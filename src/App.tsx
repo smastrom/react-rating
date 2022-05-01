@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import { RatingInput } from './lib/RatingInput';
-import { useState } from 'react';
 
 import './lib/index.css';
 

@@ -138,19 +138,15 @@ The component lets you control the rating values and the state, while taking car
 const values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 ```
 
-:x: **It won't work**
-
-```jsx
-const values = [1, 1, 1, 4, 5, 6, 6, 8, 9, 10];
-```
-
-:white_check_mark: **Works**
-
 ```jsx
 const values = ['Like', 'Dislike'];
 ```
 
-:x: **It won't work**
+:x: **Doesn't work**
+
+```jsx
+const values = [1, 1, 1, 4, 5, 6, 6, 8, 9, 10];
+```
 
 ```jsx
 const values = ['Like', 'Like'];

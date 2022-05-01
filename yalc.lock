@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "react-rating-input": {
+      "signature": "8b58f8ba23da6a8b2c0b6d572e73b319",
+      "file": true
+    }
+  }
+}

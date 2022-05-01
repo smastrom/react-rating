@@ -6,7 +6,6 @@ import dts from 'vite-plugin-dts';
 
 const globals = {
   react: 'React',
-  'react-dom': 'ReactDOM',
 };
 
 export default defineConfig({
@@ -17,17 +16,21 @@ export default defineConfig({
     }),
   ],
   build: {
+    target: 'ES6',
+    minify: 'terser',
     lib: {
       name: 'ReactRatingInput',
       entry: resolve(__dirname, 'lib/index.ts'),
       formats: ['cjs', 'es', 'umd'],
-      fileName: (format) => `${format}/index.js`,
+      fileName: (format) => `index.${format}${format === 'es' ? '' : '.min'}.js`,
     },
     rollupOptions: {
       external: Object.keys(globals),
       input: 'src/lib/index.ts',
       output: {
         globals,
+        assetFileNames: (assetInfo) =>
+          assetInfo.name == 'style.css' ? 'index.css' : assetInfo.name,
       },
     },
   },

@@ -1,0 +1,10 @@
+src
+node_modules
+.eslintignore
+.eslitnt
+.gitignore
+.prettierrc
+index.html
+tsconfig.json
+vite.config.ts
+yarn.lock

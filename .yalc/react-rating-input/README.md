@@ -2,10 +2,6 @@
 
 Rating component for React focused on accessibility, mobile-first and customization.
 
-[Live demo and examples](https://smastromattei.dev)
-
-<br />
-
 ## Features
 
 - Bring you own SVGs: No headaches or icon fonts to use your own vectors.
@@ -14,8 +10,6 @@ Rating component for React focused on accessibility, mobile-first and customizat
 - Fully responsive and mobile-first
 - Fully accessible with keyboard navigation and custom labels
 - Dependency-free
-
-<br />
 
 ## Installation
 
@@ -30,8 +24,6 @@ Or Yarn:
 ```console
 yarn add react-rating-input
 ```
-
-<br />
 
 ## Basic configuration example
 
@@ -65,15 +57,9 @@ const App = () => {
 };
 ```
 
-<br />
-
-## Props
-
-<br />
-
 ## Full configuration example
 
-<br />
+## Props
 
 ## Important notes
 
@@ -126,7 +112,7 @@ const SmilingFace = (
 
 Delete any `transform`, `fill`, `stroke`, `strokeWidth` etc from the nodes as `RatingInput` will take care of applying transforms and let you control stroke and fills.
 
-You can find free clean SVGs at [SVG Repo](https://www.svgrepo.com/).
+You can find free clean SVGs at [SVG Repo](https://www.svgrepo.com/) or [Feather](https://feathericons.com/).
 
 ### Rating Values
 
@@ -143,20 +129,6 @@ const values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 ```jsx
 const values = [1, 1, 1, 4, 5, 6, 6, 8, 9, 10];
 ```
-
-:white_check_mark: **Works**
-
-```jsx
-const values = ['Like', 'Dislike'];
-```
-
-:x: **It won't work**
-
-```jsx
-const values = ['Like', 'Like'];
-```
-
-<br />
 
 ## Local development
 

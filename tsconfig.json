@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "skipLibCheck": false,
+    "esModuleInterop": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "noEmit": true,
+    "jsx": "react"
+  },
+  "include": ["src/lib"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

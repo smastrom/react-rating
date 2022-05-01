@@ -1,0 +1,28 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "airbnb-typescript",
+    "plugin:import/recommended"
+  ],
+  "include": ["vite.config.ts"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "react/display-name": "off",
+    "comma-dangle": "off",
+    "@typescript-eslint/comma-dangle": "off",
+    "indent": "off",
+    "@typescript-eslint/indent": "off",
+    "react/prop-types": "off",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
+  }
+}

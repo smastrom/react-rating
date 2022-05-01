@@ -2,10 +2,18 @@
   "name": "react-rating-input",
   "version": "0.1.0",
   "license": "MIT",
+  "main": "dist/index.cjs.min.js",
+  "module": "dist/index.es.js",
+  "browser": "dist/index.umd.min.js",
+  "unpkg": "dist/index.umd.min.js",
   "types": "dist/types/index.d.ts",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "browser": "dist/index.js",
+  "style": "dist/style.css",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.min.js"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/smastrom/react-rating-input.git"

@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 
-import { toSecondDecimal } from './utils';
 import { ItemProps, SVGAtrributes } from './types';
+
+const toSecondDecimal = (number: number): number => Math.round(number * 100) / 100;
 
 export const RatingItem = ({
   svgChildNodes = null,

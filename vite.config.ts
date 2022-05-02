@@ -38,7 +38,7 @@ export default defineConfig({
       outputDir: 'dist/types',
       exclude: [
         'src/lib/constants.ts',
-        'src/lib/defaultStyles.ts',
+        'src/lib/DefaultStyles.tsx',
         'src/lib/getBreakpointRules.ts',
         'src/lib/getItemStyles.ts',
         'src/lib/RatingItem.tsx',

@@ -1,25 +1,16 @@
 import { CSSProperties } from 'react';
 
-import {
-  STROKE_STYLE_ROUND,
-  STROKE_STYLE_SHARP,
-  DIRECTION_X,
-  DIRECTION_Y,
-  LABEL_POSITION_TOP,
-  LABEL_POSITION_BOTTOM,
-  LABEL_POSITION_LEFT,
-  LABEL_POSITION_RIGHT,
-} from './constants';
-
-export interface SingleStyles {
-  [key: string]: string | number | undefined;
-}
-
-export type StrokeStyle = typeof STROKE_STYLE_ROUND | typeof STROKE_STYLE_SHARP;
+type StrokeStyle = 'round' | 'sharp';
 
 type SvgChildNodes = JSX.Element | JSX.Element[] | null;
 
-export interface ElementStyle {
+export type ElementStyles = ElementStyle[];
+
+export type SingleStyles = {
+  [key: string]: string | number | undefined;
+};
+
+export type ElementStyle = {
   svgChildNodes?: SvgChildNodes;
   itemStrokeWidth?: number;
   itemStrokeStyle?: StrokeStyle;
@@ -31,40 +22,30 @@ export interface ElementStyle {
   inactiveItemStrokeColor?: string;
   inactiveBoxColor?: string;
   inactiveBoxBorderColor?: string;
-}
+};
 
-export type ElementStyles = ElementStyle[];
-
-interface BoxStyles {
+type BoxStyles = {
   boxRadius?: number;
   boxBorder?: number;
   boxPadding?: number;
   boxGap?: number;
-}
+};
 
-export interface BoxStylesBreakpoints {
+export type BoxStylesBreakpoints = {
   [key: number]: BoxStyles;
-}
+};
 
-type Direction = typeof DIRECTION_X | typeof DIRECTION_Y;
-
-type LabelPosition =
-  | typeof LABEL_POSITION_TOP
-  | typeof LABEL_POSITION_BOTTOM
-  | typeof LABEL_POSITION_LEFT
-  | typeof LABEL_POSITION_RIGHT;
-
-export interface InputGroupProps extends BoxStyles {
+export type InputGroupProps = BoxStyles & {
   // Component
   ratingValues: string[];
   ratingValue: string | undefined | null;
   customLabels?: string[];
-  hoverEffects?: boolean;
+  enableHover?: boolean;
+  direction: 'horizontal' | 'vertical';
   highlightOnlySelected?: boolean;
-  displayLabel?: boolean;
-  labelPosition?: LabelPosition;
-  direction?: Direction;
   customEasing?: string;
+  enableKeyboard?: boolean;
+  enableTransitions?: boolean;
   // Item Styles
   itemStyles?: ElementStyles;
   breakpoints?: BoxStylesBreakpoints;
@@ -74,20 +55,17 @@ export interface InputGroupProps extends BoxStyles {
   style?: CSSProperties;
   className?: string;
   // Callbacks
-  onChange: (value: string) => void;
-  onClick?: Function;
-}
-
-export type TabIndexValues = 0 | -1;
+  onChange: (currentValue: string) => void | undefined;
+};
 
 // RatingItem Component
 
-export interface ItemProps {
+export type ItemProps = {
   svgChildNodes?: SvgChildNodes;
   svgItemLabel?: string;
   strokeWidth?: number;
-}
+};
 
-export interface SVGAtrributes {
+export type SVGAtrributes = {
   [key: string]: string;
-}
+};

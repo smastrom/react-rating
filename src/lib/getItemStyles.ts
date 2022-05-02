@@ -1,30 +1,16 @@
-import { defaultItemStyles } from './defaultStyles';
-import {
-  CSS_ACTIVE_ITEM_COLOR,
-  CSS_ACTIVE_ITEM_STROKE_COLOR,
-  CSS_ACTIVE_BOX_COLOR,
-  CSS_ACTIVE_BOX_BORDER_COLOR,
-  CSS_INACTIVE_ITEM_COLOR,
-  CSS_INACTIVE_ITEM_STROKE_COLOR,
-  CSS_INACTIVE_BOX_COLOR,
-  CSS_INACTIVE_BOX_BORDER_COLOR,
-  STROKE_STYLE_SHARP,
-  STROKE_STYLE_ROUND,
-  CSS_ITEM_STROKE_LINECAP,
-  CSS_ITEM_STROKE_LINEJOIN,
-} from './constants';
+import { defaultItemStyles } from './DefaultStyles';
 
 import { ElementStyles, ElementStyle, SingleStyles } from './types';
 
 const addStrokeStyles = (itemStrokeStyle: string, targetObject: SingleStyles): void => {
   switch (itemStrokeStyle) {
-    case STROKE_STYLE_SHARP:
-      targetObject[CSS_ITEM_STROKE_LINECAP] = 'miter';
-      targetObject[CSS_ITEM_STROKE_LINEJOIN] = 'square';
+    case 'sharp':
+      targetObject['--rri--item-stroke-linecap'] = 'miter';
+      targetObject['--rri--item-stroke-linejoin'] = 'square';
       break;
-    case STROKE_STYLE_ROUND:
-      targetObject[CSS_ITEM_STROKE_LINECAP] = 'round';
-      targetObject[CSS_ITEM_STROKE_LINEJOIN] = 'round';
+    case 'round':
+      targetObject['--rri--item-stroke-linecap'] = 'round';
+      targetObject['--rri--item-stroke-linejoin'] = 'round';
       break;
   }
 };
@@ -39,21 +25,24 @@ export const getItemStyles = (itemStylesProp: ElementStyles): SingleStyles[] | [
       };
       const singleStyle: SingleStyles = {};
 
-      singleStyle[CSS_ACTIVE_ITEM_COLOR] = mergedStyle.activeItemColor;
-      singleStyle[CSS_ACTIVE_BOX_COLOR] = mergedStyle.activeBoxColor;
-      singleStyle[CSS_ACTIVE_BOX_BORDER_COLOR] = mergedStyle.activeBoxBorderColor;
+      singleStyle['--rri--item-color'] = mergedStyle.activeItemColor;
+      singleStyle['--rri--box-color'] = mergedStyle.activeBoxColor;
+      singleStyle['--rri--box-border-color'] = mergedStyle.activeBoxBorderColor;
 
-      singleStyle[CSS_INACTIVE_ITEM_COLOR] = mergedStyle.inactiveItemColor;
-      singleStyle[CSS_INACTIVE_BOX_COLOR] = mergedStyle.inactiveBoxColor;
-      singleStyle[CSS_INACTIVE_BOX_BORDER_COLOR] = mergedStyle.inactiveBoxBorderColor;
+      singleStyle['--rri--inactive-item-color'] = mergedStyle.inactiveItemColor;
+      singleStyle['--rri--inactive-box-color'] = mergedStyle.inactiveBoxColor;
+      singleStyle['--rri--inactive-box-border-color'] =
+        mergedStyle.inactiveBoxBorderColor;
 
       if (
         typeof mergedStyle.itemStrokeWidth === 'number' &&
         mergedStyle.itemStrokeWidth > 0 &&
         typeof mergedStyle.itemStrokeStyle === 'string'
       ) {
-        singleStyle[CSS_ACTIVE_ITEM_STROKE_COLOR] = mergedStyle.activeItemStrokeColor;
-        singleStyle[CSS_INACTIVE_ITEM_STROKE_COLOR] = mergedStyle.inactiveItemStrokeColor;
+        singleStyle['--rri--active-item-stroke-color'] =
+          mergedStyle.activeItemStrokeColor;
+        singleStyle['--rri--inactive-item-stroke-color'] =
+          mergedStyle.inactiveItemStrokeColor;
         addStrokeStyles(mergedStyle.itemStrokeStyle, singleStyle);
       }
 

@@ -6,7 +6,7 @@ export const getBreakpointRules = (
   let rulesArray: string[] = [];
 
   Object.entries(breakpointsProp).forEach(([breakpointValue, styles]) => {
-    const mediaRule = `@media(min-width: ${breakpointValue}px) { .react-rating-input-radio-group {`;
+    const mediaRule = `@media(min-width: ${breakpointValue}px) { .rri--radio-group {`;
     let variablesValues = '';
     const breakpointProperties = Object.entries(styles);
 
@@ -14,16 +14,16 @@ export const getBreakpointRules = (
       let breakpointProperty: string = '';
       switch (property) {
         case 'boxRadius':
-          breakpointProperty = `--react-rating-input-box-radius: ${value}px !important;`;
+          breakpointProperty = `--rri--box-radius: ${value}px !important;`;
           break;
         case 'boxBorder':
-          breakpointProperty = `--react-rating-input-box-border-width: ${value}px !important;`;
+          breakpointProperty = `--rri--box-border-width: ${value}px !important;`;
           break;
         case 'boxPadding':
-          breakpointProperty = `--react-rating-input-box-padding: ${value}px !important;`;
+          breakpointProperty = `--rri--box-padding: ${value}px !important;`;
           break;
         case 'boxGap':
-          breakpointProperty = `--react-rating-input-box-gap: ${value}px !important;`;
+          breakpointProperty = `--rri--box-gap: ${value}px !important;`;
       }
       variablesValues = variablesValues.concat('', breakpointProperty);
       if (index === breakpointProperties.length - 1) {

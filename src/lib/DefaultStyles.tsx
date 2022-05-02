@@ -1,10 +1,13 @@
-import { STROKE_STYLE_ROUND } from './constants';
+import React from 'react';
+
 import { ElementStyle } from './types';
 
+const Star = <polygon points="100,10 40,198 190,78 10,78 160,198" />;
+
 export const defaultItemStyles: ElementStyle = {
-  svgChildNodes: null,
+  svgChildNodes: Star,
   itemStrokeWidth: 0,
-  itemStrokeStyle: STROKE_STYLE_ROUND,
+  itemStrokeStyle: 'round',
   activeItemColor: '#DCFCE7',
   activeItemStrokeColor: undefined,
   activeBoxColor: '#22C55E',

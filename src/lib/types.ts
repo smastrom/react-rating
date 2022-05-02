@@ -22,18 +22,18 @@ export type ItemStyle = {
   inactiveBoxBorderColor?: string;
 };
 
-type BoxStyles = {
+type GlobalStyles = {
   containerGap?: number;
   boxRadius?: number;
   boxBorderWidth?: number;
   boxPadding?: number;
 };
 
-export type BoxStylesBreakpoints = {
-  [key: number]: BoxStyles;
+export type Breakpoints = {
+  [key: number]: GlobalStyles;
 };
 
-export type RatingItemProps = BoxStyles & {
+export type RatingItemProps = GlobalStyles & {
   onChange: (currentValue: string) => void | undefined;
 
   ratingValues: string[];
@@ -42,15 +42,19 @@ export type RatingItemProps = BoxStyles & {
   enableHover?: boolean;
   direction: 'horizontal' | 'vertical';
   highlightOnlySelected?: boolean;
+  readOnly?: boolean;
   customEasing?: string;
   enableKeyboard?: boolean;
   enableTransitions?: boolean;
 
   itemStyles?: ItemStyle | ItemStyle[];
-  breakpoints?: BoxStylesBreakpoints;
+  breakpoints?: Breakpoints;
 
   ref?: HTMLDivElement;
   id?: string;
   style?: CSSProperties;
   className?: string;
+
+  ariaLabelledBy?: string;
+  readOnlyLabel?: string;
 };

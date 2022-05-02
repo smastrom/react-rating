@@ -1,8 +1,6 @@
-import { BoxStylesBreakpoints } from './types';
+import { Breakpoints } from './types';
 
-export const getBreakpointRules = (
-  breakpointsProp: BoxStylesBreakpoints
-): string | undefined => {
+export const getBreakpointRules = (breakpointsProp: Breakpoints): string | undefined => {
   let rulesArray: string[] = [];
 
   Object.entries(breakpointsProp).forEach(([breakpointValue, styles]) => {

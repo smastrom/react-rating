@@ -28,9 +28,9 @@ export const getItemStyles = (itemStylesProp: ItemStyle[]): SingleItemStyle[] | 
       };
       const singleStyle: SingleItemStyle = {};
 
-      singleStyle['--rri--item-color'] = mergedStyle.activeItemColor;
-      singleStyle['--rri--box-color'] = mergedStyle.activeBoxColor;
-      singleStyle['--rri--box-border-color'] = mergedStyle.activeBoxBorderColor;
+      singleStyle['--rri--active-item-color'] = mergedStyle.activeItemColor;
+      singleStyle['--rri--active-box-color'] = mergedStyle.activeBoxColor;
+      singleStyle['--rri--active-box-border-color'] = mergedStyle.activeBoxBorderColor;
 
       singleStyle['--rri--inactive-item-color'] = mergedStyle.inactiveItemColor;
       singleStyle['--rri--inactive-box-color'] = mergedStyle.inactiveBoxColor;

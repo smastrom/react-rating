@@ -1,81 +1,91 @@
-.react-rating-input-radio-group {
+.rri--radio-group {
   display: flex;
-  flex-direction: var(--react-rating-input-direction, unset);
+  flex-direction: var(--rri--direction, unset);
 }
 
-.rating-box-wrapper {
-  width: auto;
-  display: flex;
-  aspect-ratio: 1;
-}
-
-.react-rating-input-radio {
+.rri--radio {
   display: flex;
   width: 100%;
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  flex-direction: var(--react-rating-input-label-position, unset);
+  flex-direction: var(--rri--label-position, unset);
   gap: 0.5em;
 }
 
-.rating-box-wrapper svg {
-  stroke-linecap: var(--react-rating-input-item-stroke-linecap, unset);
-  stroke-linejoin: var(--react-rating-input-item-stroke-linejoin, unset);
+.rri--box {
+  width: auto;
+  display: flex;
+  aspect-ratio: 1;
 }
 
-/* Add focus */
+/* Box */
 
-.react-rating-input-radio-yr {
-  flex-direction: column-reverse;
-}
-
-.react-rating-input-radio-x {
-  flex-direction: row;
-}
-
-.react-rating-input-radio-x {
-  flex-direction: row-reverse;
-}
-
-@media (hover: hover) {
-  .react-rating-input-has-hover:hover .rating-box-wrapper {
-    background-color: var(--react-rating-input-box-color);
-    border-color: var(--react-rating-input-box-border-color, none);
-  }
-
-  .react-rating-input-has-hover:hover .rating-box-wrapper svg {
-    fill: var(--react-rating-input-item-color);
-  }
-}
-
-.react-rating-input-inactive .rating-box-wrapper {
-  background-color: var(--react-rating-input-inactive-box-color);
-  border-color: var(--react-rating-input-inactive-box-border-color, none);
-}
-
-.react-rating-input-active .rating-box-wrapper {
-  background-color: var(--react-rating-input-box-color);
-  border-color: var(--react-rating-input-box-border-color, none);
-}
-
-.rating-box-wrapper {
+.rri--box {
   min-width: 1vw;
   display: flex;
   pointer-events: none;
-  padding: var(--react-rating-input-box-padding, 0);
+  padding: var(--rri--box-padding, 0);
   border-style: solid;
-  border-width: var(--react-rating-input-box-border-width, 0);
-  border-radius: var(--react-rating-input-box-radius, 0);
-  transition: background-color var(--react-rating-input-easing);
+  border-width: var(--rri--box-border-width, 0);
+  border-radius: var(--rri--box-radius, 0);
 }
 
-.react-rating-input-active .rating-box-wrapper svg {
-  fill: var(--react-rating-input-item-color);
-  stroke: var(--react-rating-input-active-item-stroke-color, currentColor);
+.rri--inactive .rri--box {
+  background-color: var(--rri--inactive-box-color);
+  border-color: var(--rri--inactive-box-border-color, none);
 }
 
-.react-rating-input-inactive .rating-box-wrapper svg {
-  fill: var(--react-rating-input-inactive-item-color);
-  stroke: var(--react-rating-input-inactive-item-stroke-color, currentColor);
+.rri--active .rri--box {
+  background-color: var(--rri--box-color);
+  border-color: var(--rri--box-border-color, none);
+}
+
+/* Hover states */
+
+@media (hover: hover) {
+  .rri--has-hover:hover .rri--box {
+    background-color: var(--rri--box-color);
+    border-color: var(--rri--box-border-color, none);
+  }
+
+  .rri--has-hover:hover .rri--box svg {
+    fill: var(--rri--item-color);
+    stroke: var(--rri--active-item-stroke-color, currentColor);
+  }
+}
+
+/* Focus */
+
+.rri--radio:focus-visible {
+  outline: none;
+  border-radius: var(--rri--box-radius, 0);
+  border: 4px solid white;
+}
+
+/* Transitions */
+
+.rri--has-transitions .rri--box {
+  transition: background-color var(--rri--easing);
+}
+
+.rri--has-transitions .rri--box svg {
+  transition: fill var(--rri--easing), stroke var(--rri--easing);
+}
+
+/* SVG Item */
+
+.rri--box svg {
+  stroke-linecap: var(--rri--item-stroke-linecap, unset);
+  stroke-linejoin: var(--rri--item-stroke-linejoin, unset);
+}
+
+.rri--active .rri--box svg {
+  fill: var(--rri--item-color);
+  stroke: var(--rri--active-item-stroke-color, currentColor);
+}
+
+.rri--inactive .rri--box svg {
+  fill: var(--rri--inactive-item-color);
+  stroke: var(--rri--inactive-item-stroke-color, currentColor);
 }

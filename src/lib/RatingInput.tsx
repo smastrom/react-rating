@@ -1,51 +1,41 @@
-import React, { CSSProperties, forwardRef, useState } from 'react';
+// @ts-nocheck
+
+import React, { CSSProperties, forwardRef, useRef } from 'react';
 
 import { RatingItem } from './RatingItem';
 import { getBreakpointRules } from './getBreakpointRules';
 import { getItemStyles } from './getItemStyles';
-import { getLabelDirectionValue } from './utils';
-import { defaultItemStyles } from './defaultStyles';
-import {
-  CSS_ACTIVE_CLASS,
-  CSS_INACTIVE_CLASS,
-  DEFAULT_BOX_BORDER_VALUE,
-  DEFAULT_BOX_GAP_VALUE,
-  DEFAULT_BOX_PADDING_VALUE,
-  DEFAULT_BOX_RADIUS_VALUE,
-  DEFAULT_EASING_VALUE,
-  DIRECTION_Y,
-  LABEL_POSITION_BOTTOM,
-} from './constants';
-import { InputGroupProps, TabIndexValues } from './types';
+import { defaultItemStyles } from './DefaultStyles';
+
+import { InputGroupProps } from './types';
 
 export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
   (
     {
-      // Component
       ratingValues = undefined,
       ratingValue = undefined,
       customLabels = undefined,
-      hoverEffects = true,
-      highlightOnlySelected = false,
-      displayLabel = false,
-      labelPosition = LABEL_POSITION_BOTTOM,
-      direction = DIRECTION_Y,
-      customEasing = DEFAULT_EASING_VALUE,
-      // Item Styles
+
       itemStyles = [defaultItemStyles],
+      direction = 'horizontal',
+      customEasing = '500ms cubic-bezier(0, 0, 0.2, 1)',
       breakpoints = undefined,
-      // HTML
+
+      highlightOnlySelected = false,
+      enableHover = true,
+      enableTransitions = true,
+      enableKeyboard = true,
+
       id = undefined,
       className = undefined,
       style = undefined,
-      // Box
-      boxRadius = DEFAULT_BOX_RADIUS_VALUE,
-      boxBorder = DEFAULT_BOX_BORDER_VALUE,
-      boxPadding = DEFAULT_BOX_PADDING_VALUE,
-      boxGap = DEFAULT_BOX_GAP_VALUE,
-      // Callbacks
+
+      boxRadius = 20, // Add containerWidth
+      boxBorder = 0,
+      boxPadding = 20,
+      boxGap = 20,
+
       onChange = undefined,
-      onClick = undefined,
     },
     externalRef
   ) => {
@@ -56,18 +46,53 @@ export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
     }
 
     const itemsNumber = ratingValues.length;
-
-    // States
-
-    const initialTabIndexValues: TabIndexValues[] = new Array(itemsNumber).fill(-1);
-    const [tabIndex, setTabIndex] = useState<TabIndexValues[]>(initialTabIndexValues);
+    const radioDivs = useRef<HTMLDivElement[] | []>([]);
 
     // Handlers
 
-    const handleTabIndex = (index: number): void => {
-      const newValues: TabIndexValues[] = new Array(itemsNumber).fill(-1);
-      newValues[index] = 0;
-      setTabIndex(newValues);
+    const handleSelection = (index: number) => {
+      if (typeof onChange === 'function') {
+        onChange(ratingValues[index]);
+      }
+    };
+
+    const handleKeydown = (
+      event:
+        | React.MouseEventHandler<HTMLDivElement>
+        | React.KeyboardEvent<HTMLDivElement>,
+      index: number
+    ) => {
+      event.preventDefault();
+
+      const previousValue = index - 1;
+      const lastValue = itemsNumber - 1;
+      const nextValue = index + 1;
+
+      const isEventFiringFromLastItem = lastValue === index;
+      const isEventFiringFromFistItem = index === 0;
+
+      switch (event.code) {
+        case 'Tab':
+        case 'Escape':
+          radioDivs.current[index].blur();
+          break;
+        case 'ArrowDown':
+        case 'ArrowRight':
+          {
+            const indexToSelect = isEventFiringFromLastItem ? 0 : nextValue;
+            radioDivs.current[indexToSelect].focus();
+            handleSelection(indexToSelect);
+          }
+          break;
+        case 'ArrowUp':
+        case 'ArrowLeft':
+          {
+            const indexToSelect = isEventFiringFromFistItem ? lastValue : previousValue;
+            radioDivs.current[indexToSelect].focus();
+            handleSelection(indexToSelect);
+          }
+          break;
+      }
     };
 
     const handleHighlight = (index: number) => {
@@ -75,59 +100,38 @@ export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
 
       if (highlightOnlySelected) {
         if (valueAtIndex === index) {
-          return CSS_ACTIVE_CLASS;
+          return 'rri--active';
         }
-        return CSS_INACTIVE_CLASS;
+        return 'rri--inactive';
       }
       if (valueAtIndex + 1 <= index) {
-        return CSS_INACTIVE_CLASS;
+        return 'rri--inactive';
       }
-      return CSS_ACTIVE_CLASS;
-    };
-
-    const handleClick = (index: number) => {
-      if (typeof onChange === 'function') {
-        setTimeout(() => {
-          onChange(ratingValues[index]);
-        });
-      }
-      if (typeof onClick === 'function') {
-        setTimeout(() => {
-          onClick();
-        });
-      }
-    };
-
-    const handleMouseLeave = () => {
-      setTabIndex(initialTabIndexValues);
-    };
-
-    const handleMouseEnter = (index: number) => {
-      handleTabIndex(index);
+      return 'rri--active';
     };
 
     // Labels
 
-    const defaultLabels: string[] = new Array(itemsNumber)
-      .fill('')
-      .map((_, index: number) => `Vote ${index + 1} on ${itemsNumber}`);
+    const defaultLabels: string[] = ratingValues.map(
+      (_, index: number) => `Vote ${ratingValues[index]}`
+    );
 
     const itemLabels = typeof customLabels === 'undefined' ? defaultLabels : customLabels;
 
-    // CSS Variables
+    // Styles
 
     const sharedStyles = {
-      '--react-rating-input-label-position': getLabelDirectionValue(
-        displayLabel,
-        labelPosition
-      ),
-      '--react-rating-input-box-radius': `${boxRadius}px`,
-      '--react-rating-input-box-border-width': `${boxBorder}px`,
-      '--react-rating-input-box-padding': `${boxPadding}px`,
-      '--react-rating-input-box-gap': `${boxGap}px`, // Create new function - Append global styles
-      '--react-rating-input-easing': customEasing,
-      '--react-rating-input-direction': direction === 'horizontal' ? 'row' : 'column',
+      '--rri--box-radius': `${boxRadius}px`,
+      '--rri--box-border-width': `${boxBorder}px`,
+      '--rri--box-padding': `${boxPadding}px`,
+      '--rri--box-gap': `${boxGap}px`, // Create new function - Append global styles
+      '--rri--easing': customEasing,
+      '--rri--direction': direction === 'horizontal' ? 'row' : 'column',
     } as CSSProperties;
+
+    const additionalClassNames = `${enableHover ? 'rri--has-hover' : ''} ${
+      enableTransitions ? 'rri--has-transitions' : ''
+    }`;
 
     const appendStyles = () => {
       if (getItemStyles(itemStyles)?.length === 1) {
@@ -173,7 +177,7 @@ export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
         <div
           role="radiogroup"
           ref={externalRef}
-          className={`react-rating-input-radio-group ${className || ''}`}
+          className={`rri--radio-group ${className || ''}`}
           id={id}
           style={{
             ...style,
@@ -181,39 +185,27 @@ export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
             ...appendStyles(),
           }}
         >
-          {new Array(itemsNumber).fill(undefined).map((_, index) => (
+          {ratingValues.map((_, index) => (
             <div
-              key={`react_rating_item_${index}`}
+              key={`rri_item_${index}`}
               role="radio"
-              aria-labelledby={`react-rating-item-value-${index + 1}`}
-              className={`react-rating-input-radio ${handleHighlight(index)} ${
-                hoverEffects ? 'react-rating-input-has-hover' : ''
-              }`}
+              ref={(ref) => (radioDivs.current[index] = ref)}
+              className={`rri--radio ${handleHighlight(index)} ${additionalClassNames}`}
+              tabIndex={enableKeyboard && ratingValues[index] === ratingValue ? 0 : -1}
               aria-checked={ratingValues[index] === ratingValue}
-              tabIndex={tabIndex[index]}
               aria-label={itemLabels?.[index]}
-              onClick={() => handleClick(index)}
-              onMouseLeave={handleMouseLeave}
-              onMouseEnter={() => handleMouseEnter(index)}
+              onClick={() => handleSelection(index)}
+              onKeyDown={
+                enableKeyboard ? (event) => handleKeydown(event, index) : undefined
+              }
             >
-              <div
-                style={{ ...appendSingleStyles(index) }}
-                className="rating-box-wrapper"
-              >
+              <div style={{ ...appendSingleStyles(index) }} className="rri--box">
                 <RatingItem
                   svgChildNodes={getSvgItem(index)}
                   svgItemLabel={itemLabels?.[index]}
                   strokeWidth={getStrokeIndex(index)}
                 />
               </div>
-              {displayLabel && (
-                <label
-                  id={`react-rating-item-value-${index}`}
-                  style={{ textAlign: 'center', fontSize: '0.875rem' }}
-                >
-                  Excellent
-                </label>
-              )}
             </div>
           ))}
         </div>

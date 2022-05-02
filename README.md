@@ -8,9 +8,9 @@ Rating component for React focused on accessibility, mobile-first and customizat
 
 ## Features
 
-- Bring you own SVGs: No headaches or icon fonts to use your own vectors.
+- Bring you own SVGs: No headaches or icon fonts in order to use your own vectors.
 - Built-in SVG scaling, positioning and stroke control.
-- Highly customizable: strokes, boxes, hover, transitions and much more.
+- Highly customizable: colors, strokes, boxes, hover, transitions, breakpoints and much more.
 - Fully responsive and mobile-first
 - Fully accessible with keyboard navigation and custom labels
 - Dependency-free
@@ -43,22 +43,15 @@ import 'react-rating-input/dist/index.min.css';
 
 const values = [1, 2, 3, 4, 5];
 
-const Star = <polygon points="100,10 40,198 190,78 10,78 160,198" />;
-
-const itemStyle = {
-    svgChildNodes: Star;
-};
-
 const App = () => {
   const [value, setValue] = useState(values[0]); // <-- Initial value
 
   return (
       <div style={{ maxWidth: 600 }}> {/* <-- Wrap it in a container */}
         <RatingInput
-            itemStyles={itemStyle}
             ratingValues={values}
             ratingValue={value}
-            onChange={(value) => setValue(value)}
+            onChange={(currentValue) => setValue(currentValue)}
         >
       </div>
   )
@@ -115,11 +108,11 @@ When importing your own SVG, include only the **inner nodes** of the `<svg>`:
 const SmilingFace = (
   <path
     d="M3.445,6.322c0-3.423,2.777-6.201,6.201-6.201c3.423,0,6.2,2.777,6.2,6.201c0,3.426-2.777,6.203-6.2,6.203
-		C6.222,12.524,3.445,9.748,3.445,6.322z M31.562,6.322c0-3.423,2.78-6.201,6.203-6.201s6.201,2.777,6.201,6.201
-		c0,3.426-2.777,6.203-6.201,6.203C34.343,12.524,31.562,9.748,31.562,6.322z M46.223,31.72
-		C42.38,40.607,33.38,46.349,23.294,46.349c-10.301,0-19.354-5.771-23.064-14.703c-0.636-1.53,0.089-3.286,1.62-3.922
-		c0.376-0.155,0.766-0.229,1.15-0.229c1.176,0,2.292,0.696,2.771,1.851c2.777,6.685,9.655,11.004,17.523,11.004
-		c7.69,0,14.528-4.322,17.421-11.012c0.658-1.521,2.424-2.222,3.943-1.562C46.181,28.433,46.881,30.199,46.223,31.72z"
+        C6.222,12.524,3.445,9.748,3.445,6.322z M31.562,6.322c0-3.423,2.78-6.201,6.203-6.201s6.201,2.777,6.201,6.201
+        c0,3.426-2.777,6.203-6.201,6.203C34.343,12.524,31.562,9.748,31.562,6.322z M46.223,31.72
+        C42.38,40.607,33.38,46.349,23.294,46.349c-10.301,0-19.354-5.771-23.064-14.703c-0.636-1.53,0.089-3.286,1.62-3.922
+        c0.376-0.155,0.766-0.229,1.15-0.229c1.176,0,2.292,0.696,2.771,1.851c2.777,6.685,9.655,11.004,17.523,11.004
+        c7.69,0,14.528-4.322,17.421-11.012c0.658-1.521,2.424-2.222,3.943-1.562C46.181,28.433,46.881,30.199,46.223,31.72z"
   />
 );
 ```

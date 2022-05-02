@@ -2,15 +2,9 @@ import { CSSProperties } from 'react';
 
 type StrokeStyle = 'round' | 'sharp';
 
-type SvgChildNodes = JSX.Element | JSX.Element[] | null;
+export type SvgChildNodes = JSX.Element | JSX.Element[] | null;
 
-export type ElementStyles = ElementStyle[];
-
-export type SingleStyles = {
-  [key: string]: string | number | undefined;
-};
-
-export type ElementStyle = {
+export type ItemStyle = {
   svgChildNodes?: SvgChildNodes;
   itemStrokeWidth?: number;
   itemStrokeStyle?: StrokeStyle;
@@ -24,21 +18,24 @@ export type ElementStyle = {
   inactiveBoxBorderColor?: string;
 };
 
+export type SingleItemStyle = {
+  [key: string]: string | number | undefined;
+};
+
 type BoxStyles = {
+  containerGap?: number;
   boxRadius?: number;
-  boxBorder?: number;
+  boxBorderWidth?: number;
   boxPadding?: number;
-  boxGap?: number;
 };
 
 export type BoxStylesBreakpoints = {
   [key: number]: BoxStyles;
 };
 
-export type InputGroupProps = BoxStyles & {
-  // Component
+export type RatingItemProps = BoxStyles & {
   ratingValues: string[];
-  ratingValue: string | undefined | null;
+  ratingValue: string | number | undefined | null;
   customLabels?: string[];
   enableHover?: boolean;
   direction: 'horizontal' | 'vertical';
@@ -46,26 +43,14 @@ export type InputGroupProps = BoxStyles & {
   customEasing?: string;
   enableKeyboard?: boolean;
   enableTransitions?: boolean;
-  // Item Styles
-  itemStyles?: ElementStyles;
+
+  itemStyles?: ItemStyle[];
   breakpoints?: BoxStylesBreakpoints;
-  // HTML
+
   ref?: HTMLDivElement;
   id?: string;
   style?: CSSProperties;
   className?: string;
-  // Callbacks
+
   onChange: (currentValue: string) => void | undefined;
-};
-
-// RatingItem Component
-
-export type ItemProps = {
-  svgChildNodes?: SvgChildNodes;
-  svgItemLabel?: string;
-  strokeWidth?: number;
-};
-
-export type SVGAtrributes = {
-  [key: string]: string;
 };

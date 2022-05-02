@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+
 import { RatingInput } from './lib/RatingInput';
 
-import { ElementStyles } from './lib/types';
+import { ItemStyle } from './lib/types';
 
 import './lib/index.css';
 
@@ -41,7 +42,7 @@ const Mail = (
 );
 const values = ['1', '2', '3', '4', '5']; // Ensure only strings are allowed
 
-const testStyles: ElementStyles = [
+const testStyles: ItemStyle[] = [
   // Pass object for one, pass array for more
   {
     svgChildNodes: Mail,
@@ -73,10 +74,11 @@ function App() {
     >
       <div
         style={{
-          width: '1200px',
+          maxWidth: '1200px',
           backgroundColor: '#DCFCE7',
           border: '2px solid #4ADE80',
           borderRadius: '10px',
+          padding: '20px',
         }}
       >
         <RatingInput
@@ -85,19 +87,22 @@ function App() {
           itemStyles={testStyles}
           enableHover
           enableTransitions
-          enableKeyboard
           highlightOnlySelected
           direction="horizontal"
+          containerGap={20}
           boxRadius={0}
-          boxGap={20}
+          boxBorderWidth={3}
+          boxPadding={20}
           breakpoints={{
             120: {
-              boxRadius: 0,
-              boxGap: 100,
+              containerGap: 20,
+              boxRadius: 10,
+              boxPadding: 10,
             },
             230: {
-              boxRadius: 30,
-              boxGap: 100,
+              containerGap: 20,
+              boxRadius: 20,
+              boxPadding: 20,
             },
           }}
           onChange={(currentValue: string): void => setValue(currentValue)}

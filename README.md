@@ -44,7 +44,7 @@ import 'react-rating-input/dist/index.min.css';
 const values = [1, 2, 3, 4, 5];
 
 const App = () => {
-  const [value, setValue] = useState(values[0]); // <-- Initial value
+  const [value, setValue] = useState(values[0]); // <-- Initial value (1)
 
   return (
       <div style={{ maxWidth: 600 }}> {/* <-- Wrap it in a container */}

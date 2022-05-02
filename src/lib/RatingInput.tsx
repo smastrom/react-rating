@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React, { CSSProperties, forwardRef, useRef } from 'react';
 
 import { RatingItem } from './RatingItem';
@@ -7,9 +5,9 @@ import { getBreakpointRules } from './getBreakpointRules';
 import { getItemStyles } from './getItemStyles';
 import { defaultItemStyles } from './DefaultStyles';
 
-import { InputGroupProps } from './types';
+import { RatingItemProps } from './types';
 
-export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
+export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
   (
     {
       ratingValues = undefined,
@@ -30,42 +28,51 @@ export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
       className = undefined,
       style = undefined,
 
-      boxRadius = 20, // Add containerWidth
-      boxBorder = 0,
+      containerGap = 20,
+      boxRadius = 20,
+      boxBorderWidth = 0,
       boxPadding = 20,
-      boxGap = 20,
 
       onChange = undefined,
     },
     externalRef
   ) => {
-    if (!ratingValues || !ratingValue || !onChange || !itemStyles) {
-      throw new Error(
-        'The following props are required: ratingValues, ratingValue, onChange, itemStyles.'
+    if (!ratingValues || !ratingValue || !onChange) {
+      console.error(
+        '[ReactRatingInput] - Props "ratingValues", "ratingValue", "onChange" are required.'
       );
+      return null;
     }
 
-    const itemsNumber = ratingValues.length;
+    if (typeof onChange !== 'function') {
+      console.error('[ReactRatingInput] - OnChange must be a function.');
+      return null;
+    }
+
+    if (ratingValues.length > 10) {
+      console.error('[ReactRatingInput] - Maximum 10 values are allowed.');
+      return null;
+    }
+
     const radioDivs = useRef<HTMLDivElement[] | []>([]);
 
     // Handlers
 
-    const handleSelection = (index: number) => {
-      if (typeof onChange === 'function') {
-        onChange(ratingValues[index]);
-      }
+    const handleClick = (
+      event: React.MouseEvent<HTMLDivElement>,
+      index: number
+    ): void => {
+      event.preventDefault();
+      event.stopPropagation();
+      onChange(ratingValues[index]);
     };
 
-    const handleKeydown = (
-      event:
-        | React.MouseEventHandler<HTMLDivElement>
-        | React.KeyboardEvent<HTMLDivElement>,
-      index: number
-    ) => {
+    const handleKeydown = (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
       event.preventDefault();
+      event.stopPropagation();
 
       const previousValue = index - 1;
-      const lastValue = itemsNumber - 1;
+      const lastValue = ratingValues.length - 1;
       const nextValue = index + 1;
 
       const isEventFiringFromLastItem = lastValue === index;
@@ -81,22 +88,20 @@ export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
           {
             const indexToSelect = isEventFiringFromLastItem ? 0 : nextValue;
             radioDivs.current[indexToSelect].focus();
-            handleSelection(indexToSelect);
+            onChange(ratingValues[indexToSelect]);
           }
           break;
         case 'ArrowUp':
-        case 'ArrowLeft':
-          {
-            const indexToSelect = isEventFiringFromFistItem ? lastValue : previousValue;
-            radioDivs.current[indexToSelect].focus();
-            handleSelection(indexToSelect);
-          }
-          break;
+        case 'ArrowLeft': {
+          const indexToSelect = isEventFiringFromFistItem ? lastValue : previousValue;
+          radioDivs.current[indexToSelect].focus();
+          onChange(ratingValues[indexToSelect]);
+        }
       }
     };
 
     const handleHighlight = (index: number) => {
-      const valueAtIndex = ratingValues.indexOf(ratingValue as any);
+      const valueAtIndex = ratingValues.indexOf(ratingValue as string);
 
       if (highlightOnlySelected) {
         if (valueAtIndex === index) {
@@ -120,11 +125,11 @@ export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
 
     // Styles
 
-    const sharedStyles = {
+    const globalStyles = {
+      '--rri--container-gap': `${containerGap}px`,
       '--rri--box-radius': `${boxRadius}px`,
-      '--rri--box-border-width': `${boxBorder}px`,
+      '--rri--box-border-width': `${boxBorderWidth}px`,
       '--rri--box-padding': `${boxPadding}px`,
-      '--rri--box-gap': `${boxGap}px`, // Create new function - Append global styles
       '--rri--easing': customEasing,
       '--rri--direction': direction === 'horizontal' ? 'row' : 'column',
     } as CSSProperties;
@@ -149,9 +154,7 @@ export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
 
     const getStrokeIndex = (index: number) => {
       if (itemStyles.length === 1) {
-        const mappedIndex = new Array(itemsNumber)
-          .fill(0)
-          .map(() => itemStyles[0].itemStrokeWidth);
+        const mappedIndex = ratingValues.map(() => itemStyles[0].itemStrokeWidth);
         return mappedIndex[index];
       }
       if (itemStyles.length > 1) {
@@ -181,7 +184,7 @@ export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
           id={id}
           style={{
             ...style,
-            ...sharedStyles,
+            ...globalStyles,
             ...appendStyles(),
           }}
         >
@@ -189,23 +192,29 @@ export const RatingInput = forwardRef<HTMLDivElement, InputGroupProps>(
             <div
               key={`rri_item_${index}`}
               role="radio"
-              ref={(ref) => (radioDivs.current[index] = ref)}
+              ref={(ref) => (radioDivs.current[index] = ref as HTMLDivElement)}
               className={`rri--radio ${handleHighlight(index)} ${additionalClassNames}`}
               tabIndex={enableKeyboard && ratingValues[index] === ratingValue ? 0 : -1}
+              aria-labelledby={`rri_label_${index + 1}`}
               aria-checked={ratingValues[index] === ratingValue}
-              aria-label={itemLabels?.[index]}
-              onClick={() => handleSelection(index)}
+              onClick={(event) => handleClick(event, index)}
               onKeyDown={
                 enableKeyboard ? (event) => handleKeydown(event, index) : undefined
               }
             >
-              <div style={{ ...appendSingleStyles(index) }} className="rri--box">
+              <div
+                style={{ ...appendSingleStyles(index) }}
+                className="rri--box"
+                aria-hidden="true"
+              >
                 <RatingItem
                   svgChildNodes={getSvgItem(index)}
-                  svgItemLabel={itemLabels?.[index]}
                   strokeWidth={getStrokeIndex(index)}
                 />
               </div>
+              <span className="rri--hidden" id={`rri_label_${index + 1}`}>
+                {itemLabels?.[index]}
+              </span>
             </div>
           ))}
         </div>

@@ -1,5 +1,6 @@
-import { resolve } from 'path';
+// @ts-ignore
 import { appendFile, rm } from 'fs';
+import { format } from 'prettier';
 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -10,8 +11,8 @@ export default defineConfig({
     target: 'ES6',
     minify: 'terser',
     lib: {
-      name: 'ReactRatingInput',
-      entry: resolve(__dirname, 'lib/index.ts'),
+      name: 'React Rating Input',
+      entry: 'src/lib/index.ts',
       formats: ['es', 'umd', 'cjs'],
       fileName: (format) => {
         if (format === 'es') {
@@ -37,7 +38,6 @@ export default defineConfig({
     dts({
       outputDir: 'dist/types',
       exclude: [
-        'src/lib/constants.ts',
         'src/lib/DefaultStyles.tsx',
         'src/lib/getBreakpointRules.ts',
         'src/lib/getItemStyles.ts',
@@ -46,7 +46,17 @@ export default defineConfig({
         'src/lib/index.ts',
       ],
       beforeWriteFile: (_, content) => {
-        appendFile('dist/index.d.ts', content, (err: any) => {
+        const newContent = content
+          .replace("import { RatingItemProps } from './types';", '')
+          .replace('/// <reference types="vite/client" />', '')
+          .replace('export {};', '');
+
+        const formattedContent = format(newContent, {
+          singleQuote: true,
+          parser: 'typescript',
+        });
+
+        appendFile('dist/index.d.ts', formattedContent, (err: any) => {
           if (err) {
             console.log(err);
           }

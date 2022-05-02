@@ -4,6 +4,10 @@ type StrokeStyle = 'round' | 'sharp';
 
 export type SvgChildNodes = JSX.Element | JSX.Element[] | null;
 
+export type SingleItemStyle = {
+  [key: string]: string | number | undefined;
+};
+
 export type ItemStyle = {
   svgChildNodes?: SvgChildNodes;
   itemStrokeWidth?: number;
@@ -18,10 +22,6 @@ export type ItemStyle = {
   inactiveBoxBorderColor?: string;
 };
 
-export type SingleItemStyle = {
-  [key: string]: string | number | undefined;
-};
-
 type BoxStyles = {
   containerGap?: number;
   boxRadius?: number;
@@ -34,6 +34,8 @@ export type BoxStylesBreakpoints = {
 };
 
 export type RatingItemProps = BoxStyles & {
+  onChange: (currentValue: string) => void | undefined;
+
   ratingValues: string[];
   ratingValue: string | number | undefined | null;
   customLabels?: string[];
@@ -44,13 +46,11 @@ export type RatingItemProps = BoxStyles & {
   enableKeyboard?: boolean;
   enableTransitions?: boolean;
 
-  itemStyles?: ItemStyle[];
+  itemStyles?: ItemStyle | ItemStyle[];
   breakpoints?: BoxStylesBreakpoints;
 
   ref?: HTMLDivElement;
   id?: string;
   style?: CSSProperties;
   className?: string;
-
-  onChange: (currentValue: string) => void | undefined;
 };

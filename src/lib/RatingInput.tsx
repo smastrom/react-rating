@@ -5,7 +5,7 @@ import { getBreakpointRules } from './getBreakpointRules';
 import { getItemStyles } from './getItemStyles';
 import { defaultItemStyles } from './DefaultStyles';
 
-import { RatingItemProps } from './types';
+import { ItemStyle, RatingItemProps, SvgChildNodes } from './types';
 
 export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
   (
@@ -14,9 +14,14 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       ratingValue = undefined,
       customLabels = undefined,
 
-      itemStyles = [defaultItemStyles],
+      itemStyles = defaultItemStyles,
       direction = 'horizontal',
       customEasing = '500ms cubic-bezier(0, 0, 0.2, 1)',
+
+      containerGap = 20,
+      boxRadius = 20,
+      boxBorderWidth = 0,
+      boxPadding = 20,
       breakpoints = undefined,
 
       highlightOnlySelected = false,
@@ -28,15 +33,13 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       className = undefined,
       style = undefined,
 
-      containerGap = 20,
-      boxRadius = 20,
-      boxBorderWidth = 0,
-      boxPadding = 20,
-
       onChange = undefined,
     },
     externalRef
   ) => {
+    const isItemStylesArray = Array.isArray(itemStyles);
+    const isItemStylesObject = typeof itemStyles === 'object' && !isItemStylesArray;
+
     if (!ratingValues || !ratingValue || !onChange) {
       console.error(
         '[ReactRatingInput] - Props "ratingValues", "ratingValue", "onChange" are required.'
@@ -44,8 +47,13 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       return null;
     }
 
-    if (typeof onChange !== 'function') {
-      console.error('[ReactRatingInput] - OnChange must be a function.');
+    if (
+      isItemStylesArray &&
+      (itemStyles.length < ratingValues.length || itemStyles.length > ratingValues.length)
+    ) {
+      console.error(
+        '[ReactRatingInput] - They array provided to itemStyles must have the same length of ratingValues'
+      );
       return null;
     }
 
@@ -115,14 +123,6 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       return 'rri--active';
     };
 
-    // Labels
-
-    const defaultLabels: string[] = ratingValues.map(
-      (_, index: number) => `Vote ${ratingValues[index]}`
-    );
-
-    const itemLabels = typeof customLabels === 'undefined' ? defaultLabels : customLabels;
-
     // Styles
 
     const globalStyles = {
@@ -139,41 +139,49 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
     }`;
 
     const appendStyles = () => {
-      if (getItemStyles(itemStyles)?.length === 1) {
-        return getItemStyles(itemStyles)?.[0];
+      if (isItemStylesObject) {
+        return getItemStyles([itemStyles as ItemStyle])[0];
       }
       return {};
     };
 
     const appendSingleStyles = (index: number) => {
-      if (getItemStyles(itemStyles)?.length > 1) {
+      if (isItemStylesArray) {
         return getItemStyles(itemStyles)?.[index];
       }
       return {};
     };
 
     const getStrokeIndex = (index: number) => {
-      if (itemStyles.length === 1) {
-        const mappedIndex = ratingValues.map(() => itemStyles[0].itemStrokeWidth);
-        return mappedIndex[index];
-      }
-      if (itemStyles.length > 1) {
+      if (isItemStylesArray) {
         const mappedIndex = itemStyles.map(({ itemStrokeWidth }) =>
           typeof itemStrokeWidth === 'number' ? itemStrokeWidth : 0
         );
         return mappedIndex[index];
       }
+      if (isItemStylesObject) {
+        const mappedIndex = ratingValues.map(() => itemStyles.itemStrokeWidth);
+        return mappedIndex[index];
+      }
     };
 
-    const getSvgItem = (index: number) => {
-      if (itemStyles.length === 1) {
-        return itemStyles[0].svgChildNodes;
+    const getSvgItem = (index: number): SvgChildNodes => {
+      if (isItemStylesObject) {
+        return itemStyles.svgChildNodes as SvgChildNodes;
       }
-      if (itemStyles.length > 1) {
-        return itemStyles[index].svgChildNodes;
+      if (isItemStylesArray) {
+        return itemStyles[index].svgChildNodes as SvgChildNodes;
       }
       return null;
     };
+
+    // Labels
+
+    const defaultLabels: string[] = ratingValues.map(
+      (_, index: number) => `Vote ${ratingValues[index]}`
+    );
+
+    const itemLabels = typeof customLabels === 'undefined' ? defaultLabels : customLabels;
 
     return (
       <>

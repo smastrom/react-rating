@@ -10,6 +10,8 @@ import { ItemStyle, RatingItemProps, SvgChildNodes } from './types';
 export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
   (
     {
+      onChange = undefined,
+
       ratingValues = undefined,
       ratingValue = undefined,
       customLabels = undefined,
@@ -28,31 +30,35 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       enableHover = true,
       enableTransitions = true,
       enableKeyboard = true,
+      readOnly = false,
 
       id = undefined,
       className = undefined,
       style = undefined,
 
-      onChange = undefined,
+      ariaLabelledBy = undefined,
+      readOnlyLabel = 'Rating',
     },
     externalRef
   ) => {
     const isItemStylesArray = Array.isArray(itemStyles);
     const isItemStylesObject = typeof itemStyles === 'object' && !isItemStylesArray;
 
-    if (!ratingValues || !ratingValue || !onChange) {
+    if (!ratingValues || !ratingValue) {
       console.error(
-        '[ReactRatingInput] - Props "ratingValues", "ratingValue", "onChange" are required.'
+        '[ReactRatingInput] - Props "ratingValues" and "ratingValue" are required.'
       );
       return null;
     }
 
-    if (
-      isItemStylesArray &&
-      (itemStyles.length < ratingValues.length || itemStyles.length > ratingValues.length)
-    ) {
+    if (!readOnly && typeof onChange !== 'function') {
+      console.error('[ReactRatingInput] - Prop "onChange" is required.');
+      return null;
+    }
+
+    if (isItemStylesArray && itemStyles.length !== ratingValues?.length) {
       console.error(
-        '[ReactRatingInput] - They array provided to itemStyles must have the same length of ratingValues'
+        '[ReactRatingInput] - They array provided must be of the same length of ratingValues.'
       );
       return null;
     }
@@ -72,7 +78,9 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
     ): void => {
       event.preventDefault();
       event.stopPropagation();
-      onChange(ratingValues[index]);
+      if (typeof onChange === 'function') {
+        onChange(ratingValues[index]);
+      }
     };
 
     const handleKeydown = (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
@@ -96,14 +104,18 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
           {
             const indexToSelect = isEventFiringFromLastItem ? 0 : nextValue;
             radioDivs.current[indexToSelect].focus();
-            onChange(ratingValues[indexToSelect]);
+            if (typeof onChange === 'function') {
+              onChange(ratingValues[indexToSelect]);
+            }
           }
           break;
         case 'ArrowUp':
         case 'ArrowLeft': {
           const indexToSelect = isEventFiringFromFistItem ? lastValue : previousValue;
           radioDivs.current[indexToSelect].focus();
-          onChange(ratingValues[indexToSelect]);
+          if (typeof onChange === 'function') {
+            onChange(ratingValues[indexToSelect]);
+          }
         }
       }
     };
@@ -134,10 +146,6 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       '--rri--direction': direction === 'horizontal' ? 'row' : 'column',
     } as CSSProperties;
 
-    const additionalClassNames = `${enableHover ? 'rri--has-hover' : ''} ${
-      enableTransitions ? 'rri--has-transitions' : ''
-    }`;
-
     const appendStyles = () => {
       if (isItemStylesObject) {
         return getItemStyles([itemStyles as ItemStyle])[0];
@@ -152,7 +160,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       return {};
     };
 
-    const getStrokeIndex = (index: number) => {
+    const getStrokeIndex = (index: number): number => {
       if (isItemStylesArray) {
         const mappedIndex = itemStyles.map(({ itemStrokeWidth }) =>
           typeof itemStrokeWidth === 'number' ? itemStrokeWidth : 0
@@ -161,8 +169,9 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       }
       if (isItemStylesObject) {
         const mappedIndex = ratingValues.map(() => itemStyles.itemStrokeWidth);
-        return mappedIndex[index];
+        return mappedIndex[index] as number;
       }
+      return 0;
     };
 
     const getSvgItem = (index: number): SvgChildNodes => {
@@ -175,10 +184,42 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       return null;
     };
 
+    const additionalClassNames = `${enableHover && !readOnly ? 'rri--has-hover' : ''} ${
+      enableTransitions && !readOnly ? 'rri--has-transitions' : ''
+    }`;
+
+    // Props
+
+    const getInteractiveRadioGroupProps = () => {
+      if (!readOnly) {
+        return {
+          role: 'radiogroup',
+          'aria-labelledby': ariaLabelledBy,
+        };
+      }
+      return { role: 'img', 'aria-label': readOnlyLabel };
+    };
+
+    const getInteractiveRadioProps = (index: number) => {
+      if (!readOnly) {
+        return {
+          role: 'radio',
+          'aria-labelledby': ariaLabelledBy,
+          'aria-checked': ratingValues[index] === ratingValue,
+          onClick: (event: React.MouseEvent<HTMLDivElement>) => handleClick(event, index),
+          tabIndex: enableKeyboard && ratingValues[index] === ratingValue ? 0 : -1,
+          onKeyDown: enableKeyboard
+            ? (event: React.KeyboardEvent<HTMLDivElement>) => handleKeydown(event, index)
+            : undefined,
+        };
+      }
+      return {};
+    };
+
     // Labels
 
     const defaultLabels: string[] = ratingValues.map(
-      (_, index: number) => `Vote ${ratingValues[index]}`
+      (_, index: number) => `Rate ${ratingValues[index]}`
     );
 
     const itemLabels = typeof customLabels === 'undefined' ? defaultLabels : customLabels;
@@ -186,32 +227,27 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
     return (
       <>
         <div
-          role="radiogroup"
           ref={externalRef}
-          className={`rri--radio-group ${className || ''}`}
+          className={`rri--radio-group ${className || ''}`.trim()}
           id={id}
           style={{
             ...style,
             ...globalStyles,
             ...appendStyles(),
           }}
+          {...getInteractiveRadioGroupProps()}
         >
           {ratingValues.map((_, index) => (
             <div
               key={`rri_item_${index}`}
-              role="radio"
               ref={(ref) => (radioDivs.current[index] = ref as HTMLDivElement)}
-              className={`rri--radio ${handleHighlight(index)} ${additionalClassNames}`}
-              tabIndex={enableKeyboard && ratingValues[index] === ratingValue ? 0 : -1}
-              aria-labelledby={`rri_label_${index + 1}`}
-              aria-checked={ratingValues[index] === ratingValue}
-              onClick={(event) => handleClick(event, index)}
-              onKeyDown={
-                enableKeyboard ? (event) => handleKeydown(event, index) : undefined
-              }
+              className={`rri--radio ${handleHighlight(
+                index
+              )} ${additionalClassNames}`.trim()}
+              {...getInteractiveRadioProps(index)}
             >
               <div
-                style={{ ...appendSingleStyles(index) }}
+                style={appendSingleStyles(index)}
                 className="rri--box"
                 aria-hidden="true"
               >
@@ -220,9 +256,11 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
                   strokeWidth={getStrokeIndex(index)}
                 />
               </div>
-              <span className="rri--hidden" id={`rri_label_${index + 1}`}>
-                {itemLabels?.[index]}
-              </span>
+              {!readOnly && (
+                <span className="rri--hidden" id={`rri_label_${index + 1}`}>
+                  {itemLabels?.[index]}
+                </span>
+              )}
             </div>
           ))}
         </div>

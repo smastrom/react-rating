@@ -1,17 +1,22 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 
-import { ItemProps, SVGAtrributes } from './types';
+import { SvgChildNodes } from './types';
+
+type ItemProps = {
+  svgChildNodes?: SvgChildNodes;
+  strokeWidth?: number;
+};
+
+type SvgData = {
+  [key: string]: string;
+};
 
 const toSecondDecimal = (number: number): number => Math.round(number * 100) / 100;
 
-export const RatingItem = ({
-  svgChildNodes = null,
-  svgItemLabel = 'Rating Item',
-  strokeWidth = 0,
-}: ItemProps) => {
+export const RatingItem = ({ svgChildNodes = null, strokeWidth = 0 }: ItemProps) => {
   const svgRef = useRef<SVGPathElement | null>(null);
 
-  const [svgData, setSvgData] = useState<SVGAtrributes | null>(null);
+  const [svgData, setSvgData] = useState<SvgData | null>(null);
 
   const strokeOffset = strokeWidth > 0 ? -(strokeWidth / 2) : 0;
 
@@ -48,12 +53,12 @@ export const RatingItem = ({
 
   return (
     <svg
+      className="rri--svg-item"
       xmlns="http://www.w3.org/2000/svg"
       viewBox={svgData ? svgData.viewBox : '0 0 0 0'}
       strokeWidth={strokeWidth || 0}
       width="100%"
     >
-      <title>{svgItemLabel}</title>
       <g
         ref={svgRef}
         transform={svgData ? `translate(${svgData.translateData})` : undefined}

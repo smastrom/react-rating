@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { ElementStyle } from './types';
+import { ItemStyle } from './types';
 
 const Star = <polygon points="100,10 40,198 190,78 10,78 160,198" />;
 
-export const defaultItemStyles: ElementStyle = {
+export const defaultItemStyles: ItemStyle = {
   svgChildNodes: Star,
   itemStrokeWidth: 0,
   itemStrokeStyle: 'round',

@@ -13,6 +13,9 @@ export const getBreakpointRules = (
     breakpointProperties.forEach(([property, value], index) => {
       let breakpointProperty: string = '';
       switch (property) {
+        case 'containerGap':
+          breakpointProperty = `--rri--container-gap: ${value}px !important;`;
+          break;
         case 'boxRadius':
           breakpointProperty = `--rri--box-radius: ${value}px !important;`;
           break;
@@ -21,9 +24,6 @@ export const getBreakpointRules = (
           break;
         case 'boxPadding':
           breakpointProperty = `--rri--box-padding: ${value}px !important;`;
-          break;
-        case 'boxGap':
-          breakpointProperty = `--rri--box-gap: ${value}px !important;`;
       }
       variablesValues = variablesValues.concat('', breakpointProperty);
       if (index === breakpointProperties.length - 1) {

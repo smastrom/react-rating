@@ -1,6 +1,9 @@
 .rri--radio-group {
   display: flex;
   flex-direction: var(--rri--direction, unset);
+  width: 100% !important;
+  width: var(--rri--container-width, 100%);
+  gap: var(--rri--container-gap, unset);
 }
 
 .rri--radio {
@@ -10,7 +13,16 @@
   align-items: center;
   justify-content: center;
   flex-direction: var(--rri--label-position, unset);
-  gap: 0.5em;
+}
+
+.rri--radio:focus .rri--box {
+  background-color: var(--rri--box-color);
+  border-color: var(--rri--box-border-color, none);
+}
+
+.rri--radio:focus .rri--box .rri--svg-item {
+  fill: var(--rri--item-color);
+  stroke: var(--rri--active-item-stroke-color, currentColor);
 }
 
 .rri--box {
@@ -49,7 +61,7 @@
     border-color: var(--rri--box-border-color, none);
   }
 
-  .rri--has-hover:hover .rri--box svg {
+  .rri--has-hover:hover .rri--box .rri--svg-item {
     fill: var(--rri--item-color);
     stroke: var(--rri--active-item-stroke-color, currentColor);
   }
@@ -69,23 +81,37 @@
   transition: background-color var(--rri--easing);
 }
 
-.rri--has-transitions .rri--box svg {
+.rri--has-transitions .rri--box .rri--svg-item {
   transition: fill var(--rri--easing), stroke var(--rri--easing);
 }
 
 /* SVG Item */
 
-.rri--box svg {
+.rri--box .rri--svg-item {
   stroke-linecap: var(--rri--item-stroke-linecap, unset);
   stroke-linejoin: var(--rri--item-stroke-linejoin, unset);
 }
 
-.rri--active .rri--box svg {
+.rri--active .rri--box .rri--svg-item {
   fill: var(--rri--item-color);
   stroke: var(--rri--active-item-stroke-color, currentColor);
 }
 
-.rri--inactive .rri--box svg {
+.rri--inactive .rri--box .rri--svg-item {
   fill: var(--rri--inactive-item-color);
   stroke: var(--rri--inactive-item-stroke-color, currentColor);
+}
+
+/* Hidden */
+
+.rri--hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

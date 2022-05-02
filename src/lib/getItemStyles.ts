@@ -1,8 +1,11 @@
 import { defaultItemStyles } from './DefaultStyles';
 
-import { ElementStyles, ElementStyle, SingleStyles } from './types';
+import { ItemStyle, SingleItemStyle } from './types';
 
-const addStrokeStyles = (itemStrokeStyle: string, targetObject: SingleStyles): void => {
+const addStrokeStyles = (
+  itemStrokeStyle: string,
+  targetObject: SingleItemStyle
+): void => {
   switch (itemStrokeStyle) {
     case 'sharp':
       targetObject['--rri--item-stroke-linecap'] = 'miter';
@@ -15,15 +18,15 @@ const addStrokeStyles = (itemStrokeStyle: string, targetObject: SingleStyles): v
   }
 };
 
-export const getItemStyles = (itemStylesProp: ElementStyles): SingleStyles[] | [] => {
-  const singleStyles: SingleStyles[] = [];
+export const getItemStyles = (itemStylesProp: ItemStyle[]): SingleItemStyle[] | [] => {
+  const singleStyles: SingleItemStyle[] = [];
   if (Array.isArray(itemStylesProp)) {
     itemStylesProp.forEach((userStyle) => {
-      const mergedStyle: ElementStyle = {
+      const mergedStyle: ItemStyle = {
         ...defaultItemStyles,
         ...userStyle,
       };
-      const singleStyle: SingleStyles = {};
+      const singleStyle: SingleItemStyle = {};
 
       singleStyle['--rri--item-color'] = mergedStyle.activeItemColor;
       singleStyle['--rri--box-color'] = mergedStyle.activeBoxColor;

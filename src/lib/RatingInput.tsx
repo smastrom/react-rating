@@ -146,10 +146,9 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
 
     const getFullBreakpoints = (): Breakpoints => {
       if (typeof breakpoints === 'object') {
-        const maxBreakpoint = Number.parseInt(Object.keys(breakpoints)[0]) - 1;
         const fullBreakpoints = { ...breakpoints };
 
-        fullBreakpoints[maxBreakpoint] = {
+        fullBreakpoints[-1] = {
           containerGap,
           boxRadius,
           boxBorderWidth,

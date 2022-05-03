@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { ItemStyle, SvgChildNodes } from './types';
 
 import { isPlainObject } from './utils';

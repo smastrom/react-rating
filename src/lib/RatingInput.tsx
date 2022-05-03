@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 
 import { RatingItem } from './RatingItem';
 import { defaultItemStyles } from './DefaultStyles';
@@ -8,7 +8,7 @@ import { getSvgStrokes } from './getSvgStrokes';
 import { getCssVars } from './getCssVars';
 import { getActiveClassNames } from './getActiveClassNames';
 import { getGlobalStyles } from './getGlobalStyles';
-import { isPlainObject } from './utils';
+import { isInvalidArray, isPlainObject } from './utils';
 
 import { RatingInputProps } from './types';
 
@@ -21,6 +21,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       itemStyles = defaultItemStyles,
       enableKeyboard = true,
       direction = 'horizontal',
+      highlightOnlySelected = false,
       containerGap = 20,
       boxRadius = 20,
       boxBorderWidth = 0,
@@ -37,13 +38,16 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
     if (!ratingValues || !ratingValue) {
       return null;
     }
+    if (ratingValues.length > 10) {
+      return null;
+    }
     if (typeof onChange !== 'function') {
       return null;
     }
-    if (Array.isArray(itemStyles) && itemStyles.length !== ratingValues?.length) {
+    if (isInvalidArray(ratingValues)) {
       return null;
     }
-    if (ratingValues.length > 10) {
+    if (Array.isArray(itemStyles) && itemStyles.length !== ratingValues?.length) {
       return null;
     }
 
@@ -56,22 +60,56 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
     const [dynamicStyles, setDynamicStyles] = useState(() => ({
       cssVars: getCssVars(itemStyles, ratingValue),
       activeClassNames: getActiveClassNames(
+        highlightOnlySelected,
         ratingValues,
         ratingValues.indexOf(ratingValue as string)
       ),
     }));
 
+    /** Effect */
+
+    useEffect(() => {
+      const cssVars = getCssVars(itemStyles, ratingValues.indexOf(ratingValue as string));
+      const activeClassNames = getActiveClassNames(
+        highlightOnlySelected,
+        ratingValues,
+        ratingValues.indexOf(ratingValue as string)
+      );
+      setDynamicStyles({ cssVars, activeClassNames });
+    }, [ratingValue]);
+
     /** Handlers */
 
-    const handleMouseEnter = (hoveredIndex) => {
+    const handleClick = (
+      event: React.MouseEvent<HTMLDivElement>,
+      index: number
+    ): void => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (typeof onChange === 'function') {
+        onChange(ratingValues[index]);
+      }
+    };
+
+    const handleMouseEnter = (event, hoveredIndex) => {
+      event.preventDefault();
+      event.stopPropagation();
       const cssVars = getCssVars(itemStyles, hoveredIndex);
-      const activeClassNames = getActiveClassNames(ratingValues, hoveredIndex);
+      const activeClassNames = getActiveClassNames(
+        highlightOnlySelected,
+        ratingValues,
+        hoveredIndex
+      );
       setDynamicStyles({ cssVars, activeClassNames });
     };
 
-    const handleMouseLeave = () => {
+    const handleMouseLeave = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       const cssVars = getCssVars(itemStyles, ratingValues.indexOf(ratingValue as string));
       const activeClassNames = getActiveClassNames(
+        highlightOnlySelected,
         ratingValues,
         ratingValues.indexOf(ratingValue as string)
       );
@@ -117,18 +155,13 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       }
     };
 
-    const handleClick = (
-      event: React.MouseEvent<HTMLDivElement>,
-      index: number
-    ): void => {
-      event.preventDefault();
-      event.stopPropagation();
-      if (typeof onChange === 'function') {
-        onChange(ratingValues[index]);
-      }
-    };
-
     /** Props */
+
+    const mouseProps = (childIndex) => ({
+      onMouseEnter: (event: React.MouseEvent<HTMLDivElement>) =>
+        handleMouseEnter(event, childIndex),
+      onMouseLeave: (event: React.MouseEvent<HTMLDivElement>) => handleMouseLeave(event),
+    });
 
     const radioProps = (
       radioChildIndex: number
@@ -137,8 +170,6 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       'aria-labelledby': ariaLabelledBy,
       'aria-checked': ratingValues[radioChildIndex] === ratingValue,
       ref: (ref: HTMLDivElement) => (radioDivs.current[radioChildIndex] = ref),
-      onMouseEnter: () => handleMouseEnter(radioChildIndex),
-      onMouseLeave: () => handleMouseLeave(),
       onClick: (event: React.MouseEvent<HTMLDivElement>) =>
         handleClick(event, radioChildIndex),
       tabIndex: enableKeyboard && ratingValues[radioChildIndex] === ratingValue ? 0 : -1,
@@ -176,22 +207,27 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
           {ratingValues.map((_, index) => (
             <div
               key={`rri_item_${index}`}
-              className={`rri--radio ${dynamicStyles?.activeClassNames?.[index]}`}
-              {...radioProps(index)}
+              className="rri--hover-mask"
+              {...mouseProps(index)}
             >
               <div
-                style={{ ...dynamicStyles?.cssVars?.[index] }}
-                className="rri--box"
-                aria-hidden="true"
+                className={`rri--radio ${dynamicStyles?.activeClassNames?.[index]}`}
+                {...radioProps(index)}
               >
-                <RatingItem
-                  svgChildNodes={getSvgNodes(itemStyles, index)}
-                  strokeWidth={getSvgStrokes(ratingValues, itemStyles, index)}
-                />
+                <div
+                  style={{ ...dynamicStyles?.cssVars?.[index] }}
+                  className="rri--box"
+                  aria-hidden="true"
+                >
+                  <RatingItem
+                    svgChildNodes={getSvgNodes(itemStyles, index)}
+                    strokeWidth={getSvgStrokes(ratingValues, itemStyles, index)}
+                  />
+                </div>
+                <span className="rri--hidden" id={`rri_label_${index + 1}`}>
+                  {itemLabels?.[index]}
+                </span>
               </div>
-              <span className="rri--hidden" id={`rri_label_${index + 1}`}>
-                {itemLabels?.[index]}
-              </span>
             </div>
           ))}
         </div>

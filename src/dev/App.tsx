@@ -60,45 +60,49 @@ const testStyles: ItemStyle = {
 
 const testStylesArr: ItemStyle[] = [
   {
-    svgChildNodes: Star,
+    svgChildNodes: Mail,
+    itemStrokeWidth: 3,
+    itemStrokeStyle: 'round',
     activeItemColor: 'white',
     activeItemStrokeColor: 'tomato',
     activeBoxColor: 'tomato',
+    inactiveItemStrokeColor: 'fuchsia', // Has no effect
     inactiveItemColor: '#DCFCE7', // Has no effect on box half
     inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
   },
   {
-    svgChildNodes: Star,
+    svgChildNodes: Mail,
+    itemStrokeWidth: 3,
+    itemStrokeStyle: 'round',
     activeItemColor: 'white',
     activeItemStrokeColor: 'orange',
     activeBoxColor: 'orange',
+    inactiveItemStrokeColor: 'fuchsia', // Has no effect
     inactiveItemColor: '#DCFCE7', // Has no effect on box half
     inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
   },
   {
-    svgChildNodes: Star,
+    svgChildNodes: Mail,
+    itemStrokeWidth: 3,
+    itemStrokeStyle: 'round',
     activeItemColor: 'white',
     activeItemStrokeColor: 'gold',
     activeBoxColor: 'gold',
+    inactiveItemStrokeColor: 'fuchsia', // Has no effect
     inactiveItemColor: '#DCFCE7', // Has no effect on box half
     inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
   },
   {
-    svgChildNodes: Star,
+    svgChildNodes: Mail,
+    itemStrokeWidth: 3,
+    itemStrokeStyle: 'round',
     activeItemColor: 'white',
     activeItemStrokeColor: '#9ACD32',
     activeBoxColor: '#9ACD32',
+    inactiveItemStrokeColor: 'fuchsia', // Has no effect
     inactiveItemColor: '#DCFCE7', // Has no effect on box half
     inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
   },
-  /*   {
-    svgChildNodes: Star,
-    activeItemColor: 'white',
-    activeItemStrokeColor: '#22C55E',
-    activeBoxColor: '#22C55E',
-    inactiveItemColor: '#DCFCE7', // Has no effect on box half
-    inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
-  }, */
 ];
 
 function App() {

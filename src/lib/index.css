@@ -1,28 +1,32 @@
 .rri--group {
   display: flex;
   flex-direction: var(--rri--direction, unset);
-  width: 100% !important;
+  width: 100%;
   width: var(--rri--container-width, 100%);
-  gap: var(--rri--container-gap, unset);
 }
 
 .rri--radio {
-  cursor: pointer;
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: center;
 }
 
-.rri--box {
-  width: auto;
+.rri--hover-mask {
   display: flex;
-  aspect-ratio: 1;
+  cursor: pointer;
+  padding-right: var(--rri--container-gap, unset);
+}
+
+.rri--hover-mask:last-of-type {
+  padding-right: unset;
 }
 
 /* Box */
 
 .rri--box {
+  width: auto;
+  aspect-ratio: 1;
   min-width: 1vw;
   display: flex;
   pointer-events: none;

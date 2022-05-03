@@ -13,8 +13,7 @@
     "url": "git://github.com/smastrom/react-rating-input.git"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "author": "Simone Mastromattei <smastrom@proton.me>",
   "homepage": "smastromattei.dev",

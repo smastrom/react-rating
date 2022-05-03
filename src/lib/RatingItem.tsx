@@ -5,6 +5,7 @@ import { SvgChildNodes } from './types';
 type RatingItemProps = {
   svgChildNodes?: SvgChildNodes;
   strokeWidth?: number;
+  isPrecisionReadonly?: boolean;
 };
 
 type SvgData = {
@@ -16,6 +17,7 @@ const toSecondDecimal = (number: number): number => Math.round(number * 100) / 1
 export const RatingItem = ({
   svgChildNodes = null,
   strokeWidth = 0,
+  isPrecisionReadonly = false,
 }: RatingItemProps) => {
   const svgRef = useRef<SVGPathElement | null>(null);
 
@@ -54,6 +56,15 @@ export const RatingItem = ({
     }
   }, [strokeWidth, svgChildNodes]);
 
+  const getReadOnlyPrecisionAttrs = () => {
+    if (isPrecisionReadonly) {
+      return {
+        fill: "url('#rri_precision')",
+      };
+    }
+    return {};
+  };
+
   return (
     <svg
       className="rri--svg-item"
@@ -62,9 +73,19 @@ export const RatingItem = ({
       strokeWidth={strokeWidth || 0}
       width="100%"
     >
+      {isPrecisionReadonly && (
+        <defs>
+          <linearGradient id="rri_precision">
+            <stop className="rri--precision-stop-1" offset="50%" />
+            <stop className="rri--precision-stop-2" offset="50%" />
+          </linearGradient>
+        </defs>
+      )}
+
       <g
         ref={svgRef}
         transform={svgData ? `translate(${svgData.translateData})` : undefined}
+        {...getReadOnlyPrecisionAttrs()}
       >
         {svgChildNodes}
       </g>

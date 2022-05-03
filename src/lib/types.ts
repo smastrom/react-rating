@@ -33,19 +33,16 @@ export type Breakpoints = {
   [key: number]: GlobalStyles;
 };
 
-export type RatingItemProps = GlobalStyles & {
+export type RatingInputProps = GlobalStyles & {
   onChange: (currentValue: string) => void | undefined;
 
-  ratingValues: string[];
+  ratingValues: string[] | number[];
   ratingValue: string | number | undefined | null;
-  customLabels?: string[];
-  enableHover?: boolean;
+  customAccessibleLabels?: string[];
   direction: 'horizontal' | 'vertical';
+
   highlightOnlySelected?: boolean;
-  readOnly?: boolean;
-  customEasing?: string;
   enableKeyboard?: boolean;
-  enableTransitions?: boolean;
 
   itemStyles?: ItemStyle | ItemStyle[];
   breakpoints?: Breakpoints;
@@ -54,7 +51,11 @@ export type RatingItemProps = GlobalStyles & {
   id?: string;
   style?: CSSProperties;
   className?: string;
-
   ariaLabelledBy?: string;
+
+  readOnly?: boolean;
   readOnlyLabel?: string;
+  readOnlyPrecision?: 1 | 0.5;
+  readOnlyPrecisionFillMode?: 'box' | 'svg';
+  readOnlyLimit?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 };

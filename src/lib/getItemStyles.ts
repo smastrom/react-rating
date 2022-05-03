@@ -25,6 +25,7 @@ export const getItemStyles = (itemStylesProp: ItemStyle[]): SingleItemStyle[] | 
         ...defaultItemStyles,
         ...userStyle,
       };
+
       const singleStyle: SingleItemStyle = {};
 
       singleStyle['--rri--active-item-color'] = mergedStyle.activeItemColor;

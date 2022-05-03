@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 
 import { SvgChildNodes } from './types';
 
-type ItemProps = {
+type RatingItemProps = {
   svgChildNodes?: SvgChildNodes;
   strokeWidth?: number;
 };
@@ -13,7 +13,10 @@ type SvgData = {
 
 const toSecondDecimal = (number: number): number => Math.round(number * 100) / 100;
 
-export const RatingItem = ({ svgChildNodes = null, strokeWidth = 0 }: ItemProps) => {
+export const RatingItem = ({
+  svgChildNodes = null,
+  strokeWidth = 0,
+}: RatingItemProps) => {
   const svgRef = useRef<SVGPathElement | null>(null);
 
   const [svgData, setSvgData] = useState<SvgData | null>(null);

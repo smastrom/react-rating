@@ -14,7 +14,6 @@ const addStrokeStyles = (
     case 'round':
       targetObject['--rri--item-stroke-linecap'] = 'round';
       targetObject['--rri--item-stroke-linejoin'] = 'round';
-      break;
   }
 };
 

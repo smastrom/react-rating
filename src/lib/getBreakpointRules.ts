@@ -11,16 +11,21 @@ export const getBreakpointRules = (breakpointsProp: Breakpoints): string => {
       }
 
       let variablesValues = '';
-      const minOrMax = breakpointIndex === 0 ? 'max' : 'min';
-      const mediaRule = `@media(${minOrMax}-width: ${breakpointValue}px) { .rri--radio-group {`;
+      let mediaRule = '';
+      const className = '.rri--radio-group {';
+
+      const isGlobalRule = breakpointIndex === 0;
+      if (isGlobalRule) {
+        mediaRule = className;
+      } else {
+        mediaRule = `@media(min-width: ${breakpointValue}px) { ${className}`;
+      }
 
       const breakpointProperties = Object.entries(styles);
-
       breakpointProperties.forEach(([property, value], index) => {
         if (typeof value !== 'number') {
           return;
         }
-
         let breakpointProperty: string = '';
         switch (property) {
           case 'containerGap':
@@ -37,7 +42,8 @@ export const getBreakpointRules = (breakpointsProp: Breakpoints): string => {
         }
         variablesValues = variablesValues.concat('', breakpointProperty);
         if (index === breakpointProperties.length - 1) {
-          const cssRule = `${mediaRule} ${variablesValues} } }`;
+          const closingBracket = isGlobalRule ? '' : '}';
+          const cssRule = `${mediaRule} ${variablesValues} } ${closingBracket}`;
           rulesArray.push(cssRule);
         }
       });

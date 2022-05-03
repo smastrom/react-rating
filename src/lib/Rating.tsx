@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { CSSProperties, forwardRef } from 'react';
 
 import { RatingItem } from './RatingItem';

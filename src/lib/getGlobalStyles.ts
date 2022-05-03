@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { RatingInputProps } from './types';
 import { toKebabCase } from './utils';
 

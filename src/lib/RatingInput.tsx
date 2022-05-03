@@ -5,7 +5,7 @@ import { getBreakpointRules } from './getBreakpointRules';
 import { getItemStyles } from './getItemStyles';
 import { defaultItemStyles } from './DefaultStyles';
 
-import { ItemStyle, RatingItemProps, SvgChildNodes } from './types';
+import { Breakpoints, ItemStyle, RatingItemProps, SvgChildNodes } from './types';
 
 export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
   (
@@ -68,6 +68,8 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       return null;
     }
 
+    // Refs
+
     const radioDivs = useRef<HTMLDivElement[] | []>([]);
 
     // Handlers
@@ -87,11 +89,11 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       event.preventDefault();
       event.stopPropagation();
 
-      const previousValue = index - 1;
-      const lastValue = ratingValues.length - 1;
-      const nextValue = index + 1;
+      const previousSibling = index - 1;
+      const nextSibling = index + 1;
+      const lastSibling = ratingValues.length - 1;
 
-      const isEventFiringFromLastItem = lastValue === index;
+      const isEventFiringFromLastItem = lastSibling === index;
       const isEventFiringFromFistItem = index === 0;
 
       switch (event.code) {
@@ -102,65 +104,97 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
         case 'ArrowDown':
         case 'ArrowRight':
           {
-            const indexToSelect = isEventFiringFromLastItem ? 0 : nextValue;
-            radioDivs.current[indexToSelect].focus();
+            const siblingToFocus = isEventFiringFromLastItem ? 0 : nextSibling;
+            radioDivs.current[siblingToFocus].focus();
             if (typeof onChange === 'function') {
-              onChange(ratingValues[indexToSelect]);
+              onChange(ratingValues[siblingToFocus]);
             }
           }
           break;
         case 'ArrowUp':
         case 'ArrowLeft': {
-          const indexToSelect = isEventFiringFromFistItem ? lastValue : previousValue;
-          radioDivs.current[indexToSelect].focus();
+          const siblingToFocus = isEventFiringFromFistItem
+            ? lastSibling
+            : previousSibling;
+          radioDivs.current[siblingToFocus].focus();
           if (typeof onChange === 'function') {
-            onChange(ratingValues[indexToSelect]);
+            onChange(ratingValues[siblingToFocus]);
           }
         }
       }
     };
 
-    const handleHighlight = (index: number) => {
-      const valueAtIndex = ratingValues.indexOf(ratingValue as string);
+    // Styles
+
+    const getGlobalResponsiveStyles = () => {
+      if (typeof breakpoints === 'undefined') {
+        return {
+          '--rri--container-gap': `${containerGap}px`,
+          '--rri--box-radius': `${boxRadius}px`,
+          '--rri--box-border-width': `${boxBorderWidth}px`,
+          '--rri--box-padding': `${boxPadding}px`,
+        } as CSSProperties;
+      }
+      return {};
+    };
+
+    const globalStyles = {
+      ...getGlobalResponsiveStyles(),
+      '--rri--easing': customEasing,
+      '--rri--direction': direction === 'horizontal' ? 'row' : 'column',
+    } as CSSProperties;
+
+    const getFullBreakpoints = (): Breakpoints => {
+      if (typeof breakpoints === 'object') {
+        const maxBreakpoint = Number.parseInt(Object.keys(breakpoints)[0]) - 1;
+        const fullBreakpoints = { ...breakpoints };
+
+        fullBreakpoints[maxBreakpoint] = {
+          containerGap,
+          boxRadius,
+          boxBorderWidth,
+          boxPadding,
+        };
+
+        return fullBreakpoints;
+      }
+      return {};
+    };
+
+    const additionalClassNames = `${enableHover && !readOnly ? 'rri--has-hover' : ''} ${
+      enableTransitions && !readOnly ? 'rri--has-transitions' : ''
+    }`;
+
+    const getActiveClassNames = (index: number) => {
+      const indexOfSelectedValue = ratingValues.indexOf(ratingValue as string);
 
       if (highlightOnlySelected) {
-        if (valueAtIndex === index) {
+        if (indexOfSelectedValue === index) {
           return 'rri--active';
         }
         return 'rri--inactive';
       }
-      if (valueAtIndex + 1 <= index) {
+      if (indexOfSelectedValue + 1 <= index) {
         return 'rri--inactive';
       }
       return 'rri--active';
     };
 
-    // Styles
-
-    const globalStyles = {
-      '--rri--container-gap': `${containerGap}px`,
-      '--rri--box-radius': `${boxRadius}px`,
-      '--rri--box-border-width': `${boxBorderWidth}px`,
-      '--rri--box-padding': `${boxPadding}px`,
-      '--rri--easing': customEasing,
-      '--rri--direction': direction === 'horizontal' ? 'row' : 'column',
-    } as CSSProperties;
-
-    const appendStyles = () => {
+    const getCssVariables = () => {
       if (isItemStylesObject) {
         return getItemStyles([itemStyles as ItemStyle])[0];
       }
       return {};
     };
 
-    const appendSingleStyles = (index: number) => {
+    const getSingleCssVariables = (index: number) => {
       if (isItemStylesArray) {
         return getItemStyles(itemStyles)?.[index];
       }
       return {};
     };
 
-    const getStrokeIndex = (index: number): number => {
+    const getSingleStroke = (index: number): number => {
       if (isItemStylesArray) {
         const mappedIndex = itemStyles.map(({ itemStrokeWidth }) =>
           typeof itemStrokeWidth === 'number' ? itemStrokeWidth : 0
@@ -184,10 +218,6 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
       return null;
     };
 
-    const additionalClassNames = `${enableHover && !readOnly ? 'rri--has-hover' : ''} ${
-      enableTransitions && !readOnly ? 'rri--has-transitions' : ''
-    }`;
-
     // Props
 
     const getInteractiveRadioGroupProps = () => {
@@ -206,6 +236,8 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
           role: 'radio',
           'aria-labelledby': ariaLabelledBy,
           'aria-checked': ratingValues[index] === ratingValue,
+          ref: (ref: HTMLDivElement) =>
+            (radioDivs.current[index] = ref as HTMLDivElement),
           onClick: (event: React.MouseEvent<HTMLDivElement>) => handleClick(event, index),
           tabIndex: enableKeyboard && ratingValues[index] === ratingValue ? 0 : -1,
           onKeyDown: enableKeyboard
@@ -224,6 +256,8 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
 
     const itemLabels = typeof customLabels === 'undefined' ? defaultLabels : customLabels;
 
+    // Render
+
     return (
       <>
         <div
@@ -233,27 +267,26 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
           style={{
             ...style,
             ...globalStyles,
-            ...appendStyles(),
+            ...getCssVariables(),
           }}
           {...getInteractiveRadioGroupProps()}
         >
           {ratingValues.map((_, index) => (
             <div
               key={`rri_item_${index}`}
-              ref={(ref) => (radioDivs.current[index] = ref as HTMLDivElement)}
-              className={`rri--radio ${handleHighlight(
+              className={`rri--radio ${getActiveClassNames(
                 index
               )} ${additionalClassNames}`.trim()}
               {...getInteractiveRadioProps(index)}
             >
               <div
-                style={appendSingleStyles(index)}
+                style={getSingleCssVariables(index)}
                 className="rri--box"
                 aria-hidden="true"
               >
                 <RatingItem
                   svgChildNodes={getSvgItem(index)}
-                  strokeWidth={getStrokeIndex(index)}
+                  strokeWidth={getSingleStroke(index)}
                 />
               </div>
               {!readOnly && (
@@ -265,7 +298,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingItemProps>(
           ))}
         </div>
         {typeof breakpoints === 'object' && (
-          <style>{getBreakpointRules(breakpoints)}</style>
+          <style>{getBreakpointRules(getFullBreakpoints())}</style>
         )}
       </>
     );

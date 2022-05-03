@@ -136,15 +136,15 @@ function App() {
           boxBorderWidth={3}
           boxPadding={20}
           breakpoints={{
-            120: {
-              containerGap: 20,
-              boxRadius: 10,
-              boxPadding: 10,
-            },
             230: {
               containerGap: 20,
               boxRadius: 20,
               boxPadding: 20,
+            },
+            120: {
+              containerGap: 20,
+              boxRadius: 10,
+              boxPadding: 10,
             },
           }}
           onChange={(currentValue: string): void => setValue(currentValue)}

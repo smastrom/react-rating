@@ -1,18 +1,36 @@
-import { Breakpoints } from './types';
+import { GlobalStyles } from './getGlobalStyles';
+import { toKebabCase } from './utils';
 
-export const getBreakpointRules = (breakpointsProp: Breakpoints): string => {
+export const getBreakpointRules = ({
+  breakpoints,
+  containerGap,
+  boxRadius,
+  boxBorderWidth,
+  boxPadding,
+}: Omit<GlobalStyles, 'direction'>): string => {
   let rulesArray: string[] = [];
 
-  Object.entries(breakpointsProp).forEach(
+  const fullBreakpoints = { ...breakpoints };
+
+  fullBreakpoints[0] = {
+    containerGap,
+    boxRadius,
+    boxBorderWidth,
+    boxPadding,
+  };
+
+  Object.entries(fullBreakpoints).forEach(
     ([breakpointValue, styles], breakpointIndex) => {
-      const isValidBreakpoint = Number.isInteger(Number.parseInt(breakpointValue));
+      const breakpointSign = Math.sign(Number.parseInt(breakpointValue));
+      const isValidBreakpoint = breakpointSign === 1 || breakpointSign === 0;
+
       if (!isValidBreakpoint) {
         return;
       }
 
       let variablesValues = '';
       let mediaRule = '';
-      const className = '.rri--radio-group {';
+      const className = '.rri--group {';
 
       const isGlobalRule = breakpointIndex === 0;
       if (isGlobalRule) {
@@ -26,20 +44,7 @@ export const getBreakpointRules = (breakpointsProp: Breakpoints): string => {
         if (typeof value !== 'number') {
           return;
         }
-        let breakpointProperty: string = '';
-        switch (property) {
-          case 'containerGap':
-            breakpointProperty = `--rri--container-gap: ${value}px;`;
-            break;
-          case 'boxRadius':
-            breakpointProperty = `--rri--box-radius: ${value}px;`;
-            break;
-          case 'boxBorder':
-            breakpointProperty = `--rri--box-border-width: ${value}px;`;
-            break;
-          case 'boxPadding':
-            breakpointProperty = `--rri--box-padding: ${value}px;`;
-        }
+        const breakpointProperty = `--rri--${toKebabCase(property)}: ${value}px;`;
         variablesValues = variablesValues.concat('', breakpointProperty);
         if (index === breakpointProperties.length - 1) {
           const closingBracket = isGlobalRule ? '' : '}';

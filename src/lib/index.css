@@ -1,4 +1,4 @@
-.rri--radio-group {
+.rri--group {
   display: flex;
   flex-direction: var(--rri--direction, unset);
   width: 100% !important;
@@ -7,20 +7,11 @@
 }
 
 .rri--radio {
+  cursor: pointer;
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: center;
-}
-
-.rri--radio:focus .rri--box {
-  background-color: var(--rri--active-box-color);
-  border-color: var(--rri--active-box-border-color, none);
-}
-
-.rri--radio:focus .rri--box .rri--svg-item {
-  fill: var(--rri--active-item-color);
-  stroke: var(--rri--active-item-stroke-color, currentColor);
 }
 
 .rri--box {
@@ -40,6 +31,8 @@
   border-width: var(--rri--box-border-width, 0);
   border-radius: var(--rri--box-radius, 0);
 }
+
+/* Active */
 
 .rri--inactive .rri--box {
   background-color: var(--rri--inactive-box-color);
@@ -69,14 +62,7 @@
   }
 }
 
-/* Focus */
-
-.rri--radio:focus-visible {
-  outline: none;
-  border-radius: var(--rri--box-radius, 0);
-  --focus-shadow-color: var(--rri--active-box-border-color);
-  box-shadow: 0px 8px 0px var(--focus-shadow-color);
-}
+/* Focus - To do */
 
 /* Transitions */
 
@@ -86,6 +72,63 @@
 
 .rri--has-transitions .rri--box .rri--svg-item {
   transition: fill var(--rri--easing), stroke var(--rri--easing);
+}
+
+/* Readonly */
+
+.rri--precision-stop-1 {
+  stop-color: var(--rri--active-item-color);
+}
+
+.rri--precision-stop-2 {
+  stop-color: var(--rri--inactive-item-color);
+}
+
+/* Readonly - Box*/
+
+.rri--readonly-precision-box-int .rri--box {
+  background: linear-gradient(
+    to right,
+    var(--rri--active-box-color, none) 50%,
+    var(--rri--inactive-box-color, none) 50%
+  );
+}
+
+.rri--readonly-precision-active-box .rri--box {
+  background-color: var(--rri--active-box-color);
+}
+
+.rri--readonly-precision-inactive-box .rri--box {
+  background-color: var(--rri--inactive-box-color);
+}
+
+.rri--readonly-precision-box-int .rri--box .rri--svg-item,
+.rri--readonly-precision-active-box .rri--box .rri--svg-item,
+.rri--readonly-precision-inactive-box .rri--box .rri--svg-item {
+  fill: var(--rri--active-item-color);
+  stroke: var(--rri--active-item-stroke-color, currentColor);
+}
+
+/* Readonly - SVG */
+
+.rri--readonly-precision-svg-int .rri--svg-item {
+  stroke: var(--rri--active-item-stroke-color, currentColor);
+}
+
+.rri--readonly-precision-svg-active .rri--svg-item {
+  fill: var(--rri--active-item-color);
+  stroke: var(--rri--active-item-stroke-color, currentColor);
+}
+
+.rri--readonly-precision-svg-inactive .rri--svg-item {
+  fill: var(--rri--inactive-item-color);
+  stroke: var(--rri--active-item-stroke-color, currentColor);
+}
+
+.rri--readonly-precision-svg-int .rri--box,
+.rri--readonly-precision-svg-active .rri--box,
+.rri--readonly-precision-svg-inactive .rri--box {
+  background-color: var(--rri--active-box-color);
 }
 
 /* SVG Item */

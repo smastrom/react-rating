@@ -1,16 +1,16 @@
 export const getActiveClassNames = (
-  isExclusive: boolean,
-  ratingValues: string[] | number[],
+  highlightOnlySelectedProp: boolean,
+  ratingValues: number[],
   selectedIndex: number
 ) =>
   ratingValues.map((_, index) => {
-    if (isExclusive === false) {
+    if (highlightOnlySelectedProp === false) {
       if (index <= selectedIndex) {
         return 'rri--active';
       }
       return 'rri--inactive';
     }
-    if (isExclusive === true) {
+    if (highlightOnlySelectedProp === true) {
       if (index === selectedIndex) {
         return 'rri--active';
       }

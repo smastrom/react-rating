@@ -24,9 +24,9 @@ export const Rating = forwardRef<HTMLDivElement, RatingItemProps>(
       ratingValue = 5,
 
       itemStyles = defaultItemStyles,
-      direction = 'horizontal',
+      orientation = 'horizontal',
 
-      containerGap = 20,
+      boxMargin = 20,
       boxRadius = 20,
       boxBorderWidth = 0,
       boxPadding = 20,
@@ -52,7 +52,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingItemProps>(
     const getGlobalResponsiveStyles = () => {
       if (typeof breakpoints === 'undefined') {
         return {
-          '--rri--container-gap': `${containerGap}px`,
+          '--rri--box-margin': `${boxMargin}px`,
           '--rri--box-radius': `${boxRadius}px`,
           '--rri--box-border-width': `${boxBorderWidth}px`,
           '--rri--box-padding': `${boxPadding}px`,
@@ -63,7 +63,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingItemProps>(
 
     const globalStyles = {
       ...getGlobalResponsiveStyles(),
-      '--rri--direction': direction === 'horizontal' ? 'row' : 'column',
+      '--rri--orientation': orientation === 'horizontal' ? 'row' : 'column',
     } as CSSProperties;
 
     const getFullBreakpoints = (): Breakpoints => {
@@ -71,7 +71,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingItemProps>(
         const fullBreakpoints = { ...breakpoints };
 
         fullBreakpoints[0] = {
-          containerGap,
+          boxMargin,
           boxRadius,
           boxBorderWidth,
           boxPadding,

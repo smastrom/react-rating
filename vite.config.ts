@@ -1,6 +1,4 @@
-// @ts-ignore
 import { appendFile, rm } from 'fs';
-import { format } from 'prettier';
 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -12,8 +10,8 @@ export default defineConfig({
     minify: 'terser',
     lib: {
       name: 'React Rating Input',
-      entry: 'src/lib/index.ts',
-      formats: ['es', 'umd', 'cjs'],
+      entry: 'src/index.ts',
+      formats: ['es', 'umd'],
       fileName: (format) => {
         if (format === 'es') {
           return 'index.js';
@@ -23,13 +21,13 @@ export default defineConfig({
     },
     rollupOptions: {
       external: ['react'],
-      input: 'src/lib/index.ts',
+      input: 'src/index.ts',
       output: {
         globals: {
           react: 'React',
         },
         assetFileNames: (assetInfo) =>
-          assetInfo.name == 'style.css' ? 'index.min.css' : assetInfo.name,
+          assetInfo.name === 'style.css' ? 'index.min.css' : assetInfo.name,
       },
     },
   },
@@ -37,26 +35,14 @@ export default defineConfig({
     react({ jsxRuntime: 'classic' }),
     dts({
       outputDir: 'dist/types',
-      exclude: [
-        'src/lib/DefaultStyles.tsx',
-        'src/lib/getBreakpointRules.ts',
-        'src/lib/getItemStyles.ts',
-        'src/lib/RatingItem.tsx',
-        'src/lib/utils.ts',
-        'src/lib/index.ts',
-      ],
+      include: ['src/types.ts', 'src/RatingInput.tsx'],
       beforeWriteFile: (_, content) => {
-        const newContent = content
-          .replace("import { RatingItemProps } from './types';", '')
+        const cleanContent = content
+          .replace("import { RatingInputProps } from './types';", '')
           .replace('/// <reference types="vite/client" />', '')
           .replace('export {};', '');
 
-        const formattedContent = format(newContent, {
-          singleQuote: true,
-          parser: 'typescript',
-        });
-
-        appendFile('dist/index.d.ts', formattedContent, (err: any) => {
+        appendFile('dist/index.d.ts', cleanContent, (err: any) => {
           if (err) {
             console.log(err);
           }

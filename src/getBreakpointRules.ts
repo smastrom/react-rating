@@ -3,17 +3,17 @@ import { toKebabCase } from './utils';
 
 export const getBreakpointRules = ({
   breakpoints,
-  containerGap,
+  boxMargin,
   boxRadius,
   boxBorderWidth,
   boxPadding,
-}: Omit<GlobalStyles, 'direction'>): string => {
+}: Omit<GlobalStyles, 'orientation'>): string => {
   let rulesArray: string[] = [];
 
   const fullBreakpoints = { ...breakpoints };
 
   fullBreakpoints[0] = {
-    containerGap,
+    boxMargin,
     boxRadius,
     boxBorderWidth,
     boxPadding,

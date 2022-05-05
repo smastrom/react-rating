@@ -1,9 +1,10 @@
-import { ItemStyle } from './types';
 import { isPlainObject } from './utils';
+
+import { ItemStylesProp } from './types';
 
 export const getSvgStrokes = (
   ratingValuesNum: number[] | string[],
-  itemStylesProp: ItemStyle | ItemStyle[],
+  itemStylesProp: ItemStylesProp | ItemStylesProp[],
   index: number
 ): number => {
   if (Array.isArray(itemStylesProp)) {

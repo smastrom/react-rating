@@ -1,6 +1,6 @@
 .rri--group {
   display: flex;
-  flex-direction: var(--rri--direction, unset);
+  flex-orientation: var(--rri--orientation, unset);
   width: 100%;
   width: var(--rri--container-width, 100%);
 }
@@ -15,11 +15,34 @@
 .rri--hover-mask {
   display: flex;
   cursor: pointer;
-  padding-right: var(--rri--container-gap, unset);
 }
 
-.rri--hover-mask:last-of-type {
+/* orientation - Horizontal */
+
+.rri--group.rri--dir-x .rri--hover-mask {
+  padding-right: var(--rri--box-margin, unset);
+}
+
+.rri--group.rri--dir-x .rri--hover-mask:last-of-type {
   padding-right: unset;
+}
+
+[dir='rtl'] .rri--group.rri--dir-x .rri--hover-mask:last-of-type {
+  padding-right: var(--rri--box-margin, unset);
+}
+
+[dir='rtl'] .rri--group.rri--dir-x .rri--hover-mask:first-of-type {
+  padding-right: unset;
+}
+
+/* orientation - Vertical */
+
+.rri--group.rri--dir-y .rri--hover-mask {
+  padding-bottom: var(--rri--box-margin, unset);
+}
+
+.rri--group.rri--dir-y .rri--hover-mask:last-of-type {
+  padding-bottom: unset;
 }
 
 /* Box */
@@ -50,33 +73,9 @@
 
 /* Hover states */
 
-.rri--has-hover {
-  cursor: pointer;
-}
-
-@media (hover: hover) {
-  .rri--has-hover:hover .rri--box {
-    background-color: var(--rri--active-box-color);
-    border-color: var(--rri--active-box-border-color, none);
-  }
-
-  .rri--has-hover:hover .rri--box .rri--svg-item {
-    fill: var(--rri--active-item-color);
-    stroke: var(--rri--active-item-stroke-color, currentColor);
-  }
-}
-
 /* Focus - To do */
 
 /* Transitions */
-
-.rri--has-transitions .rri--box {
-  transition: background-color var(--rri--easing);
-}
-
-.rri--has-transitions .rri--box .rri--svg-item {
-  transition: fill var(--rri--easing), stroke var(--rri--easing);
-}
 
 /* Readonly */
 
@@ -84,8 +83,16 @@
   stop-color: var(--rri--active-item-color);
 }
 
+[dir='rtl'] .rri--precision-stop-1 {
+  stop-color: var(--rri--inactive-item-color);
+}
+
 .rri--precision-stop-2 {
   stop-color: var(--rri--inactive-item-color);
+}
+
+[dir='rtl'] .rri--precision-stop-2 {
+  stop-color: var(--rri--active-item-color);
 }
 
 /* Readonly - Box*/
@@ -93,6 +100,14 @@
 .rri--readonly-precision-box-int .rri--box {
   background: linear-gradient(
     to right,
+    var(--rri--active-box-color, none) 50%,
+    var(--rri--inactive-box-color, none) 50%
+  );
+}
+
+[dir='rtl'] .rri--readonly-precision-box-int .rri--box {
+  background: linear-gradient(
+    to left,
     var(--rri--active-box-color, none) 50%,
     var(--rri--inactive-box-color, none) 50%
   );

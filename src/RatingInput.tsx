@@ -8,14 +8,14 @@ import { getSvgStrokes } from './getSvgStrokes';
 import { getCssObjectVars, getCssArrayVars } from './getCssVars';
 import { getActiveClassNames } from './getActiveClassNames';
 import { getGlobalStyles } from './getGlobalStyles';
-import { isPlainObject, isValidInitialValue } from './utils';
+import { isPlainObject } from './utils';
 
 import { CSSVariables, ItemStylesProp, RatingInputProps } from './types';
 
-/** Accessible radio-group to be used as input, please refer to the
- * README at https://github.com/smastrom/react-rating-input
+/** Accessible radio-group to be used as input, please refer to
+ * README.md at https://github.com/smastrom/react-rating-input
  * for the complete list of props. If you just need to display the rating
- * please use <Rating /> instead. */
+ * please use `<Rating />` instead. */
 
 export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
   (
@@ -31,7 +31,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       itemStyles = defaultItemStyles,
       boxMargin = 20,
       boxRadius = 20,
-      boxBorderWidth = 0,
+      boxBorderWidth = undefined,
       boxPadding = 20,
       breakpoints = undefined,
 
@@ -44,18 +44,12 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
     },
     externalRef
   ) => {
-    const ratingValues = Array.from(Array(limit), (_, index) => index + 1);
-
-    const isStylesPropObject = isPlainObject(itemStyles);
     const isStylesPropArray = Array.isArray(itemStyles);
 
     if (typeof limit !== 'number' || limit < 1 || limit > 10) {
       return null;
     }
-    if (!isValidInitialValue(ratingValues, ratingValue)) {
-      return null;
-    }
-    if (!isStylesPropObject && !isStylesPropArray) {
+    if (!isPlainObject(itemStyles) && !isStylesPropArray) {
       return null;
     }
     if (isStylesPropArray && itemStyles.length !== limit) {
@@ -64,9 +58,8 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
     if (typeof onChange !== 'function') {
       return null;
     }
-    if (typeof highlightOnlySelected !== 'boolean') {
-      return null;
-    }
+
+    const ratingValues = Array.from(Array(limit), (_, index) => index + 1);
 
     /* Refs */
 
@@ -83,9 +76,9 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
     };
 
     const [dynamicStyles, setDynamicStyles] = useState(() => ({
-      cssVars: isStylesPropObject
-        ? getCssObjectVars(itemStyles as ItemStylesProp)
-        : getCssArrayVars(itemStyles as ItemStylesProp[], ratingValue || 0),
+      cssVars: isStylesPropArray
+        ? getCssArrayVars(itemStyles as ItemStylesProp[], ratingValue || 0)
+        : getCssObjectVars(itemStyles as ItemStylesProp),
       activeClassNames: getClassNames(),
     }));
 
@@ -259,7 +252,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
                 >
                   <RatingItem
                     svgChildNodes={getSvgNodes(itemStyles, index)}
-                    strokeWidth={getSvgStrokes(ratingValues, itemStyles, index)}
+                    strokeWidth={getSvgStrokes(itemStyles, index)}
                   />
                 </div>
                 <span className="rri--hidden" id={`rri_label_${index + 1}`}>

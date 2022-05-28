@@ -1,5 +1,4 @@
 import { GlobalStyles } from './getGlobalStyles';
-import { toKebabCase } from './utils';
 
 export const getBreakpointRules = ({
   breakpoints,
@@ -21,10 +20,10 @@ export const getBreakpointRules = ({
 
   Object.entries(fullBreakpoints).forEach(
     ([breakpointValue, styles], breakpointIndex) => {
-      const breakpointSign = Math.sign(Number.parseInt(breakpointValue));
-      const isValidBreakpoint = breakpointSign === 1 || breakpointSign === 0;
+      const breakpointNumVal = Number.parseInt(breakpointValue);
+      const isInvalidBreakpoint = Number.isNaN(breakpointNumVal) || breakpointNumVal < 0;
 
-      if (!isValidBreakpoint) {
+      if (isInvalidBreakpoint) {
         return;
       }
 
@@ -44,7 +43,23 @@ export const getBreakpointRules = ({
         if (typeof value !== 'number') {
           return;
         }
-        const breakpointProperty = `--rri--${toKebabCase(property)}: ${value}px;`;
+
+        let breakpointProperty: string = '';
+
+        switch (property) {
+          case 'boxMargin':
+            breakpointProperty = `--rri--box-margin: ${value}px;`;
+            break;
+          case 'boxPadding':
+            breakpointProperty = `--rri--box-padding: ${value}px;`;
+            break;
+          case 'boxRadius':
+            breakpointProperty = `--rri--box-radius: ${value}px;`;
+            break;
+          case 'boxBorderWidth':
+            breakpointProperty = `--rri--box-border-width: ${value}px;`;
+        }
+
         variablesValues = variablesValues.concat('', breakpointProperty);
         if (index === breakpointProperties.length - 1) {
           const closingBracket = isGlobalRule ? '' : '}';

@@ -1,5 +1,3 @@
-export type SvgChildNodes = JSX.Element | JSX.Element[] | null;
-
 type StrokeStyle = 'round' | 'sharp';
 
 export type CSSVariables = {
@@ -8,15 +6,17 @@ export type CSSVariables = {
 
 export type ItemStylesProp = {
   /** JSX Element including the inner nodes of the SVG you want to display. */
-  svgChildNodes?: SvgChildNodes;
+  svgChildNodes: JSX.Element;
   /** JSX Element including the inner nodes of the SVG you want to display. */
   itemStrokeWidth?: number;
   itemStrokeStyle?: StrokeStyle;
-  activeItemColor?: string;
+
+  activeItemColor: string;
   activeItemStrokeColor?: string;
   activeBoxColor?: string;
   activeBoxBorderColor?: string;
-  inactiveItemColor?: string;
+
+  inactiveItemColor: string;
   inactiveItemStrokeColor?: string;
   inactiveBoxColor?: string;
   inactiveBoxBorderColor?: string;

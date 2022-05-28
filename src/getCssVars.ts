@@ -1,5 +1,7 @@
 import { ItemStylesProp, CSSVariables } from './types';
 
+type PartialItemStyleProps = Partial<ItemStylesProp>;
+
 const getItemCssVars = (targetObj: CSSVariables, key: string, value: string) => {
   if (typeof value !== 'string') {
     return;
@@ -32,7 +34,7 @@ const getItemCssVars = (targetObj: CSSVariables, key: string, value: string) => 
   }
 };
 
-const isStrokeSet = (sourceObj: ItemStylesProp) =>
+const isStrokeSet = (sourceObj: PartialItemStyleProps) =>
   sourceObj.hasOwnProperty('itemStrokeWidth') &&
   typeof sourceObj.itemStrokeWidth === 'number' &&
   sourceObj.itemStrokeWidth > 0;
@@ -49,7 +51,10 @@ const getStrokeStyles = (targetObj: CSSVariables, itemStrokeStyle: string) => {
   }
 };
 
-const getVarsFromPropStyles = (sourceObj: ItemStylesProp, targetObj: CSSVariables) => {
+const getVarsFromPropStyles = (
+  sourceObj: PartialItemStyleProps,
+  targetObj: CSSVariables
+) => {
   Object.entries(sourceObj).forEach(([key, value]) => {
     getItemCssVars(targetObj, key, value as string);
   });
@@ -58,7 +63,7 @@ const getVarsFromPropStyles = (sourceObj: ItemStylesProp, targetObj: CSSVariable
 export const getCssObjectVars = (itemStylesProp: ItemStylesProp) => {
   const cssVars: CSSVariables = {};
 
-  const copiedStyle = { ...itemStylesProp };
+  const copiedStyle: PartialItemStyleProps = { ...itemStylesProp };
   delete copiedStyle.svgChildNodes;
 
   if (isStrokeSet(itemStylesProp)) {
@@ -82,10 +87,10 @@ export const getCssArrayVars = (
   itemStylesProp.forEach((childNodeStyle, styleIndex) => {
     const cssVars: CSSVariables = {};
 
-    const copiedPrevStyle = { ...prevStyles };
+    const copiedPrevStyle: PartialItemStyleProps = { ...prevStyles };
     delete copiedPrevStyle.svgChildNodes;
 
-    const copiedStyle = { ...childNodeStyle };
+    const copiedStyle: PartialItemStyleProps = { ...childNodeStyle };
     delete copiedStyle.svgChildNodes;
 
     const styleToPush = styleIndex <= selectedIndex ? copiedPrevStyle : copiedStyle;

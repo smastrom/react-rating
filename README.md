@@ -8,13 +8,13 @@ Rating components for React focused on accessibility, SVGs, mobile-first and cus
 
 ## Features
 
-- Use any SVG: No headaches or icon fonts in order to use your own vectors.
-- Automatic SVG scaling and positioning
-- Highly customizable: fills, strokes, box color and borders, hover, transitions, breakpoints and much more.
+- **Use any SVG**: No headaches or icon fonts in order to use vectors from any source.
+- Automatic SVG transforms
+- Highly customizable: fills, strokes, box colors and borders, transitions, breakpoints and much more.
 - Fully responsive and mobile-first
 - Fully accessible with keyboard navigation and custom labels
-- Dependency-free, ~2.5Kb gzipped.
-- Fully typed with IntelliSense infos and completion
+- Fully typed with IntelliSense infos and autocomplete
+- Dependency-free, ~3Kb gzipped.
 
 <br />
 
@@ -28,8 +28,8 @@ yarn add react-rating-input
 
 In the browser:
 
-```js
-import
+```html
+<script type="module"></script>
 ```
 
 <br />
@@ -113,6 +113,7 @@ const App = () => (
 | --------------------- | ----------------------------------------------- | --------------------------------------------------------------------------- | ----------------- | ------------------ |
 | ratingValue           | number                                          | An integer from 0 to **limit**, can be a float as well.                     | undefined         | :white_check_mark: |
 | limit                 | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | Number of rating items to display                                           | 5                 | :x:                |
+| highlightOnlySelected | boolean                                         | Wheter or not to highlight only the selected rating item                    | false             | :x:                |
 | orientation           | `horizontal` \| `vertical`                      | orientation of the rating items                                             | `horizontal`      | :x:                |
 | halfPrecision         | boolean                                         | If true and `ratingValue` is a float the SVG or the box will be half-filled | false             | :x:                |
 | halfPrecisionFillMode | `svg` \| `box`                                  | Wheter to half-fill the SVG or the box                                      | `svg`             | :x:                |
@@ -137,7 +138,7 @@ Just pass a `ItemStyle` object to `itemStyles` prop of any of both components.
 
 ```ts
 type ItemStyle = {
-  svgChildNodes: JSX.Element | JSX.Element[] | null;
+  svgChildNodes: JSX.Element;
   itemStrokeWidth?: number;
   itemStrokeStyle?: 'round' | 'sharp';
 
@@ -161,18 +162,10 @@ const Star = <polygon points="100,10 40,198 190,78 10,78 160,198" />;
 
 const itemStyle = {
   svgChildNodes: Star,
-  itemStrokeWidth: undefined,
-  itemStrokeStyle: 'round',
-
   activeItemColor: 'red',
-  activeItemStrokeColor: undefined,
   activeBoxColor: 'blue',
-  activeBoxBorderColor: undefined,
-
   inactiveItemColor: 'red',
-  inactiveItemStrokeColor: undefined,
   inactiveBoxColor: 'blue',
-  inactiveBoxBorderColor: undefined,
 };
 ```
 

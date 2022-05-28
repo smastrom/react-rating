@@ -1,5 +1,12 @@
 export const toSecondDecimal = (number: number): number => Math.round(number * 100) / 100;
 
+export const removeInvalidStyleKeys = (sourceObj: any) =>
+  Object.keys(sourceObj).forEach((key) => {
+    if (typeof sourceObj[key] !== 'string' && typeof sourceObj[key] !== 'number') {
+      delete sourceObj[key];
+    }
+  });
+
 export const isPlainObject = (object: any) =>
   Array.isArray(object) === false && typeof object === 'object' && object !== null;
 

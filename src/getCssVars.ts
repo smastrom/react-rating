@@ -1,8 +1,12 @@
-import { toKebabCase } from './utils';
+import { removeInvalidStyleKeys, toKebabCase } from './utils';
 
 import { ItemStylesProp, CSSVariables } from './types';
 
-const getStrokeStyles = (targetObject: CSSVariables, itemStrokeStyle: string): void => {
+const isStrokeSet = (sourceObject: ItemStylesProp) =>
+  sourceObject.hasOwnProperty('itemStrokeWidth') &&
+  typeof sourceObject.itemStrokeWidth === 'number';
+
+const getStrokeStyles = (targetObject: CSSVariables, itemStrokeStyle: string) => {
   switch (itemStrokeStyle) {
     case 'sharp':
       targetObject['--rri--item-stroke-linecap'] = 'miter';
@@ -29,7 +33,11 @@ export const getCssObjectVars = (itemStylesProp: ItemStylesProp) => {
   const copiedStyle = { ...itemStylesProp };
   delete copiedStyle.svgChildNodes;
 
-  getStrokeStyles(cssVars, copiedStyle.itemStrokeStyle as string);
+  removeInvalidStyleKeys(copiedStyle);
+
+  if (isStrokeSet(itemStylesProp)) {
+    getStrokeStyles(cssVars, copiedStyle.itemStrokeStyle as string);
+  }
   delete copiedStyle.itemStrokeStyle;
 
   getVarsFromPropStyles(copiedStyle, cssVars);
@@ -45,7 +53,7 @@ export const getCssArrayVars = (
 
   const prevStyles = itemStylesProp[selectedIndex];
 
-  itemStylesProp.forEach((childNodeStyle, index) => {
+  itemStylesProp.forEach((childNodeStyle, styleIndex) => {
     const cssVars: CSSVariables = {};
 
     const copiedPrevStyle = { ...prevStyles };
@@ -54,15 +62,18 @@ export const getCssArrayVars = (
     const copiedStyle = { ...childNodeStyle };
     delete copiedStyle.svgChildNodes;
 
-    const styleToPush = index <= selectedIndex ? copiedPrevStyle : copiedStyle;
+    const styleToPush = styleIndex <= selectedIndex ? copiedPrevStyle : copiedStyle;
 
-    getStrokeStyles(cssVars, styleToPush.itemStrokeStyle as string);
+    removeInvalidStyleKeys(styleToPush);
+
+    if (isStrokeSet(styleToPush)) {
+      getStrokeStyles(cssVars, styleToPush.itemStrokeStyle as string);
+    }
     delete styleToPush.itemStrokeStyle;
 
     getVarsFromPropStyles(styleToPush, cssVars);
 
-    const cleanedStyle = JSON.parse(JSON.stringify(cssVars));
-    cssVarsArray.push(cleanedStyle);
+    cssVarsArray.push(cssVars);
   });
 
   return cssVarsArray;

@@ -1,29 +1,57 @@
-import { removeInvalidStyleKeys, toKebabCase } from './utils';
-
 import { ItemStylesProp, CSSVariables } from './types';
 
-const isStrokeSet = (sourceObject: ItemStylesProp) =>
-  sourceObject.hasOwnProperty('itemStrokeWidth') &&
-  typeof sourceObject.itemStrokeWidth === 'number';
+const getItemCssVars = (targetObj: CSSVariables, key: string, value: string) => {
+  if (typeof value !== 'string') {
+    return;
+  }
 
-const getStrokeStyles = (targetObject: CSSVariables, itemStrokeStyle: string) => {
-  switch (itemStrokeStyle) {
-    case 'sharp':
-      targetObject['--rri--item-stroke-linecap'] = 'miter';
-      targetObject['--rri--item-stroke-linejoin'] = 'square';
+  switch (key) {
+    case 'activeItemColor':
+      targetObj['--rri--active-item-color'] = value;
       break;
-    case 'round':
-      targetObject['--rri--item-stroke-linecap'] = 'round';
-      targetObject['--rri--item-stroke-linejoin'] = 'round';
+    case 'activeItemStrokeColor':
+      targetObj['--rri--active-item-stroke-color'] = value;
+      break;
+    case 'activeBoxColor':
+      targetObj['--rri--active-box-color'] = value;
+      break;
+    case 'activeBoxBorderColor':
+      targetObj['--rri--active-box-border-color'] = value;
+      break;
+    case 'inactiveItemColor':
+      targetObj['--rri--inactive-item-color'] = value;
+      break;
+    case 'inactiveItemStrokeColor':
+      targetObj['--rri--inactive-item-stroke-color'] = value;
+      break;
+    case 'inactiveBoxColor':
+      targetObj['--rri--inactive-box-color'] = value;
+      break;
+    case 'inactiveBoxBorderColor':
+      targetObj['--rri--inactive-box-border-color'] = value;
   }
 };
 
-const getVarsFromPropStyles = (
-  sourceObject: ItemStylesProp,
-  destinationObject: CSSVariables
-) => {
-  Object.entries(sourceObject).forEach(([key, value]) => {
-    destinationObject[`--rri--${toKebabCase(key)}`] = `${value}`;
+const isStrokeSet = (sourceObj: ItemStylesProp) =>
+  sourceObj.hasOwnProperty('itemStrokeWidth') &&
+  typeof sourceObj.itemStrokeWidth === 'number' &&
+  sourceObj.itemStrokeWidth > 0;
+
+const getStrokeStyles = (targetObj: CSSVariables, itemStrokeStyle: string) => {
+  switch (itemStrokeStyle) {
+    case 'sharp':
+      targetObj['--rri--item-stroke-linecap'] = 'miter';
+      targetObj['--rri--item-stroke-linejoin'] = 'square';
+      break;
+    default:
+      targetObj['--rri--item-stroke-linecap'] = 'round';
+      targetObj['--rri--item-stroke-linejoin'] = 'round';
+  }
+};
+
+const getVarsFromPropStyles = (sourceObj: ItemStylesProp, targetObj: CSSVariables) => {
+  Object.entries(sourceObj).forEach(([key, value]) => {
+    getItemCssVars(targetObj, key, value as string);
   });
 };
 
@@ -33,15 +61,13 @@ export const getCssObjectVars = (itemStylesProp: ItemStylesProp) => {
   const copiedStyle = { ...itemStylesProp };
   delete copiedStyle.svgChildNodes;
 
-  removeInvalidStyleKeys(copiedStyle);
-
   if (isStrokeSet(itemStylesProp)) {
     getStrokeStyles(cssVars, copiedStyle.itemStrokeStyle as string);
   }
+  delete copiedStyle.itemStrokeWidth;
   delete copiedStyle.itemStrokeStyle;
 
   getVarsFromPropStyles(copiedStyle, cssVars);
-
   return cssVars;
 };
 
@@ -64,15 +90,13 @@ export const getCssArrayVars = (
 
     const styleToPush = styleIndex <= selectedIndex ? copiedPrevStyle : copiedStyle;
 
-    removeInvalidStyleKeys(styleToPush);
-
     if (isStrokeSet(styleToPush)) {
       getStrokeStyles(cssVars, styleToPush.itemStrokeStyle as string);
     }
+    delete styleToPush.itemStrokeWidth;
     delete styleToPush.itemStrokeStyle;
 
     getVarsFromPropStyles(styleToPush, cssVars);
-
     cssVarsArray.push(cssVars);
   });
 

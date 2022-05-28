@@ -2,8 +2,8 @@
   "name": "react-rating-input",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "dist/index.cjs.min.js",
   "module": "dist/index.js",
+  "main": "dist/index.umd.min.js",
   "browser": "dist/index.umd.min.js",
   "unpkg": "dist/index.umd.min.js",
   "types": "dist/index.d.ts",
@@ -15,6 +15,12 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.min.js"
+    }
+  },
   "author": "Simone Mastromattei <smastrom@proton.me>",
   "homepage": "smastromattei.dev",
   "scripts": {

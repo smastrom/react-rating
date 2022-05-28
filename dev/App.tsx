@@ -42,12 +42,12 @@ const Mail = (
 );
 
 const testStyles: ItemStylesProp = {
-  svgChildNodes: Star,
-  itemStrokeWidth: undefined,
+  svgChildNodes: Heart,
+  itemStrokeWidth: 20,
   itemStrokeStyle: 'round',
 
   activeItemColor: 'red',
-  activeItemStrokeColor: '#22C55E',
+  activeItemStrokeColor: 'yellow',
   activeBoxColor: '#22C55E',
   activeBoxBorderColor: 'red',
 
@@ -60,18 +60,21 @@ const testStyles: ItemStylesProp = {
 const testStylesArr: ItemStylesProp[] = [
   {
     svgChildNodes: Mail,
-    itemStrokeWidth: 3,
+    itemStrokeWidth: 32,
     itemStrokeStyle: 'round',
+
     activeItemColor: 'white',
     activeItemStrokeColor: 'tomato',
     activeBoxColor: 'tomato',
+    activeBoxBorderColor: 'blue',
+
     inactiveItemStrokeColor: 'fuchsia', // Has no effect
     inactiveItemColor: '#DCFCE7', // Has no effect on box half
     inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
   },
   {
     svgChildNodes: Mail,
-    itemStrokeWidth: 3,
+    itemStrokeWidth: 30,
     itemStrokeStyle: 'round',
     activeItemColor: 'white',
     activeItemStrokeColor: 'orange',
@@ -145,8 +148,8 @@ function App() {
           orientation="horizontal"
           customAccessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}
           boxMargin={20}
-          boxRadius={0}
-          boxBorderWidth={3}
+          boxRadius={20}
+          boxBorderWidth={4}
           boxPadding={20}
           breakpoints={{
             230: {

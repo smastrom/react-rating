@@ -1,21 +1,20 @@
-import { isPlainObject } from './utils';
-
 import { ItemStylesProp } from './types';
 
+const isValidStroke = (strokeWidth: any) =>
+  typeof strokeWidth === 'number' && strokeWidth > 0;
+
 export const getSvgStrokes = (
-  ratingValuesNum: number[] | string[],
   itemStylesProp: ItemStylesProp | ItemStylesProp[],
   index: number
 ): number => {
   if (Array.isArray(itemStylesProp)) {
     const strokesArr = itemStylesProp.map(({ itemStrokeWidth }) =>
-      typeof itemStrokeWidth === 'number' ? itemStrokeWidth : 0
+      isValidStroke(itemStrokeWidth) ? itemStrokeWidth : 0
     );
-    return strokesArr[index];
-  }
-  if (isPlainObject(itemStylesProp)) {
-    const strokesArr = ratingValuesNum.map(() => itemStylesProp.itemStrokeWidth);
     return strokesArr[index] as number;
+  }
+  if (isValidStroke(itemStylesProp.itemStrokeWidth)) {
+    return itemStylesProp.itemStrokeWidth as number;
   }
   return 0;
 };

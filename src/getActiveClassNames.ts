@@ -10,10 +10,8 @@ export const getActiveClassNames = (
       }
       return 'rri--inactive';
     }
-    if (highlightOnlySelectedProp === true) {
-      if (index === selectedIndex) {
-        return 'rri--active';
-      }
-      return 'rri--inactive';
+    if (index === selectedIndex) {
+      return 'rri--active';
     }
+    return 'rri--inactive';
   });

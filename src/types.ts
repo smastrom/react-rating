@@ -23,22 +23,29 @@ export type ItemStylesProp = {
 };
 
 /** Those styles are considered "global" as they are not supposed to change for each rating item.
- * Their value must be assigned with a number representing the pixels value of each property.*/
+ * Their value must be expressed with an integer representing the number of pixels. Those values
+ * can also be customized for different breakpoints as well. Please refer to README.md at
+ * https://google.com for more infos.
+ */
 type GlobalStyles = {
-  /** Side margin between rating items */
-  boxPadding?: number;
-  /** Side margin between rating items */
+  /** Integer representing the number of pixels of the right-side margin between the rating items.*/
   boxMargin?: number;
-  /** Side margin between rating items */
+  /** Integer representing the padding in pixels between the rating item and the box bounds. */
+  boxPadding?: number;
+  /** Integer representing the border radius of the box in pixels. */
   boxRadius?: number;
-  /** Side margin between rating items */
+  /** Integer representing the box border width in pixels. */
   boxBorderWidth?: number;
 };
 
+/** Customize boxMargin, boxPadding, boxRadius and boxBorderWidth for different breakpoints.
+ * Refer to README.md at https://google.com for more infos.
+ */
 export type Breakpoints = {
   [key: number]: GlobalStyles;
 };
 
+/** Maximum number of rating items to display. Should be an integer from 1 to 10. */
 type Limit = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
 export type RatingInputProps = GlobalStyles & {

@@ -1,6 +1,6 @@
 .rri--group {
   display: flex;
-  flex-orientation: var(--rri--orientation, unset);
+  flex-direction: var(--rri--orientation, unset);
   width: 100%;
   width: var(--rri--container-width, 100%);
 }

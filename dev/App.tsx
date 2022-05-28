@@ -43,16 +43,16 @@ const Mail = (
 
 const testStyles: ItemStylesProp = {
   svgChildNodes: Star,
-  itemStrokeWidth: 0,
+  itemStrokeWidth: undefined,
   itemStrokeStyle: 'round',
-  activeItemColor: 'white',
+
+  activeItemColor: 'red',
   activeItemStrokeColor: '#22C55E',
   activeBoxColor: '#22C55E',
   activeBoxBorderColor: 'red',
 
   inactiveItemColor: '#DCFCE7', // Has no effect on box half
   inactiveItemStrokeColor: 'fuchsia', // Has no effect
-
   inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
   inactiveBoxBorderColor: '#FFFFFF', // Has no effect
 };
@@ -140,7 +140,7 @@ function App() {
         <RatingInput
           limit={5}
           ratingValue={value}
-          itemStyles={testStylesArr}
+          itemStyles={testStyles}
           // highlightOnlySelected
           orientation="horizontal"
           customAccessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}

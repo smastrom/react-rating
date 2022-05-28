@@ -102,7 +102,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
 
       const activeClassNames = getClassNames();
       setDynamicStyles({ cssVars, activeClassNames });
-    }, [ratingValue]);
+    }, [ratingValue, itemStyles]);
 
     /* Handlers */
 

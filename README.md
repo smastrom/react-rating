@@ -14,7 +14,7 @@ Rating components for React focused on accessibility, SVGs, mobile-first and cus
 - Fully responsive and mobile-first
 - Fully accessible with keyboard navigation and custom labels
 - Dependency-free, ~2.5Kb gzipped.
-- Fully typed with IntelliSense completion and infos.
+- Fully typed with IntelliSense infos and completion
 
 <br />
 

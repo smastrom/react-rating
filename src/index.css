@@ -50,7 +50,7 @@
 .rri--box {
   width: auto;
   aspect-ratio: 1;
-  min-width: 1vw;
+  min-width: 1vw; /* Maybe remove */
   display: flex;
   pointer-events: none;
   padding: var(--rri--box-padding, 0);

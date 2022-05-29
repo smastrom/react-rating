@@ -1,15 +1,8 @@
-type StrokeStyle = 'round' | 'sharp';
-
-export type CSSVariables = {
-  [key: string]: string;
-};
-
 export type ItemStylesProp = {
   /** JSX Element including the inner nodes of the SVG you want to display. */
   svgChildNodes: JSX.Element;
-  /** JSX Element including the inner nodes of the SVG you want to display. */
   itemStrokeWidth?: number;
-  itemStrokeStyle?: StrokeStyle;
+  itemStrokeStyle?: 'round' | 'sharp';
 
   activeItemColor: string;
   activeItemStrokeColor?: string;
@@ -20,6 +13,20 @@ export type ItemStylesProp = {
   inactiveItemStrokeColor?: string;
   inactiveBoxColor?: string;
   inactiveBoxBorderColor?: string;
+};
+
+export type NewItemStylesProp = {
+  svgChildNodes: JSX.Element | JSX.Element[];
+  itemStrokeWidth?: number;
+  itemStrokeStyle?: 'round' | 'sharp';
+
+  activeFillColor?: string | string[];
+  activeStrokeColor?: string | string[];
+  inactiveFillColor?: string;
+  inactiveStrokeColor?: string;
+
+  activeBoxColor?: string | string[];
+  inactiveBoxColor?: string;
 };
 
 /** Those styles are considered "global" as they are not supposed to change for each rating item.
@@ -35,7 +42,7 @@ type GlobalStyles = {
   /** Integer representing the border radius of the box in pixels. */
   boxRadius?: number;
   /** Integer representing the box border width in pixels. */
-  boxBorderWidth?: number;
+  boxBorderWidth?: number; // Remove it
 };
 
 /** Customize boxMargin, boxPadding, boxRadius and boxBorderWidth for different breakpoints.
@@ -45,32 +52,36 @@ export type Breakpoints = {
   [key: number]: GlobalStyles;
 };
 
-/** Maximum number of rating items to display. Should be an integer from 1 to 10. */
-type Limit = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-
-export type RatingInputProps = GlobalStyles & {
-  /** Maximum number of rating items to display. Should be an integer between 1 and 10. */
-  onChange: (currentValue: number) => void | undefined;
-  /** Maximum number of rating items to display. Should be an integer between 1 and 10. */
-  limit: Limit;
+type SharedProps = {
   ratingValue: number | null;
-  customAccessibleLabels?: string[];
-  orientation: 'horizontal' | 'vertical';
-
+  /** Maximum number of rating items to display. Should be an integer between 1 and 10. */
+  limit: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
   highlightOnlySelected?: boolean;
-  enableKeyboard?: boolean;
-
+  orientation: 'horizontal' | 'vertical';
   itemStyles?: ItemStylesProp | ItemStylesProp[];
   breakpoints?: Breakpoints;
-
-  ref?: HTMLDivElement;
   id?: string;
   style?: React.CSSProperties;
   className?: string;
-  ariaLabelledBy?: string;
+  /** Wheter to fill with active colors the svg or the box when hovering/selecting. */
+  fillMode?: 'svg' | 'box';
 };
 
-export type RatingProps = Pick<
-  RatingInputProps,
-  'limit' | 'ratingValue' | 'ref' | 'id' | 'className' | 'style'
->;
+export type RatingInputProps = GlobalStyles &
+  SharedProps & {
+    onChange: (currentValue: number) => void | undefined;
+    enableKeyboard?: boolean;
+    labelledBy?: string;
+    customAccessibleLabels?: string[];
+  };
+
+export type RatingProps = GlobalStyles &
+  SharedProps & {
+    halfPrecision: boolean;
+    halfPrecisionFillMode: 'svg' | 'box';
+    accessibleLabel: 'string';
+  };
+
+export type CSSVariables = {
+  [key: string]: string;
+};

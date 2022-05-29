@@ -10,7 +10,12 @@ import { getActiveClassNames } from './getActiveClassNames';
 import { getGlobalStyles } from './getGlobalStyles';
 import { isPlainObject } from './utils';
 
-import { CSSVariables, ItemStylesProp, RatingInputProps } from './types';
+import {
+  CSSVariables,
+  ItemStylesProp,
+  NewItemStylesProp,
+  RatingInputProps,
+} from './types';
 
 /** Accessible radio-group to be used as input, please refer to
  * README.md at https://github.com/smastrom/react-rating-input
@@ -21,35 +26,32 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
   (
     {
       ratingValue = null,
-      onChange = undefined,
       limit = 5,
-
+      onChange,
       highlightOnlySelected = false,
       enableKeyboard = true,
       orientation = 'horizontal',
-
       itemStyles = defaultItemStyles,
       boxMargin = 20,
       boxRadius = 20,
-      boxBorderWidth = undefined,
+      boxBorderWidth,
       boxPadding = 20,
-      breakpoints = undefined,
-
-      id = undefined,
-      className = undefined,
-      style = undefined,
-
-      ariaLabelledBy = undefined,
-      customAccessibleLabels = undefined,
+      breakpoints,
+      id,
+      className,
+      style,
+      labelledBy,
+      customAccessibleLabels,
     },
     externalRef
   ) => {
     const isStylesPropArray = Array.isArray(itemStyles);
+    const isStylesPropObj = isPlainObject(itemStyles);
 
     if (typeof limit !== 'number' || limit < 1 || limit > 10) {
       return null;
     }
-    if (!isPlainObject(itemStyles) && !isStylesPropArray) {
+    if (!isStylesPropObj && !isStylesPropArray) {
       return null;
     }
     if (isStylesPropArray && itemStyles.length !== limit) {
@@ -65,7 +67,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
 
     const roleRadioDivs = useRef<HTMLDivElement[] | []>([]);
 
-    /* State */
+    /* State and effect */
 
     const getClassNames = () => {
       return getActiveClassNames(
@@ -81,8 +83,6 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
         : getCssObjectVars(itemStyles as ItemStylesProp),
       activeClassNames: getClassNames(),
     }));
-
-    /* Effect */
 
     useEffect(() => {
       let cssVars: CSSVariables | CSSVariables[];
@@ -125,7 +125,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
         const cssVars = getCssArrayVars(itemStyles, selectedIndex);
         setDynamicStyles({ cssVars, activeClassNames });
       } else {
-        setDynamicStyles((userStyles) => ({ ...userStyles, activeClassNames }));
+        setDynamicStyles({ ...dynamicStyles, activeClassNames });
       }
     };
 
@@ -187,7 +187,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
 
     const radioProps = (radioChildIndex: number): React.HTMLProps<HTMLDivElement> => ({
       role: 'radio',
-      'aria-labelledby': ariaLabelledBy,
+      'aria-labelledby': labelledBy,
       'aria-checked': ratingValues[radioChildIndex] === ratingValue,
       ref: (radioChildNode: HTMLDivElement) =>
         (roleRadioDivs.current[radioChildIndex] = radioChildNode),
@@ -218,9 +218,10 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
           } ${className || ''}`.trim()}
           id={id}
           role="radiogroup"
-          aria-labelledby={ariaLabelledBy}
+          aria-labelledby={labelledBy}
           style={{
             ...style,
+            ...(isStylesPropObj ? ({ ...dynamicStyles?.cssVars } as CSSVariables) : {}),
             ...getGlobalStyles({
               orientation,
               breakpoints,
@@ -237,6 +238,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
               className="rri--hover-mask"
               {...mouseProps(index)}
             >
+              {/* Maybe remove rri--radio */}
               <div
                 className={`rri--radio ${dynamicStyles?.activeClassNames?.[index]}`}
                 {...radioProps(index)}
@@ -245,7 +247,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
                   style={
                     isStylesPropArray
                       ? { ...(dynamicStyles?.cssVars as CSSVariables[])?.[index] }
-                      : ({ ...dynamicStyles?.cssVars } as CSSVariables)
+                      : {}
                   }
                   className="rri--box"
                   aria-hidden="true"

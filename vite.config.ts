@@ -35,7 +35,7 @@ export default defineConfig({
     react({ jsxRuntime: 'classic' }),
     dts({
       outputDir: 'dist/types',
-      include: ['src/types.ts', 'src/RatingInput.tsx'],
+      include: ['src/types.ts', 'src/RatingInput.tsx', 'src/Rating.tsx'],
       beforeWriteFile: (_, content) => {
         const cleanContent = content
           .replace("import { RatingInputProps } from './types';", '')

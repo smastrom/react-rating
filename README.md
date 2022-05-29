@@ -8,8 +8,8 @@ Rating components for React focused on accessibility, SVGs, mobile-first and cus
 
 ## Features
 
-- **Use any SVG**: No headaches or icon fonts in order to use vectors from any source.
-- Automatic SVG transforms
+- **Use any SVG**: No headaches or icon fonts in order to use any vector from any source.
+- Automatic SVG transforms (when necessary)
 - Highly customizable: fills, strokes, box colors and borders, transitions, breakpoints and much more.
 - Fully responsive and mobile-first
 - Fully accessible with keyboard navigation and custom labels
@@ -114,7 +114,7 @@ const App = () => (
 | ratingValue           | number                                          | An integer from 0 to **limit**, can be a float as well.                     | undefined         | :white_check_mark: |
 | limit                 | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | Number of rating items to display                                           | 5                 | :x:                |
 | highlightOnlySelected | boolean                                         | Wheter or not to highlight only the selected rating item                    | false             | :x:                |
-| orientation           | `horizontal` \| `vertical`                      | orientation of the rating items                                             | `horizontal`      | :x:                |
+| orientation           | `horizontal` \| `vertical`                      | Orientation of the rating items                                             | `horizontal`      | :x:                |
 | halfPrecision         | boolean                                         | If true and `ratingValue` is a float the SVG or the box will be half-filled | false             | :x:                |
 | halfPrecisionFillMode | `svg` \| `box`                                  | Wheter to half-fill the SVG or the box                                      | `svg`             | :x:                |
 | itemStyles            | ItemStyle \| ItemStyle[]                        | Custom SVG and styles                                                       | [defaultStyles]() | :x:                |
@@ -399,7 +399,7 @@ yarn
 yarn dev
 ```
 
-Vite's [Library Mode](https://vitejs.dev/guide/build.html#library-mode) is used to bundle the package. Just run:
+Vite's [Library Mode](https://vitejs.dev/guide/build.html#library-mode) is used to bundle the package. To build the package just run:
 
 ```console
 yarn build

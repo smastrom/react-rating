@@ -2,10 +2,8 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 
 import { toSecondDecimal } from './utils';
 
-import { SvgChildNodes } from './types';
-
 type RatingItemProps = {
-  svgChildNodes?: SvgChildNodes;
+  svgChildNodes?: JSX.Element;
   strokeWidth?: number;
   isPrecisionReadonly?: boolean;
 };
@@ -15,7 +13,7 @@ type SvgData = {
 };
 
 export const RatingItem = ({
-  svgChildNodes = null,
+  svgChildNodes,
   strokeWidth = 0,
   isPrecisionReadonly = false,
 }: RatingItemProps) => {

@@ -1,174 +1,94 @@
 // @ts-nocheck
 
-import React, { CSSProperties, forwardRef } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 
 import { RatingItem } from './RatingItem';
-import { getBreakpointRules } from './getBreakpointRules';
-import { getItemStyles } from './getItemStyles';
 import { defaultItemStyles } from './DefaultStyles';
+import { getBreakpointRules } from './getBreakpointRules';
+import { getSvgNodes } from './getSvgNodes';
+import { getSvgStrokes } from './getSvgStrokes';
+import { getCssObjectVars, getCssArrayVars } from './getCssVars';
+import { getActiveClassNames } from './getActiveClassNames';
+import { getGlobalStyles } from './getGlobalStyles';
+import { isPlainObject } from './utils';
 
-import { Breakpoints, ItemStyle, RatingItemProps, SvgChildNodes } from './types';
+import { CSSVariables, ItemStylesProp, RatingProps } from './types';
 
-const isPlainObject = (object: any) =>
-  !Array.isArray(object) && typeof object === 'object' && object !== null;
-
-const roundToHalf = (num: number) => Math.round(num * 2) / 2;
-
-export const Rating = forwardRef<HTMLDivElement, RatingItemProps>(
+export const Rating = forwardRef<HTMLDivElement, RatingProps>( // Define props
   (
     {
-      readOnlyLabel = 'Rating', // Rename to accessibleLabel
-      readOnlyPrecision = 0.5, // Rename to precision
-      readOnlyPrecisionFillMode = 'svg', // Rename to fillMode
-      readOnlyLimit = 5, // Rename to limit
-      ratingValue = 5,
-
-      itemStyles = defaultItemStyles,
+      ratingValue = null,
+      limit = 5,
+      highlightOnlySelected = false,
       orientation = 'horizontal',
-
+      halfPrecision = false,
+      halfPrecisionFillMode = 'svg',
+      itemStyles = defaultItemStyles,
       boxMargin = 20,
       boxRadius = 20,
-      boxBorderWidth = 0,
+      boxBorderWidth,
       boxPadding = 20,
-      breakpoints = undefined,
-
-      id = undefined,
-      className = undefined,
-      style = undefined,
+      breakpoints,
+      id,
+      className,
+      style,
+      accessibleLabel,
     },
     externalRef
   ) => {
-    const isItemStylesArray = Array.isArray(itemStyles);
-    const isItemStylesObject = isPlainObject(itemStyles);
+    const isStylesPropArray = Array.isArray(itemStyles);
+    const isStylesPropObj = isPlainObject(itemStyles);
 
-    // Styles
-
-    const isHalfPrecisionActive = readOnlyPrecision === 0.5;
-    const isHalfPrecisionActiveBox =
-      isHalfPrecisionActive && readOnlyPrecisionFillMode === 'box';
-    const isHalfPrecisionActiveSvg =
-      isHalfPrecisionActive && readOnlyPrecisionFillMode === 'svg';
-
-    const getGlobalResponsiveStyles = () => {
-      if (typeof breakpoints === 'undefined') {
-        return {
-          '--rri--box-margin': `${boxMargin}px`,
-          '--rri--box-radius': `${boxRadius}px`,
-          '--rri--box-border-width': `${boxBorderWidth}px`,
-          '--rri--box-padding': `${boxPadding}px`,
-        } as CSSProperties;
-      }
-      return {};
-    }; // Maybe remove and apply to all elements
-
-    const globalStyles = {
-      ...getGlobalResponsiveStyles(),
-      '--rri--orientation': orientation === 'horizontal' ? 'row' : 'column',
-    } as CSSProperties;
-
-    const getFullBreakpoints = (): Breakpoints => {
-      if (isPlainObject(breakpoints)) {
-        const fullBreakpoints = { ...breakpoints };
-
-        fullBreakpoints[0] = {
-          boxMargin,
-          boxRadius,
-          boxBorderWidth,
-          boxPadding,
-        };
-
-        return fullBreakpoints;
-      }
-      return {};
-    };
-
-    const getPrecisionIntersectionIndex = (ratingVal: number | string): number | null => {
-      if (isHalfPrecisionActive) {
-        const ratingValueNum = Number(ratingVal);
-        if (isNaN(ratingValueNum)) {
-          return null;
-        }
-        const roundedHalf = roundToHalf(ratingValueNum);
-
-        if (Number.isInteger(roundedHalf)) {
-          console.log(roundedHalf);
-          return roundedHalf;
-        }
-
-        const intersectionIndex = Math.floor(roundedHalf);
-        return intersectionIndex;
-      }
+    if (typeof limit !== 'number' || limit < 1 || limit > 10) {
       return null;
-    };
-
-    const getReadOnlyPrecisionClassNames = (index: number): string => {
-      const intersectionIndex = getPrecisionIntersectionIndex(ratingValue);
-
-      // Add no half
-
-      if (typeof intersectionIndex === 'number') {
-        if (isHalfPrecisionActiveBox) {
-          if (index > intersectionIndex) {
-            return 'rri--readonly-precision-inactive-box';
-          }
-          if (index < intersectionIndex) {
-            return 'rri--readonly-precision-active-box';
-          }
-          return 'rri--readonly-precision-box-int';
-        }
-
-        if (isHalfPrecisionActiveSvg) {
-          if (index > intersectionIndex) {
-            return 'rri--readonly-precision-svg-inactive';
-          }
-          if (index < intersectionIndex) {
-            return 'rri--readonly-precision-svg-active';
-          }
-          return 'rri--readonly-precision-svg-int';
-        }
-      }
-      return '';
-    };
-
-    const getCssVariables = () => {
-      if (isItemStylesObject) {
-        return getItemStyles([itemStyles as ItemStyle])[0];
-      }
-      return {};
-    };
-
-    const getSingleCssVariables = (index: number) => {
-      if (isItemStylesArray) {
-        return getItemStyles(itemStyles)?.[index];
-      }
-      return {};
-    };
-
-    const getSingleStroke = (index: number): number => {
-      if (isItemStylesArray) {
-        const mappedIndex = itemStyles.map(({ itemStrokeWidth }) =>
-          typeof itemStrokeWidth === 'number' ? itemStrokeWidth : 0
-        );
-        return mappedIndex[index];
-      }
-      if (isItemStylesObject) {
-        const mappedIndex = ratingValues.map(() => itemStyles.itemStrokeWidth);
-        return mappedIndex[index] as number;
-      }
-      return 0;
-    };
-
-    const getSvgItem = (index: number): SvgChildNodes => {
-      if (isItemStylesObject) {
-        return itemStyles.svgChildNodes as SvgChildNodes;
-      }
-      if (isItemStylesArray) {
-        return itemStyles[index].svgChildNodes as SvgChildNodes;
-      }
+    }
+    if (!isStylesPropObj && !isStylesPropArray) {
       return null;
+    }
+    if (isStylesPropArray && itemStyles.length !== limit) {
+      return null;
+    }
+
+    const ratingValues = Array.from(Array(limit), (_, index) => index + 1);
+
+    const isHalfPrecisionSvg = halfPrecision && halfPrecisionFillMode === 'svg';
+    const isHalfPrecisionBox = halfPrecision && halfPrecisionFillMode === 'box';
+
+    /* State and effect */
+
+    const getClassNames = () => {
+      return getActiveClassNames(
+        highlightOnlySelected,
+        ratingValues,
+        ratingValues.indexOf(ratingValue || 0)
+      );
     };
 
-    const ariaProps = { role: 'img', 'aria-label': readOnlyLabel };
+    const [dynamicStyles, setDynamicStyles] = useState(() => ({
+      cssVars: isStylesPropArray
+        ? getCssArrayVars(itemStyles as ItemStylesProp[], ratingValue || 0)
+        : getCssObjectVars(itemStyles as ItemStylesProp),
+      activeClassNames: getClassNames(),
+    }));
+
+    useEffect(() => {
+      let cssVars: CSSVariables | CSSVariables[];
+
+      if (isStylesPropArray) {
+        cssVars = getCssArrayVars(itemStyles, ratingValues.indexOf(ratingValue || 0));
+      } else {
+        cssVars = getCssObjectVars(itemStyles);
+      }
+
+      const activeClassNames = getClassNames();
+      setDynamicStyles({ cssVars, activeClassNames });
+    }, [ratingValue, itemStyles]);
+
+    /* Props */
+
+    const ariaProps = { role: 'img', 'aria-label': accessibleLabel };
+
+    /* Render */
 
     return (
       <>
@@ -178,18 +98,29 @@ export const Rating = forwardRef<HTMLDivElement, RatingItemProps>(
           id={id}
           style={{
             ...style,
-            ...globalStyles,
-            ...getCssVariables(),
+            ...(isStylesPropObj ? ({ ...dynamicStyles?.cssVars } as CSSVariables) : {}),
+            ...getGlobalStyles({
+              orientation,
+              breakpoints,
+              boxMargin,
+              boxPadding,
+              boxRadius,
+              boxBorderWidth,
+            }),
           }}
           {...ariaProps}
         >
-          {new Array(readOnlyLimit).fill(undefined).map((_, index) => (
+          {ratingValues.map((_, index) => (
             <div
               key={`rri_item_${index}`}
               className={`rri--radio ${getReadOnlyPrecisionClassNames(index)}`}
             >
               <div
-                style={getSingleCssVariables(index)}
+                style={
+                  isStylesPropArray
+                    ? { ...(dynamicStyles?.cssVars as CSSVariables[])?.[index] }
+                    : {}
+                }
                 className="rri--box"
                 aria-hidden="true"
               >
@@ -199,15 +130,23 @@ export const Rating = forwardRef<HTMLDivElement, RatingItemProps>(
                       ? getPrecisionIntersectionIndex(ratingValue as any) === index
                       : false
                   }
-                  svgChildNodes={getSvgItem(index)}
-                  strokeWidth={getSingleStroke(index)}
+                  svgChildNodes={getSvgNodes(itemStyles, index)}
+                  strokeWidth={getSvgStrokes(itemStyles, index)}
                 />
               </div>
             </div>
           ))}
         </div>
         {isPlainObject(breakpoints) && (
-          <style>{getBreakpointRules(getFullBreakpoints())}</style>
+          <style>
+            {getBreakpointRules({
+              breakpoints,
+              boxMargin,
+              boxPadding,
+              boxRadius,
+              boxBorderWidth,
+            })}
+          </style>
         )}
       </>
     );

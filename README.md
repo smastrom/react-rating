@@ -88,22 +88,26 @@ const App = () => (
 
 ### RatingInput
 
-| Prop                   | Type                                            | Default value     | Required           |
-| ---------------------- | ----------------------------------------------- | ----------------- | ------------------ |
-| ratingValue            | number \| null \| undefined                     | undefined         | :white_check_mark: |
-| onChange               | function \| undefined                           | undefined         | :white_check_mark: |
-| limit                  | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5                 | :x:                |
-| highlightOnlySelected  | boolean                                         | false             | :x:                |
-| enableKeyboard         | boolean                                         | true              | :x:                |
-| orientation            | `horizontal` \| `vertical`                      | `horizontal`      | :x:                |
-| itemStyles             | ItemStyle \| ItemStyle[]                        | [defaultStyles]() | :x:                |
-| boxMargin              | number                                          | 10                | :x:                |
-| boxPadding             | number                                          | 10                | :x:                |
-| boxRadius              | number                                          | 0                 | :x:                |
-| boxBorderWidth         | number                                          | 0                 | :x:                |
-| breakpoints            | Breakpoints                                     | undefined         | :x:                |
-| customAccessibleLabels | string[]                                        | undefined         | :x:                |
-| labelledBy             | string                                          | undefined         | :x:                |
+| Prop                   | Type                                                    | Default value     | Required           |
+| ---------------------- | ------------------------------------------------------- | ----------------- | ------------------ |
+| ratingValue            | number                                                  | 0                 | :white_check_mark: |
+| onChange               | function \| undefined                                   | undefined         | :white_check_mark: |
+| onHoverChange          | function \| undefined                                   | undefined         | :x:                |
+| limit                  | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10         | 5                 | :x:                |
+| highlightOnlySelected  | boolean                                                 | false             | :x:                |
+| enableKeyboard         | boolean                                                 | true              | :x:                |
+| orientation            | `horizontal` \| `vertical`                              | `horizontal`      | :x:                |
+| transition             | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `none`            | :x:                |
+| customEasing           | string                                                  | `150ms ease-out`  | :x:                |
+| highlightOnlySelected  | boolean                                                 | false             | :x:                |
+| itemStyles             | ItemStyle                                               | [defaultStyles]() | :x:                |
+| boxMargin              | number                                                  | 10                | :x:                |
+| boxPadding             | number                                                  | 10                | :x:                |
+| boxRadius              | number                                                  | 0                 | :x:                |
+| boxBorderWidth         | number                                                  | 0                 | :x:                |
+| breakpoints            | Breakpoints                                             | undefined         | :x:                |
+| customAccessibleLabels | string[]                                                | undefined         | :x:                |
+| labelledBy             | string                                                  | undefined         | :x:                |
 
 <br />
 

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useState } from 'react';
 
 import { RatingInput } from '../src/RatingInput';
@@ -31,7 +33,7 @@ const Mail = (
 );
 
 const testStyles: ItemStylesProp = {
-  svgChildNodes: [Face, Face, Face, Face, Face],
+  svgChildNodes: [Face, Star, Face, Face, Face],
   // itemStrokeWidth: 5,
   itemStrokeStyle: 'round',
 
@@ -44,8 +46,30 @@ const testStyles: ItemStylesProp = {
   inactiveBoxColor: '#dbdbe5',
 };
 
+const renderValue = (value: any) => {
+  switch (value) {
+    case 1:
+      return 'Poor';
+    case 2:
+      return 'Nothing Special';
+    case 3:
+      return 'Average';
+    case 4:
+      return 'Very Good';
+    case 5:
+      return 'Excellent';
+    default:
+      return 'No rating';
+  }
+};
+
 const App = () => {
   const [value, setValue] = useState<number | null>(3);
+
+  const [values, setValues] = useState({
+    selected: 3,
+    hovered: 0,
+  });
 
   return (
     <div
@@ -55,6 +79,8 @@ const App = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        gap: '20px',
+        flexDirection: 'column',
       }}
     >
       <div
@@ -90,6 +116,8 @@ const App = () => {
           onChange={(currentValue: number): void => setValue(currentValue)}
         />
       </div>
+      <h3>{renderValue(value)}</h3>
+      <button onClick={() => setValue(0)}>Reset</button>
     </div>
   );
 };

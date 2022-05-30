@@ -7,7 +7,7 @@ import { defaultItemStyles } from './DefaultStyles';
 import { getBreakpointRules } from './getBreakpointRules';
 import { getSvgNodes } from './getSvgNodes';
 import { getSvgStroke } from './getSvgStroke';
-import { getArrayCssVars, getObjectCssVars } from './getCssVars';
+// import { getArrayCssVars, getObjectCssVars } from './getCssVars';
 import { getActiveClassNames } from './getActiveClassNames';
 import { getGlobalStyles } from './getGlobalStyles';
 import { isPlainObject } from './utils';

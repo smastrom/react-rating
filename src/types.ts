@@ -49,8 +49,6 @@ type SharedProps = {
   id?: string;
   style?: React.CSSProperties;
   className?: string;
-  /** Wheter to fill with active colors the svg or the box when hovering/selecting. */
-  fillMode?: 'svg' | 'box';
 };
 
 export type RatingInputProps = GlobalStyles &

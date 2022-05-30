@@ -13,12 +13,12 @@ import { isPlainObject } from './utils';
 
 import { RatingInputProps } from './types';
 
-/** Accessible radio-group to be used as input, please refer to
+/** Accessible image element to be used as input, please refer to
  * README.md at https://github.com/smastrom/react-rating-input
  * for the complete list of props. If you just need to display the rating
  * please use `<Rating />` instead. */
 
-export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
+export const Rating = forwardRef<HTMLDivElement, RatingInputProps>(
   (
     {
       ratingValue = 0,

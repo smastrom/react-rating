@@ -24,6 +24,8 @@ export const RatingItem = ({
   const strokeOffset = strokeWidth > 0 ? -(strokeWidth / 2) : 0;
 
   useLayoutEffect(() => {
+    console.log('Rubrante');
+
     const {
       width: svgWidth,
       height: svgHeight,

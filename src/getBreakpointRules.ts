@@ -40,7 +40,7 @@ export const getBreakpointRules = ({
 
       const breakpointProperties = Object.entries(styles);
       breakpointProperties.forEach(([property, value], index) => {
-        if (typeof value !== 'number') {
+        if (typeof value !== 'number' || value < 0) {
           return;
         }
 

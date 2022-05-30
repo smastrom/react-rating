@@ -120,6 +120,8 @@
   transition: fill var(--rri--easing), stroke var(--rri--easing);
 }
 
+/*** Orientation ***/
+
 /* Orientation - Horizontal */
 
 .rri--group.rri--dir-x .rri--hover-mask {

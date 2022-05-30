@@ -35,7 +35,7 @@ export type Breakpoints = {
 };
 
 type SharedProps = {
-  ratingValue: number | null;
+  ratingValue: number;
   /** Maximum number of rating items to display. Should be an integer between 1 and 10. */
   limit: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
   highlightOnlySelected?: boolean;
@@ -52,6 +52,7 @@ type SharedProps = {
 export type RatingInputProps = GlobalStyles &
   SharedProps & {
     onChange: (currentValue: number) => void | undefined;
+    onHoverChange: (hoveredValue: number) => void | undefined;
     enableKeyboard?: boolean;
     labelledBy?: string;
     customAccessibleLabels?: string[];

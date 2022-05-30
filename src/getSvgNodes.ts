@@ -1,11 +1,11 @@
 import { ItemStylesProp } from './types';
 
 export const getSvgNodes = (
-  itemStylesProp: ItemStylesProp | ItemStylesProp[],
+  itemStylesProp: ItemStylesProp,
   index: number
 ): JSX.Element => {
-  if (Array.isArray(itemStylesProp)) {
-    return itemStylesProp[index].svgChildNodes as JSX.Element;
+  if (Array.isArray(itemStylesProp.svgChildNodes)) {
+    return itemStylesProp.svgChildNodes[index];
   }
-  return itemStylesProp.svgChildNodes as JSX.Element;
+  return itemStylesProp.svgChildNodes;
 };

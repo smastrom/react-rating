@@ -16,17 +16,6 @@ const Face = (
 
 const Star = <polygon points="100,10 40,198 190,78 10,78 160,198" />;
 
-const SmilingFace = (
-  <path
-    d="M3.445,6.322c0-3.423,2.777-6.201,6.201-6.201c3.423,0,6.2,2.777,6.2,6.201c0,3.426-2.777,6.203-6.2,6.203
-  C6.222,12.524,3.445,9.748,3.445,6.322z M31.562,6.322c0-3.423,2.78-6.201,6.203-6.201s6.201,2.777,6.201,6.201
-  c0,3.426-2.777,6.203-6.201,6.203C34.343,12.524,31.562,9.748,31.562,6.322z M46.223,31.72
-  C42.38,40.607,33.38,46.349,23.294,46.349c-10.301,0-19.354-5.771-23.064-14.703c-0.636-1.53,0.089-3.286,1.62-3.922
-  c0.376-0.155,0.766-0.229,1.15-0.229c1.176,0,2.292,0.696,2.771,1.851c2.777,6.685,9.655,11.004,17.523,11.004
-  c7.69,0,14.528-4.322,17.421-11.012c0.658-1.521,2.424-2.222,3.943-1.562C46.181,28.433,46.881,30.199,46.223,31.72z"
-  />
-);
-
 const Heart = (
   <path
     d="M433.5,67c-25.3-25.3-59-39.3-94.8-39.3s-69.6,14-94.9,39.4l-7.3,7.3l-7.5-7.5
@@ -42,85 +31,21 @@ const Mail = (
 );
 
 const testStyles: ItemStylesProp = {
-  svgChildNodes: Heart,
-  itemStrokeWidth: undefined,
+  svgChildNodes: [Face, Face, Face, Face, Face],
+  // itemStrokeWidth: 5,
   itemStrokeStyle: 'round',
 
-  activeItemColor: 'red',
-  activeItemStrokeColor: 'yellow',
-  activeBoxColor: '#22C55E',
-  activeBoxBorderColor: 'red',
+  activeFillColor: 'white',
+  // activeStrokeColor: 'green',
+  inactiveFillColor: 'white',
+  // inactiveStrokeColor: 'white',
 
-  inactiveItemColor: '#DCFCE7', // Has no effect on box half
-  inactiveItemStrokeColor: 'fuchsia', // Has no effect on box half
-
-  inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
-  inactiveBoxBorderColor: '#FFFFFF', // Has no effect in any case
+  activeBoxColor: ['#ff3621', '#ff8621', '#ffce00', '#73cf11', '#00b679'],
+  inactiveBoxColor: '#dbdbe5',
 };
 
-const testStylesArr: ItemStylesProp[] = [
-  {
-    svgChildNodes: Mail,
-    itemStrokeWidth: 32,
-    itemStrokeStyle: 'round',
-
-    activeItemColor: 'white',
-    activeItemStrokeColor: 'tomato',
-    activeBoxColor: 'tomato',
-    activeBoxBorderColor: 'blue',
-
-    inactiveItemStrokeColor: 'fuchsia', // Has no effect
-    inactiveItemColor: '#DCFCE7', // Has no effect on box half
-    inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
-  },
-  {
-    svgChildNodes: Mail,
-    itemStrokeWidth: 30,
-    itemStrokeStyle: 'round',
-    activeItemColor: 'white',
-    activeItemStrokeColor: 'orange',
-    activeBoxColor: 'orange',
-    inactiveItemStrokeColor: 'fuchsia', // Has no effect
-    inactiveItemColor: '#DCFCE7', // Has no effect on box half
-    inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
-  },
-  {
-    svgChildNodes: Mail,
-    itemStrokeWidth: 3,
-    itemStrokeStyle: 'round',
-    activeItemColor: 'white',
-    activeItemStrokeColor: 'gold',
-    activeBoxColor: 'gold',
-    inactiveItemStrokeColor: 'fuchsia', // Has no effect
-    inactiveItemColor: '#DCFCE7', // Has no effect on box half
-    inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
-  },
-  {
-    svgChildNodes: Mail,
-    itemStrokeWidth: 3,
-    itemStrokeStyle: 'round',
-    activeItemColor: 'white',
-    activeItemStrokeColor: '#9ACD32',
-    activeBoxColor: '#9ACD32',
-    inactiveItemStrokeColor: 'fuchsia', // Has no effect
-    inactiveItemColor: '#DCFCE7', // Has no effect on box half
-    inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
-  },
-  {
-    svgChildNodes: Mail,
-    itemStrokeWidth: 3,
-    itemStrokeStyle: 'round',
-    activeItemColor: 'white',
-    activeItemStrokeColor: '#9ACD32',
-    activeBoxColor: '#9ACD32',
-    inactiveItemStrokeColor: 'fuchsia', // Has no effect
-    inactiveItemColor: '#DCFCE7', // Has no effect on box half
-    inactiveBoxColor: '#D4D4D4', // Has no effect on svg half
-  },
-];
-
-function App() {
-  const [value, setValue] = useState<number | null>(1);
+const App = () => {
+  const [value, setValue] = useState<number | null>(3);
 
   return (
     <div
@@ -138,19 +63,17 @@ function App() {
           backgroundColor: '#DCFCE7',
           border: '2px solid #4ADE80',
           borderRadius: '10px',
-          padding: '20px',
         }}
       >
         <RatingInput
           limit={5}
           ratingValue={value}
-          itemStyles={testStylesArr}
+          itemStyles={testStyles}
           // highlightOnlySelected
           orientation="horizontal"
           customAccessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}
           boxMargin={5}
           boxRadius={5}
-          boxBorderWidth={2}
           boxPadding={20}
           breakpoints={{
             230: {
@@ -169,6 +92,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;

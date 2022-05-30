@@ -4,18 +4,13 @@ import { RatingItem } from './RatingItem';
 import { defaultItemStyles } from './DefaultStyles';
 import { getBreakpointRules } from './getBreakpointRules';
 import { getSvgNodes } from './getSvgNodes';
-import { getSvgStrokes } from './getSvgStrokes';
-import { getCssObjectVars, getCssArrayVars } from './getCssVars';
+import { getSvgStroke } from './getSvgStroke';
+import { getArrayCssVars, getObjectCssVars } from './getCssVars';
 import { getActiveClassNames } from './getActiveClassNames';
 import { getGlobalStyles } from './getGlobalStyles';
 import { isPlainObject } from './utils';
 
-import {
-  CSSVariables,
-  ItemStylesProp,
-  NewItemStylesProp,
-  RatingInputProps,
-} from './types';
+import { RatingInputProps } from './types';
 
 /** Accessible radio-group to be used as input, please refer to
  * README.md at https://github.com/smastrom/react-rating-input
@@ -34,7 +29,6 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       itemStyles = defaultItemStyles,
       boxMargin = 20,
       boxRadius = 20,
-      boxBorderWidth,
       boxPadding = 20,
       breakpoints,
       id,
@@ -45,29 +39,23 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
     },
     externalRef
   ) => {
-    const isStylesPropArray = Array.isArray(itemStyles);
-    const isStylesPropObj = isPlainObject(itemStyles);
-
     if (typeof limit !== 'number' || limit < 1 || limit > 10) {
       return null;
     }
-    if (!isStylesPropObj && !isStylesPropArray) {
-      return null;
-    }
-    if (isStylesPropArray && itemStyles.length !== limit) {
-      return null;
-    }
+
+    /* Prevent rendering if invalid prop? */
+
     if (typeof onChange !== 'function') {
       return null;
     }
 
     const ratingValues = Array.from(Array(limit), (_, index) => index + 1);
 
-    /* Refs */
-
     const roleRadioDivs = useRef<HTMLDivElement[] | []>([]);
 
-    /* State and effect */
+    const uniqIds = useRef<string[]>(
+      ratingValues.map(() => (Math.random() + 1).toString(36).substring(7))
+    );
 
     const getClassNames = () => {
       return getActiveClassNames(
@@ -77,27 +65,27 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       );
     };
 
-    const [dynamicStyles, setDynamicStyles] = useState(() => ({
-      cssVars: isStylesPropArray
-        ? getCssArrayVars(itemStyles as ItemStylesProp[], ratingValue || 0)
-        : getCssObjectVars(itemStyles as ItemStylesProp),
+    const [dynamicStyles, setDynamicStyles] = useState({
+      arrayCssVars: getArrayCssVars(
+        itemStyles,
+        ratingValues.indexOf(ratingValue || 0),
+        highlightOnlySelected
+      ),
       activeClassNames: getClassNames(),
-    }));
+      objectCssVars: getObjectCssVars(itemStyles),
+    });
 
     useEffect(() => {
-      let cssVars: CSSVariables | CSSVariables[];
-
-      if (isStylesPropArray) {
-        cssVars = getCssArrayVars(itemStyles, ratingValues.indexOf(ratingValue || 0));
-      } else {
-        cssVars = getCssObjectVars(itemStyles);
-      }
-
+      const objectCssVars = getObjectCssVars(itemStyles);
       const activeClassNames = getClassNames();
-      setDynamicStyles({ cssVars, activeClassNames });
-    }, [ratingValue, itemStyles]);
+      const arrayCssVars = getArrayCssVars(
+        itemStyles,
+        ratingValues.indexOf(ratingValue || 0),
+        highlightOnlySelected
+      );
 
-    /* Handlers */
+      setDynamicStyles({ activeClassNames, objectCssVars, arrayCssVars });
+    }, [ratingValue, itemStyles]);
 
     const handleClick = (
       event: React.MouseEvent<HTMLDivElement>,
@@ -121,12 +109,13 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
         selectedIndex
       );
 
-      if (isStylesPropArray) {
-        const cssVars = getCssArrayVars(itemStyles, selectedIndex);
-        setDynamicStyles({ cssVars, activeClassNames });
-      } else {
-        setDynamicStyles({ ...dynamicStyles, activeClassNames });
-      }
+      const arrayCssVars = getArrayCssVars(
+        itemStyles,
+        selectedIndex,
+        highlightOnlySelected
+      );
+
+      setDynamicStyles({ ...dynamicStyles, arrayCssVars, activeClassNames });
     };
 
     const handleMouseEnter = (
@@ -177,8 +166,6 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       }
     };
 
-    /* Props */
-
     const mouseProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => ({
       onMouseEnter: (event: React.MouseEvent<HTMLDivElement>) =>
         handleMouseEnter(event, childIndex),
@@ -187,7 +174,9 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
 
     const radioProps = (radioChildIndex: number): React.HTMLProps<HTMLDivElement> => ({
       role: 'radio',
-      'aria-labelledby': labelledBy,
+      'aria-labelledby': `${uniqIds.current[radioChildIndex]}_rri_label_${
+        radioChildIndex + 1
+      }`,
       'aria-checked': ratingValues[radioChildIndex] === ratingValue,
       ref: (radioChildNode: HTMLDivElement) =>
         (roleRadioDivs.current[radioChildIndex] = radioChildNode),
@@ -200,14 +189,10 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
         : undefined,
     });
 
-    /* Labels */
-
     const itemLabels =
       typeof customAccessibleLabels === 'undefined'
         ? ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`)
         : customAccessibleLabels;
-
-    /* Render */
 
     return (
       <>
@@ -215,20 +200,19 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
           ref={externalRef}
           className={`rri--group ${
             orientation === 'horizontal' ? 'rri--dir-x' : 'rri--dir-y'
-          } ${className || ''}`.trim()}
+          } ${className || ''}`}
           id={id}
           role="radiogroup"
           aria-labelledby={labelledBy}
           style={{
             ...style,
-            ...(isStylesPropObj ? ({ ...dynamicStyles?.cssVars } as CSSVariables) : {}),
+            ...dynamicStyles.objectCssVars,
             ...getGlobalStyles({
               orientation,
               breakpoints,
               boxMargin,
               boxPadding,
               boxRadius,
-              boxBorderWidth,
             }),
           }}
         >
@@ -238,26 +222,26 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
               className="rri--hover-mask"
               {...mouseProps(index)}
             >
-              {/* Maybe remove rri--radio */}
               <div
                 className={`rri--radio ${dynamicStyles?.activeClassNames?.[index]}`}
                 {...radioProps(index)}
               >
                 <div
-                  style={
-                    isStylesPropArray
-                      ? { ...(dynamicStyles?.cssVars as CSSVariables[])?.[index] }
-                      : {}
-                  }
+                  style={{
+                    ...dynamicStyles?.arrayCssVars?.[index],
+                  }}
                   className="rri--box"
                   aria-hidden="true"
                 >
                   <RatingItem
                     svgChildNodes={getSvgNodes(itemStyles, index)}
-                    strokeWidth={getSvgStrokes(itemStyles, index)}
+                    strokeWidth={getSvgStroke(itemStyles)}
                   />
                 </div>
-                <span className="rri--hidden" id={`rri_label_${index + 1}`}>
+                <span
+                  className="rri--hidden"
+                  id={`${uniqIds.current[index]}_rri_label_${index + 1}`}
+                >
                   {itemLabels?.[index]}
                 </span>
               </div>
@@ -271,7 +255,6 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
               boxMargin,
               boxPadding,
               boxRadius,
-              boxBorderWidth,
             })}
           </style>
         )}

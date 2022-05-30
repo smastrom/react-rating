@@ -4,7 +4,6 @@ export const getBreakpointRules = ({
   breakpoints,
   boxMargin,
   boxRadius,
-  boxBorderWidth,
   boxPadding,
 }: Omit<GlobalStyles, 'orientation'>): string => {
   let rulesArray: string[] = [];
@@ -14,7 +13,6 @@ export const getBreakpointRules = ({
   fullBreakpoints[0] = {
     boxMargin,
     boxRadius,
-    boxBorderWidth,
     boxPadding,
   };
 
@@ -27,8 +25,8 @@ export const getBreakpointRules = ({
         return;
       }
 
-      let variablesValues = '';
-      let mediaRule = '';
+      let variablesValues = '',
+        mediaRule = '';
       const className = '.rri--group {';
 
       const isGlobalRule = breakpointIndex === 0;
@@ -55,9 +53,6 @@ export const getBreakpointRules = ({
             break;
           case 'boxRadius':
             breakpointProperty = `--rri--box-radius: ${value}px;`;
-            break;
-          case 'boxBorderWidth':
-            breakpointProperty = `--rri--box-border-width: ${value}px;`;
         }
 
         variablesValues = variablesValues.concat('', breakpointProperty);

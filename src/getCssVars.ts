@@ -6,6 +6,8 @@ type AnyUserProvidedStyle = {
   [key: string]: any;
 };
 
+/* Maybe remove border-vars if no border have been set? */
+
 const getItemCssVars = (targetObj: CSSVariables, key: string, value: string) => {
   switch (key) {
     case 'activeFillColor':
@@ -17,6 +19,8 @@ const getItemCssVars = (targetObj: CSSVariables, key: string, value: string) => 
     case 'activeBoxColor':
       targetObj['--rri--active-box-color'] = value;
       break;
+    case 'activeBoxBorderColor':
+      targetObj['--rri--active-box-border-color'] = value;
     case 'inactiveFillColor':
       targetObj['--rri--inactive-item-color'] = value;
       break;
@@ -25,6 +29,10 @@ const getItemCssVars = (targetObj: CSSVariables, key: string, value: string) => 
       break;
     case 'inactiveBoxColor':
       targetObj['--rri--inactive-box-color'] = value;
+    case 'inactiveBoxBorderColor':
+      targetObj['--rri--inactive-box-border-color'] = value;
+    case 'customEasing':
+      targetObj['--rri--easing'] = value;
   }
 };
 
@@ -113,12 +121,14 @@ export const getArrayCssVars = (
   currentSelectedIndex: number,
   highlightOnlySelected: boolean
 ) => {
-  const { activeFillColor, activeStrokeColor, activeBoxColor } = itemStylesProp;
+  const { activeFillColor, activeStrokeColor, activeBoxColor, activeBoxBorderColor } =
+    itemStylesProp;
 
   const arrayStyles: AnyUserProvidedStyle = {
     activeFillColor,
     activeStrokeColor,
     activeBoxColor,
+    activeBoxBorderColor,
   };
 
   /* Delete any user-provided non-array style */

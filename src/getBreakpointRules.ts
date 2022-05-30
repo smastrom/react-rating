@@ -5,6 +5,7 @@ export const getBreakpointRules = ({
   boxMargin,
   boxRadius,
   boxPadding,
+  boxBorderWidth,
 }: Omit<GlobalStyles, 'orientation'>): string => {
   let rulesArray: string[] = [];
 
@@ -14,6 +15,7 @@ export const getBreakpointRules = ({
     boxMargin,
     boxRadius,
     boxPadding,
+    boxBorderWidth,
   };
 
   Object.entries(fullBreakpoints).forEach(
@@ -53,6 +55,9 @@ export const getBreakpointRules = ({
             break;
           case 'boxRadius':
             breakpointProperty = `--rri--box-radius: ${value}px;`;
+            break;
+          case 'boxBorderWidth':
+            breakpointProperty = `--rri--box-border-width: ${value}px;`;
         }
 
         variablesValues = variablesValues.concat('', breakpointProperty);

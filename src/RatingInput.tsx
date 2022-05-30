@@ -15,13 +15,13 @@ import { RatingInputProps } from './types';
 const getTransitionClasses = (transitionProp: string): string => {
   switch (transitionProp) {
     case 'zoom':
-      return 'rri--transition-zoom';
+      return 'rri--transition-zoom rri--transition-colors';
+    case 'position':
+      return 'rri--transition-position rri--transition-colors';
+    case 'opacity':
+      return 'rri--transition-opacity rri--transition-colors';
     case 'colors':
       return 'rri--transition-colors';
-    case 'opacity':
-      return 'rri--transition-opacity';
-    case 'position':
-      return 'rri--transition-position';
     default:
       return '';
   }
@@ -42,11 +42,13 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       highlightOnlySelected = false,
       enableKeyboard = true,
       orientation = 'horizontal',
-      transition = 'none',
+      transition = 'zoom',
       itemStyles = defaultItemStyles,
-      boxMargin = 20,
-      boxRadius = 20,
-      boxPadding = 20,
+      customEasing = '150ms ease-out',
+      boxMargin = 5,
+      boxRadius,
+      boxPadding = 5,
+      boxBorderWidth,
       breakpoints,
       id,
       className,
@@ -90,7 +92,10 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
               highlightOnlySelected
             )
           : [{}],
-      objectCssVars: getObjectCssVars(itemStyles),
+      objectCssVars: getObjectCssVars({
+        ...itemStyles,
+        customEasing,
+      }) /* Maybe add easing */,
       activeClassNames: getClassNames(ratingValues.indexOf(ratingValue)),
     });
 
@@ -226,7 +231,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
           ref={externalRef}
           className={`rri--group ${
             orientation === 'horizontal' ? 'rri--dir-x' : 'rri--dir-y'
-          } ${className || ''}`}
+          } ${className || ''} ${getTransitionClasses(transition)}`}
           id={id}
           role="radiogroup"
           aria-labelledby={labelledBy}
@@ -239,19 +244,17 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
               boxMargin,
               boxPadding,
               boxRadius,
+              boxBorderWidth,
             }),
           }}
         >
           {ratingValues.map((_, index) => (
             <div
               key={`rri_item_${index}`}
-              className="rri--hover-mask"
+              className={`rri--hover-mask ${styles?.activeClassNames?.[index]}`}
               {...mouseProps(index)}
             >
-              <div
-                className={`rri--radio ${styles?.activeClassNames?.[index]}`}
-                {...radioProps(index)}
-              >
+              <div className="rri--radio" {...radioProps(index)}>
                 <div
                   style={{
                     ...styles?.arrayCssVars?.[index],
@@ -281,6 +284,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
               boxMargin,
               boxPadding,
               boxRadius,
+              boxBorderWidth,
             })}
           </style>
         )}

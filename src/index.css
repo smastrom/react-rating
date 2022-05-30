@@ -1,7 +1,14 @@
+/*** Core elements ***/
+
 .rri--group {
   display: flex;
   flex-direction: var(--rri--orientation, unset);
   width: 100%;
+}
+
+.rri--hover-mask {
+  display: flex;
+  cursor: pointer;
 }
 
 .rri--radio {
@@ -14,23 +21,106 @@
 .rri--radio:focus-visible {
   border: none;
   border-radius: var(--rri--box-radius, 0);
-  box-shadow: 0 0 0 3px #0071ff;
+  box-shadow: 0 0 0 3px blue;
   outline: none;
 }
 
-.rri--hover-mask {
-  transition: transform 150ms ease-out;
-  transform: scale(1);
+.rri--box {
+  width: auto;
+  aspect-ratio: 1;
   display: flex;
-  cursor: pointer;
+  pointer-events: none;
+  padding: var(--rri--box-padding, 0);
+  border-style: solid;
+  border-width: var(--rri--box-border-width, 0);
+  border-radius: var(--rri--box-radius, 0);
 }
 
-.rri--hover-mask:hover {
-  /*   transform: scale(1.15); */
-  transform: translateY(-12.5%);
+/* Active / Inactive */
+
+.rri--inactive .rri--radio .rri--box {
+  background-color: var(--rri--inactive-box-color);
+  border-color: var(--rri--inactive-box-border-color, none);
 }
 
-/* orientation - Horizontal */
+.rri--active .rri--radio .rri--box {
+  background-color: var(--rri--active-box-color);
+  border-color: var(--rri--active-box-border-color, none);
+}
+
+/* SVG Item */
+
+.rri--svg-item {
+  stroke-linecap: var(--rri--item-stroke-linecap, unset);
+  stroke-linejoin: var(--rri--item-stroke-linejoin, unset);
+}
+
+.rri--active .rri--radio .rri--box .rri--svg-item {
+  fill: var(--rri--active-item-color);
+  stroke: var(--rri--active-item-stroke-color, currentColor);
+}
+
+.rri--inactive .rri--radio .rri--box .rri--svg-item {
+  fill: var(--rri--inactive-item-color);
+  stroke: var(--rri--inactive-item-stroke-color, currentColor);
+}
+
+/*** Transitions ***/
+
+/* Zoom */
+
+.rri--group.rri--transition-zoom .rri--hover-mask {
+  transition: transform var(--rri--easing);
+  transform: scale(1);
+}
+
+@media (hover: hover) {
+  .rri--group.rri--transition-zoom .rri--hover-mask:hover {
+    transform: scale(1.15);
+  }
+}
+
+/* Position */
+
+.rri--group.rri--transition-position .rri--hover-mask {
+  transition: transform var(--rri--easing);
+  transform: translateY(0%);
+}
+
+@media (hover: hover) {
+  .rri--group.rri--transition-position .rri--hover-mask:hover {
+    transform: translateY(-12.5%);
+  }
+}
+
+/* Opacity */
+
+.rri--group.rri--transition-opacity .rri--hover-mask.rri--active {
+  opacity: 1;
+}
+
+.rri--group.rri--transition-opacity .rri--hover-mask.rri--inactive {
+  opacity: 0.35;
+  transition: opacity var(--rri--easing);
+}
+
+@media (hover: hover) {
+  .rri--group.rri--transition-opacity .rri--hover-mask:hover {
+    opacity: 1;
+  }
+}
+
+/* Colors */
+
+.rri--transition-colors .rri--hover-mask .rri--radio .rri--box {
+  transition: background-color var(--rri--easing), border-color var(--rri--easing); /* Add same transition to svg */
+}
+
+.rri--transition-colors .rri--hover-mask .rri--radio .rri--box .rri--svg-item {
+  transition: fill var(--rri--easing), stroke var(--rri--easing);
+}
+
+/* Orientation - Horizontal */
 
 .rri--group.rri--dir-x .rri--hover-mask {
   padding-left: var(--rri--box-margin, unset);
@@ -42,60 +132,28 @@
   padding-right: var(--rri--box-margin, unset);
 }
 
-/* Fix margin for rtl */
+/* Orientation - Horizontal - RTL */
+
+[dir='rtl'] .rri--group.rri--dir-x .rri--hover-mask {
+  padding-right: var(--rri--box-margin, unset);
+  padding-left: unset;
+}
 
 [dir='rtl'] .rri--group.rri--dir-x .rri--hover-mask:last-of-type {
   padding-left: var(--rri--box-margin, unset);
 }
 
-[dir='rtl'] .rri--group.rri--dir-x .rri--hover-mask:first-of-type {
-  padding-left: unset;
-}
+/* Orientation - Vertical */
 
-/* orientation - Vertical */
-
-/* Fix margin for vertical */
 .rri--group.rri--dir-y .rri--hover-mask {
-  padding-bottom: var(--rri--box-margin, unset);
+  padding-left: var(--rri--box-margin, unset);
+  padding-top: var(--rri--box-margin, unset);
+  padding-right: var(--rri--box-margin, unset);
 }
 
 .rri--group.rri--dir-y .rri--hover-mask:last-of-type {
-  padding-bottom: unset;
+  padding-bottom: var(--rri--box-margin, unset);
 }
-
-/* Box */
-
-.rri--box {
-  width: auto;
-  aspect-ratio: 1;
-  min-width: 1vw; /* Maybe remove */
-  display: flex;
-  pointer-events: none;
-  padding: var(--rri--box-padding, 0);
-  border-style: solid;
-  border-width: var(--rri--box-border-width, 0);
-  border-radius: var(--rri--box-radius, 0);
-
-  transition: background-color 150ms ease-out, border-color 150ms ease-out; /* Add same transition to svg */
-}
-
-/* Active */
-
-.rri--inactive .rri--box {
-  background-color: var(--rri--inactive-box-color);
-  border-color: var(--rri--inactive-box-border-color, none);
-}
-
-.rri--active .rri--box {
-  background-color: var(--rri--active-box-color);
-  border-color: var(--rri--active-box-border-color, none);
-}
-
-/* Hover states */
-
-/* Focus - To do */
-
-/* Transitions */
 
 /* Readonly */
 
@@ -168,23 +226,6 @@
 .rri--readonly-precision-svg-active .rri--box,
 .rri--readonly-precision-svg-inactive .rri--box {
   background-color: var(--rri--active-box-color);
-}
-
-/* SVG Item */
-
-.rri--box .rri--svg-item {
-  stroke-linecap: var(--rri--item-stroke-linecap, unset);
-  stroke-linejoin: var(--rri--item-stroke-linejoin, unset);
-}
-
-.rri--active .rri--box .rri--svg-item {
-  fill: var(--rri--active-item-color);
-  stroke: var(--rri--active-item-stroke-color, currentColor);
-}
-
-.rri--inactive .rri--box .rri--svg-item {
-  fill: var(--rri--inactive-item-color);
-  stroke: var(--rri--inactive-item-stroke-color, currentColor);
 }
 
 /* Hidden */

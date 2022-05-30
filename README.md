@@ -107,7 +107,7 @@ const App = () => (
 | boxBorderWidth         | number                                                  | 0                 | :x:                |
 | breakpoints            | Breakpoints                                             | undefined         | :x:                |
 | customAccessibleLabels | string[]                                                | undefined         | :x:                |
-| labelledBy             | string                                                  | undefined         | :x:                |
+| labelledBy             | string                                                  | undefined         | :x:                |x
 
 <br />
 

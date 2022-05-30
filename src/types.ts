@@ -9,7 +9,9 @@ export type ItemStylesProp = {
   inactiveStrokeColor?: string;
 
   activeBoxColor?: string | string[];
+  activeBoxBorderColor?: string | string[];
   inactiveBoxColor?: string;
+  inactiveBoxBorderColor?: string;
 };
 
 /** Those styles are considered "global" as they are not supposed to change for each rating item.
@@ -25,6 +27,8 @@ type GlobalStyles = {
   boxPadding?: number;
   /** Integer representing the border radius of the box in pixels. */
   boxRadius?: number;
+  /** Integer representing the border radius of the box in pixels. */
+  boxBorderWidth?: number;
 };
 
 /** Customize boxMargin, boxPadding, boxRadius and boxBorderWidth for different breakpoints.
@@ -57,6 +61,7 @@ export type RatingInputProps = GlobalStyles &
     labelledBy?: string;
     customAccessibleLabels?: string[];
     transition?: 'colors' | 'zoom' | 'position' | 'none';
+    customEasing?: string;
   };
 
 export type RatingProps = GlobalStyles &

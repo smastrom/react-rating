@@ -33,8 +33,8 @@ const Mail = (
 );
 
 const testStyles: ItemStylesProp = {
-  svgChildNodes: [Face, Star, Face, Face, Face],
-  // itemStrokeWidth: 5,
+  svgChildNodes: [Face, Face, Face, Face, Face],
+  // itemStrokeWidth: 0.5,
   itemStrokeStyle: 'round',
 
   activeFillColor: 'white',
@@ -44,6 +44,9 @@ const testStyles: ItemStylesProp = {
 
   activeBoxColor: ['#ff3621', '#ff8621', '#ffce00', '#73cf11', '#00b679'],
   inactiveBoxColor: '#dbdbe5',
+
+  activeBoxBorderColor: ['#c41400', '#d05e00', '#cca300', '#61bb00', '#009664'],
+  inactiveBoxBorderColor: '#a8a8a8',
 };
 
 const displayRating = (value: any) => {
@@ -95,9 +98,6 @@ const App = () => {
       <div
         style={{
           maxWidth: '600px',
-          backgroundColor: '#DCFCE7',
-          border: '2px solid #4ADE80',
-          borderRadius: '10px',
         }}
       >
         <RatingInput
@@ -105,12 +105,15 @@ const App = () => {
           limit={5}
           ratingValue={value}
           itemStyles={testStyles}
+          transition="zoom"
           // highlightOnlySelected
           orientation="horizontal"
+          // customEasing="180ms ease-in"
           customAccessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}
           boxMargin={5}
           boxRadius={5}
           boxPadding={20}
+          boxBorderWidth={3}
           breakpoints={{
             230: {
               boxMargin: 20,
@@ -130,8 +133,7 @@ const App = () => {
       <h3>Selected: {displayRating(value)}</h3>
       <h3>Hovered: {displayRating(hoveredValue)}</h3>
       <h3>
-        Smart feedback:{' '}
-        {hoveredValue === 0 ? displayRating(value) : displayRating(hoveredValue)}
+        Smart: {hoveredValue === 0 ? displayRating(value) : displayRating(hoveredValue)}
       </h3>
       <button onClick={() => setValue(0)}>Reset</button>
     </div>

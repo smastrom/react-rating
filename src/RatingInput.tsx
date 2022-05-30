@@ -12,6 +12,21 @@ import { isPlainObject } from './utils';
 
 import { RatingInputProps } from './types';
 
+const getTransitionClasses = (transitionProp: string): string => {
+  switch (transitionProp) {
+    case 'zoom':
+      return 'rri--transition-zoom';
+    case 'colors':
+      return 'rri--transition-colors';
+    case 'opacity':
+      return 'rri--transition-opacity';
+    case 'position':
+      return 'rri--transition-position';
+    default:
+      return '';
+  }
+};
+
 /** Accessible radio-group to be used as input, please refer to
  * README.md at https://github.com/smastrom/react-rating-input
  * for the complete list of props. If you just need to display the rating
@@ -27,7 +42,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       highlightOnlySelected = false,
       enableKeyboard = true,
       orientation = 'horizontal',
-      transition = 'zoom',
+      transition = 'none',
       itemStyles = defaultItemStyles,
       boxMargin = 20,
       boxRadius = 20,
@@ -63,9 +78,8 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
 
     /* Helpers */
 
-    const getClassNames = (selectedValue: number) => {
-      return getActiveClassNames(highlightOnlySelected, ratingValues, selectedValue);
-    };
+    const getClassNames = (selectedValue: number) =>
+      getActiveClassNames(highlightOnlySelected, ratingValues, selectedValue);
 
     const getStyles = () => ({
       arrayCssVars:
@@ -82,12 +96,12 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
 
     /* State */
 
-    const [dynamicStyles, setDynamicStyles] = useState(getStyles());
+    const [styles, setStyles] = useState(getStyles());
 
     /* Effect */
 
     useEffect(() => {
-      setDynamicStyles(getStyles());
+      setStyles(getStyles());
     }, [ratingValue, itemStyles]);
 
     /* Mouse Handlers */
@@ -115,7 +129,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
         hoveredIndex,
         highlightOnlySelected
       );
-      setDynamicStyles({ ...dynamicStyles, arrayCssVars, activeClassNames });
+      setStyles({ ...styles, arrayCssVars, activeClassNames });
     };
 
     const handleMouseLeave = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -132,7 +146,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
               highlightOnlySelected
             )
           : [{}];
-      setDynamicStyles({ ...dynamicStyles, arrayCssVars, activeClassNames });
+      setStyles({ ...styles, arrayCssVars, activeClassNames });
     };
 
     console.log('Rubra');
@@ -218,7 +232,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
           aria-labelledby={labelledBy}
           style={{
             ...style,
-            ...dynamicStyles.objectCssVars,
+            ...styles.objectCssVars,
             ...getGlobalStyles({
               orientation,
               breakpoints,
@@ -235,12 +249,12 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
               {...mouseProps(index)}
             >
               <div
-                className={`rri--radio ${dynamicStyles?.activeClassNames?.[index]}`}
+                className={`rri--radio ${styles?.activeClassNames?.[index]}`}
                 {...radioProps(index)}
               >
                 <div
                   style={{
-                    ...dynamicStyles?.arrayCssVars?.[index],
+                    ...styles?.arrayCssVars?.[index],
                   }}
                   className="rri--box"
                   aria-hidden="true"

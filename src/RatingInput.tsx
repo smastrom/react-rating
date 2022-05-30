@@ -20,9 +20,10 @@ import { RatingInputProps } from './types';
 export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
   (
     {
-      ratingValue = null,
+      ratingValue = 0,
       limit = 5,
       onChange,
+      onHoverChange,
       highlightOnlySelected = false,
       enableKeyboard = true,
       orientation = 'horizontal',
@@ -40,13 +41,15 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
     },
     externalRef
   ) => {
-    if (typeof limit !== 'number' || limit < 1 || limit > 10) {
-      return null;
-    }
-
-    /* Prevent rendering if invalid prop? */
-
-    if (typeof onChange !== 'function') {
+    if (
+      typeof limit !== 'number' ||
+      limit < 1 ||
+      limit > 10 ||
+      typeof ratingValue !== 'number' ||
+      ratingValue < 0 ||
+      ratingValue > limit ||
+      typeof onChange !== 'function'
+    ) {
       return null;
     }
 
@@ -58,35 +61,36 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       ratingValues.map(() => (Math.random() + 1).toString(36).substring(7))
     );
 
-    const getClassNames = () => {
-      return getActiveClassNames(
-        highlightOnlySelected,
-        ratingValues,
-        ratingValues.indexOf(ratingValue || 0)
-      );
+    /* Helpers */
+
+    const getClassNames = (selectedValue: number) => {
+      return getActiveClassNames(highlightOnlySelected, ratingValues, selectedValue);
     };
 
-    const [dynamicStyles, setDynamicStyles] = useState({
-      arrayCssVars: getArrayCssVars(
-        itemStyles,
-        ratingValues.indexOf(ratingValue || 0),
-        highlightOnlySelected
-      ),
-      activeClassNames: getClassNames(),
+    const getStyles = () => ({
+      arrayCssVars:
+        ratingValue > 0
+          ? getArrayCssVars(
+              itemStyles,
+              ratingValues.indexOf(ratingValue),
+              highlightOnlySelected
+            )
+          : [{}],
       objectCssVars: getObjectCssVars(itemStyles),
+      activeClassNames: getClassNames(ratingValues.indexOf(ratingValue)),
     });
 
-    useEffect(() => {
-      const objectCssVars = getObjectCssVars(itemStyles);
-      const activeClassNames = getClassNames();
-      const arrayCssVars = getArrayCssVars(
-        itemStyles,
-        ratingValues.indexOf(ratingValue || 0),
-        highlightOnlySelected
-      );
+    /* State */
 
-      setDynamicStyles({ activeClassNames, objectCssVars, arrayCssVars });
+    const [dynamicStyles, setDynamicStyles] = useState(getStyles());
+
+    /* Effect */
+
+    useEffect(() => {
+      setDynamicStyles(getStyles());
     }, [ratingValue, itemStyles]);
+
+    /* Mouse Handlers */
 
     const handleClick = (
       event: React.MouseEvent<HTMLDivElement>,
@@ -97,38 +101,43 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       onChange(ratingValues[index]);
     };
 
-    const handleMouseEnterAndLeave = (
-      event: React.MouseEvent<HTMLDivElement>,
-      selectedIndex: number
-    ) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      const activeClassNames = getActiveClassNames(
-        highlightOnlySelected,
-        ratingValues,
-        selectedIndex
-      );
-
-      const arrayCssVars = getArrayCssVars(
-        itemStyles,
-        selectedIndex,
-        highlightOnlySelected
-      );
-
-      setDynamicStyles({ ...dynamicStyles, arrayCssVars, activeClassNames });
-    };
-
     const handleMouseEnter = (
       event: React.MouseEvent<HTMLDivElement>,
       hoveredIndex: number
     ) => {
-      return handleMouseEnterAndLeave(event, hoveredIndex);
+      if (typeof onHoverChange === 'function') {
+        onHoverChange(ratingValues[hoveredIndex]);
+      }
+
+      const activeClassNames = getClassNames(hoveredIndex);
+      const arrayCssVars = getArrayCssVars(
+        itemStyles,
+        hoveredIndex,
+        highlightOnlySelected
+      );
+      setDynamicStyles({ ...dynamicStyles, arrayCssVars, activeClassNames });
     };
 
     const handleMouseLeave = (event: React.MouseEvent<HTMLDivElement>) => {
-      return handleMouseEnterAndLeave(event, ratingValues.indexOf(ratingValue || 0));
+      if (typeof onHoverChange === 'function') {
+        onHoverChange(0);
+      }
+
+      const activeClassNames = getClassNames(ratingValues.indexOf(ratingValue));
+      const arrayCssVars =
+        ratingValue > 0
+          ? getArrayCssVars(
+              itemStyles,
+              ratingValues.indexOf(ratingValue),
+              highlightOnlySelected
+            )
+          : [{}];
+      setDynamicStyles({ ...dynamicStyles, arrayCssVars, activeClassNames });
     };
+
+    console.log('Rubra');
+
+    /* Keyboard Handlers */
 
     const handleKeydown = (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
       event.preventDefault();
@@ -166,6 +175,8 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
         }
       }
     };
+
+    /* Props */
 
     const mouseProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => ({
       onMouseEnter: (event: React.MouseEvent<HTMLDivElement>) =>

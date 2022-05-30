@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { RatingInput } from '../src/RatingInput';
 
@@ -46,7 +46,7 @@ const testStyles: ItemStylesProp = {
   inactiveBoxColor: '#dbdbe5',
 };
 
-const renderValue = (value: any) => {
+const displayRating = (value: any) => {
   switch (value) {
     case 1:
       return 'Poor';
@@ -59,17 +59,26 @@ const renderValue = (value: any) => {
     case 5:
       return 'Excellent';
     default:
-      return 'No rating';
+      return 'None';
   }
 };
 
 const App = () => {
-  const [value, setValue] = useState<number | null>(3);
+  const ratingInputRef = useRef(null);
 
-  const [values, setValues] = useState({
-    selected: 3,
-    hovered: 0,
-  });
+  const [value, setValue] = useState<number>(3);
+  const [hoveredValue, setHoveredValue] = useState<number>(0);
+
+  const onClickOutside = (event) => {
+    if (value > 0 && !ratingInputRef.current.contains(event.target)) {
+      setValue(0);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', onClickOutside);
+    return () => document.removeEventListener('click', onClickOutside);
+  }, []);
 
   return (
     <div
@@ -92,6 +101,7 @@ const App = () => {
         }}
       >
         <RatingInput
+          ref={ratingInputRef}
           limit={5}
           ratingValue={value}
           itemStyles={testStyles}
@@ -114,9 +124,15 @@ const App = () => {
             },
           }}
           onChange={(currentValue: number): void => setValue(currentValue)}
+          onHoverChange={(hoveredVal: number): void => setHoveredValue(hoveredVal)}
         />
       </div>
-      <h3>{renderValue(value)}</h3>
+      <h3>Selected: {displayRating(value)}</h3>
+      <h3>Hovered: {displayRating(hoveredValue)}</h3>
+      <h3>
+        Smart feedback:{' '}
+        {hoveredValue === 0 ? displayRating(value) : displayRating(hoveredValue)}
+      </h3>
       <button onClick={() => setValue(0)}>Reset</button>
     </div>
   );

@@ -2,12 +2,7 @@ import { CSSVariables, RatingInputProps } from './types';
 
 export type GlobalStyles = Pick<
   RatingInputProps,
-  | 'breakpoints'
-  | 'boxRadius'
-  | 'boxMargin'
-  | 'boxPadding'
-  | 'boxBorderWidth'
-  | 'orientation'
+  'breakpoints' | 'boxRadius' | 'boxMargin' | 'boxPadding' | 'orientation'
 >;
 
 const getGlobalStylesVars = (targetObj: CSSVariables, key: string, value: number) => {
@@ -23,9 +18,6 @@ const getGlobalStylesVars = (targetObj: CSSVariables, key: string, value: number
       break;
     case 'boxRadius':
       targetObj['--rri--box-radius'] = `${value}px`;
-      break;
-    case 'boxBorderWidth':
-      targetObj['--rri--box-border-width'] = `${value}px`;
   }
 };
 

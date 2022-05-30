@@ -1,21 +1,4 @@
 export type ItemStylesProp = {
-  /** JSX Element including the inner nodes of the SVG you want to display. */
-  svgChildNodes: JSX.Element;
-  itemStrokeWidth?: number;
-  itemStrokeStyle?: 'round' | 'sharp';
-
-  activeItemColor: string;
-  activeItemStrokeColor?: string;
-  activeBoxColor?: string;
-  activeBoxBorderColor?: string;
-
-  inactiveItemColor: string;
-  inactiveItemStrokeColor?: string;
-  inactiveBoxColor?: string;
-  inactiveBoxBorderColor?: string;
-};
-
-export type NewItemStylesProp = {
   svgChildNodes: JSX.Element | JSX.Element[];
   itemStrokeWidth?: number;
   itemStrokeStyle?: 'round' | 'sharp';
@@ -35,14 +18,13 @@ export type NewItemStylesProp = {
  * https://google.com for more infos.
  */
 type GlobalStyles = {
+  // Rename to boxStyles
   /** Integer representing the number of pixels of the right-side margin between the rating items.*/
   boxMargin?: number;
   /** Integer representing the padding in pixels between the rating item and the box bounds. */
   boxPadding?: number;
   /** Integer representing the border radius of the box in pixels. */
   boxRadius?: number;
-  /** Integer representing the box border width in pixels. */
-  boxBorderWidth?: number; // Remove it
 };
 
 /** Customize boxMargin, boxPadding, boxRadius and boxBorderWidth for different breakpoints.
@@ -58,7 +40,7 @@ type SharedProps = {
   limit: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
   highlightOnlySelected?: boolean;
   orientation: 'horizontal' | 'vertical';
-  itemStyles?: ItemStylesProp | ItemStylesProp[];
+  itemStyles?: ItemStylesProp;
   breakpoints?: Breakpoints;
   id?: string;
   style?: React.CSSProperties;
@@ -73,6 +55,7 @@ export type RatingInputProps = GlobalStyles &
     enableKeyboard?: boolean;
     labelledBy?: string;
     customAccessibleLabels?: string[];
+    transition?: 'colors' | 'zoom' | 'position' | 'none';
   };
 
 export type RatingProps = GlobalStyles &

@@ -6,7 +6,7 @@ import { RatingItem } from './RatingItem';
 import { defaultItemStyles } from './DefaultStyles';
 import { getBreakpointRules } from './getBreakpointRules';
 import { getSvgNodes } from './getSvgNodes';
-import { getSvgStrokes } from './getSvgStrokes';
+import { getSvgStrokes } from './getSvgStroke';
 import { getCssObjectVars, getCssArrayVars } from './getCssVars';
 import { getActiveClassNames } from './getActiveClassNames';
 import { getGlobalStyles } from './getGlobalStyles';

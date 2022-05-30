@@ -12,31 +12,49 @@
   justify-content: center;
 }
 
+.rri--radio:focus-visible {
+  border: none;
+  border-radius: var(--rri--box-radius, 0);
+  box-shadow: 0 0 0 3px #0071ff;
+  outline: none;
+}
+
 .rri--hover-mask {
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(1);
   display: flex;
   cursor: pointer;
+}
+
+.rri--hover-mask:hover {
+  transform: scale(1.15);
 }
 
 /* orientation - Horizontal */
 
 .rri--group.rri--dir-x .rri--hover-mask {
-  padding-right: var(--rri--box-margin, unset);
+  padding-left: var(--rri--box-margin, unset);
+  padding-top: var(--rri--box-margin, unset);
+  padding-bottom: var(--rri--box-margin, unset);
 }
 
 .rri--group.rri--dir-x .rri--hover-mask:last-of-type {
-  padding-right: unset;
-}
-
-[dir='rtl'] .rri--group.rri--dir-x .rri--hover-mask:last-of-type {
   padding-right: var(--rri--box-margin, unset);
 }
 
+/* Fix margin for rtl */
+
+[dir='rtl'] .rri--group.rri--dir-x .rri--hover-mask:last-of-type {
+  padding-left: var(--rri--box-margin, unset);
+}
+
 [dir='rtl'] .rri--group.rri--dir-x .rri--hover-mask:first-of-type {
-  padding-right: unset;
+  padding-left: unset;
 }
 
 /* orientation - Vertical */
 
+/* Fix margin for vertical */
 .rri--group.rri--dir-y .rri--hover-mask {
   padding-bottom: var(--rri--box-margin, unset);
 }
@@ -57,6 +75,8 @@
   border-style: solid;
   border-width: var(--rri--box-border-width, 0);
   border-radius: var(--rri--box-radius, 0);
+
+  transition: background-color 150ms ease-out, border-color 150ms ease-out; /* Add same transition to svg */
 }
 
 /* Active */

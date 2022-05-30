@@ -26,6 +26,7 @@ export const RatingInput = forwardRef<HTMLDivElement, RatingInputProps>(
       highlightOnlySelected = false,
       enableKeyboard = true,
       orientation = 'horizontal',
+      transition = 'zoom',
       itemStyles = defaultItemStyles,
       boxMargin = 20,
       boxRadius = 20,

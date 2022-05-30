@@ -6,8 +6,8 @@ import { RatingItem } from './RatingItem';
 import { defaultItemStyles } from './DefaultStyles';
 import { getBreakpointRules } from './getBreakpointRules';
 import { getSvgNodes } from './getSvgNodes';
-import { getSvgStrokes } from './getSvgStroke';
-import { getCssObjectVars, getCssArrayVars } from './getCssVars';
+import { getSvgStroke } from './getSvgStroke';
+import { getArrayCssVars, getObjectCssVars } from './getCssVars';
 import { getActiveClassNames } from './getActiveClassNames';
 import { getGlobalStyles } from './getGlobalStyles';
 import { isPlainObject } from './utils';
@@ -66,8 +66,8 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>( // Define props
 
     const [dynamicStyles, setDynamicStyles] = useState(() => ({
       cssVars: isStylesPropArray
-        ? getCssArrayVars(itemStyles as ItemStylesProp[], ratingValue || 0)
-        : getCssObjectVars(itemStyles as ItemStylesProp),
+        ? getArrayCssVars(itemStyles as ItemStylesProp[], ratingValue || 0)
+        : getObjectCssVars(itemStyles as ItemStylesProp),
       activeClassNames: getClassNames(),
     }));
 
@@ -75,9 +75,9 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>( // Define props
       let cssVars: CSSVariables | CSSVariables[];
 
       if (isStylesPropArray) {
-        cssVars = getCssArrayVars(itemStyles, ratingValues.indexOf(ratingValue || 0));
+        cssVars = getArrayCssVars(itemStyles, ratingValues.indexOf(ratingValue || 0));
       } else {
-        cssVars = getCssObjectVars(itemStyles);
+        cssVars = getObjectCssVars(itemStyles);
       }
 
       const activeClassNames = getClassNames();
@@ -131,7 +131,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>( // Define props
                       : false
                   }
                   svgChildNodes={getSvgNodes(itemStyles, index)}
-                  strokeWidth={getSvgStrokes(itemStyles, index)}
+                  strokeWidth={getSvgStroke(itemStyles, index)}
                 />
               </div>
             </div>

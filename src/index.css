@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: var(--rri--orientation, unset);
   width: 100%;
-  width: var(--rri--container-width, 100%);
 }
 
 .rri--radio {
@@ -20,14 +19,15 @@
 }
 
 .rri--hover-mask {
-  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 150ms ease-out;
   transform: scale(1);
   display: flex;
   cursor: pointer;
 }
 
 .rri--hover-mask:hover {
-  transform: scale(1.15);
+  /*   transform: scale(1.15); */
+  transform: translateY(-12.5%);
 }
 
 /* orientation - Horizontal */

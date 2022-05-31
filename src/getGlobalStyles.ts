@@ -1,7 +1,7 @@
-import { CSSVariables, RatingInputProps } from './types';
+import { CSSVariables, RatingProps } from './types';
 
 export type GlobalStyles = Pick<
-  RatingInputProps,
+  RatingProps,
   | 'boxRadius'
   | 'boxMargin'
   | 'boxPadding'

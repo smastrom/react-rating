@@ -24,8 +24,6 @@ export const RatingItem = ({
   const strokeOffset = strokeWidth > 0 ? -(strokeWidth / 2) : 0;
 
   useLayoutEffect(() => {
-    console.log('Rubrante');
-
     const {
       width: svgWidth,
       height: svgHeight,
@@ -67,6 +65,7 @@ export const RatingItem = ({
 
   return (
     <svg
+      aria-hidden="true"
       className="rri--svg-item"
       xmlns="http://www.w3.org/2000/svg"
       viewBox={svgData ? svgData.viewBox : '0 0 0 0'}

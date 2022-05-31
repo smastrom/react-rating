@@ -9,5 +9,3 @@ export const getSvgStroke = (itemStylesProp: ItemStylesProp): number => {
   }
   return 0;
 };
-
-// Maybe simplify

@@ -6,30 +6,31 @@
   width: 100%;
 }
 
-.rri--hover-mask {
-  display: flex;
-  cursor: pointer;
-}
-
-.rri--radio {
+.rri--item-mask {
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: center;
 }
 
-.rri--radio:focus-visible {
+.rri--item-box:focus-visible {
   border: none;
   border-radius: var(--rri--box-radius, 0);
   box-shadow: 0 0 0 3px blue;
   outline: none;
 }
 
-.rri--box {
+.rri--flx-center {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.rri--item-box,
+.rri--item-box-ro {
   width: auto;
   aspect-ratio: 1;
   display: flex;
-  pointer-events: none;
   padding: var(--rri--box-padding, 0);
   border-style: solid;
   border-width: var(--rri--box-border-width, 0);
@@ -38,12 +39,14 @@
 
 /* Active / Inactive */
 
-.rri--inactive .rri--radio .rri--box {
+.rri--inactive .rri--item-box,
+.rri--item-box-ro.rri--inactive {
   background-color: var(--rri--inactive-box-color);
   border-color: var(--rri--inactive-box-border-color, none);
 }
 
-.rri--active .rri--radio .rri--box {
+.rri--active .rri--item-box,
+.rri--item-box-ro.rri--active {
   background-color: var(--rri--active-box-color);
   border-color: var(--rri--active-box-border-color, none);
 }
@@ -55,106 +58,145 @@
   stroke-linejoin: var(--rri--item-stroke-linejoin, unset);
 }
 
-.rri--active .rri--radio .rri--box .rri--svg-item {
+.rri--active .rri--item-box .rri--svg-item,
+.rri--item-box-ro.rri--active .rri--svg-item {
   fill: var(--rri--active-item-color);
   stroke: var(--rri--active-item-stroke-color, currentColor);
 }
 
-.rri--inactive .rri--radio .rri--box .rri--svg-item {
+.rri--inactive .rri--item-box .rri--svg-item,
+.rri--item-box-ro.rri--inactive .rri--svg-item {
   fill: var(--rri--inactive-item-color);
   stroke: var(--rri--inactive-item-stroke-color, currentColor);
+}
+
+/*** Orientation and margin ***/
+
+/* Orientation - Horizontal */
+
+.rri--group.rri--dir-x .rri--margin {
+  padding-left: var(--rri--box-margin, unset);
+  padding-top: var(--rri--box-margin, unset);
+  padding-bottom: var(--rri--box-margin, unset);
+}
+
+.rri--group.rri--dir-x .rri--margin:last-of-type {
+  padding-right: var(--rri--box-margin, unset);
+}
+
+/* Orientation - Horizontal - RTL */
+
+[dir='rtl'] .rri--group.rri--dir-x .rri--margin {
+  padding-right: var(--rri--box-margin, unset);
+  padding-left: unset;
+}
+
+[dir='rtl'] .rri--group.rri--dir-x .rri--margin:last-of-type {
+  padding-left: var(--rri--box-margin, unset);
+}
+
+/* Orientation - Vertical */
+
+.rri--group.rri--dir-y .rri--margin {
+  padding-left: var(--rri--box-margin, unset);
+  padding-top: var(--rri--box-margin, unset);
+  padding-right: var(--rri--box-margin, unset);
+}
+
+.rri--group.rri--dir-y .rri--margin:last-of-type {
+  padding-bottom: var(--rri--box-margin, unset);
+}
+
+/*** Orientation and margin readOnly ***/
+
+/* Orientation - Horizontal */
+
+.rri--group.rri--dir-x .rri--margin-ro {
+  margin-left: var(--rri--box-margin, unset);
+  margin-top: var(--rri--box-margin, unset);
+  margin-bottom: var(--rri--box-margin, unset);
+}
+
+.rri--group.rri--dir-x .rri--margin-ro:last-of-type {
+  margin-right: var(--rri--box-margin, unset);
+}
+
+/* Orientation - Horizontal - RTL */
+
+[dir='rtl'] .rri--group.rri--dir-x .rri--margin-ro {
+  margin-right: var(--rri--box-margin, unset);
+  margin-left: unset;
+}
+
+[dir='rtl'] .rri--group.rri--dir-x .rri--margin-ro:last-of-type {
+  margin-left: var(--rri--box-margin, unset);
+}
+
+/* Orientation - Vertical */
+
+.rri--group.rri--dir-y .rri--margin-ro {
+  margin-left: var(--rri--box-margin, unset);
+  margin-top: var(--rri--box-margin, unset);
+  margin-right: var(--rri--box-margin, unset);
+}
+
+.rri--group.rri--dir-y .rri--margin-ro:last-of-type {
+  margin-bottom: var(--rri--box-margin, unset);
 }
 
 /*** Transitions ***/
 
 /* Zoom */
 
-.rri--group.rri--transition-zoom .rri--hover-mask {
+.rri--group.rri--transition-zoom .rri--item-mask {
   transition: transform var(--rri--easing);
   transform: scale(1);
 }
 
 @media (hover: hover) {
-  .rri--group.rri--transition-zoom .rri--hover-mask:hover {
+  .rri--group.rri--transition-zoom .rri--item-mask:hover {
     transform: scale(1.15);
   }
 }
 
 /* Position */
 
-.rri--group.rri--transition-position .rri--hover-mask {
+.rri--group.rri--transition-position .rri--item-mask {
   transition: transform var(--rri--easing);
   transform: translateY(0%);
 }
 
 @media (hover: hover) {
-  .rri--group.rri--transition-position .rri--hover-mask:hover {
+  .rri--group.rri--transition-position .rri--item-mask:hover {
     transform: translateY(-12.5%);
   }
 }
 
 /* Opacity */
 
-.rri--group.rri--transition-opacity .rri--hover-mask.rri--active {
+.rri--group.rri--transition-opacity .rri--item-mask.rri--active {
   opacity: 1;
 }
 
-.rri--group.rri--transition-opacity .rri--hover-mask.rri--inactive {
+.rri--group.rri--transition-opacity .rri--item-mask.rri--inactive {
   opacity: 0.35;
   transition: opacity var(--rri--easing);
 }
 
 @media (hover: hover) {
-  .rri--group.rri--transition-opacity .rri--hover-mask:hover {
+  .rri--group.rri--transition-opacity .rri--item-mask:hover {
     opacity: 1;
   }
 }
 
 /* Colors */
 
-.rri--transition-colors .rri--hover-mask .rri--radio .rri--box {
+.rri--transition-colors .rri--item-mask .rri--item-box {
   transition: background-color var(--rri--easing), border-color var(--rri--easing); /* Add same transition to svg */
 }
 
-.rri--transition-colors .rri--hover-mask .rri--radio .rri--box .rri--svg-item {
+.rri--transition-colors .rri--item-mask .rri--item-box .rri--svg-item {
   transition: fill var(--rri--easing), stroke var(--rri--easing);
-}
-
-/*** Orientation ***/
-
-/* Orientation - Horizontal */
-
-.rri--group.rri--dir-x .rri--hover-mask {
-  padding-left: var(--rri--box-margin, unset);
-  padding-top: var(--rri--box-margin, unset);
-  padding-bottom: var(--rri--box-margin, unset);
-}
-
-.rri--group.rri--dir-x .rri--hover-mask:last-of-type {
-  padding-right: var(--rri--box-margin, unset);
-}
-
-/* Orientation - Horizontal - RTL */
-
-[dir='rtl'] .rri--group.rri--dir-x .rri--hover-mask {
-  padding-right: var(--rri--box-margin, unset);
-  padding-left: unset;
-}
-
-[dir='rtl'] .rri--group.rri--dir-x .rri--hover-mask:last-of-type {
-  padding-left: var(--rri--box-margin, unset);
-}
-
-/* Orientation - Vertical */
-
-.rri--group.rri--dir-y .rri--hover-mask {
-  padding-left: var(--rri--box-margin, unset);
-  padding-top: var(--rri--box-margin, unset);
-  padding-right: var(--rri--box-margin, unset);
-}
-
-.rri--group.rri--dir-y .rri--hover-mask:last-of-type {
-  padding-bottom: var(--rri--box-margin, unset);
 }
 
 /* Readonly */
@@ -177,7 +219,7 @@
 
 /* Readonly - Box*/
 
-.rri--readonly-precision-box-int .rri--box {
+.rri--readonly-precision-box-int .rri--item-box {
   background: linear-gradient(
     to right,
     var(--rri--active-box-color, none) 50%,
@@ -185,7 +227,7 @@
   );
 }
 
-[dir='rtl'] .rri--readonly-precision-box-int .rri--box {
+[dir='rtl'] .rri--readonly-precision-box-int .rri--item-box {
   background: linear-gradient(
     to left,
     var(--rri--active-box-color, none) 50%,
@@ -193,17 +235,17 @@
   );
 }
 
-.rri--readonly-precision-active-box .rri--box {
+.rri--readonly-precision-active-box .rri--item-box {
   background-color: var(--rri--active-box-color);
 }
 
-.rri--readonly-precision-inactive-box .rri--box {
+.rri--readonly-precision-inactive-box .rri--item-box {
   background-color: var(--rri--inactive-box-color);
 }
 
-.rri--readonly-precision-box-int .rri--box .rri--svg-item,
-.rri--readonly-precision-active-box .rri--box .rri--svg-item,
-.rri--readonly-precision-inactive-box .rri--box .rri--svg-item {
+.rri--readonly-precision-box-int .rri--item-box .rri--svg-item,
+.rri--readonly-precision-active-box .rri--item-box .rri--svg-item,
+.rri--readonly-precision-inactive-box .rri--item-box .rri--svg-item {
   fill: var(--rri--active-item-color);
   stroke: var(--rri--active-item-stroke-color, currentColor);
 }
@@ -224,13 +266,13 @@
   stroke: var(--rri--active-item-stroke-color, currentColor);
 }
 
-.rri--readonly-precision-svg-int .rri--box,
-.rri--readonly-precision-svg-active .rri--box,
-.rri--readonly-precision-svg-inactive .rri--box {
+.rri--readonly-precision-svg-int .rri--item-box,
+.rri--readonly-precision-svg-active .rri--item-box,
+.rri--readonly-precision-svg-inactive .rri--item-box {
   background-color: var(--rri--active-box-color);
 }
 
-/* Hidden */
+/*** Helpers ***/
 
 .rri--hidden {
   position: absolute;
@@ -242,4 +284,8 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+.rri--cursor {
+  cursor: pointer;
 }

@@ -5,11 +5,11 @@ export type ItemStylesProp = {
 
   activeFillColor?: string | string[];
   activeStrokeColor?: string | string[];
-  inactiveFillColor?: string;
-  inactiveStrokeColor?: string;
-
   activeBoxColor?: string | string[];
   activeBoxBorderColor?: string | string[];
+
+  inactiveFillColor?: string;
+  inactiveStrokeColor?: string;
   inactiveBoxColor?: string;
   inactiveBoxBorderColor?: string;
 };
@@ -19,7 +19,7 @@ export type ItemStylesProp = {
  * can also be customized for different breakpoints as well. Please refer to README.md at
  * https://google.com for more infos.
  */
-type GlobalStyles = {
+type BoxStylesProps = {
   // Rename to boxStyles
   /** Integer representing the number of pixels of the right-side margin between the rating items.*/
   boxMargin?: number;
@@ -35,9 +35,14 @@ type GlobalStyles = {
  * Refer to README.md at https://google.com for more infos.
  */
 export type Breakpoints = {
-  [key: number]: GlobalStyles;
+  [key: number]: BoxStylesProps;
 };
 
+export type CSSVariables = {
+  [key: string]: string;
+};
+
+/** Those props are always injected wheter readOnly equals to false or not. */
 type SharedProps = {
   ratingValue: number;
   /** Maximum number of rating items to display. Should be an integer between 1 and 10. */
@@ -51,24 +56,22 @@ type SharedProps = {
   className?: string;
 };
 
-export type RatingInputProps = GlobalStyles &
-  SharedProps & {
-    onChange: (currentValue: number) => void | undefined;
-    onHoverChange: (hoveredValue: number) => void | undefined;
-    enableKeyboard?: boolean;
-    labelledBy?: string;
-    customAccessibleLabels?: string[];
-    transition?: 'colors' | 'zoom' | 'position' | 'none';
-    customEasing?: string;
-  };
-
-export type RatingProps = GlobalStyles &
-  SharedProps & {
-    halfPrecision: boolean;
-    halfPrecisionFillMode: 'svg' | 'box';
-    accessibleLabel: 'string';
-  };
-
-export type CSSVariables = {
-  [key: string]: string;
+/** Those props are injected only if readOnly equals to true. */
+type ReadOnlyProps = {
+  halfPrecision: boolean;
+  readOnly: boolean;
+  accessibleLabel: string;
 };
+
+/** Those props are injected only if readOnly equals to false. */
+type InputProps = {
+  onChange: (value: number) => void | undefined;
+  onHoverChange: (value: number) => void | undefined;
+  enableKeyboard?: boolean;
+  labelledBy?: string;
+  customAccessibleLabels?: string[];
+  transition?: 'colors' | 'zoom' | 'position' | 'none';
+  customEasing?: string;
+};
+
+export type RatingProps = SharedProps & ReadOnlyProps & BoxStylesProps & InputProps;

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 
-import { RatingInput } from '../src/RatingInput';
+import { Rating } from '../src/Rating';
 
 import { ItemStylesProp } from '../src/types';
 
@@ -100,7 +100,8 @@ const App = () => {
           maxWidth: '600px',
         }}
       >
-        <RatingInput
+        <Rating
+          // readOnly
           ref={ratingInputRef}
           limit={5}
           ratingValue={value}
@@ -130,10 +131,12 @@ const App = () => {
           onHoverChange={(hoveredVal: number): void => setHoveredValue(hoveredVal)}
         />
       </div>
+
       <h3>Selected: {displayRating(value)}</h3>
       <h3>Hovered: {displayRating(hoveredValue)}</h3>
       <h3>
-        Smart: {hoveredValue === 0 ? displayRating(value) : displayRating(hoveredValue)}
+        Selected + Hovered:{' '}
+        {hoveredValue === 0 ? displayRating(value) : displayRating(hoveredValue)}
       </h3>
       <button onClick={() => setValue(0)}>Reset</button>
     </div>

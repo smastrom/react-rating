@@ -6,7 +6,6 @@ import dts from 'vite-plugin-dts';
 
 export default defineConfig({
   build: {
-    target: 'ES6',
     minify: 'terser',
     lib: {
       name: 'React Rating Input',
@@ -38,7 +37,7 @@ export default defineConfig({
       include: ['src/types.ts', 'src/RatingInput.tsx', 'src/Rating.tsx'],
       beforeWriteFile: (_, content) => {
         const cleanContent = content
-          .replace("import { RatingInputProps } from './types';", '')
+          .replace("import { RatingProps } from './types';", '')
           .replace('/// <reference types="vite/client" />', '')
           .replace('export {};', '');
 

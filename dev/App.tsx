@@ -101,7 +101,7 @@ const App = () => {
         }}
       >
         <Rating
-          // readOnly
+          readOnly
           ref={ratingInputRef}
           limit={5}
           ratingValue={value}
@@ -111,6 +111,7 @@ const App = () => {
           orientation="horizontal"
           // customEasing="180ms ease-in"
           customAccessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}
+          halfPrecisionFillMode="box"
           boxMargin={5}
           boxRadius={5}
           boxPadding={20}

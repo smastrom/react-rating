@@ -19,7 +19,7 @@ export type ItemStylesProp = {
  * can also be customized for different breakpoints as well. Please refer to README.md at
  * https://google.com for more infos.
  */
-type BoxStylesProps = {
+type BoxStyles = {
   // Rename to boxStyles
   /** Integer representing the number of pixels of the right-side margin between the rating items.*/
   boxMargin?: number;
@@ -35,7 +35,7 @@ type BoxStylesProps = {
  * Refer to README.md at https://google.com for more infos.
  */
 export type Breakpoints = {
-  [key: number]: BoxStylesProps;
+  [key: number]: BoxStyles;
 };
 
 export type CSSVariables = {
@@ -45,6 +45,7 @@ export type CSSVariables = {
 /** Those props are always injected wheter readOnly equals to false or not. */
 type SharedProps = {
   ratingValue: number;
+  readOnly: boolean;
   /** Maximum number of rating items to display. Should be an integer between 1 and 10. */
   limit: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
   highlightOnlySelected?: boolean;
@@ -58,8 +59,7 @@ type SharedProps = {
 
 /** Those props are injected only if readOnly equals to true. */
 type ReadOnlyProps = {
-  halfPrecision: boolean;
-  readOnly: boolean;
+  halfPrecisionFillMode: 'svg' | 'box';
   accessibleLabel: string;
 };
 
@@ -74,4 +74,4 @@ type InputProps = {
   customEasing?: string;
 };
 
-export type RatingProps = SharedProps & ReadOnlyProps & BoxStylesProps & InputProps;
+export type RatingProps = SharedProps & ReadOnlyProps & BoxStyles & InputProps;

@@ -14,16 +14,10 @@
 }
 
 .rri--item-box:focus-visible {
-  border: none;
+  border: 4px solid white !important;
   border-radius: var(--rri--box-radius, 0);
-  box-shadow: 0 0 0 3px blue;
-  outline: none;
-}
-
-.rri--flx-center {
-  width: 100%;
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0 0 0 4px #0071ff;
+  outline: 10px red;
 }
 
 .rri--item-box,

@@ -3,13 +3,11 @@ import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { RatingItem } from './RatingItem';
 import { defaultItemStyles } from './DefaultStyles';
 import { getBreakpointRules } from './getBreakpointRules';
-import { getSvgNodes } from './getSvgNodes';
-import { getSvgStroke } from './getSvgStroke';
 import { getArrayCssVars, getObjectCssVars } from './getCssVars';
 import { getActiveClassNames } from './getActiveClassNames';
 import { getTransitionClasses } from './getTransitionClasses';
 import { getGlobalStyles } from './getGlobalStyles';
-import { isPlainObject } from './utils';
+import { isPlainObject, roundToHalf } from './utils';
 
 import { RatingProps } from './types';
 
@@ -36,12 +34,13 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       style,
       labelledBy,
       customAccessibleLabels,
-      halfPrecision = false,
+      halfPrecisionFillMode = 'svg',
       readOnly = false,
       accessibleLabel = 'Rating',
     },
     externalRef
   ) => {
+    // Add readOnly false and isInteger condition
     if (
       typeof limit !== 'number' ||
       limit < 1 ||
@@ -142,7 +141,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
 
     /* Keyboard handler */
 
-    const handleKeydown = (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -236,7 +235,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
             enableKeyboard && ratingValues[radioChildIndex] === ratingValue ? 0 : -1,
           onKeyDown: enableKeyboard
             ? (event: React.KeyboardEvent<HTMLDivElement>) =>
-                handleKeydown(event, radioChildIndex)
+                handleKeyDown(event, radioChildIndex)
             : undefined,
         };
       }
@@ -268,10 +267,40 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
 
     /* Labels */
 
-    const radioLabels =
+    const getRadioLabels = () =>
       typeof customAccessibleLabels === 'undefined'
         ? ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`)
         : customAccessibleLabels;
+
+    /* readOnly */
+
+    /* This is the childNodeIndex where the box / svg are going to half-fill */
+
+    /* fillMode: SVG ? activeBoxColor has no effect */
+    /* fillMode: Box ? activeItemColor has no effect */
+
+    /* halfFillMode ? highLightOnlySelected has no effect */
+
+    /** Per l'intersectionIndex il colore del bordo è sempre activeBorderColor
+     * sia per la box che per l'svg
+     */
+
+    const getPrecisionIntersectionIndex = (ratingValue: number) => {
+      if (readOnly) {
+        if (Number.isInteger(ratingValue)) {
+          return ratingValue;
+        }
+
+        const roundedHalf = roundToHalf(ratingValue);
+        if (Number.isInteger(roundedHalf)) {
+          return roundedHalf;
+        }
+      }
+    };
+
+    // halfPrecisionFillMode = 'svg' | 'box';
+
+    console.log(getPrecisionIntersectionIndex(2.56));
 
     return (
       <>
@@ -296,14 +325,33 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
                   style={styles?.arrayCssVars?.[childNodeIndex]}
                 >
                   <RatingItem
-                    svgChildNodes={getSvgNodes(itemStyles, childNodeIndex)}
-                    strokeWidth={getSvgStroke(itemStyles)}
+                    svgChildNodes={
+                      Array.isArray(itemStyles.svgChildNodes)
+                        ? itemStyles.svgChildNodes[childNodeIndex]
+                        : itemStyles.svgChildNodes
+                    }
+                    strokeWidth={
+                      typeof itemStyles.itemStrokeWidth === 'number' &&
+                      itemStyles.itemStrokeWidth > 0
+                        ? itemStyles.itemStrokeWidth
+                        : 0
+                    }
                   />
                 </div>
               ) : (
                 <RatingItem
-                  svgChildNodes={getSvgNodes(itemStyles, childNodeIndex)}
-                  strokeWidth={getSvgStroke(itemStyles)}
+                  // isPrecisionReadonly
+                  svgChildNodes={
+                    Array.isArray(itemStyles.svgChildNodes)
+                      ? itemStyles.svgChildNodes[childNodeIndex]
+                      : itemStyles.svgChildNodes
+                  }
+                  strokeWidth={
+                    typeof itemStyles.itemStrokeWidth === 'number' &&
+                    itemStyles.itemStrokeWidth > 0
+                      ? itemStyles.itemStrokeWidth
+                      : 0
+                  }
                 />
               )}
 
@@ -314,7 +362,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
                     childNodeIndex + 1
                   }`}
                 >
-                  {radioLabels?.[childNodeIndex]}
+                  {getRadioLabels()?.[childNodeIndex]}
                 </span>
               )}
             </div>

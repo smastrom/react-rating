@@ -1,6 +1,6 @@
-# React Rating Input
+# React Advanced Rating
 
-Rating components for React focused on accessibility, SVGs, mobile-first and customization.
+Zero-dependency highly customizable rating component for React.
 
 [Live demo and examples](https://smastromattei.dev)
 
@@ -8,8 +8,7 @@ Rating components for React focused on accessibility, SVGs, mobile-first and cus
 
 ## Features
 
-- **Use any SVG**: No headaches or icon fonts in order to use any vector from any source.
-- Automatic SVG transforms (when necessary)
+- **Use any SVG**: No headaches or icon fonts in order to use vectors from any source.
 - Highly customizable: fills, strokes, box colors and borders, transitions, breakpoints and much more.
 - Fully responsive and mobile-first
 - Fully accessible with keyboard navigation and custom labels
@@ -34,32 +33,21 @@ In the browser:
 
 <br />
 
-## Package
-
-The package exports two components:
-
-- **RatingInput** - Accessible [radio-group](https://dequeuniversity.com/library/aria/radio-and-radio-group) to be used as input
-- **Rating** - Accessible [image element](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/img_role) to display the rating
-
-<br />
-
 ## Basic usage
 
-Examples of the most basic usage including only the required props.
-
-### RatingInput
+As an accessible [radio-group](https://dequeuniversity.com/library/aria/radio-and-radio-group):
 
 ```jsx
 import React, { useState } from "react";
-import { RatingInput } from 'react-rating-input';
-import 'react-rating-input/dist/index.min.css'; // <-- Import CSS
+import { Rating } from 'react-advanced-rating';
+import 'react-advanced-rating/dist/index.min.css'; // <-- Import CSS
 
 const App = () => {
-  const [value, setValue] = useState(3); // <-- Initial value, init with null for no value
+  const [value, setValue] = useState(3); // <-- Initial value, init with 0 for no value
 
   return (
       <div style={{ maxWidth: 600 }}> {/* <-- Wrap it in a container */}
-        <RatingInput
+        <Rating
             ratingValue={value}
             onChange={(currentValue) => setValue(currentValue)}
         >
@@ -68,66 +56,55 @@ const App = () => {
 };
 ```
 
-### Rating
+or as an accessible [image element](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/img_role):
 
 ```jsx
 import React from 'react';
-import { Rating } from 'react-rating-input';
-import 'react-rating-input/dist/index.min.css';
+import { Rating } from 'react-advanced-rating';
+import 'react-advanced-rating/dist/index.min.css';
 
 const App = () => (
   <div style={{ maxWidth: 600 }}>
-    <Rating ratingValue={3.78} />
+    <Rating readOnly ratingValue={3.78} />
   </div>
 );
 ```
 
 <br />
 
-## Props
+## API
 
-### RatingInput
+**Legend**
 
-| Prop                   | Type                                                    | Default value     | Required           |
-| ---------------------- | ------------------------------------------------------- | ----------------- | ------------------ |
-| ratingValue            | number                                                  | 0                 | :white_check_mark: |
-| onChange               | function \| undefined                                   | undefined         | :white_check_mark: |
-| onHoverChange          | function \| undefined                                   | undefined         | :x:                |
-| limit                  | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10         | 5                 | :x:                |
-| highlightOnlySelected  | boolean                                                 | false             | :x:                |
-| enableKeyboard         | boolean                                                 | true              | :x:                |
-| orientation            | `horizontal` \| `vertical`                              | `horizontal`      | :x:                |
-| transition             | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `none`            | :x:                |
-| customEasing           | string                                                  | `150ms ease-out`  | :x:                |
-| highlightOnlySelected  | boolean                                                 | false             | :x:                |
-| itemStyles             | ItemStyle                                               | [defaultStyles]() | :x:                |
-| boxMargin              | number                                                  | 10                | :x:                |
-| boxPadding             | number                                                  | 10                | :x:                |
-| boxRadius              | number                                                  | 0                 | :x:                |
-| boxBorderWidth         | number                                                  | 0                 | :x:                |
-| breakpoints            | Breakpoints                                             | undefined         | :x:                |
-| customAccessibleLabels | string[]                                                | undefined         | :x:                |
-| labelledBy             | string                                                  | undefined         | :x:                |x
+| Color               | Description                                |
+| ------------------- | ------------------------------------------ |
+| :green_circle:      | Has always effect                          |
+| :large_blue_circle: | Has effect only if `readOnly` is **false** |
+| :purple_circle:     | Has effect only if `readOnly` is **true**  |
 
 <br />
 
-### Rating
-
-| Prop                  | Type                                            | Description                                                                 | Default           | Required           |
-| --------------------- | ----------------------------------------------- | --------------------------------------------------------------------------- | ----------------- | ------------------ |
-| ratingValue           | number                                          | An integer from 0 to **limit**, can be a float as well.                     | undefined         | :white_check_mark: |
-| limit                 | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | Number of rating items to display                                           | 5                 | :x:                |
-| highlightOnlySelected | boolean                                         | Wheter or not to highlight only the selected rating item                    | false             | :x:                |
-| orientation           | `horizontal` \| `vertical`                      | Orientation of the rating items                                             | `horizontal`      | :x:                |
-| halfPrecision         | boolean                                         | If true and `ratingValue` is a float the SVG or the box will be half-filled | false             | :x:                |
-| halfPrecisionFillMode | `svg` \| `box`                                  | Wheter to half-fill the SVG or the box                                      | `svg`             | :x:                |
-| itemStyles            | ItemStyle \| ItemStyle[]                        | Custom SVG and styles                                                       | [defaultStyles]() | :x:                |
-| boxMargin             | number                                          | Side margin between boxes                                                   | 10                | :x:                |
-| boxPadding            | number                                          | Box/item padding                                                            | 10                | :x:                |
-| boxRadius             | number                                          | Box border radius                                                           | 0                 | :x:                |
-| boxBorderWidth        | number                                          | Box border width                                                            | 0                 | :x:                |
-| breakpoints           | Breakpoints                                     | Global styles breakpoints                                                   | undefined         | :x:                |
-| accessibleLabel       | string                                          | Value of `aria-label`                                                       | `Rating`          | :x:                |
+| Prop                  | Type                                                    | Description                                                                                          | Default                        | Required                        | :thinking:          |
+| --------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------ | ------------------------------- | ------------------- |
+| ratingValue           | number                                                  | An integer from 0 to **limit**, can be a float if `readOnly` is **true**.                            | undefined                      | Yes                             | :green_circle:      |
+| onChange              | function                                                | Callback to update `ratingValue`                                                                     | undefined                      | Only if `readOnly` is **false** | :large_blue_circle: |
+| onHoverChange         | function                                                | Callback to update the hovered ratingValue                                                           | undefined                      | No                              | :large_blue_circle: |
+| readOnly              | boolean                                                 | Wheter or not the component should be an accessible image element                                    | false                          | No                              | :green_circle:      |
+| limit                 | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10         | Maximum number of rating items to display                                                            | 5                              | No                              | :green_circle:      |
+| highlightOnlySelected | boolean                                                 | Wheter or not to highlight only the selected rating item. Has no effect if `ratingValue` is a float. | false                          | No                              | :green_circle:      |
+| orientation           | `horizontal` \| `vertical`                              | Orientation of the rating items                                                                      | `horizontal`                   | No                              | :green_circle:      |
+| transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting                                                          | `zoom`                         | No                              | :large_blue_circle: |
+| customEasing          | string                                                  | Custom easing to apply to transitions as `<timing> <easing>`                                         | `150ms ease-out`               | No                              | :large_blue_circle: |
+| halfPrecisionFillMode | `svg` \| `box`                                          | Wheter to half-fill the SVG or the box if `ratingValue` is a float                                   | `svg`                          | No                              | :purple_circle:     |
+| itemStyles            | ItemStyle \| ItemStyle[]                                | Custom SVGs and styles                                                                               | [defaultStyles]()              | No                              | :green_circle:      |
+| boxMargin             | number                                                  | Margin between boxes                                                                                 | 5                              | No                              | :green_circle:      |
+| boxPadding            | number                                                  | Box padding                                                                                          | 5                              | No                              | :green_circle:      |
+| boxRadius             | number                                                  | Box border radius                                                                                    | 0                              | No                              | :green_circle:      |
+| boxBorderWidth        | number                                                  | Box border width                                                                                     | 0                              | No                              | :green_circle:      |
+| breakpoints           | Breakpoints                                             | Global styles breakpoints                                                                            | undefined                      | No                              | :green_circle:      |
+| enableKeyboard        | boolean                                                 | Wheter or not to enable keyboard navigation                                                          | true                           | No                              | :large_blue_circle: |
+| accessibleLabels      | string[]                                                | Accessible labels for each rating item                                                               | Array of `Rate ${ratingValue}` | No                              | :large_blue_circle: |
+| accessibleLabel       | string                                                  | Value of `aria-label` attribute                                                                      | `Rating`                       | No                              | :purple_circle:     |
 
 <br />
 

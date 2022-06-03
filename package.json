@@ -1,5 +1,5 @@
 {
-  "name": "react-rating-input",
+  "name": "react-advanced-rating",
   "version": "0.1.0",
   "license": "MIT",
   "module": "dist/index.js",
@@ -54,6 +54,7 @@
     "tslib": "^2.4.0",
     "typescript": "^4.7.2",
     "vite": "^2.9.9",
-    "vite-plugin-dts": "^1.2.0"
+    "vite-plugin-dts": "^1.2.0",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }

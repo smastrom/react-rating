@@ -1,4 +1,19 @@
-import { GlobalStyles } from './getGlobalStyles';
+import { GlobalStyles } from './getGlobalStylesCssVars';
+
+const setBreakpointProperty = (property: string, value: number) => {
+  switch (property) {
+    case 'boxMargin':
+      return `--rar--box-margin: ${value}px;`;
+    case 'boxPadding':
+      return `--rar--box-padding: ${value}px;`;
+    case 'boxRadius':
+      return `--rar--box-radius: ${value}px;`;
+    case 'boxBorderWidth':
+      return `--rar--box-border-width: ${value}px;`;
+    default:
+      return '';
+  }
+};
 
 export const getBreakpointRules = ({
   breakpoints,
@@ -29,7 +44,7 @@ export const getBreakpointRules = ({
 
       let variablesValues = '',
         mediaRule = '';
-      const className = '.rri--group {';
+      const className = '.rar--group {';
 
       const isGlobalRule = breakpointIndex === 0;
       if (isGlobalRule) {
@@ -39,28 +54,18 @@ export const getBreakpointRules = ({
       }
 
       const breakpointProperties = Object.entries(styles);
+      if (breakpointProperties.length > 4) {
+        return;
+      }
+
       breakpointProperties.forEach(([property, value], index) => {
         if (typeof value !== 'number' || value < 0) {
           return;
         }
 
-        let breakpointProperty: string = '';
-
-        switch (property) {
-          case 'boxMargin':
-            breakpointProperty = `--rri--box-margin: ${value}px;`;
-            break;
-          case 'boxPadding':
-            breakpointProperty = `--rri--box-padding: ${value}px;`;
-            break;
-          case 'boxRadius':
-            breakpointProperty = `--rri--box-radius: ${value}px;`;
-            break;
-          case 'boxBorderWidth':
-            breakpointProperty = `--rri--box-border-width: ${value}px;`;
-        }
-
+        const breakpointProperty = setBreakpointProperty(property, value);
         variablesValues = variablesValues.concat('', breakpointProperty);
+
         if (index === breakpointProperties.length - 1) {
           const closingBracket = isGlobalRule ? '' : '}';
           const cssRule = `${mediaRule} ${variablesValues} } ${closingBracket}`;

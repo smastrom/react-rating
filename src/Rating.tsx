@@ -1,92 +1,151 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useRef, useState, useEffect, useLayoutEffect } from 'react';
 
 import { RatingItem } from './RatingItem';
 import { defaultItemStyles } from './DefaultStyles';
 import { getBreakpointRules } from './getBreakpointRules';
 import { getArrayCssVars, getObjectCssVars } from './getCssVars';
 import { getActiveClassNames } from './getActiveClassNames';
-import { getTransitionClasses } from './getTransitionClasses';
-import { getGlobalStyles } from './getGlobalStyles';
-import { isPlainObject, roundToHalf } from './utils';
+import { getHalfFillClassNames } from './getHalfFillClassNames';
+import { getTransitionClassNames } from './getTransitionClassNames';
+import { getGlobalStylesCssVars } from './getGlobalStylesCssVars';
+import { isPlainObject, isFinalValueFloat, getIntersectionIndex } from './utils';
+import { getErrors } from './getErrors';
 
 import { RatingProps } from './types';
 
 export const Rating = forwardRef<HTMLDivElement, RatingProps>(
   (
     {
-      ratingValue = 0,
-      limit = 5,
-      onChange,
-      onHoverChange,
-      highlightOnlySelected = false,
-      enableKeyboard = true,
-      orientation = 'horizontal',
-      transition = 'zoom',
-      itemStyles = defaultItemStyles,
-      customEasing = '150ms ease-out',
+      value = 0, // Ok
+      limit = 5, // Ok
+      readOnly = false, // Ok
+      onChange, // Ok
+      onHoverChange, // Ok
+      highlightOnlySelected = false, // Ok
+      enableKeyboard = true, // Ok
+      orientation = 'horizontal', // Ok
+      transition = 'zoom', // Ok
+      itemStyles = defaultItemStyles, // To do
+      customEasing = '150ms ease-out', // Ok
       boxMargin = 5,
-      boxRadius,
+      boxRadius = 0, // Check wheter or not to inject styles with default value
       boxPadding = 5,
-      boxBorderWidth,
-      breakpoints,
+      boxBorderWidth = 0,
+      breakpoints, // Ok
+      halfFillMode = 'svg', // To do
+      labelledBy,
+      accessibleLabels,
+      accessibleLabel = readOnly === false ? 'Rating' : `Rated ${value} on ${limit}`,
       id,
       className,
       style,
-      labelledBy,
-      customAccessibleLabels,
-      halfPrecisionFillMode = 'svg',
-      readOnly = false,
-      accessibleLabel = 'Rating',
     },
     externalRef
   ) => {
-    // Add readOnly false and isInteger condition
-    if (
-      typeof limit !== 'number' ||
-      limit < 1 ||
-      limit > 10 ||
-      typeof ratingValue !== 'number' ||
-      ratingValue < 0 ||
-      ratingValue > limit ||
-      (readOnly === false && typeof onChange !== 'function')
-    ) {
+    const { shouldRender, errorReason } = getErrors(
+      limit,
+      value,
+      readOnly,
+      onChange,
+      itemStyles,
+      highlightOnlySelected
+    );
+
+    if (!shouldRender) {
+      console.error(errorReason);
       return null;
     }
 
+    /* Rating value helpers from props */
+
     const ratingValues = Array.from(Array(limit), (_, index) => index + 1);
+
+    const hasPrecision = readOnly && !Number.isInteger(value);
+    const isEligibleForHalfFill = hasPrecision && !highlightOnlySelected;
+    const isNotEligibleForHalfFill = hasPrecision && highlightOnlySelected;
+
+    const ratingValue = isNotEligibleForHalfFill ? Math.round(value) : value;
+    const deservesHalfFill = isEligibleForHalfFill && isFinalValueFloat(ratingValue);
+
+    const currentRatingIndex = isEligibleForHalfFill
+      ? getIntersectionIndex(ratingValues, ratingValue)
+      : ratingValues.indexOf(ratingValue);
+
+    /* Refs */
 
     const roleRadioDivs = useRef<HTMLDivElement[] | []>([]);
 
     const uniqIds = useRef<string[]>(
-      ratingValues.map(() => (Math.random() + 1).toString(36).substring(7))
+      readOnly === false
+        ? ratingValues.map(() => (Math.random() + 1).toString(36).substring(7))
+        : []
     );
 
     /* State getters, used to generate CSS variables and active classNames */
 
-    const getClassNames = (selectedValue: number) =>
-      getActiveClassNames(highlightOnlySelected, ratingValues, selectedValue);
+    const getClassNames = (currentSelectedIndex: number) => {
+      if (deservesHalfFill) {
+        return getHalfFillClassNames(ratingValue, ratingValues, halfFillMode);
+      }
 
-    const getStyles = () => ({
-      arrayCssVars:
-        ratingValue > 0
-          ? getArrayCssVars(
-              itemStyles,
-              ratingValues.indexOf(ratingValue),
-              highlightOnlySelected
-            )
-          : [{}],
-      objectCssVars: getObjectCssVars({
-        ...itemStyles,
-        customEasing,
-      }),
-      activeClassNames: getClassNames(ratingValues.indexOf(ratingValue)),
-    });
+      return getActiveClassNames(
+        highlightOnlySelected,
+        ratingValues,
+        currentSelectedIndex
+      );
+    };
+
+    const getStyles = () => {
+      const easingValue = readOnly || customEasing === 'none' ? undefined : customEasing;
+
+      return {
+        arrayCssVars:
+          ratingValue >= 0.25
+            ? getArrayCssVars(
+                itemStyles,
+                currentRatingIndex,
+                highlightOnlySelected,
+                halfFillMode,
+                deservesHalfFill
+              )
+            : [{}],
+        objectCssVars: getObjectCssVars(
+          {
+            ...itemStyles,
+            easingValue,
+          },
+          halfFillMode,
+          deservesHalfFill
+        ),
+        activeClassNames: getClassNames(currentRatingIndex),
+      };
+    };
 
     /* State */
 
     const [styles, setStyles] = useState(getStyles());
 
-    /* Effect */
+    /* Effects */
+
+    useLayoutEffect(() => {
+      if (isPlainObject(breakpoints)) {
+        const breakpointRules = getBreakpointRules({
+          breakpoints,
+          boxMargin,
+          boxPadding,
+          boxRadius,
+          boxBorderWidth,
+        });
+        if (breakpointRules.length > 0) {
+          const breakpointsStyleTag = document.createElement('style');
+          breakpointsStyleTag.innerHTML = breakpointRules;
+          document.head.appendChild(breakpointsStyleTag);
+          return () => {
+            document.head.removeChild(breakpointsStyleTag);
+          };
+        }
+      }
+    }, [itemStyles]);
 
     useEffect(() => {
       setStyles(getStyles());
@@ -103,10 +162,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       onChange(ratingValues[index]);
     };
 
-    const handleMouseEnter = (
-      event: React.MouseEvent<HTMLDivElement>,
-      hoveredIndex: number
-    ) => {
+    const handleMouseEnter = (hoveredIndex: number) => {
       if (typeof onHoverChange === 'function') {
         onHoverChange(ratingValues[hoveredIndex]);
       }
@@ -120,24 +176,18 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       setStyles({ ...styles, arrayCssVars, activeClassNames });
     };
 
-    const handleMouseLeave = (event: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseLeave = () => {
       if (typeof onHoverChange === 'function') {
         onHoverChange(0);
       }
 
       const activeClassNames = getClassNames(ratingValues.indexOf(ratingValue));
       const arrayCssVars =
-        ratingValue > 0
-          ? getArrayCssVars(
-              itemStyles,
-              ratingValues.indexOf(ratingValue),
-              highlightOnlySelected
-            )
+        ratingValue >= 0.25
+          ? getArrayCssVars(itemStyles, currentRatingIndex, highlightOnlySelected)
           : [{}];
       setStyles({ ...styles, arrayCssVars, activeClassNames });
     };
-
-    console.log('Rubra');
 
     /* Keyboard handler */
 
@@ -181,22 +231,29 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
     /* Parent element props */
 
     const getRatingClassNames = () => {
-      const sharedClassNames = `rri--group rri--dir-${
+      const sharedClassNames = `rar--group rar--dir-${
         orientation === 'vertical' ? 'y' : 'x'
       } ${className || ''}`;
 
       if (readOnly === false) {
-        return `${sharedClassNames} ${getTransitionClasses(transition)}`;
+        const needsTransitionClassNames = readOnly === false && transition !== 'none';
+        const transitionClassNames = needsTransitionClassNames
+          ? getTransitionClassNames(transition)
+          : '';
+        return `${sharedClassNames} ${transitionClassNames}`;
       }
       return sharedClassNames;
     };
 
     const getRatingAriaProps = (): React.HTMLProps<HTMLDivElement> => {
       if (readOnly === false) {
-        return {
-          role: 'radiogroup',
-          'aria-labelledby': labelledBy,
-        };
+        const ariaProps: React.HTMLProps<HTMLDivElement> = { role: 'radiogroup' };
+        if (typeof labelledBy === 'string' && labelledBy.length > 0) {
+          ariaProps['aria-labelledby'] = labelledBy;
+        } else {
+          ariaProps['aria-label'] = accessibleLabel;
+        }
+        return ariaProps;
       }
       return {
         role: 'img',
@@ -204,10 +261,10 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       };
     };
 
-    const ratingStyles = {
+    const ratingStyles: React.CSSProperties = {
       ...style,
-      ...styles.objectCssVars,
-      ...getGlobalStyles({
+      ...styles.objectCssVars, // To do: Create a new function that renders such vars to the element main className
+      ...getGlobalStylesCssVars({
         orientation,
         breakpoints,
         boxMargin,
@@ -223,7 +280,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       if (readOnly === false) {
         return {
           role: 'radio',
-          'aria-labelledby': `${uniqIds.current[radioChildIndex]}_rri_label_${
+          'aria-labelledby': `${uniqIds.current[radioChildIndex]}_rar_label_${
             radioChildIndex + 1
           }`,
           'aria-checked': ratingValues[radioChildIndex] === ratingValue,
@@ -232,154 +289,115 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
           onClick: (event: React.MouseEvent<HTMLDivElement>) =>
             handleClick(event, radioChildIndex),
           tabIndex:
-            enableKeyboard && ratingValues[radioChildIndex] === ratingValue ? 0 : -1,
-          onKeyDown: enableKeyboard
-            ? (event: React.KeyboardEvent<HTMLDivElement>) =>
-                handleKeyDown(event, radioChildIndex)
-            : undefined,
+            enableKeyboard === true && ratingValues[radioChildIndex] === ratingValue
+              ? 0
+              : -1,
+          onKeyDown:
+            enableKeyboard === true
+              ? (event: React.KeyboardEvent<HTMLDivElement>) =>
+                  handleKeyDown(event, radioChildIndex)
+              : undefined,
         };
       }
       return {};
     };
 
+    const getRadioLabels = () =>
+      Array.isArray(accessibleLabels)
+        ? accessibleLabels
+        : ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`);
+
     /* Rating item box props */
 
     const getItemClassNames = (childIndex: number) => {
-      const activeClasNames = styles?.activeClassNames?.[childIndex];
+      const activeClasName = styles?.activeClassNames?.[childIndex];
 
       if (readOnly === false) {
-        return `rri--item-mask rri--cursor rri--margin ${activeClasNames}`;
+        return `rar--box-mask rar--cursor rar--margin ${activeClasName}`;
       }
-      return `rri--item-box-ro rri--margin-ro ${activeClasNames}`;
+      return `rar--ro-box rar--margin-ro ${activeClasName}`;
     };
 
     const getMouseProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
       if (readOnly === false) {
         return {
-          onMouseEnter: (event: React.MouseEvent<HTMLDivElement>) =>
-            handleMouseEnter(event, childIndex),
-          onMouseLeave: (event: React.MouseEvent<HTMLDivElement>) =>
-            handleMouseLeave(event),
+          onMouseEnter: () => handleMouseEnter(childIndex),
+          onMouseLeave: handleMouseLeave,
         };
       }
       return {};
     };
 
-    /* Labels */
+    /* SVG element props */
 
-    const getRadioLabels = () =>
-      typeof customAccessibleLabels === 'undefined'
-        ? ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`)
-        : customAccessibleLabels;
-
-    /* readOnly */
-
-    /* This is the childNodeIndex where the box / svg are going to half-fill */
-
-    /* fillMode: SVG ? activeBoxColor has no effect */
-    /* fillMode: Box ? activeItemColor has no effect */
-
-    /* halfFillMode ? highLightOnlySelected has no effect */
-
-    /** Per l'intersectionIndex il colore del bordo è sempre activeBorderColor
-     * sia per la box che per l'svg
-     */
-
-    const getPrecisionIntersectionIndex = (ratingValue: number) => {
-      if (readOnly) {
-        if (Number.isInteger(ratingValue)) {
-          return ratingValue;
-        }
-
-        const roundedHalf = roundToHalf(ratingValue);
-        if (Number.isInteger(roundedHalf)) {
-          return roundedHalf;
-        }
+    const getSvgRatingItemProps = (childNodeIndex: number) => {
+      const sharedProps: any = {
+        svgChildNodes: Array.isArray(itemStyles.svgChildNodes)
+          ? itemStyles.svgChildNodes[childNodeIndex]
+          : itemStyles.svgChildNodes,
+        itemStrokeWidth:
+          typeof itemStyles.itemStrokeWidth === 'number' && itemStyles.itemStrokeWidth > 0
+            ? itemStyles.itemStrokeWidth
+            : 0,
+      };
+      if (deservesHalfFill && halfFillMode === 'svg') {
+        sharedProps['hasHalfFill'] = childNodeIndex === currentRatingIndex;
       }
+      return sharedProps;
     };
 
-    // halfPrecisionFillMode = 'svg' | 'box';
-
-    console.log(getPrecisionIntersectionIndex(2.56));
+    /* Render */
 
     return (
-      <>
-        <div
-          {...getRatingAriaProps()}
-          ref={externalRef}
-          id={id}
-          className={getRatingClassNames()}
-          style={ratingStyles}
-        >
-          {ratingValues.map((_, childNodeIndex) => (
-            <div
-              {...getMouseProps(childNodeIndex)}
-              key={`rri_item_mask_${childNodeIndex}`}
-              className={getItemClassNames(childNodeIndex)}
-              style={readOnly ? styles?.arrayCssVars?.[childNodeIndex] : {}}
-            >
-              {readOnly === false ? (
-                <div
-                  {...getRadioProps(childNodeIndex)}
-                  className="rri--item-box"
-                  style={styles?.arrayCssVars?.[childNodeIndex]}
-                >
-                  <RatingItem
-                    svgChildNodes={
-                      Array.isArray(itemStyles.svgChildNodes)
-                        ? itemStyles.svgChildNodes[childNodeIndex]
-                        : itemStyles.svgChildNodes
-                    }
-                    strokeWidth={
-                      typeof itemStyles.itemStrokeWidth === 'number' &&
-                      itemStyles.itemStrokeWidth > 0
-                        ? itemStyles.itemStrokeWidth
-                        : 0
-                    }
-                  />
-                </div>
-              ) : (
-                <RatingItem
-                  // isPrecisionReadonly
-                  svgChildNodes={
-                    Array.isArray(itemStyles.svgChildNodes)
-                      ? itemStyles.svgChildNodes[childNodeIndex]
-                      : itemStyles.svgChildNodes
-                  }
-                  strokeWidth={
-                    typeof itemStyles.itemStrokeWidth === 'number' &&
-                    itemStyles.itemStrokeWidth > 0
-                      ? itemStyles.itemStrokeWidth
-                      : 0
-                  }
-                />
-              )}
-
-              {readOnly === false && (
-                <span
-                  className="rri--hidden"
-                  id={`${uniqIds.current[childNodeIndex]}_rri_label_${
-                    childNodeIndex + 1
-                  }`}
-                >
-                  {getRadioLabels()?.[childNodeIndex]}
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-        {isPlainObject(breakpoints) && (
-          <style>
-            {getBreakpointRules({
-              breakpoints,
-              boxMargin,
-              boxPadding,
-              boxRadius,
-              boxBorderWidth,
-            })}
-          </style>
-        )}
-      </>
+      <div
+        {...getRatingAriaProps()}
+        ref={externalRef}
+        id={id}
+        style={ratingStyles}
+        className={getRatingClassNames()}
+      >
+        {/* */}
+        {/* */}
+        {/* */}
+        {/* */}
+        {ratingValues.map((_, childNodeIndex) => (
+          <div
+            {...getMouseProps(childNodeIndex)}
+            key={`rar_item_mask_${childNodeIndex}`}
+            className={getItemClassNames(childNodeIndex)}
+            style={readOnly ? styles?.arrayCssVars?.[childNodeIndex] : {}}
+          >
+            {/* */}
+            {/* */}
+            {readOnly === false ? (
+              <div
+                {...getRadioProps(childNodeIndex)}
+                className="rar--box"
+                style={styles?.arrayCssVars?.[childNodeIndex]}
+              >
+                <RatingItem {...getSvgRatingItemProps(childNodeIndex)} />
+              </div>
+            ) : (
+              <RatingItem {...getSvgRatingItemProps(childNodeIndex)} />
+            )}
+            {/* */}
+            {readOnly === false && (
+              <span
+                className="rar--hidden"
+                id={`${uniqIds.current[childNodeIndex]}_rar_label_${childNodeIndex + 1}`}
+              >
+                {getRadioLabels()?.[childNodeIndex]}
+              </span>
+            )}
+            {/* */}
+            {/* */}
+          </div>
+        ))}
+        {/* */}
+        {/* */}
+        {/* */}
+        {/* */}
+      </div>
     );
   }
 );

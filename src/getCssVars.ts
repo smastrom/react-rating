@@ -1,66 +1,28 @@
-import { ItemStylesProp, CSSVariables } from './types';
+import {
+  setItemStylesCssVars,
+  getColorsCssVars,
+  getEasingVar,
+} from './setItemStylesCssVars';
+import { setStrokeStyles, setStrokeStylesX } from './setStrokeStyles';
+import { isValidPositiveNumber as isValidStroke } from './utils';
 
-type ItemStylesForCss = Omit<ItemStylesProp, 'svgChildNodes'>;
+import { ItemStylesForCss, KeyAndValueStrings, RatingProps } from './types';
 
 type AnyUserProvidedStyle = {
   [key: string]: any;
 };
 
-/* Maybe remove border-vars if no border have been set? */
-
-const getItemCssVars = (targetObj: CSSVariables, key: string, value: string) => {
-  switch (key) {
-    case 'activeFillColor':
-      targetObj['--rri--active-item-color'] = value;
-      break;
-    case 'activeStrokeColor':
-      targetObj['--rri--active-item-stroke-color'] = value;
-      break;
-    case 'activeBoxColor':
-      targetObj['--rri--active-box-color'] = value;
-      break;
-    case 'activeBoxBorderColor':
-      targetObj['--rri--active-box-border-color'] = value;
-    case 'inactiveFillColor':
-      targetObj['--rri--inactive-item-color'] = value;
-      break;
-    case 'inactiveStrokeColor':
-      targetObj['--rri--inactive-item-stroke-color'] = value;
-      break;
-    case 'inactiveBoxColor':
-      targetObj['--rri--inactive-box-color'] = value;
-    case 'inactiveBoxBorderColor':
-      targetObj['--rri--inactive-box-border-color'] = value;
-    case 'customEasing':
-      targetObj['--rri--easing'] = value;
-  }
-};
-
-const isStrokeSet = (sourceObj: ItemStylesForCss) =>
-  sourceObj.hasOwnProperty('itemStrokeWidth') &&
-  typeof sourceObj.itemStrokeStyle === 'string' &&
-  (sourceObj.itemStrokeWidth as number) > 0;
-
-const getStrokeStyles = (targetObj: CSSVariables, itemStrokeStyle: string) => {
-  switch (itemStrokeStyle) {
-    case 'sharp':
-      targetObj['--rri--item-stroke-linecap'] = 'miter';
-      targetObj['--rri--item-stroke-linejoin'] = 'square';
-      break;
-    default:
-      targetObj['--rri--item-stroke-linecap'] = 'round';
-      targetObj['--rri--item-stroke-linejoin'] = 'round';
-  }
-};
-
-type ItemStylesStrings = CSSVariables;
-
-export const getObjectCssVars = (itemStylesProp: AnyUserProvidedStyle) => {
+export const getObjectCssVars = (
+  itemStylesProp: AnyUserProvidedStyle,
+  halfFillModeProp?: RatingProps['halfFillMode'],
+  deservesHalfFill?: boolean
+) => {
   const {
     svgChildNodes,
     activeFillColor,
     activeStrokeColor,
     activeBoxColor,
+    activeBoxBorderColor,
     ...nonArrayStyles
   } = itemStylesProp;
 
@@ -68,11 +30,21 @@ export const getObjectCssVars = (itemStylesProp: AnyUserProvidedStyle) => {
     activeFillColor,
     activeStrokeColor,
     activeBoxColor,
+    activeBoxBorderColor,
   };
 
   let objectStyles: ItemStylesForCss = {};
-  const objectStylesToKeep: ItemStylesStrings = {};
-  const objectCssVars: CSSVariables = {};
+  const objectStylesToKeep: KeyAndValueStrings = {};
+  const objectCssVars: KeyAndValueStrings = {};
+
+  /* Delete any unnecessary style if final rating will be half-filled */
+  if (deservesHalfFill) {
+    if (halfFillModeProp === 'box') {
+      delete maybeArrayStyles.activeFillColor;
+    } else {
+      delete maybeArrayStyles.activeBoxColor;
+    }
+  }
 
   /* Delete any user-provided invalid style */
   Object.keys(nonArrayStyles).forEach((key: string) => {
@@ -85,7 +57,7 @@ export const getObjectCssVars = (itemStylesProp: AnyUserProvidedStyle) => {
     }
   });
 
-  /* Delete any user-provided array and keep only valid string values*/
+  /* Delete any user-provided array and keep only string values*/
   Object.entries(maybeArrayStyles).forEach(([key, value]) => {
     if (!Array.isArray(value)) {
       if (typeof value !== 'string') {
@@ -97,19 +69,45 @@ export const getObjectCssVars = (itemStylesProp: AnyUserProvidedStyle) => {
 
   /* Merge any eventual style which could have been provided as an array */
   if (Object.keys(objectStylesToKeep).length > 0) {
-    objectStyles = { ...nonArrayStyles, ...(objectStylesToKeep as ItemStylesStrings) };
+    objectStyles = { ...nonArrayStyles, ...(objectStylesToKeep as KeyAndValueStrings) };
   } else {
-    objectStyles = { ...nonArrayStyles }; // Tell TS that nonArrayStyles should not be AnyUserProvidedStyle type anymore
+    objectStyles = { ...nonArrayStyles }; // To do: Tell TS that nonArrayStyles should not be AnyUserProvidedStyle type anymore
   }
 
-  if (isStrokeSet(objectStyles)) {
-    getStrokeStyles(objectCssVars, objectStyles.itemStrokeStyle as string);
+  let className = '.rar--group {';
+
+  // Easing ok
+  if (objectStyles.easingValue) {
+    const easingX = getEasingVar(objectStyles.easingValue);
+    className = className.concat('', easingX);
+    delete objectStyles.easingValue;
+  }
+
+  // Stroke ok
+  if (objectStyles.itemStrokeWidth && isValidStroke(objectStyles.itemStrokeWidth)) {
+    const strokeStyleX = setStrokeStylesX(objectStyles.itemStrokeStyle);
+    className = className.concat('', strokeStyleX);
+
+    setStrokeStyles(objectCssVars, objectStyles.itemStrokeStyle);
+  } else {
+    delete objectStyles.activeStrokeColor, objectStyles.inactiveStrokeColor;
   }
   delete objectStyles.itemStrokeStyle, objectStyles.itemStrokeWidth;
 
+  Object.entries(objectStyles).forEach(([key, value], index) => {
+    const cssVar = getColorsCssVars(key, value);
+    className = className.concat('', cssVar);
+
+    if (index === Object.entries(objectStyles).length - 1) {
+      className = className.concat('', '}');
+    }
+  });
+
+  console.log(className);
+
   Object.entries(objectStyles).forEach(([key, value]) => {
     if (typeof value === 'string') {
-      getItemCssVars(objectCssVars, key, value);
+      setItemStylesCssVars(objectCssVars, key, value);
     }
   });
 
@@ -119,10 +117,17 @@ export const getObjectCssVars = (itemStylesProp: AnyUserProvidedStyle) => {
 export const getArrayCssVars = (
   itemStylesProp: AnyUserProvidedStyle,
   currentSelectedIndex: number,
-  highlightOnlySelected: boolean
+  highlightOnlySelected: RatingProps['highlightOnlySelected'],
+  halfFillModeProp?: RatingProps['halfFillMode'],
+  deservesHalfFill?: boolean
 ) => {
-  const { activeFillColor, activeStrokeColor, activeBoxColor, activeBoxBorderColor } =
-    itemStylesProp;
+  const {
+    activeFillColor,
+    activeStrokeColor,
+    activeBoxColor,
+    activeBoxBorderColor,
+    itemStrokeWidth,
+  } = itemStylesProp;
 
   const arrayStyles: AnyUserProvidedStyle = {
     activeFillColor,
@@ -130,6 +135,20 @@ export const getArrayCssVars = (
     activeBoxColor,
     activeBoxBorderColor,
   };
+
+  /* Delete unnecessary styles if final rating will be half-filled */
+  if (deservesHalfFill) {
+    if (halfFillModeProp === 'box') {
+      delete arrayStyles.activeFillColor;
+    } else {
+      delete arrayStyles.activeBoxColor;
+    }
+  }
+
+  /* Delete activeStroke color if unnecessary */
+  if (isValidStroke(itemStrokeWidth)) {
+    delete arrayStyles.activeStrokeColor;
+  }
 
   /* Delete any user-provided non-array style */
   Object.keys(arrayStyles).forEach((key) => {
@@ -143,22 +162,22 @@ export const getArrayCssVars = (
     return;
   }
 
-  const arrayStylesVars: CSSVariables = {};
+  const arrayStylesVars: KeyAndValueStrings = {};
 
   /* Get the value of any style at the same index as the current selected rating */
   Object.entries(arrayStyles).forEach(([key, value]) => {
     if (typeof value?.[currentSelectedIndex] === 'string') {
-      getItemCssVars(arrayStylesVars, key, value[currentSelectedIndex]);
+      setItemStylesCssVars(arrayStylesVars, key, value[currentSelectedIndex]);
     }
   });
 
-  let cssVars: CSSVariables[];
+  let cssVars: KeyAndValueStrings[];
 
   if (highlightOnlySelected) {
-    cssVars = new Array(currentSelectedIndex).fill({});
+    cssVars = Array(currentSelectedIndex).fill({});
     cssVars.push(arrayStylesVars);
   } else {
-    cssVars = new Array(currentSelectedIndex + 1).fill(arrayStylesVars);
+    cssVars = Array(currentSelectedIndex + 1).fill(arrayStylesVars);
   }
 
   return cssVars;

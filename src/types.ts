@@ -1,5 +1,7 @@
+export type SvgChildNodes = JSX.Element | JSX.Element[];
+
 export type ItemStylesProp = {
-  svgChildNodes: JSX.Element | JSX.Element[];
+  svgChildNodes: SvgChildNodes;
   itemStrokeWidth?: number;
   itemStrokeStyle?: 'round' | 'sharp';
 
@@ -14,13 +16,11 @@ export type ItemStylesProp = {
   inactiveBoxBorderColor?: string;
 };
 
-/** Those styles are considered "global" as they are not supposed to change for each rating item.
- * Their value must be expressed with an integer representing the number of pixels. Those values
+/** Their value must be expressed with an integer representing the number of pixels. Those values
  * can also be customized for different breakpoints as well. Please refer to README.md at
  * https://google.com for more infos.
  */
-type BoxStyles = {
-  // Rename to boxStyles
+export type BoxStyles = {
   /** Integer representing the number of pixels of the right-side margin between the rating items.*/
   boxMargin?: number;
   /** Integer representing the padding in pixels between the rating item and the box bounds. */
@@ -42,11 +42,15 @@ export type CSSVariables = {
   [key: string]: string;
 };
 
-/** Those props are always injected wheter readOnly equals to false or not. */
-type SharedProps = {
-  ratingValue: number;
+export type KeyAndValueStrings = {
+  [key: string]: string;
+};
+
+/** Those props are always injected whether readOnly equals to false or not. */
+export type SharedProps = {
+  value: number;
   readOnly: boolean;
-  /** Maximum number of rating items to display. Should be an integer between 1 and 10. */
+  /** An integer between 1 and 10 representing the number of rating items to display. */
   limit: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
   highlightOnlySelected?: boolean;
   orientation: 'horizontal' | 'vertical';
@@ -58,20 +62,22 @@ type SharedProps = {
 };
 
 /** Those props are injected only if readOnly equals to true. */
-type ReadOnlyProps = {
-  halfPrecisionFillMode: 'svg' | 'box';
-  accessibleLabel: string;
+export type ReadOnlyProps = {
+  halfFillMode?: 'svg' | 'box';
+  accessibleLabel?: string;
 };
 
 /** Those props are injected only if readOnly equals to false. */
-type InputProps = {
+export type InputProps = {
   onChange: (value: number) => void | undefined;
   onHoverChange: (value: number) => void | undefined;
   enableKeyboard?: boolean;
   labelledBy?: string;
-  customAccessibleLabels?: string[];
-  transition?: 'colors' | 'zoom' | 'position' | 'none';
+  accessibleLabels?: string[];
+  transition?: 'colors' | 'zoom' | 'position' | 'opacity' | 'none';
   customEasing?: string;
 };
 
 export type RatingProps = SharedProps & ReadOnlyProps & BoxStyles & InputProps;
+
+export type ItemStylesForCss = Omit<ItemStylesProp, 'svgChildNodes'>;

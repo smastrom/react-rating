@@ -1,17 +1,21 @@
+import { SharedProps } from './types';
+
+type HighlightOnlySelectedPropValue = NonNullable<SharedProps['highlightOnlySelected']>;
+
 export const getActiveClassNames = (
-  highlightOnlySelectedProp: boolean,
+  highlightOnlySelectedProp: HighlightOnlySelectedPropValue,
   ratingValues: number[],
   selectedIndex: number
 ) =>
   ratingValues.map((_, index) => {
     if (highlightOnlySelectedProp === false) {
       if (index <= selectedIndex) {
-        return 'rri--active';
+        return 'rar--on';
       }
-      return 'rri--inactive';
+      return 'rar--off';
     }
     if (index === selectedIndex) {
-      return 'rri--active';
+      return 'rar--on';
     }
-    return 'rri--inactive';
+    return 'rar--off';
   });

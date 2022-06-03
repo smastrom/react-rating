@@ -1,12 +1,16 @@
-export type ItemStylesProp = {
-  svgChildNodes: JSX.Element | JSX.Element[];
-  itemStrokeWidth?: number;
-  itemStrokeStyle?: 'round' | 'sharp';
+export type SvgChildNodes = JSX.Element | JSX.Element[];
 
+export type MaybeArrayColors = {
   activeFillColor?: string | string[];
   activeStrokeColor?: string | string[];
   activeBoxColor?: string | string[];
   activeBoxBorderColor?: string | string[];
+};
+
+export type ItemStylesProp = MaybeArrayColors & {
+  svgChildNodes: SvgChildNodes;
+  itemStrokeWidth?: number;
+  itemStrokeStyle?: 'round' | 'sharp';
 
   inactiveFillColor?: string;
   inactiveStrokeColor?: string;
@@ -14,13 +18,11 @@ export type ItemStylesProp = {
   inactiveBoxBorderColor?: string;
 };
 
-/** Those styles are considered "global" as they are not supposed to change for each rating item.
- * Their value must be expressed with an integer representing the number of pixels. Those values
+/** Their value must be expressed with an integer representing the number of pixels. Those values
  * can also be customized for different breakpoints as well. Please refer to README.md at
  * https://google.com for more infos.
  */
-type BoxStyles = {
-  // Rename to boxStyles
+export type BoxStyles = {
   /** Integer representing the number of pixels of the right-side margin between the rating items.*/
   boxMargin?: number;
   /** Integer representing the padding in pixels between the rating item and the box bounds. */
@@ -38,16 +40,18 @@ export type Breakpoints = {
   [key: number]: BoxStyles;
 };
 
-export type CSSVariables = {
-  [key: string]: string;
+export type MaybeInvalidBreakPoints = {
+  [key: string | number]: {
+    [key: string | number]: any;
+  };
 };
 
-/** Those props are always injected wheter readOnly equals to false or not. */
-type SharedProps = {
-  ratingValue: number;
-  readOnly: boolean;
-  /** Maximum number of rating items to display. Should be an integer between 1 and 10. */
-  limit: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+/** Those props are always injected whether readOnly equals to false or not. */
+export type SharedProps = {
+  value: number;
+  readOnly?: boolean;
+  /** An integer between 1 and 10 representing the number of rating items to display. */
+  limit?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
   highlightOnlySelected?: boolean;
   orientation: 'horizontal' | 'vertical';
   itemStyles?: ItemStylesProp;
@@ -58,20 +62,61 @@ type SharedProps = {
 };
 
 /** Those props are injected only if readOnly equals to true. */
-type ReadOnlyProps = {
-  halfPrecisionFillMode: 'svg' | 'box';
-  accessibleLabel: string;
+export type ReadOnlyProps = {
+  halfFillMode?: 'svg' | 'box';
+  accessibleLabel?: string;
 };
 
 /** Those props are injected only if readOnly equals to false. */
-type InputProps = {
+export type InputProps = {
   onChange: (value: number) => void | undefined;
   onHoverChange: (value: number) => void | undefined;
   enableKeyboard?: boolean;
   labelledBy?: string;
-  customAccessibleLabels?: string[];
-  transition?: 'colors' | 'zoom' | 'position' | 'none';
-  customEasing?: string;
+  accessibleLabels?: string[];
+  transition?: 'colors' | 'zoom' | 'position' | 'opacity' | 'none';
 };
 
 export type RatingProps = SharedProps & ReadOnlyProps & BoxStyles & InputProps;
+
+/* Internal */
+
+export type RatingItemProps = Pick<ItemStylesProp, 'svgChildNodes' | 'itemStrokeWidth'> & {
+  hasHalfFill: boolean;
+};
+
+type CSSPrefix = 'rar';
+
+export type CSSVariables = {
+  [key: `--${CSSPrefix}--${string}`]: string;
+};
+
+export type CSSClassName = `${CSSPrefix}--${string}`;
+
+export type TagID = `${CSSPrefix}_${string}`;
+
+export type MaybeEmptyCSSClassName = CSSClassName | '';
+
+// Maybe create a new type for repetetions of classNames
+
+export type NonArrayColors = Pick<
+  ItemStylesProp,
+  'inactiveBoxColor' | 'inactiveFillColor' | 'inactiveBoxBorderColor' | 'inactiveStrokeColor'
+>;
+
+type ActiveColorsStrings = {
+  [key in keyof MaybeArrayColors]: string;
+};
+
+export type MergedStyles = {
+  boxStyles: BoxStyles;
+  colors: NonArrayColors & ActiveColorsStrings;
+};
+
+export type ValidArrayColors = {
+  [key in keyof MaybeArrayColors]: string[];
+};
+
+export type RequireAtLeastOne<T> = {
+  [K in keyof T]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<keyof T, K>>>;
+}[keyof T];

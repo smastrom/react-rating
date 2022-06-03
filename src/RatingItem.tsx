@@ -1,27 +1,25 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 
-import { toSecondDecimal } from './utils';
+import { getUniqueId, toSecondDecimal } from './utils';
 
-type RatingItemProps = {
-  svgChildNodes?: JSX.Element;
-  strokeWidth?: number;
-  isPrecisionReadonly?: boolean;
-};
+import { MaybeEmptyCSSClassName, RatingItemProps } from './types';
 
-type SvgData = {
+export type KeyAndValueStrings = {
   [key: string]: string;
 };
 
 export const RatingItem = ({
   svgChildNodes,
-  strokeWidth = 0,
-  isPrecisionReadonly = false,
+  itemStrokeWidth = 0,
+  hasHalfFill = false,
 }: RatingItemProps) => {
   const svgRef = useRef<SVGPathElement | null>(null);
 
-  const [svgData, setSvgData] = useState<SvgData | null>(null);
+  const uniqId = useRef<string | null>(hasHalfFill ? getUniqueId() : null);
 
-  const strokeOffset = strokeWidth > 0 ? -(strokeWidth / 2) : 0;
+  const [svgData, setSvgData] = useState<KeyAndValueStrings | null>(null);
+
+  const strokeOffset = itemStrokeWidth > 0 ? -(itemStrokeWidth / 2) : 0;
 
   useLayoutEffect(() => {
     const {
@@ -37,11 +35,11 @@ export const RatingItem = ({
       typeof svgXPos === 'number' &&
       typeof svgYPos === 'number'
     ) {
-      const translateOffset = strokeWidth > 0 ? `${strokeOffset} ${strokeOffset}` : '0 0';
+      const translateOffset = itemStrokeWidth > 0 ? `${strokeOffset} ${strokeOffset}` : '0 0';
 
       const viewBox = `${translateOffset} ${toSecondDecimal(
-        svgWidth + strokeWidth
-      )} ${toSecondDecimal(svgHeight + strokeWidth)}`;
+        svgWidth + itemStrokeWidth
+      )} ${toSecondDecimal(svgHeight + itemStrokeWidth)}`;
 
       const translateData = `${svgXPos === 0 ? 0 : toSecondDecimal(svgXPos) * -1} ${
         svgYPos === 0 ? 0 : toSecondDecimal(svgYPos) * -1
@@ -52,12 +50,14 @@ export const RatingItem = ({
         translateData,
       });
     }
-  }, [strokeWidth, svgChildNodes]);
+  }, []);
+
+  const strokeClassName: MaybeEmptyCSSClassName = itemStrokeWidth > 0 ? 'rar--svg-stroke' : '';
 
   const getReadOnlyPrecisionAttrs = () => {
-    if (isPrecisionReadonly) {
+    if (hasHalfFill) {
       return {
-        fill: "url('#rri_precision')",
+        fill: `url('#${uniqId.current}_rar_hf')`,
       };
     }
     return {};
@@ -66,17 +66,18 @@ export const RatingItem = ({
   return (
     <svg
       aria-hidden="true"
-      className="rri--svg-item"
+      className={`rar--svg-item ${strokeClassName}`}
       xmlns="http://www.w3.org/2000/svg"
       viewBox={svgData ? svgData.viewBox : '0 0 0 0'}
-      strokeWidth={strokeWidth || 0}
+      strokeWidth={itemStrokeWidth || 0}
       width="100%"
+      preserveAspectRatio="none"
     >
-      {isPrecisionReadonly && (
+      {hasHalfFill && (
         <defs>
-          <linearGradient id="rri_precision">
-            <stop className="rri--precision-stop-1" offset="50%" />
-            <stop className="rri--precision-stop-2" offset="50%" />
+          <linearGradient id={`${uniqId.current}_rar_hf`}>
+            <stop className="rar--precision-stop-1" offset="50%" />
+            <stop className="rar--precision-stop-2" offset="50%" />
           </linearGradient>
         </defs>
       )}

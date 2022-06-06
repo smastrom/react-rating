@@ -9,7 +9,7 @@
 ## Features
 
 - **Use any SVG**: No headaches or icon fonts in order to use vectors from any source.
-- Highly customizable: fills, strokes, box colors and borders, transitions, breakpoints and much more.
+- Highly customizable: fills, strokes, colors, transitions, breakpoints and much more.
 - Fully responsive and mobile-first
 - Fully accessible with keyboard navigation and custom labels
 - Fully typed with IntelliSense infos and autocomplete
@@ -94,7 +94,6 @@ const App = () => (
 | highlightOnlySelected | boolean                                                 | Whether or not to highlight only the selected rating item.                                 | false                                                             | No                              | :green_circle:      |
 | orientation           | `horizontal` \| `vertical`                              | Orientation of the rating items                                                            | `horizontal`                                                      | No                              | :green_circle:      |
 | transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting                                                | `zoom`                                                            | No                              | :large_blue_circle: |
-| customEasing          | string                                                  | Custom easing to apply to transitions as `<timing> <easing>`                               | `150ms ease-out`                                                  | No                              | :large_blue_circle: |
 | halfFillMode          | `svg` \| `box`                                          | Whether to half-fill the SVG or the box if `value` is a float                              | `svg`                                                             | No                              | :purple_circle:     |
 | itemStyles            | [ItemStyle]()                                           | Custom SVGs and styles                                                                     | [defaultStyles]()                                                 | No                              | :green_circle:      |
 | boxMargin             | number                                                  | Margin between boxes in px                                                                 | 5                                                                 | No                              | :green_circle:      |
@@ -120,7 +119,7 @@ Pass a `ItemStyle` object to `itemStyles` prop:
 
 ```ts
 type ItemStyle = {
-  svgChildNodes: JSX.Element;
+  svgChildNodes: JSX.Element | JSX.Element[];
   itemStrokeWidth?: number;
   itemStrokeStyle?: 'round' | 'sharp';
 
@@ -207,9 +206,9 @@ const App = () => {
 
 ### How to create svgChildNodes components
 
-Create a new JSX component from the SVG inner nodes and **remove any transform**, fill, or stroke-related attributes from the source paths.
+Create a new JSX element from the SVG inner nodes and **remove any transform**, fill, or stroke-related attributes from the source paths.
 
-Rating component will take care of rendering a brand-new SVG element, applying proper transforms if necessary.
+Rating component will take care of rendering a brand-new SVG element, applying proper transforms if necessary. This is particularly handy when pasting SVG code from Adobe XD or any other source that applies random transforms to your nodes.
 
 <details><summary><strong>Example 1</strong></summary>
 <br />
@@ -337,8 +336,6 @@ const App = () => {
   )
 };
 ```
-
-> :warning: Any array-length should be equal to the `limit` prop value (default: 5) or `null` will be returned from rendering.
 
 <br />
 
@@ -475,7 +472,7 @@ const App = () => {
   const [ratingValue, setRatingValue] = useState(3);
 
   return (
-      <div style={{ maxWidth: 250, display: 'flex', gap: '10px' }}>
+      <div style={{ maxWidth: 250, display: 'flex', flexDirection: "column", gap: '10px' }}>
         <h3 id={LABEL_DOM_ID}>Rate this product</h3>
         <Rating
             value={ratingValue}
@@ -572,19 +569,25 @@ To navigate the rating items:
 
 ## Troubleshooting
 
-**Nothing is returned from rendering, why?**
-
-- If `readOnly` is set to false, check that you have initialized the state with an integer from 0 to `limit` (default: 5).
-
-- If `readOnly` is set to false, check that you have passed the `onChange` function as displayed in the examples.
-
-- Check that the object passed to `itemStyles` has the property `svgChildNodes` set.
-
-- If you passed an array to any supported `itemStyle` property, check that the array length matches the `limit` prop value.
-
-**I can see the nodes returned from rendering, but no styles have been applied.**
+### I can see the nodes returned from rendering, but no styles have been applied.
 
 Check that you have imported the CSS as displayed in the [Basic usage]() section.
+
+### I keep getting the error "svgChildNodes is not a valid JSX element".
+
+Check that you are passing a JSX element and not a functional component:
+
+:white_check_mark: **Correct**
+
+```jsx
+const Star = <path d="M100,10L40 198 190 78 10 78 160 198z" />;
+```
+
+:x: **Incorrect**
+
+```jsx
+const Star = () => <path d="M100,10L40 198 190 78 10 78 160 198z" />;
+```
 
 <br />
 

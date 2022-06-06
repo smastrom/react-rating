@@ -2,7 +2,6 @@
 
 .rar--group {
   display: flex;
-  flex-direction: var(--rar--orientation, row);
   width: 100%;
 }
 
@@ -22,13 +21,33 @@
 
 .rar--box,
 .rar--ro-box {
-  width: auto;
+  width: 100% !important;
   aspect-ratio: 1;
   display: flex;
   padding: var(--rar--box-padding, 0);
   border-style: solid;
   border-width: var(--rar--box-border-width, 0);
   border-radius: var(--rar--box-radius, 0);
+}
+
+/* Utilities */
+
+.rar--dir-x {
+  flex-direction: row;
+}
+
+.rar--dir-y {
+  flex-direction: column;
+}
+
+.rar--stroke-round {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rar--stroke-sharp {
+  stroke-linecap: miter;
+  stroke-linejoin: square;
 }
 
 /* Active / Inactive */
@@ -148,9 +167,23 @@
 
 /*** Transitions ***/
 
+/* Colors */
+
+.rar--transition-colors .rar--box-mask .rar--box {
+  --rar--easing: 150ms ease-out;
+  transition: background-color var(--rar--easing), border-color var(--rar--easing);
+}
+
+.rar--transition-colors .rar--box-mask .rar--box .rar--svg-item {
+  transition: fill var(--rar--easing), stroke var(--rar--easing);
+}
+
 /* Zoom */
 
+/* Easing source: https://easings.net/it#easeOutSine */
+
 .rar--group.rar--transition-zoom .rar--box-mask {
+  --rar--easing: 150ms cubic-bezier(0.61, 1, 0.88, 1);
   transition: transform var(--rar--easing);
   transform: scale(1);
 }
@@ -164,6 +197,7 @@
 /* Position */
 
 .rar--group.rar--transition-position .rar--box-mask {
+  --rar--easing: 150ms cubic-bezier(0.61, 1, 0.88, 1);
   transition: transform var(--rar--easing);
   transform: translateY(0%);
 }
@@ -189,16 +223,6 @@
   .rar--group.rar--transition-opacity .rar--box-mask:hover {
     opacity: 1;
   }
-}
-
-/* Colors */
-
-.rar--transition-colors .rar--box-mask .rar--box {
-  transition: background-color var(--rar--easing), border-color var(--rar--easing); /* Add same transition to svg */
-}
-
-.rar--transition-colors .rar--box-mask .rar--box .rar--svg-item {
-  transition: fill var(--rar--easing), stroke var(--rar--easing);
 }
 
 /* Read only SVG defs */

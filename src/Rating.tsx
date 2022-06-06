@@ -1,38 +1,66 @@
-import React, { forwardRef, useRef, useState, useEffect, useLayoutEffect } from 'react';
+import React, { forwardRef, useRef, useState, useLayoutEffect, useEffect } from 'react';
 
 import { RatingItem } from './RatingItem';
-import { defaultItemStyles } from './DefaultStyles';
-import { getBreakpointRules } from './getBreakpointRules';
-import { getArrayCssVars, getObjectCssVars } from './getCssVars';
-import { getActiveClassNames } from './getActiveClassNames';
-import { getHalfFillClassNames } from './getHalfFillClassNames';
+import { getDynamicCssVars } from './getDynamicCssVars';
+import { getActiveClassNames } from './getDynamicClassNames';
+import { getHalfFillClassNames } from './getDynamicClassNames';
 import { getTransitionClassNames } from './getTransitionClassNames';
-import { getGlobalStylesCssVars } from './getGlobalStylesCssVars';
-import { isPlainObject, isFinalValueFloat, getIntersectionIndex } from './utils';
+import { getStaticCssVars } from './getStaticCssVars';
+import { createBreakpointsStyleElement } from './createBreakpointsStyleElement';
+import {
+  isFinalValueFloat,
+  getIntersectionIndex,
+  getUniqueId,
+  isObjectWithKeys,
+  isValidPositiveNumber as isValidStroke,
+  cleanupSplitColors,
+} from './utils';
 import { getErrors } from './getErrors';
 
-import { RatingProps } from './types';
+import {
+  RatingProps,
+  ItemStylesProp,
+  CSSVariables,
+  CSSClassName,
+  MaybeEmptyCSSClassName,
+  TagID,
+  MergedStyles,
+  MaybeInvalidBreakPoints,
+  RequireAtLeastOne,
+  ValidArrayColors,
+} from './types';
+
+const Star = <path d="M100,10L40 198 190 78 10 78 160 198z" />;
+
+export const defaultItemStyles: ItemStylesProp = {
+  svgChildNodes: Star,
+  itemStrokeWidth: 2,
+  itemStrokeStyle: 'round',
+  activeStrokeColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
+  activeBoxColor: 'aliceblue',
+  activeFillColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
+  inactiveFillColor: 'rgba(0, 0, 0, 0.25)',
+};
 
 export const Rating = forwardRef<HTMLDivElement, RatingProps>(
   (
     {
-      value = 0, // Ok
-      limit = 5, // Ok
-      readOnly = false, // Ok
-      onChange, // Ok
-      onHoverChange, // Ok
-      highlightOnlySelected = false, // Ok
-      enableKeyboard = true, // Ok
-      orientation = 'horizontal', // Ok
-      transition = 'zoom', // Ok
-      itemStyles = defaultItemStyles, // To do
-      customEasing = '150ms ease-out', // Ok
+      value = 0,
+      limit = 5,
+      readOnly = false,
+      onChange,
+      onHoverChange,
+      highlightOnlySelected = false,
+      enableKeyboard = true,
+      orientation = 'horizontal',
+      transition = 'none', // To do: maybe set 'colors' as default?
+      itemStyles = defaultItemStyles,
       boxMargin = 5,
-      boxRadius = 0, // Check wheter or not to inject styles with default value
+      boxRadius = 0,
       boxPadding = 5,
       boxBorderWidth = 0,
-      breakpoints, // Ok
-      halfFillMode = 'svg', // To do
+      breakpoints,
+      halfFillMode = 'svg',
       labelledBy,
       accessibleLabels,
       accessibleLabel = readOnly === false ? 'Rating' : `Rated ${value} on ${limit}`,
@@ -42,13 +70,15 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
     },
     externalRef
   ) => {
+    const { svgChildNodes, itemStrokeStyle, itemStrokeWidth, ...colors } = itemStyles;
+
     const { shouldRender, errorReason } = getErrors(
       limit,
       value,
       readOnly,
+      highlightOnlySelected,
       onChange,
-      itemStyles,
-      highlightOnlySelected
+      svgChildNodes
     );
 
     if (!shouldRender) {
@@ -56,7 +86,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       return null;
     }
 
-    /* Rating value helpers from props */
+    /* Rating value helpers */
 
     const ratingValues = Array.from(Array(limit), (_, index) => index + 1);
 
@@ -65,98 +95,108 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
     const isNotEligibleForHalfFill = hasPrecision && highlightOnlySelected;
 
     const ratingValue = isNotEligibleForHalfFill ? Math.round(value) : value;
-    const deservesHalfFill = isEligibleForHalfFill && isFinalValueFloat(ratingValue);
-
     const currentRatingIndex = isEligibleForHalfFill
       ? getIntersectionIndex(ratingValues, ratingValue)
       : ratingValues.indexOf(ratingValue);
 
+    const deservesHalfFill = isEligibleForHalfFill && isFinalValueFloat(ratingValue);
+
+    /* CSS helpers */
+
+    const { staticColors, arrayColors } = cleanupSplitColors(colors);
+    const hasArrayColors = Object.keys(arrayColors).length > 0;
+
+    const absoluteStrokeWidth = isValidStroke(itemStrokeWidth) ? itemStrokeWidth : 0;
+    const absoluteHalfFillMode = halfFillMode === 'box' ? 'box' : 'svg';
+
     /* Refs */
+
+    const breakpointsStyleTagId = useRef<string | null>(null);
+    const uniqueLabelsIds = useRef<string[]>(
+      readOnly === false ? ratingValues.map(() => getUniqueId()) : []
+    );
 
     const roleRadioDivs = useRef<HTMLDivElement[] | []>([]);
 
-    const uniqIds = useRef<string[]>(
-      readOnly === false
-        ? ratingValues.map(() => (Math.random() + 1).toString(36).substring(7))
-        : []
-    );
+    /* Styles getters */
 
-    /* State getters, used to generate CSS variables and active classNames */
-
-    const getClassNames = (currentSelectedIndex: number) => {
-      if (deservesHalfFill) {
-        return getHalfFillClassNames(ratingValue, ratingValues, halfFillMode);
-      }
-
-      return getActiveClassNames(
-        highlightOnlySelected,
-        ratingValues,
-        currentSelectedIndex
-      );
-    };
-
-    const getStyles = () => {
-      const easingValue = readOnly || customEasing === 'none' ? undefined : customEasing;
+    const getStaticStyles = () => {
+      const mergedStyles: MergedStyles = {
+        boxStyles: { boxMargin, boxPadding, boxRadius, boxBorderWidth },
+        colors: staticColors,
+      };
 
       return {
-        arrayCssVars:
-          ratingValue >= 0.25
-            ? getArrayCssVars(
-                itemStyles,
-                currentRatingIndex,
-                highlightOnlySelected,
-                halfFillMode,
-                deservesHalfFill
-              )
-            : [{}],
-        objectCssVars: getObjectCssVars(
-          {
-            ...itemStyles,
-            easingValue,
-          },
-          halfFillMode,
-          deservesHalfFill
-        ),
-        activeClassNames: getClassNames(currentRatingIndex),
+        staticCssVars: getStaticCssVars(mergedStyles, deservesHalfFill, absoluteHalfFillMode),
       };
     };
 
+    const getDynamicClassNames = (currentSelectedIndex: number) => {
+      if (deservesHalfFill) {
+        return getHalfFillClassNames(ratingValue, ratingValues, absoluteHalfFillMode);
+      }
+      return getActiveClassNames(highlightOnlySelected, ratingValues, currentSelectedIndex);
+    };
+
+    const getDynamicStyles = () => ({
+      dynamicClassNames: getDynamicClassNames(currentRatingIndex),
+      dynamicCssVars:
+        hasArrayColors && ratingValue >= 0.25
+          ? getDynamicCssVars(
+              arrayColors as RequireAtLeastOne<ValidArrayColors>,
+              absoluteStrokeWidth as number,
+              currentRatingIndex,
+              highlightOnlySelected,
+              absoluteHalfFillMode,
+              deservesHalfFill
+            )
+          : [{}],
+    });
+
     /* State */
 
-    const [styles, setStyles] = useState(getStyles());
+    type StylesState = {
+      staticCssVars: CSSVariables;
+      dynamicCssVars: CSSVariables[] | [];
+      dynamicClassNames: string[];
+    };
+
+    const [styles, setStyles] = useState<StylesState>({
+      ...getStaticStyles(),
+      ...getDynamicStyles(),
+    });
 
     /* Effects */
 
     useLayoutEffect(() => {
-      if (isPlainObject(breakpoints)) {
-        const breakpointRules = getBreakpointRules({
-          breakpoints,
-          boxMargin,
-          boxPadding,
-          boxRadius,
-          boxBorderWidth,
-        });
-        if (breakpointRules.length > 0) {
-          const breakpointsStyleTag = document.createElement('style');
-          breakpointsStyleTag.innerHTML = breakpointRules;
-          document.head.appendChild(breakpointsStyleTag);
+      if (isObjectWithKeys(breakpoints)) {
+        if (!breakpointsStyleTagId.current) {
+          breakpointsStyleTagId.current = getUniqueId();
+        }
+        const tagId: TagID = `rar_bp_${breakpointsStyleTagId.current}`;
+        const breakpointsStyleElem = createBreakpointsStyleElement(
+          tagId,
+          breakpoints as MaybeInvalidBreakPoints
+        );
+
+        if (breakpointsStyleElem) {
+          document.head.appendChild(breakpointsStyleElem);
           return () => {
-            document.head.removeChild(breakpointsStyleTag);
+            if (document.getElementById(tagId)) {
+              document.head.removeChild(breakpointsStyleElem);
+            }
           };
         }
       }
-    }, [itemStyles]);
+    }, []);
 
     useEffect(() => {
-      setStyles(getStyles());
-    }, [ratingValue, itemStyles]);
+      setStyles({ ...getStaticStyles(), ...getDynamicStyles() });
+    }, [ratingValue]);
 
     /* Mouse handlers */
 
-    const handleClick = (
-      event: React.MouseEvent<HTMLDivElement>,
-      index: number
-    ): void => {
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>, index: number): void => {
       event.preventDefault();
       event.stopPropagation();
       onChange(ratingValues[index]);
@@ -167,13 +207,16 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
         onHoverChange(ratingValues[hoveredIndex]);
       }
 
-      const activeClassNames = getClassNames(hoveredIndex);
-      const arrayCssVars = getArrayCssVars(
-        itemStyles,
-        hoveredIndex,
-        highlightOnlySelected
-      );
-      setStyles({ ...styles, arrayCssVars, activeClassNames });
+      const dynamicClassNames = getDynamicClassNames(hoveredIndex);
+      const dynamicCssVars = hasArrayColors
+        ? getDynamicCssVars(
+            arrayColors as RequireAtLeastOne<ValidArrayColors>,
+            absoluteStrokeWidth as number,
+            hoveredIndex,
+            highlightOnlySelected
+          )
+        : [];
+      setStyles({ ...styles, dynamicCssVars, dynamicClassNames });
     };
 
     const handleMouseLeave = () => {
@@ -181,12 +224,17 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
         onHoverChange(0);
       }
 
-      const activeClassNames = getClassNames(ratingValues.indexOf(ratingValue));
-      const arrayCssVars =
-        ratingValue >= 0.25
-          ? getArrayCssVars(itemStyles, currentRatingIndex, highlightOnlySelected)
-          : [{}];
-      setStyles({ ...styles, arrayCssVars, activeClassNames });
+      const dynamicClassNames = getDynamicClassNames(ratingValues.indexOf(ratingValue));
+      const dynamicCssVars =
+        hasArrayColors && ratingValue >= 0.25
+          ? getDynamicCssVars(
+              arrayColors as RequireAtLeastOne<ValidArrayColors>,
+              absoluteStrokeWidth as number,
+              currentRatingIndex,
+              highlightOnlySelected
+            )
+          : [];
+      setStyles({ ...styles, dynamicCssVars, dynamicClassNames });
     };
 
     /* Keyboard handler */
@@ -204,6 +252,8 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
 
       switch (event.code) {
         case 'Tab':
+          roleRadioDivs.current[index].blur();
+          break;
         case 'Escape':
           roleRadioDivs.current[index].blur();
           break;
@@ -219,24 +269,31 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
           break;
         case 'ArrowUp':
         case 'ArrowLeft': {
-          const siblingToFocus = isEventFiringFromFistItem
-            ? lastSibling
-            : previousSibling;
+          const siblingToFocus = isEventFiringFromFistItem ? lastSibling : previousSibling;
           roleRadioDivs.current[siblingToFocus].focus();
           onChange(ratingValues[siblingToFocus]);
         }
       }
     };
 
-    /* Parent element props */
+    /* Radio-group/parent props */
 
     const getRatingClassNames = () => {
-      const sharedClassNames = `rar--group rar--dir-${
+      const orientationClassName: CSSClassName = `rar--dir-${
         orientation === 'vertical' ? 'y' : 'x'
-      } ${className || ''}`;
+      }`;
+      const strokeStyleClassName: CSSClassName = `rar--stroke-${
+        itemStrokeStyle === 'sharp' ? 'sharp' : 'round'
+      }`;
+      const breakpointsTargetClassName: MaybeEmptyCSSClassName = breakpointsStyleTagId.current
+        ? `rar--${breakpointsStyleTagId.current}`
+        : '';
 
-      if (readOnly === false) {
-        const needsTransitionClassNames = readOnly === false && transition !== 'none';
+      const sharedClassNames: MaybeEmptyCSSClassName = `rar--group ${orientationClassName}
+      ${strokeStyleClassName} ${className || ''} ${breakpointsTargetClassName}`;
+
+      if (!readOnly) {
+        const needsTransitionClassNames = !readOnly && transition !== 'none';
         const transitionClassNames = needsTransitionClassNames
           ? getTransitionClassNames(transition)
           : '';
@@ -246,7 +303,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
     };
 
     const getRatingAriaProps = (): React.HTMLProps<HTMLDivElement> => {
-      if (readOnly === false) {
+      if (!readOnly) {
         const ariaProps: React.HTMLProps<HTMLDivElement> = { role: 'radiogroup' };
         if (typeof labelledBy === 'string' && labelledBy.length > 0) {
           ariaProps['aria-labelledby'] = labelledBy;
@@ -261,26 +318,34 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       };
     };
 
-    const ratingStyles: React.CSSProperties = {
-      ...style,
-      ...styles.objectCssVars, // To do: Create a new function that renders such vars to the element main className
-      ...getGlobalStylesCssVars({
-        orientation,
-        breakpoints,
-        boxMargin,
-        boxPadding,
-        boxRadius,
-        boxBorderWidth,
-      }),
+    /* Rating boxes props */
+
+    const getBoxClassNames = (childIndex: number) => {
+      const activeClasName = styles?.dynamicClassNames?.[childIndex];
+
+      if (!readOnly) {
+        return `rar--box-mask rar--cursor rar--margin ${activeClasName}`;
+      }
+      return `rar--ro-box rar--margin-ro ${activeClasName}`;
     };
 
-    /* Radio div props */
+    const getMouseProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
+      if (!readOnly) {
+        return {
+          onMouseEnter: () => handleMouseEnter(childIndex),
+          onMouseLeave: handleMouseLeave,
+        };
+      }
+      return {};
+    };
+
+    /* Radio divs */
 
     const getRadioProps = (radioChildIndex: number): React.HTMLProps<HTMLDivElement> => {
-      if (readOnly === false) {
+      if (!readOnly) {
         return {
           role: 'radio',
-          'aria-labelledby': `${uniqIds.current[radioChildIndex]}_rar_label_${
+          'aria-labelledby': `${uniqueLabelsIds.current[radioChildIndex]}_rar_label_${
             radioChildIndex + 1
           }`,
           'aria-checked': ratingValues[radioChildIndex] === ratingValue,
@@ -289,9 +354,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
           onClick: (event: React.MouseEvent<HTMLDivElement>) =>
             handleClick(event, radioChildIndex),
           tabIndex:
-            enableKeyboard === true && ratingValues[radioChildIndex] === ratingValue
-              ? 0
-              : -1,
+            enableKeyboard === true && ratingValues[radioChildIndex] === ratingValue ? 0 : -1,
           onKeyDown:
             enableKeyboard === true
               ? (event: React.KeyboardEvent<HTMLDivElement>) =>
@@ -302,49 +365,28 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       return {};
     };
 
-    const getRadioLabels = () =>
-      Array.isArray(accessibleLabels)
-        ? accessibleLabels
-        : ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`);
-
-    /* Rating item box props */
-
-    const getItemClassNames = (childIndex: number) => {
-      const activeClasName = styles?.activeClassNames?.[childIndex];
-
-      if (readOnly === false) {
-        return `rar--box-mask rar--cursor rar--margin ${activeClasName}`;
-      }
-      return `rar--ro-box rar--margin-ro ${activeClasName}`;
-    };
-
-    const getMouseProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
-      if (readOnly === false) {
-        return {
-          onMouseEnter: () => handleMouseEnter(childIndex),
-          onMouseLeave: handleMouseLeave,
-        };
-      }
-      return {};
-    };
-
-    /* SVG element props */
+    /* SVG */
 
     const getSvgRatingItemProps = (childNodeIndex: number) => {
       const sharedProps: any = {
-        svgChildNodes: Array.isArray(itemStyles.svgChildNodes)
-          ? itemStyles.svgChildNodes[childNodeIndex]
-          : itemStyles.svgChildNodes,
-        itemStrokeWidth:
-          typeof itemStyles.itemStrokeWidth === 'number' && itemStyles.itemStrokeWidth > 0
-            ? itemStyles.itemStrokeWidth
-            : 0,
+        svgChildNodes: Array.isArray(svgChildNodes)
+          ? svgChildNodes[childNodeIndex]
+          : svgChildNodes,
+        itemStrokeWidth: absoluteStrokeWidth,
       };
-      if (deservesHalfFill && halfFillMode === 'svg') {
+      if (deservesHalfFill && absoluteHalfFillMode === 'svg') {
+        // To do: check that this condition is strong enough
         sharedProps['hasHalfFill'] = childNodeIndex === currentRatingIndex;
       }
       return sharedProps;
     };
+
+    /* Labels */
+
+    const getRadioLabels = () =>
+      Array.isArray(accessibleLabels)
+        ? accessibleLabels
+        : ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`);
 
     /* Render */
 
@@ -353,27 +395,27 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
         {...getRatingAriaProps()}
         ref={externalRef}
         id={id}
-        style={ratingStyles}
+        style={{ ...style, ...styles.staticCssVars }}
         className={getRatingClassNames()}
       >
         {/* */}
         {/* */}
-        {/* */}
-        {/* */}
+        {/* Boxes */}
         {ratingValues.map((_, childNodeIndex) => (
           <div
             {...getMouseProps(childNodeIndex)}
-            key={`rar_item_mask_${childNodeIndex}`}
-            className={getItemClassNames(childNodeIndex)}
-            style={readOnly ? styles?.arrayCssVars?.[childNodeIndex] : {}}
+            key={`rar_mask_${childNodeIndex}`}
+            className={getBoxClassNames(childNodeIndex)}
+            style={readOnly ? styles?.dynamicCssVars?.[childNodeIndex] : {}}
           >
             {/* */}
             {/* */}
-            {readOnly === false ? (
+            {/* Radios & SVG */}
+            {!readOnly ? (
               <div
                 {...getRadioProps(childNodeIndex)}
                 className="rar--box"
-                style={styles?.arrayCssVars?.[childNodeIndex]}
+                style={styles?.dynamicCssVars?.[childNodeIndex]}
               >
                 <RatingItem {...getSvgRatingItemProps(childNodeIndex)} />
               </div>
@@ -381,19 +423,20 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
               <RatingItem {...getSvgRatingItemProps(childNodeIndex)} />
             )}
             {/* */}
-            {readOnly === false && (
+            {/* */}
+            {/* Labels */}
+            {!readOnly && (
               <span
                 className="rar--hidden"
-                id={`${uniqIds.current[childNodeIndex]}_rar_label_${childNodeIndex + 1}`}
+                id={`${uniqueLabelsIds.current[childNodeIndex]}_rar_label_${
+                  childNodeIndex + 1
+                }`}
               >
                 {getRadioLabels()?.[childNodeIndex]}
               </span>
             )}
-            {/* */}
-            {/* */}
           </div>
         ))}
-        {/* */}
         {/* */}
         {/* */}
         {/* */}

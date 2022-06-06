@@ -1,11 +1,11 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 
-import { toSecondDecimal } from './utils';
+import { getUniqueId, toSecondDecimal } from './utils';
 
-import { ItemStylesProp, KeyAndValueStrings } from './types';
+import { MaybeEmptyCSSClassName, RatingItemProps } from './types';
 
-type RatingItemProps = Pick<ItemStylesProp, 'svgChildNodes' | 'itemStrokeWidth'> & {
-  hasHalfFill: boolean;
+export type KeyAndValueStrings = {
+  [key: string]: string;
 };
 
 export const RatingItem = ({
@@ -15,9 +15,7 @@ export const RatingItem = ({
 }: RatingItemProps) => {
   const svgRef = useRef<SVGPathElement | null>(null);
 
-  const uniqId = useRef<string | null>(
-    hasHalfFill ? (Math.random() + 1).toString(36).substring(7) : null
-  );
+  const uniqId = useRef<string | null>(hasHalfFill ? getUniqueId() : null);
 
   const [svgData, setSvgData] = useState<KeyAndValueStrings | null>(null);
 
@@ -37,8 +35,7 @@ export const RatingItem = ({
       typeof svgXPos === 'number' &&
       typeof svgYPos === 'number'
     ) {
-      const translateOffset =
-        itemStrokeWidth > 0 ? `${strokeOffset} ${strokeOffset}` : '0 0';
+      const translateOffset = itemStrokeWidth > 0 ? `${strokeOffset} ${strokeOffset}` : '0 0';
 
       const viewBox = `${translateOffset} ${toSecondDecimal(
         svgWidth + itemStrokeWidth
@@ -53,9 +50,9 @@ export const RatingItem = ({
         translateData,
       });
     }
-  }, [itemStrokeWidth, svgChildNodes]);
+  }, []);
 
-  const strokeClassName = itemStrokeWidth > 0 ? 'rar--svg-stroke' : '';
+  const strokeClassName: MaybeEmptyCSSClassName = itemStrokeWidth > 0 ? 'rar--svg-stroke' : '';
 
   const getReadOnlyPrecisionAttrs = () => {
     if (hasHalfFill) {
@@ -74,6 +71,7 @@ export const RatingItem = ({
       viewBox={svgData ? svgData.viewBox : '0 0 0 0'}
       strokeWidth={itemStrokeWidth || 0}
       width="100%"
+      preserveAspectRatio="none"
     >
       {hasHalfFill && (
         <defs>

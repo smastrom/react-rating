@@ -1,4 +1,6 @@
-import { isEmptyObject } from './utils';
+import { isValidElement } from 'react';
+
+import Package from '../package.json';
 
 type ErrorsObj = {
   shouldRender: boolean;
@@ -6,43 +8,61 @@ type ErrorsObj = {
 };
 
 const getErrorReason = (reason: string) =>
-  `[react-advanced-rating] - There's an error with ${reason} prop. Nothing's returned from rendering.
-    Please check the "Troubleshooting" section of the README.`;
+  `[${Package.name}] - Nothing's returned from rendering. Reason: ${reason}.`;
 
-const setErrors = (targetObj: ErrorsObj, errorReason: string) => {
+const setErrors = (targetObj: ErrorsObj, reason: string) => {
   targetObj['shouldRender'] = false;
-  targetObj['errorReason'] = getErrorReason(errorReason);
+  targetObj['errorReason'] = getErrorReason(reason);
+
+  return targetObj;
 };
 
-// To do: implement other errors
+const invalidJSXMsg = 'svgChildNodes is not a valid JSX element';
 
 export const getErrors = (
   limit: any,
   value: any,
   readOnly: any,
+  highlightOnlySelected: any,
   onChange: any,
-  itemStyles: any,
-  highlightOnlySelected: any
+  svgChildNodes: any
 ) => {
   const errorsObj: ErrorsObj = { shouldRender: true, errorReason: '' };
 
   if (typeof limit !== 'number' || limit < 1 || limit > 10) {
-    setErrors(errorsObj, '"limit"');
+    return setErrors(errorsObj, 'limit is invalid');
   }
   if (typeof value !== 'number' || value < 0 || value > limit) {
-    setErrors(errorsObj, '"number"');
+    return setErrors(errorsObj, 'value is invalid');
   }
-  if (readOnly === false && typeof onChange !== 'function') {
-    setErrors(errorsObj, '"onChange"');
-  }
-  if (readOnly === false && !Number.isInteger(value)) {
-    setErrors(errorsObj, '"readOnly" and "value"');
-  }
-  if (isEmptyObject(itemStyles)) {
-    setErrors(errorsObj, '"itemStyles"');
+  if (typeof readOnly !== 'boolean') {
+    return setErrors(errorsObj, 'readOnly is not a boolean');
   }
   if (typeof highlightOnlySelected !== 'boolean') {
-    setErrors(errorsObj, '"highlightOnlySelected"');
+    return setErrors(errorsObj, 'highlightOnlySelected is not a boolean');
+  }
+  if (readOnly === false && typeof onChange !== 'function') {
+    return setErrors(errorsObj, 'onChange is required');
+  }
+  if (readOnly === false && !Number.isInteger(value)) {
+    return setErrors(errorsObj, 'The value provided is not an integer');
+  }
+  if (!svgChildNodes) {
+    return setErrors(errorsObj, 'itemStyles needs at least the property svgChildNodes set');
+  }
+  if (!Array.isArray(svgChildNodes) && !isValidElement(svgChildNodes)) {
+    return setErrors(errorsObj, invalidJSXMsg);
+  }
+  if (Array.isArray(svgChildNodes)) {
+    if (svgChildNodes.length !== limit) {
+      return setErrors(errorsObj, 'svgChildNodes length mismatch');
+    }
+    const areValid = (svgChildNodes as any[]).every((svgChildNode) =>
+      isValidElement(svgChildNode)
+    );
+    if (!areValid) {
+      return setErrors(errorsObj, invalidJSXMsg);
+    }
   }
 
   return errorsObj;

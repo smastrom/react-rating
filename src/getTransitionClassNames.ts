@@ -1,8 +1,8 @@
-import { InputProps } from './types';
+import { CSSClassName, InputProps } from './types';
 
 export const getTransitionClassNames = (
   transitionProp: NonNullable<InputProps['transition']>
-): string => {
+): CSSClassName | '' => {
   switch (transitionProp) {
     case 'zoom':
       return 'rar--transition-zoom rar--transition-colors';

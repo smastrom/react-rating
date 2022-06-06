@@ -1,79 +1,55 @@
-import { GlobalStyles } from './getGlobalStylesCssVars';
+import { MaybeInvalidBreakPoints } from './types';
 
-const setBreakpointProperty = (property: string, value: number) => {
-  switch (property) {
+export const getCssVarString = (key: string, value: number) => {
+  if (typeof value !== 'number' || value < 0) {
+    return '';
+  }
+  switch (key) {
     case 'boxMargin':
-      return `--rar--box-margin: ${value}px;`;
+      return `--rar--box-margin: ${value}px !important;`;
     case 'boxPadding':
-      return `--rar--box-padding: ${value}px;`;
+      return `--rar--box-padding: ${value}px !important;`;
     case 'boxRadius':
-      return `--rar--box-radius: ${value}px;`;
+      return `--rar--box-radius: ${value}px !important;`;
     case 'boxBorderWidth':
-      return `--rar--box-border-width: ${value}px;`;
+      return `--rar--box-border-width: ${value}px !important;`;
     default:
       return '';
   }
 };
 
-export const getBreakpointRules = ({
-  breakpoints,
-  boxMargin,
-  boxRadius,
-  boxPadding,
-  boxBorderWidth,
-}: Omit<GlobalStyles, 'orientation'>): string => {
-  let rulesArray: string[] = [];
+export const getBreakpointRules = (
+  uniqueId: string = '',
+  breakpoints: MaybeInvalidBreakPoints
+): string => {
+  let mediaRules: string[] = [];
 
-  const fullBreakpoints = { ...breakpoints };
-
-  fullBreakpoints[0] = {
-    boxMargin,
-    boxRadius,
-    boxPadding,
-    boxBorderWidth,
-  };
-
-  Object.entries(fullBreakpoints).forEach(
-    ([breakpointValue, styles], breakpointIndex) => {
-      const breakpointNumVal = Number.parseInt(breakpointValue);
-      const isInvalidBreakpoint = Number.isNaN(breakpointNumVal) || breakpointNumVal < 0;
-
-      if (isInvalidBreakpoint) {
-        return;
-      }
-
-      let variablesValues = '',
-        mediaRule = '';
-      const className = '.rar--group {';
-
-      const isGlobalRule = breakpointIndex === 0;
-      if (isGlobalRule) {
-        mediaRule = className;
-      } else {
-        mediaRule = `@media(min-width: ${breakpointValue}px) { ${className}`;
-      }
-
-      const breakpointProperties = Object.entries(styles);
-      if (breakpointProperties.length > 4) {
-        return;
-      }
-
-      breakpointProperties.forEach(([property, value], index) => {
-        if (typeof value !== 'number' || value < 0) {
-          return;
-        }
-
-        const breakpointProperty = setBreakpointProperty(property, value);
-        variablesValues = variablesValues.concat('', breakpointProperty);
-
-        if (index === breakpointProperties.length - 1) {
-          const closingBracket = isGlobalRule ? '' : '}';
-          const cssRule = `${mediaRule} ${variablesValues} } ${closingBracket}`;
-          rulesArray.push(cssRule);
-        }
-      });
+  Object.entries(breakpoints).forEach(([breakpointValue, styles]) => {
+    const breakpointNumericValue = Number.parseInt(breakpointValue);
+    const breakpointSign = Math.sign(breakpointNumericValue);
+    if (breakpointSign !== 1) {
+      return;
     }
-  );
-  const rulesAsString = rulesArray.toString().replaceAll(',', '').replaceAll(' ', '');
+
+    let variablesValues = '';
+    const mediaRule = `@media (min-width: ${breakpointValue}px) { .rar--${uniqueId} {`;
+
+    const boxStylesProperties = Object.entries(styles);
+    boxStylesProperties.forEach(([property, value], index) => {
+      if (typeof value !== 'number') {
+        return;
+      }
+
+      const breakpointProperty = getCssVarString(property, value);
+      variablesValues = variablesValues.concat('', breakpointProperty);
+
+      if (index === boxStylesProperties.length - 1) {
+        const cssRule = `${mediaRule} ${variablesValues} } }`;
+        mediaRules.push(cssRule);
+      }
+    });
+  });
+
+  const rulesAsString = mediaRules.toString().replaceAll(',', '').replaceAll(' ', '');
   return rulesAsString;
 };

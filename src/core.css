@@ -1,0 +1,21 @@
+.rar--group {
+  display: flex;
+  width: 100%;
+}
+
+.rar--box {
+  display: flex;
+  padding: 5px 0;
+}
+
+.rar--box:focus-visible {
+  border: 4px solid white !important;
+  border-radius: var(--rar--box-radius, 0);
+  box-shadow: 0 0 0 4px #0079ff; /* Firefox user-agent stylesheet focus color */
+  outline: 10px red;
+}
+
+.rar--svg {
+  display: flex;
+  aspect-ratio: 1;
+}

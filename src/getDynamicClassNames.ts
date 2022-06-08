@@ -1,13 +1,10 @@
 import { roundToHalf } from './utils';
 
-import { RatingProps, ReadOnlyProps, SharedProps, CSSClassName } from './types';
+import { RatingProps, ReadOnlyProps, SharedProps } from './exportedTypes';
 
 type RatingValues = RatingProps['value'][];
 
 type AbsoluteHalfFill = NonNullable<ReadOnlyProps['halfFillMode']>;
-
-const boxShared: CSSClassName = 'rar--hf-svg-fill';
-const svgShared: CSSClassName = 'rar--hf-svg-box-bg';
 
 export const getHalfFillClassNames = (
   ratingValue: RatingProps['value'],
@@ -19,20 +16,20 @@ export const getHalfFillClassNames = (
   const classNames: string[] = ratingValues.map((_, index) => {
     if (absoluteHalfFillMode === 'box') {
       if (index > intersectionIndex) {
-        return `rar--hf-box-off ${boxShared}`;
+        return `rar--hf-box-off`;
       }
       if (index === intersectionIndex) {
-        return `rar--hf-box-int ${boxShared}`;
+        return `rar--hf-box-int`;
       }
-      return `rar--hf-box-on ${boxShared}`;
+      return `rar--hf-box-on`;
     }
     if (index > intersectionIndex) {
-      return `rar--hf-svg-off ${svgShared}`;
+      return 'rar--hf-svg-off';
     }
     if (index === intersectionIndex) {
-      return `rar--hf-svg-int ${svgShared}`;
+      return 'rar--hf-svg-on';
     }
-    return `rar--hf-svg-on ${svgShared}`;
+    return 'rar--hf-svg-on';
   });
 
   return classNames;

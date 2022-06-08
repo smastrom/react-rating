@@ -1,0 +1,99 @@
+/* direction */
+
+.rar--dir-x {
+  flex-direction: row;
+}
+
+.rar--dir-y {
+  flex-direction: column;
+}
+
+/* spaceInside */
+
+.rar--space-sm .rar--svg {
+  padding: 12.5%;
+}
+
+.rar--space-md .rar--svg {
+  padding: 25%;
+}
+
+.rar--space-lg .rar--svg {
+  padding: 50%;
+}
+
+/* spaceBetween */
+
+.rar--dir-x.rar--gap-sm .rar--svg {
+  margin: 0 6.25%;
+}
+
+.rar--dir-x.rar--gap-md .rar--svg {
+  margin: 0 12.5%;
+}
+
+.rar--dir-x.rar--gap-lg .rar--svg {
+  margin: 0 25%;
+}
+
+.rar--dir-y.rar--gap-sm .rar--svg {
+  margin: 6.25% 0;
+}
+
+.rar--dir-y.rar--gap-md .rar--svg {
+  margin: 12.5% 0;
+}
+
+.rar--dir-y.rar--gap-lg .rar--svg {
+  margin: 25% 0;
+}
+
+/* radius */
+
+.rar--rx-sm .rar--svg {
+  border-radius: 5px;
+}
+
+.rar--rx-md .rar--svg {
+  border-radius: 10px;
+}
+
+.rar--rx-lg .rar--svg {
+  border-radius: 20px;
+}
+
+.rar--rx-full .rar--svg {
+  border-radius: 100%;
+}
+
+/* SVG Stroke */
+
+.rar--has-stroke .rar--svg {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Box border */
+
+.rar--has-border .rar--svg {
+  border-width: var(--rar--border-width);
+  border-style: solid;
+}
+
+/* Misc */
+
+.rar--pointer .rar--box {
+  cursor: pointer;
+}
+
+.rar--hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,0 +1,58 @@
+/*** Transitions ***/
+
+/* Easing source: https://easings.net/it#easeOutSine */
+
+/* Colors */
+
+.rar--fx-colors {
+  --rar--easing: 150ms cubic-bezier(0.61, 1, 0.88, 1);
+}
+
+.rar--fx-colors .rar--svg {
+  transition-duration: 150ms;
+  transition-timing-function: var(--rar--easing);
+  transition-property: background-color, border-color, fill, stroke;
+}
+
+/* Opacity */
+
+.rar--fx-opacity .rar--off {
+  opacity: 0.35;
+  transition: opacity var(--rar--easing);
+}
+
+.rar--fx-opacity .rar--on {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .rar--fx-opacity .rar--box:hover {
+    opacity: 1;
+  }
+}
+
+/* Zoom */
+
+@media (hover: hover) {
+  .rar--fx-zoom .rar--box {
+    transition: transform var(--rar--easing);
+    transform: scale(1);
+  }
+
+  .rar--fx-zoom .rar--box:hover {
+    transform: scale(1.15);
+  }
+}
+
+/* Position */
+
+@media (hover: hover) {
+  .rar--fx-position .rar--box {
+    transition: transform var(--rar--easing);
+    transform: translateY(0%);
+  }
+
+  .rar--fx-position .rar--box:hover {
+    transform: translateY(-15%);
+  }
+}

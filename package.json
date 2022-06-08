@@ -10,7 +10,7 @@
   "style": "dist/index.min.css",
   "repository": {
     "type": "git",
-    "url": "git://github.com/smastrom/react-rating-input.git"
+    "url": "https://github.com/smastrom/react-advanced-rating"
   },
   "files": [
     "dist"
@@ -26,9 +26,7 @@
   "scripts": {
     "dev": "vite",
     "build": "rimraf dist && tsc && vite build",
-    "local-publish": "yarn build && yalc publish",
-    "push": "yarn build && yalc push",
-    "preview": "vite preview",
+    "examples": "yarn build && cd dist && cp index.css index.js index.d.ts ../examples/next/react-advanced-rating/",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "peerDependencies": {

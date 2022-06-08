@@ -2,15 +2,47 @@ import React, { Profiler, ProfilerOnRenderCallback, useEffect, useRef, useState 
 
 import { Rating } from '../src/Rating';
 
-import { ItemStylesProp } from '../src/types';
+import { ItemStylesProp } from '../src/exportedTypes';
 
-import '../src/index.css';
+import '../src/utils.css';
+import '../src/core.css';
+import '../src/colors.css';
+import '../src/transitions.css';
+import '../src/half-fill.css';
 
-const Face = (
+const HappyFace = (
   <>
-    <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8 0-1.168.258-2.275.709-3.276.154.09.308.182.456.276.396.25.791.5 1.286.688.494.187 1.088.312 1.879.312.792 0 1.386-.125 1.881-.313s.891-.437 1.287-.687.792-.5 1.287-.688c.494-.187 1.088-.312 1.88-.312s1.386.125 1.88.313c.495.187.891.437 1.287.687s.792.5 1.287.688c.178.067.374.122.581.171.191.682.3 1.398.3 2.141 0 4.411-3.589 8-8 8z" />
-    <circle cx="8.5" cy="12.5" r="1.5" />
-    <circle cx="15.5" cy="12.5" r="1.5" />
+    <path d="M7.3010863,14.0011479 C8.0734404,15.7578367 9.98813711,17 11.9995889,17 C14.0024928,17 15.913479,15.7546194 16.6925307,14.0055328" />
+    <line x1="9" y1="9" x2="9" y2="9" />
+    <line x1="15" y1="9" x2="15" y2="9" />
+    <circle cx="12" cy="12" r="10" />
+  </>
+);
+
+const NeutralFace = (
+  <>
+    <line x1="9" y1="9" x2="9" y2="9" />
+    <line x1="15" y1="9" x2="15" y2="9" />
+    <path d="M16,15 L8,15" />
+    <circle cx="12" cy="12" r="10" />
+  </>
+);
+
+const SadFace = (
+  <>
+    <line x1="9" y1="9" x2="9" y2="9" />
+    <line x1="15" y1="9" x2="15" y2="9" />
+    <path d="M8,16 C9.33333333,15.3333333 10.6656028,15.0003822 11.9968085,15.0011466 C13.3322695,15.0003822 14.6666667,15.3333333 16,16" />
+    <circle cx="12" cy="12" r="10" />
+  </>
+);
+
+const SadFace2 = (
+  <>
+    <line stroke-linecap="round" x1="9" y1="9" x2="9" y2="9" />
+    <line stroke-linecap="round" x1="15" y1="9" x2="15" y2="9" />
+    <path d="M8,16 C9.33333333,15.3333333 10.6656028,15.0003822 11.9968085,15.0011466 C13.3322695,15.0003822 14.6666667,15.3333333 16,16" />{' '}
+    <circle cx="12" cy="12" r="10" />
   </>
 );
 
@@ -31,17 +63,14 @@ const Mail = (
 );
 
 const testStylesArr: ItemStylesProp = {
-  svgChildNodes: [Face, Star, Face, Face, Face],
+  svgChildNodes: [SadFace2, NeutralFace, HappyFace],
 
-  itemStrokeWidth: 0.5,
-  itemStrokeStyle: 'round',
+  itemStrokeWidth: 2,
 
-  activeFillColor: 'white',
   activeStrokeColor: 'green',
-  inactiveFillColor: 'red',
-  // inactiveStrokeColor: 'white',
+  inactiveStrokeColor: 'white',
 
-  activeBoxColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
+  activeBoxColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'], // To do: check length
   inactiveBoxColor: '#dddddd',
 
   activeBoxBorderColor: ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'],
@@ -101,8 +130,6 @@ const App = () => {
     return () => document.removeEventListener('click', onClickOutside);
   }, []);
 
-  // Pass all itemStyles to RatingItem ?
-
   return (
     <div
       style={{
@@ -117,37 +144,29 @@ const App = () => {
     >
       <div
         style={{
-          maxWidth: '600px',
+          maxWidth: '500px',
         }}
       >
-        {/* <Profiler onRender={onRender} id="rating"> */}
-        <Rating
-          // readOnly
-          ref={ratingInputRef}
-          limit={5}
-          aria-label="Ciao"
-          onChange={(value) => setValue(value)}
-          value={value}
-          // itemStyles={testStylesArr}
-          transition="position"
-          // highlightOnlySelected
-          orientation="horizontal"
-          accessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}
-          halfFillMode="svg"
-          boxMargin={5}
-          boxRadius={5}
-          boxPadding={5}
-          boxBorderWidth={3}
-          breakpoints={{
-            610: {
-              boxMargin: 10,
-              boxRadius: 20,
-              boxPadding: 10,
-            },
-          }}
-          onHoverChange={(hoveredVal: number): void => setHoveredValue(hoveredVal)}
-        />
-        {/* </Profiler> */}
+        <Profiler onRender={onRender} id="rating">
+          <Rating
+            // readOnly
+            ref={ratingInputRef}
+            limit={3}
+            aria-label="Ciao"
+            onChange={(value) => setValue(value)}
+            value={3}
+            itemStyles={testStylesArr}
+            transition="position"
+            // highlightOnlySelected
+            orientation="horizontal"
+            spaceBetween="small"
+            spaceInside="small"
+            radius="medium"
+            accessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}
+            halfFillMode="box"
+            onHoverChange={(hoveredVal: number): void => setHoveredValue(hoveredVal)}
+          />
+        </Profiler>
       </div>
 
       <h3>Selected: {displayRating(value)}</h3>

@@ -1,4 +1,8 @@
-import { ValidArrayColors } from './types';
+import { useEffect, useLayoutEffect } from 'react';
+
+export const isSSR = typeof window === 'undefined';
+
+export const useIsomorphicLayoutEffect = isSSR ? useEffect : useLayoutEffect;
 
 export const isPlainObject = (object: any) =>
   !Array.isArray(object) && typeof object === 'object' && object !== null;
@@ -17,25 +21,12 @@ export const roundToHalf = (number: number) => Math.round(number * 2) / 2;
 
 export const getUniqueId = () => (Math.random() + 1).toString(36).substring(7);
 
-export const cleanupSplitColors = (object: object) => {
-  const staticColors = { ...object };
-  const arrayColors: ValidArrayColors = {};
-
-  Object.entries(staticColors).forEach(([key, value]) => {
-    if (!Array.isArray(value) && !isValidColor(value)) {
-      delete staticColors[key as keyof typeof staticColors];
-    } else if (Array.isArray(value)) {
-      const cleanColors = value.filter((color) => isValidColor(color));
-      if (cleanColors.length > 0) {
-        arrayColors[key as keyof ValidArrayColors] = cleanColors;
-        delete staticColors[key as keyof typeof staticColors];
-      } else {
-        delete staticColors[key as keyof typeof staticColors];
-      }
-    }
-  });
-
-  return { staticColors, arrayColors };
+export const isFinalValueFloat = (ratingValue: number) => {
+  const roundedHalf = Number.isInteger(roundToHalf(ratingValue));
+  if (Number.isInteger(roundedHalf)) {
+    return false;
+  }
+  return true;
 };
 
 export const getIntersectionIndex = (ratingValues: number[], ratingValue: number) => {
@@ -45,12 +36,4 @@ export const getIntersectionIndex = (ratingValues: number[], ratingValue: number
   }
   const intersectionIndex = Math.floor(roundedHalf);
   return intersectionIndex;
-};
-
-export const isFinalValueFloat = (ratingValue: number) => {
-  const roundedHalf = roundToHalf(ratingValue);
-  if (Number.isInteger(roundedHalf)) {
-    return false;
-  }
-  return true;
 };

@@ -1,30 +1,34 @@
-import { setBoxStylesCssVars, setColorCssVars } from './setStaticCssVars';
+import { setColorCssVars } from './setColorsCssVars';
 
-import { CSSVariables, RatingProps, MergedStyles } from './types';
+import { RatingProps, ItemStylesProp } from './exportedTypes';
+import { CSSVariables, StaticColors } from './internalTypes';
 
 export const getStaticCssVars = (
-  mergedStyles: MergedStyles,
+  staticColors: StaticColors,
+  boxBorderWidth: any,
+  itemStrokeWidth: NonNullable<ItemStylesProp['itemStrokeWidth']>,
   deservesHalfFill: boolean,
   halfFillModeProp: RatingProps['halfFillMode']
 ): CSSVariables => {
   const cssVars: CSSVariables = {};
 
-  Object.entries(mergedStyles.boxStyles).forEach(([key, value]) => {
-    if (typeof value !== 'number') {
-      return;
-    }
-    setBoxStylesCssVars(cssVars, key, value);
-  });
+  if (typeof boxBorderWidth === 'number' && boxBorderWidth > 0) {
+    cssVars['--rar--border-width'] = `${boxBorderWidth}px`;
+  }
 
   if (deservesHalfFill) {
     if (halfFillModeProp === 'box') {
-      delete mergedStyles.colors.activeFillColor;
+      delete staticColors.activeFillColor;
     } else {
-      delete mergedStyles.colors.activeBoxColor;
+      delete staticColors.activeBoxColor;
     }
   }
 
-  Object.entries(mergedStyles.colors).forEach(([key, value]) => {
+  if (itemStrokeWidth === 0) {
+    delete staticColors.activeStrokeColor, delete staticColors.inactiveStrokeColor;
+  }
+
+  Object.entries(staticColors).forEach(([key, value]) => {
     setColorCssVars(cssVars, key, value as string);
   });
 

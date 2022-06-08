@@ -37,35 +37,6 @@ export default defineConfig({
             defaults: true,
             drop_console: false,
           },
-          mangle: {
-            properties: {
-              keep_quoted: true,
-              reserved: [
-                'value',
-                'limit',
-                'readOnly',
-                'onChange',
-                'onHoverChange',
-                'highlightOnlySelected',
-                'enableKeyboard',
-                'orientation',
-                'transition',
-                'itemStyles',
-                'boxMargin',
-                'boxRadius',
-                'boxPadding',
-                'boxBorderWidth',
-                'breakpoints',
-                'halfFillMode',
-                'labelledBy',
-                'accessibleLabels',
-                'accessibleLabel',
-                'id',
-                'className',
-                'style',
-              ],
-            },
-          },
         }),
       ],
     },
@@ -74,12 +45,9 @@ export default defineConfig({
     react({ jsxRuntime: 'classic' }),
     dts({
       outputDir: 'dist/types',
-      include: ['src/Rating.tsx', 'src/types.ts'],
+      include: ['src/exportedTypes.ts'],
       beforeWriteFile: (_, content) => {
-        const cleanContent = content
-          .replace("import { RatingProps } from './types';", '')
-          .replace('/// <reference types="vite/client" />', '')
-          .replace('export {};', '');
+        const cleanContent = content.replace('export {};', '');
 
         appendFile('dist/index.d.ts', cleanContent, (err: any) => {
           if (err) {

@@ -1,51 +1,57 @@
-import React, { forwardRef, useRef, useState, useLayoutEffect, useEffect } from 'react';
+import React, { forwardRef, useRef, useState, useEffect } from 'react';
 
 import { RatingItem } from './RatingItem';
 import { getDynamicCssVars } from './getDynamicCssVars';
 import { getActiveClassNames } from './getDynamicClassNames';
 import { getHalfFillClassNames } from './getDynamicClassNames';
-import { getTransitionClassNames } from './getTransitionClassNames';
 import { getStaticCssVars } from './getStaticCssVars';
-import { createBreakpointsStyleElement } from './createBreakpointsStyleElement';
+import { splitColors } from './splitColors';
+import { getErrors } from './getErrors';
+import {
+  getGapClassName,
+  getPaddingClassName,
+  getRadiusClassName,
+  getTransitionClassNames,
+} from './getStaticClassNames';
 import {
   isFinalValueFloat,
   getIntersectionIndex,
-  getUniqueId,
-  isObjectWithKeys,
   isValidPositiveNumber as isValidStroke,
-  cleanupSplitColors,
+  useIsomorphicLayoutEffect,
+  getUniqueId,
 } from './utils';
-import { getErrors } from './getErrors';
 
+import { RatingProps, ItemStylesProp, Rating as RatingComponent } from './exportedTypes';
 import {
-  RatingProps,
-  ItemStylesProp,
   CSSVariables,
   CSSClassName,
   MaybeEmptyCSSClassName,
-  TagID,
-  MergedStyles,
-  MaybeInvalidBreakPoints,
   RequireAtLeastOne,
   ValidArrayColors,
-} from './types';
+} from './internalTypes';
 
-const Star = <path d="M100,10L40 198 190 78 10 78 160 198z" />;
+const Star = (
+  <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
+);
 
 export const defaultItemStyles: ItemStylesProp = {
   svgChildNodes: Star,
-  itemStrokeWidth: 2,
-  itemStrokeStyle: 'round',
-  activeStrokeColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
-  activeBoxColor: 'aliceblue',
-  activeFillColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
-  inactiveFillColor: 'rgba(0, 0, 0, 0.25)',
+  itemStrokeWidth: 25,
+  boxBorderWidth: 2,
+  // activeFillColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
+  activeFillColor: '#ffb23f',
+  inactiveFillColor: '#FFF7ED',
+  activeStrokeColor: '#e17b21',
+  activeBoxBorderColor: 'red',
+  activeBoxColor: 'green',
+  inactiveBoxColor: 'blue',
+  inactiveStrokeColor: '#eda76a',
 };
 
-export const Rating = forwardRef<HTMLDivElement, RatingProps>(
+export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingProps>(
   (
     {
-      value = 0,
+      value = undefined,
       limit = 5,
       readOnly = false,
       onChange,
@@ -53,13 +59,11 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       highlightOnlySelected = false,
       enableKeyboard = true,
       orientation = 'horizontal',
-      transition = 'none', // To do: maybe set 'colors' as default?
+      spaceBetween = 'small',
+      spaceInside = 'small',
+      radius = 'none',
+      transition = 'colors',
       itemStyles = defaultItemStyles,
-      boxMargin = 5,
-      boxRadius = 0,
-      boxPadding = 5,
-      boxBorderWidth = 0,
-      breakpoints,
       halfFillMode = 'svg',
       labelledBy,
       accessibleLabels,
@@ -70,7 +74,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
     },
     externalRef
   ) => {
-    const { svgChildNodes, itemStrokeStyle, itemStrokeWidth, ...colors } = itemStyles;
+    const { svgChildNodes, itemStrokeWidth, boxBorderWidth, ...colors } = itemStyles;
 
     const { shouldRender, errorReason } = getErrors(
       limit,
@@ -94,7 +98,9 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
     const isEligibleForHalfFill = hasPrecision && !highlightOnlySelected;
     const isNotEligibleForHalfFill = hasPrecision && highlightOnlySelected;
 
-    const ratingValue = isNotEligibleForHalfFill ? Math.round(value) : value;
+    const ratingValue = (
+      isNotEligibleForHalfFill ? Math.round(value as number) : value
+    ) as number;
     const currentRatingIndex = isEligibleForHalfFill
       ? getIntersectionIndex(ratingValues, ratingValue)
       : ratingValues.indexOf(ratingValue);
@@ -103,7 +109,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
 
     /* CSS helpers */
 
-    const { staticColors, arrayColors } = cleanupSplitColors(colors);
+    const { staticColors, arrayColors } = splitColors(colors);
     const hasArrayColors = Object.keys(arrayColors).length > 0;
 
     const absoluteStrokeWidth = isValidStroke(itemStrokeWidth) ? itemStrokeWidth : 0;
@@ -111,25 +117,20 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
 
     /* Refs */
 
-    const breakpointsStyleTagId = useRef<string | null>(null);
-    const uniqueLabelsIds = useRef<string[]>(
-      readOnly === false ? ratingValues.map(() => getUniqueId()) : []
-    );
-
+    const uniqueLabelsIds = useRef<string[] | []>([]);
     const roleRadioDivs = useRef<HTMLDivElement[] | []>([]);
 
-    /* Styles getters */
+    /* State getters */
 
-    const getStaticStyles = () => {
-      const mergedStyles: MergedStyles = {
-        boxStyles: { boxMargin, boxPadding, boxRadius, boxBorderWidth },
-        colors: staticColors,
-      };
-
-      return {
-        staticCssVars: getStaticCssVars(mergedStyles, deservesHalfFill, absoluteHalfFillMode),
-      };
-    };
+    const getStaticStyles = () => ({
+      staticCssVars: getStaticCssVars(
+        staticColors,
+        boxBorderWidth,
+        absoluteStrokeWidth as number,
+        deservesHalfFill,
+        absoluteHalfFillMode
+      ),
+    });
 
     const getDynamicClassNames = (currentSelectedIndex: number) => {
       if (deservesHalfFill) {
@@ -150,7 +151,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
               absoluteHalfFillMode,
               deservesHalfFill
             )
-          : [{}],
+          : [],
     });
 
     /* State */
@@ -166,33 +167,24 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       ...getDynamicStyles(),
     });
 
-    /* Effects */
+    /* Effect */
 
-    useLayoutEffect(() => {
-      if (isObjectWithKeys(breakpoints)) {
-        if (!breakpointsStyleTagId.current) {
-          breakpointsStyleTagId.current = getUniqueId();
-        }
-        const tagId: TagID = `rar_bp_${breakpointsStyleTagId.current}`;
-        const breakpointsStyleElem = createBreakpointsStyleElement(
-          tagId,
-          breakpoints as MaybeInvalidBreakPoints
-        );
-
-        if (breakpointsStyleElem) {
-          document.head.appendChild(breakpointsStyleElem);
-          return () => {
-            if (document.getElementById(tagId)) {
-              document.head.removeChild(breakpointsStyleElem);
-            }
-          };
-        }
+    useIsomorphicLayoutEffect(() => {
+      if (!readOnly && uniqueLabelsIds.current.length === 0) {
+        uniqueLabelsIds.current = ratingValues.map(() => getUniqueId());
       }
     }, []);
 
     useEffect(() => {
       setStyles({ ...getStaticStyles(), ...getDynamicStyles() });
-    }, [ratingValue]);
+    }, [
+      ratingValue,
+      itemStyles,
+      boxBorderWidth,
+      halfFillMode,
+      orientation,
+      highlightOnlySelected, // To do: check again the deps
+    ]);
 
     /* Mouse handlers */
 
@@ -216,6 +208,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
             highlightOnlySelected
           )
         : [];
+
       setStyles({ ...styles, dynamicCssVars, dynamicClassNames });
     };
 
@@ -276,30 +269,60 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       }
     };
 
-    /* Radio-group/parent props */
+    /* Radio-group props */
 
-    const getRatingClassNames = () => {
+    const getClassNames = (): string => {
+      const cursorClassName: MaybeEmptyCSSClassName = !readOnly ? 'rar--pointer' : '';
       const orientationClassName: CSSClassName = `rar--dir-${
         orientation === 'vertical' ? 'y' : 'x'
       }`;
-      const strokeStyleClassName: CSSClassName = `rar--stroke-${
-        itemStrokeStyle === 'sharp' ? 'sharp' : 'round'
-      }`;
-      const breakpointsTargetClassName: MaybeEmptyCSSClassName = breakpointsStyleTagId.current
-        ? `rar--${breakpointsStyleTagId.current}`
-        : '';
-
-      const sharedClassNames: MaybeEmptyCSSClassName = `rar--group ${orientationClassName}
-      ${strokeStyleClassName} ${className || ''} ${breakpointsTargetClassName}`;
-
-      if (!readOnly) {
-        const needsTransitionClassNames = !readOnly && transition !== 'none';
-        const transitionClassNames = needsTransitionClassNames
-          ? getTransitionClassNames(transition)
+      const radiusClassName: MaybeEmptyCSSClassName =
+        typeof radius === 'string' && radius !== 'none' ? getRadiusClassName(radius) : '';
+      const borderClassName: MaybeEmptyCSSClassName =
+        typeof boxBorderWidth === 'number' && boxBorderWidth > 0 ? 'rar--has-border' : '';
+      const strokeClassName: MaybeEmptyCSSClassName =
+        (absoluteStrokeWidth as number) > 0 ? 'rar--has-stroke' : '';
+      const transitionClassName: MaybeEmptyCSSClassName =
+        !readOnly && transition !== 'none' ? getTransitionClassNames(transition) : '';
+      const gapClassName =
+        typeof spaceBetween === 'string' && spaceBetween !== 'none'
+          ? getGapClassName(spaceBetween)
           : '';
-        return `${sharedClassNames} ${transitionClassNames}`;
+      const paddingClassName =
+        typeof spaceInside === 'string' && spaceBetween !== 'none'
+          ? getPaddingClassName(spaceInside)
+          : '';
+
+      return `rar--group ${orientationClassName} ${strokeClassName} ${borderClassName}
+      ${transitionClassName} ${radiusClassName} ${cursorClassName} ${gapClassName}
+      ${paddingClassName} ${className || ''}`
+        .replace(/  +/g, ' ')
+        .trimEnd();
+    };
+
+    /* Radios */
+
+    const getRadioProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
+      if (!readOnly) {
+        return {
+          role: 'radio',
+          'aria-labelledby': `rar_label_${uniqueLabelsIds.current[childIndex]}`,
+          'aria-checked': ratingValues[childIndex] === ratingValue,
+          ref: (radioChildNode: HTMLDivElement) =>
+            (roleRadioDivs.current[childIndex] = radioChildNode),
+          onClick: (event: React.MouseEvent<HTMLDivElement>) => handleClick(event, childIndex),
+          onMouseEnter: () => handleMouseEnter(childIndex),
+          onMouseLeave: handleMouseLeave,
+          tabIndex:
+            enableKeyboard === true && ratingValues[childIndex] === ratingValue ? 0 : -1,
+          onKeyDown:
+            enableKeyboard === true
+              ? (event: React.KeyboardEvent<HTMLDivElement>) =>
+                  handleKeyDown(event, childIndex)
+              : undefined,
+        };
       }
-      return sharedClassNames;
+      return {};
     };
 
     const getRatingAriaProps = (): React.HTMLProps<HTMLDivElement> => {
@@ -316,53 +339,6 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
         role: 'img',
         'aria-label': accessibleLabel,
       };
-    };
-
-    /* Rating boxes props */
-
-    const getBoxClassNames = (childIndex: number) => {
-      const activeClasName = styles?.dynamicClassNames?.[childIndex];
-
-      if (!readOnly) {
-        return `rar--box-mask rar--cursor rar--margin ${activeClasName}`;
-      }
-      return `rar--ro-box rar--margin-ro ${activeClasName}`;
-    };
-
-    const getMouseProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
-      if (!readOnly) {
-        return {
-          onMouseEnter: () => handleMouseEnter(childIndex),
-          onMouseLeave: handleMouseLeave,
-        };
-      }
-      return {};
-    };
-
-    /* Radio divs */
-
-    const getRadioProps = (radioChildIndex: number): React.HTMLProps<HTMLDivElement> => {
-      if (!readOnly) {
-        return {
-          role: 'radio',
-          'aria-labelledby': `${uniqueLabelsIds.current[radioChildIndex]}_rar_label_${
-            radioChildIndex + 1
-          }`,
-          'aria-checked': ratingValues[radioChildIndex] === ratingValue,
-          ref: (radioChildNode: HTMLDivElement) =>
-            (roleRadioDivs.current[radioChildIndex] = radioChildNode),
-          onClick: (event: React.MouseEvent<HTMLDivElement>) =>
-            handleClick(event, radioChildIndex),
-          tabIndex:
-            enableKeyboard === true && ratingValues[radioChildIndex] === ratingValue ? 0 : -1,
-          onKeyDown:
-            enableKeyboard === true
-              ? (event: React.KeyboardEvent<HTMLDivElement>) =>
-                  handleKeyDown(event, radioChildIndex)
-              : undefined,
-        };
-      }
-      return {};
     };
 
     /* SVG */
@@ -392,47 +368,35 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
 
     return (
       <div
-        {...getRatingAriaProps()}
         ref={externalRef}
         id={id}
         style={{ ...style, ...styles.staticCssVars }}
-        className={getRatingClassNames()}
+        className={getClassNames()}
+        {...getRatingAriaProps()}
       >
         {/* */}
         {/* */}
-        {/* Boxes */}
-        {ratingValues.map((_, childNodeIndex) => (
+        {/* Box */}
+        {ratingValues.map((_, childIndex) => (
           <div
-            {...getMouseProps(childNodeIndex)}
-            key={`rar_mask_${childNodeIndex}`}
-            className={getBoxClassNames(childNodeIndex)}
-            style={readOnly ? styles?.dynamicCssVars?.[childNodeIndex] : {}}
+            key={`rar_box_${childIndex}`}
+            className={`rar--box ${styles.dynamicClassNames[childIndex]}`}
+            style={styles?.dynamicCssVars?.[childIndex]}
+            {...getRadioProps(childIndex)}
           >
             {/* */}
             {/* */}
-            {/* Radios & SVG */}
-            {!readOnly ? (
-              <div
-                {...getRadioProps(childNodeIndex)}
-                className="rar--box"
-                style={styles?.dynamicCssVars?.[childNodeIndex]}
-              >
-                <RatingItem {...getSvgRatingItemProps(childNodeIndex)} />
-              </div>
-            ) : (
-              <RatingItem {...getSvgRatingItemProps(childNodeIndex)} />
-            )}
+            {/* SVG */}
+            <RatingItem {...getSvgRatingItemProps(childIndex)} />
             {/* */}
             {/* */}
             {/* Labels */}
             {!readOnly && (
               <span
                 className="rar--hidden"
-                id={`${uniqueLabelsIds.current[childNodeIndex]}_rar_label_${
-                  childNodeIndex + 1
-                }`}
+                id={`rar_label_${uniqueLabelsIds.current[childIndex]}`}
               >
-                {getRadioLabels()?.[childNodeIndex]}
+                {getRadioLabels()?.[childIndex]}
               </span>
             )}
           </div>

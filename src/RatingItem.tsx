@@ -1,27 +1,35 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-import { getUniqueId, toSecondDecimal } from './utils';
+import { getUniqueId, toSecondDecimal, useIsomorphicLayoutEffect } from './utils';
 
-import { MaybeEmptyCSSClassName, RatingItemProps } from './types';
-
-export type KeyAndValueStrings = {
-  [key: string]: string;
-};
+import { RatingItemProps, KeyAndValueStrings } from './internalTypes';
 
 export const RatingItem = ({
   svgChildNodes,
   itemStrokeWidth = 0,
   hasHalfFill = false,
 }: RatingItemProps) => {
-  const svgRef = useRef<SVGPathElement | null>(null);
+  /* Helpers */
 
-  const uniqId = useRef<string | null>(hasHalfFill ? getUniqueId() : null);
+  const strokeOffset = itemStrokeWidth > 0 ? -(itemStrokeWidth / 2) : 0;
+  const translateOffset = itemStrokeWidth > 0 ? `${strokeOffset} ${strokeOffset}` : '0 0';
+
+  /* Refs */
+
+  const svgRef = useRef<SVGPathElement | null>(null);
+  const uniqId = useRef<string | null>(null);
+
+  /* State */
 
   const [svgData, setSvgData] = useState<KeyAndValueStrings | null>(null);
 
-  const strokeOffset = itemStrokeWidth > 0 ? -(itemStrokeWidth / 2) : 0;
+  /* Helpers */
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
+    if (hasHalfFill && !uniqId.current) {
+      uniqId.current = getUniqueId();
+    }
+
     const {
       width: svgWidth,
       height: svgHeight,
@@ -35,8 +43,6 @@ export const RatingItem = ({
       typeof svgXPos === 'number' &&
       typeof svgYPos === 'number'
     ) {
-      const translateOffset = itemStrokeWidth > 0 ? `${strokeOffset} ${strokeOffset}` : '0 0';
-
       const viewBox = `${translateOffset} ${toSecondDecimal(
         svgWidth + itemStrokeWidth
       )} ${toSecondDecimal(svgHeight + itemStrokeWidth)}`;
@@ -50,11 +56,11 @@ export const RatingItem = ({
         translateData,
       });
     }
-  }, []);
+  }, [svgChildNodes, itemStrokeWidth, hasHalfFill]); // To do: maybe add orientation
 
-  const strokeClassName: MaybeEmptyCSSClassName = itemStrokeWidth > 0 ? 'rar--svg-stroke' : '';
+  /* Props */
 
-  const getReadOnlyPrecisionAttrs = () => {
+  const getHalfFillAttr = () => {
     if (hasHalfFill) {
       return {
         fill: `url('#${uniqId.current}_rar_hf')`,
@@ -63,30 +69,47 @@ export const RatingItem = ({
     return {};
   };
 
+  const getStrokeAttribute = () => {
+    if (itemStrokeWidth > 0) {
+      return {
+        strokeWidth: itemStrokeWidth,
+      };
+    }
+    return {};
+  };
+
+  const getTransform = () => {
+    if (svgData) {
+      const translateProp = `translate(${svgData?.translateData})`;
+      if (translateProp === 'translate(0 0)') {
+        return {};
+      }
+      return { transform: translateProp };
+    }
+    return { transform: undefined };
+  };
+
+  /* Render */
+
   return (
     <svg
+      {...getStrokeAttribute()}
       aria-hidden="true"
-      className={`rar--svg-item ${strokeClassName}`}
+      className="rar--svg"
       xmlns="http://www.w3.org/2000/svg"
       viewBox={svgData ? svgData.viewBox : '0 0 0 0'}
-      strokeWidth={itemStrokeWidth || 0}
-      width="100%"
-      preserveAspectRatio="none"
+      preserveAspectRatio="xMidYMid meet"
     >
       {hasHalfFill && (
         <defs>
           <linearGradient id={`${uniqId.current}_rar_hf`}>
-            <stop className="rar--precision-stop-1" offset="50%" />
-            <stop className="rar--precision-stop-2" offset="50%" />
+            <stop className="rar--svg-stop-1" offset="50%" />
+            <stop className="rar--svg-stop-2" offset="50%" />
           </linearGradient>
         </defs>
       )}
 
-      <g
-        ref={svgRef}
-        transform={svgData ? `translate(${svgData.translateData})` : undefined}
-        {...getReadOnlyPrecisionAttrs()}
-      >
+      <g ref={svgRef} {...getTransform()} {...getHalfFillAttr()}>
         {svgChildNodes}
       </g>
     </svg>

@@ -1,0 +1,93 @@
+.rar--svg-stop-1 {
+  stop-color: var(--rar--fill-on-color, none);
+}
+
+[dir='rtl'] .rar--svg-stop-1 {
+  stop-color: var(--rar--fill-off-color, none);
+}
+
+.rar--svg-stop-2 {
+  stop-color: var(--rar--fill-off-color, none);
+}
+
+[dir='rtl'] .rar--svg-stop-2 {
+  stop-color: var(--rar--fill-on-color, none);
+}
+
+/* SVG Half Fill */
+
+.rar--hf-svg-on {
+  fill: var(--rar--fill-on-color, none);
+}
+
+.rar--hf-svg-off {
+  fill: var(--rar--fill-off-color, none);
+}
+
+.rar--has-stroke .rar--hf-svg-on {
+  stroke: var(--rar--stroke-on-color, currentColor);
+}
+
+.rar--has-stroke .rar--hf-svg-off {
+  stroke: var(--rar--stroke-off-color, currentColor);
+}
+
+.rar--hf-svg-on .rar--svg,
+.rar--hf-svg-off .rar--svg {
+  background-color: var(--rar--box-off-color, none);
+}
+
+.rar--has-border .rar--hf-svg-on .rar--svg {
+  border-color: var(--rar--border-on-color, currentColor);
+}
+
+.rar--has-border .rar--hf-svg-off .rar--svg {
+  border-color: var(--rar--border-off-color, currentColor);
+}
+
+/* Box half fill */
+
+.rar--hf-box-int .rar--svg {
+  background: linear-gradient(
+    to right,
+    var(--rar--box-on-color, none) 50%,
+    var(--rar--box-off-color, none) 50%
+  );
+}
+
+[dir='rtl'] .rar--hf-box-int .rar--svg {
+  background: linear-gradient(
+    to left,
+    var(--rar--box-on-color, none) 50%,
+    var(--rar--box-off-color, none) 50%
+  );
+}
+
+.rar--hf-box-on .rar--svg {
+  background-color: var(--rar--box-on-color, none);
+}
+
+.rar--hf-box-off .rar--svg {
+  background-color: var(--rar--box-off-color, none);
+}
+
+.rar--hf-box-on .rar--svg,
+.rar--hf-box-off .rar--svg,
+.rar--hf-box-int .rar--svg {
+  fill: var(--rar--fill-off-color, none);
+}
+
+.rar--has-stroke .rar--hf-box-on .rar--svg,
+.rar--has-stroke .rar--hf-box-off .rar--svg,
+.rar--has-stroke .rar--hf-box-int .rar--svg {
+  stroke: var(--rar--stroke-off-color, none);
+}
+
+.rar--has-border .rar--hf-box-on .rar--svg,
+.rar--has-border .rar--hf-box-int .rar--svg {
+  border-color: var(--rar--border-on-color, currentColor);
+}
+
+.rar--has-border .rar--hf-box-off .rar--svg {
+  border-color: var(--rar--border-off-color, currentColor);
+}

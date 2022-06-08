@@ -8,27 +8,35 @@
 
 ## Features
 
-- **Use any SVG**: No headaches or icon fonts in order to use vectors from any source.
-- Highly customizable: fills, strokes, colors, transitions, breakpoints and much more.
+- **Use any SVG**: No headaches, icon fonts or packages to install in order to use vectors from any source.
+- Highly customizable: fills, strokes, colors, transitions and much more.
 - Fully responsive and mobile-first
 - Fully accessible with keyboard navigation and custom labels
 - Fully typed with IntelliSense infos and autocomplete
-- Dependency-free, ~4Kb gzipped.
+- Dependency-free, ~3.5Kb gzipped.
 
 <br />
 
-## Installation
+## Table of contents
 
-Node:
+* [Installation](#installation)
+* [Basic usage](#basic-usage)
+* [API](#api)
+* [Styling](#styling)
+  + [Rating items](#rating-items)
+  + [How to create itemNodes elements](#-`important`--how-to-create-itemnodes-elements)
+  + [Advanced rating items styling](#advanced-rating-items-styling)
+  + [Rating items half-fill and float values](#rating-items-half-fill-and-float-values)
+  + [Styling via CSS](#styling-via-css)
+* [Accessibility](#accessibility)
+* [Troubleshooting](#troubleshooting)
+
+<br/>
+
+## Installation
 
 ```console
 yarn add react-rating-input
-```
-
-In the browser:
-
-```html
-<script type="module"></script>
 ```
 
 <br />
@@ -40,7 +48,7 @@ As an accessible [radio-group](https://dequeuniversity.com/library/aria/radio-an
 ```jsx
 import React, { useState } from "react";
 import { Rating } from 'react-advanced-rating';
-import 'react-advanced-rating/dist/index.min.css'; // <-- Import CSS
+import 'react-advanced-rating/dist/index.css'; // <-- Import CSS
 
 const App = () => {
   const [ratingValue, setRatingValue] = useState(3); // <-- Initial value, init with 0 for no value
@@ -61,7 +69,7 @@ or as an accessible non-interactive [image element](https://developer.mozilla.or
 ```jsx
 import React from 'react';
 import { Rating } from 'react-advanced-rating';
-import 'react-advanced-rating/dist/index.min.css';
+import 'react-advanced-rating/dist/index.css';
 
 const App = () => (
   <div style={{ maxWidth: 600 }}>
@@ -69,6 +77,46 @@ const App = () => (
   </div>
 );
 ```
+
+### Usage with NextJS
+
+**\_app.js**
+
+```jsx
+import 'react-advanced-rating/dist/index.css'; // <-- Import CSS
+
+const MyApp = ({ Component, pageProps }) => <Component {...pageProps} />;
+
+export default MyApp;
+```
+
+**page.js**
+
+```jsx
+import { useState } from 'react';
+import { Rating } from 'react-advanced-rating';
+
+const ProductPage = ({ ratingFromServer }) => (
+  <div style={{ maxWidth: 600 }}>
+    <Rating value={ratingFromServer} readOnly />
+  </div>
+);
+
+export default ProductPage;
+
+export const getServerSideProps = async (req, res) => {
+  // Async ops...
+  return {
+    props: {
+      ratingFromServer,
+    },
+  };
+};
+```
+
+### Usage with Gatsby
+
+Same as NextJS, but the CSS must be imported in **gatsby-browser.js**.
 
 <br />
 
@@ -84,23 +132,42 @@ const App = () => (
 
 <br />
 
+
+### :cyclone: Core
+
 | Prop                  | Type                                                    | Description                                                                                | Default                                                           | Required                        | :thinking:          |
 | --------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------- | ------------------- |
-| value                 | number                                                  | An integer from 0 to **limit**, can be a float if `readOnly` is **true**.                  | undefined                                                         | Yes                             | :green_circle:      |
+| value                 | number                                                  | An integer from 0 to **limit**, can be a float if `readOnly` is **true**.                  | undefined                                                         | **Yes**                         | :green_circle:      |
 | onChange              | function                                                | Callback to update `value`                                                                 | undefined                                                         | Only if `readOnly` is **false** | :large_blue_circle: |
 | onHoverChange         | function                                                | Callback to update the hovered rating value                                                | undefined                                                         | No                              | :large_blue_circle: |
-| readOnly              | boolean                                                 | Whether or not the component should be an accessible image element                         | false                                                             | No                              | :green_circle:      |
 | limit                 | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10         | Maximum number of rating items to display                                                  | 5                                                                 | No                              | :green_circle:      |
+| readOnly              | boolean                                                 | Whether or not the component should be an accessible image element                         | false                                                             | No                              | :green_circle:      |
+
+`ref`, `id`, `className` and `style` are also available.
+
+<br />
+
+### :nail_care: Appearance
+
+| Prop                  | Type                                                    | Description                                                                                | Default                                                           | Required                        | :thinking:          |
+| --------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------- | ------------------- |
 | highlightOnlySelected | boolean                                                 | Whether or not to highlight only the selected rating item.                                 | false                                                             | No                              | :green_circle:      |
-| orientation           | `horizontal` \| `vertical`                              | Orientation of the rating items                                                            | `horizontal`                                                      | No                              | :green_circle:      |
-| transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting                                                | `zoom`                                                            | No                              | :large_blue_circle: |
 | halfFillMode          | `svg` \| `box`                                          | Whether to half-fill the SVG or the box if `value` is a float                              | `svg`                                                             | No                              | :purple_circle:     |
-| itemStyles            | [ItemStyle]()                                           | Custom SVGs and styles                                                                     | [defaultStyles]()                                                 | No                              | :green_circle:      |
-| boxMargin             | number                                                  | Margin between boxes in px                                                                 | 5                                                                 | No                              | :green_circle:      |
-| boxPadding            | number                                                  | Box padding in px                                                                          | 5                                                                 | No                              | :green_circle:      |
-| boxRadius             | number                                                  | Box border radius in px                                                                    | 0                                                                 | No                              | :green_circle:      |
-| boxBorderWidth        | number                                                  | Box border width in px                                                                     | 0                                                                 | No                              | :green_circle:      |
-| breakpoints           | Breakpoints                                             | Box styles breakpoints                                                                     | undefined                                                         | No                              | :green_circle:      |
+| orientation           | `horizontal` \| `vertical`                              | Orientation of the rating items                                                            | `horizontal`                                                      | No                              | :green_circle:      |
+| spaceInside           | `none` \| `small` \| `regular` \| `large`               | Responsive padding of each rating item                                                     | `regular`                                                         | No                              | :green_circle:      |
+| spaceBetween          | `none` \| `small` \| `regular` \| `large`               | Responsive gap between the rating items                                                    | `small`                                                           | No                              | :green_circle:      |
+| radius                | `none` \| `small` \| `medium` \| `full`                 | Radius of each rating item                                                      | `small`                                                           | No                              | :green_circle:      |
+| transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting                                                | `colors`                                                          | No                              | :large_blue_circle: |
+| itemStyles            | [ItemStyle]()                                           | Custom SVGs and colors                                                                     | [defaultStyles]()                                                 | No                              | :green_circle:      |
+
+Would you like to style it via CSS? Take a look [here]().
+
+<br />
+
+### :open_umbrella: Accessibility
+
+| Prop                  | Type                                                    | Description                                                                                | Default                                                           | Required                        | :thinking:          |
+| --------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------- | ------------------- |
 | enableKeyboard        | boolean                                                 | Whether or not to enable keyboard navigation                                               | true                                                              | No                              | :large_blue_circle: |
 | labelledBy            | string                                                  | `id` of the element to be used as radio-group label. Value of `aria-labelledby` attribute. | undefined                                                         | No                              | :large_blue_circle: |
 | accessibleLabels      | string[]                                                | Accessible labels for each rating item                                                     | `Rate 1`, `Rate 2`...                                             | No                              | :large_blue_circle: |
@@ -112,54 +179,47 @@ const App = () => (
 
 ### Rating items
 
-Pass a `ItemStyle` object to `itemStyles` prop:
-
-<strong>Type definition</strong>
-<br />
+You can pass a `ItemStyle` object to `itemStyles` prop:
 
 ```ts
 type ItemStyle = {
-  svgChildNodes: JSX.Element | JSX.Element[];
-  itemStrokeWidth?: number;
-  itemStrokeStyle?: 'round' | 'sharp';
+  itemNodes: JSX.Element | JSX.Element[];
 
-  activeItemColor: string | string[];
+  itemStrokeWidth?: number;
+  boxBorderWidth?: number;
+
+  activeItemColor?: string | string[];
   activeItemStrokeColor?: string | string[];
   activeBoxColor?: string | string[];
   activeBoxBorderColor?: string | string[];
 
-  inactiveItemColor: string;
+  inactiveItemColor?: string;
   inactiveItemStrokeColor?: string;
   inactiveBoxColor?: string;
   inactiveBoxBorderColor?: string;
 };
 ```
 
+It may seem a lot of properties, but they are all optional (except for `svgChildNodes`), if a property is not set, no classes nor CSS variables will be added to the rendered HTML. Just set the ones that you need and that's it.
+
 <details><summary><strong>Default styles</strong></summary>
 <br />
 
 ```jsx
-const Star = <polygon points="100,10 40,198 190,78 10,78 160,198" />;
+const Star = <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />;
 
-const itemStyle = {
+const defaultItemStyles = {
   svgChildNodes: Star,
-  activeItemColor: 'red',
-  activeBoxColor: 'blue',
-  inactiveItemColor: 'red',
-  inactiveBoxColor: 'blue',
+  itemStrokeWidth: 40,
+
+  activeFillColor: '#ffb23f',
+  activeStrokeColor: '#e17b21',
+  
+  inactiveFillColor: '#fff7ed',
+  inactiveStrokeColor: '#e17b21',
 };
 ```
-
-</details>
-
-<details><summary><strong>How itemStrokeStyle works</strong></summary>
-<br />
-
-| Value   | Appearance                              |
-| ------- | --------------------------------------- |
-| `round` | ![](https://i.ibb.co/v3kyz5V/round.png) |
-| `sharp` | ![](https://i.ibb.co/5cXng6v/sharp.png) |
-
+ 
 </details>
 
 <details><summary><strong>How itemStrokeWidth works</strong></summary>
@@ -169,48 +229,75 @@ The stroke width is expressed in _viewBox user coordinate's unit size_ and **not
 
 Depending on the vector nodes provided you may have to input and try different values in order to reach the desidered stroke width.
 
+It is responsive by nature, so expect it to increase/decrease when resizing the container.
+<br />
+
 </details>
 
 <details><summary><strong>Color values</strong></summary>
 <br />
 
-Any valid CSS color string such as `aliceblue`, `#FFF332`, `rgba(0, 0, 0, 0)` or `hsl(69, 22, 200)` will be applied.
+You can pass any valid CSS color string such as `aliceblue`, `#FFF332`, `rgba(0, 0, 0, 0)` or `hsl(69, 22, 200)`.
 
 </details>
 
----
+<br />
 
-Although it is not required to customize styles, if you decide to do that, the object you pass **needs at least** the property `svgChildNodes` set:
+### `IMPORTANT` How to create itemNodes elements
+
+In short, you should include in the JSX element only the inner **<u><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">basic shapes</a></u>** of your SVG: `path`, `circle`, `rect`, `polygon`, `ellipse`, `polyline` and `line`.
+
+Then you should delete any **transform**, fill and stroke-related attribute from such elements. You can safely delete also any `data-*` and `id` attribute. 
+
+The component will take care of rendering a brand-new responsive SVG element with the elements you provided, re-applying proper transforms when necessary.
+
+You will be able to control the fill and the stroke for each rating item directly from `itemStyles` prop.
+
+Just paste or open the SVG with a text editor, it will take 20 seconds:
+
+**Example - SVG Source**
+
+```html
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g transform="translate(0 -0.073)">
+    <!-- Include from here -->
+    <circle
+      cx="4"
+      cy="4"
+      r="4"
+      transform="translate(8 3)" <!-- Delete -->
+      fill="red" <!-- Delete -->
+      stroke="2" <!-- Delete -->
+    />
+    <path
+      transform="translate(0.4 2)" <!-- Delete -->
+      d="M11,13a6.006,6.006,0,0,0-6,6,1,1,0,0,0,1,1H18a1,1,0,0,0,1-1,6.006,6.006,0,0,0-6-6Z"
+    />
+    <!-- To here -->
+  </g>
+</svg>
+```
+
+**Example - Destination**
 
 ```jsx
-const Star = <polygon points="100,10 40,198 190,78 10,78 160,198" />;
+const SmilingFace = (
+  <>
+    <circle cx="4" cy="4" r="4" />
+    <path d="M11,13a6.006,6.006,0,0,0-6,6,1,1,0,0,0,1,1H18a1,1,0,0,0,1-1,6.006,6.006,0,0,0-6-6Z" />
+  </>
+);
 
 const itemStyle = {
-  svgChildNodes: Star,
-};
-
-const App = () => {
-  const [ratingValue, setRatingValue] = useState(3);
-
-  return (
-      <div style={{ maxWidth: 600 }}>
-        <Rating
-            itemStyles={itemStyle}
-            value={ratingValue}
-            onChange={(currentValue) => setRatingValue(currentValue)}
-        >
-      </div>
-  )
+  svgChildNodes: SmilingFace,
+  activeItemColor: 'green',
+  inactiveItemColor: 'gray',
 };
 ```
 
-### How to create svgChildNodes components
+**More examples**
 
-Create a new JSX element from the SVG inner nodes and **remove any transform**, fill, or stroke-related attributes from the source paths.
-
-Rating component will take care of rendering a brand-new SVG element, applying proper transforms if necessary. This is particularly handy when pasting SVG code from Adobe XD or any other source that applies random transforms to your nodes.
-
-<details><summary><strong>Example 1</strong></summary>
+<details><summary><strong>Example 2</strong></summary>
 <br />
 
 **Source**
@@ -239,7 +326,7 @@ Rating component will take care of rendering a brand-new SVG element, applying p
 **Destination**
 
 ```jsx
-const SmilingFace = () => (
+const SmilingFace = (
   <>
     <circle cx="4" cy="4" r="4" />
     <path d="M11,13a6.006,6.006,0,0,0-6,6,1,1,0,0,0,1,1H18a1,1,0,0,0,1-1,6.006,6.006,0,0,0-6-6Z" />
@@ -284,7 +371,97 @@ const itemStyle = {
 **Destination**
 
 ```jsx
-const SmilingFace = () => (
+const SmilingFace = (
+  <>
+    <circle cx="4" cy="4" r="4" />
+    <path d="M11,13a6.006,6.006,0,0,0-6,6,1,1,0,0,0,1,1H18a1,1,0,0,0,1-1,6.006,6.006,0,0,0-6-6Z" />
+  </>
+);
+
+const itemStyle = {
+  svgChildNodes: SmilingFace,
+  activeItemColor: 'green',
+  inactiveItemColor: 'gray',
+};
+```
+
+</details>
+
+<details><summary><strong>Example 2</strong></summary>
+<br />
+
+**Source**
+
+```html
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <!-- Delete -->
+  <g transform="translate(0 -0.073)"> <!-- Delete -->
+    <!-- Include from here -->
+    <circle
+      cx="4"
+      cy="4"
+      r="4"
+      transform="translate(8 3)" <!-- Delete -->
+      fill="red" <!-- Delete -->
+      stroke="2" <!-- Delete -->
+    />
+    <path
+      transform="translate(0.4 2)" <!-- Delete -->
+      d="M11,13a6.006,6.006,0,0,0-6,6,1,1,0,0,0,1,1H18a1,1,0,0,0,1-1,6.006,6.006,0,0,0-6-6Z"
+    />
+    <!-- To here -->
+  </g> <!-- Delete -->
+</svg> <!-- Delete -->
+```
+
+**Destination**
+
+```jsx
+const SmilingFace = (
+  <>
+    <circle cx="4" cy="4" r="4" />
+    <path d="M11,13a6.006,6.006,0,0,0-6,6,1,1,0,0,0,1,1H18a1,1,0,0,0,1-1,6.006,6.006,0,0,0-6-6Z" />
+  </>
+);
+
+const itemStyle = {
+  svgChildNodes: SmilingFace,
+  activeItemColor: 'green',
+  inactiveItemColor: 'gray',
+};
+```
+
+</details>
+
+<details><summary><strong>Example 2</strong></summary>
+<br />
+
+**Source**
+
+```html
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <!-- Delete -->
+  <g transform="translate(0 -0.073)"> <!-- Delete -->
+    <!-- Include from here -->
+    <circle
+      cx="4"
+      cy="4"
+      r="4"
+      transform="translate(8 3)" <!-- Delete -->
+      fill="red" <!-- Delete -->
+      stroke="2" <!-- Delete -->
+    />
+    <path
+      transform="translate(0.4 2)" <!-- Delete -->
+      d="M11,13a6.006,6.006,0,0,0-6,6,1,1,0,0,0,1,1H18a1,1,0,0,0,1-1,6.006,6.006,0,0,0-6-6Z"
+    />
+    <!-- To here -->
+  </g> <!-- Delete -->
+</svg> <!-- Delete -->
+```
+
+**Destination**
+
+```jsx
+const SmilingFace = (
   <>
     <circle cx="4" cy="4" r="4" />
     <path d="M11,13a6.006,6.006,0,0,0-6,6,1,1,0,0,0,1,1H18a1,1,0,0,0,1-1,6.006,6.006,0,0,0-6-6Z" />
@@ -351,6 +528,8 @@ const App = () => (
 );
 ```
 
+
+
 The component will try to round it to the nearest half integer:
 
 ```js
@@ -386,74 +565,63 @@ If you don't want the half-fill feature, simply pass an integer to `value`.
 
 <br />
 
-### Box styles and breakpoints
+### Styling via CSS
 
-You can customize the SVG bounding box layout by setting the props `boxMargin`, `boxPadding`, `boxBorderWidth` and `boxRadius`.
+Although the component already comes with optimal styles configurable via props, and it shouldn't be necessary to touch any CSS it may happen that you have or prefer to.
 
-Their value is always expressed with a **number** representing the pixels.
-
-```ts
-type BoxStyles = {
-  boxMargin?: number;
-  boxPadding?: number;
-  boxRadius?: number;
-  boxBorderWidth?: number;
-};
-```
-
-**Default values**
-
-```js
-{
-  boxMargin = 5,
-  boxPadding = 5,
-  boxRadius = 0,
-  boxBorderWidth = 0,
-}
-```
-
-You can customize the values for different breakpoints by setting the `breakpoints` prop:
-
-```ts
-type Breakpoints = {
-  [key: number]: BoxStyles;
-};
-```
+You can assign a custom class to `<Rating />`:
 
 ```jsx
 const App = () => {
   const [ratingValue, setRatingValue] = useState(3);
 
   return (
-      <div style={{ maxWidth: 600 }}>
-        <RatingInput
+      <div style={{ maxWidth: 250 }}>
+        <Rating
             value={ratingValue}
             onChange={(currentValue) => setRatingValue(currentValue)}
-            boxMargin={10}
-            boxPadding={10}
-            boxRadius={5}
-            boxBorderWidth={2}
-            breakpoints={{
-              375: {
-                boxMargin: 15,
-                boxPadding: 15,
-                boxRadius: 10,
-                boxBorderWidth: 4,
-              },
-              910: {
-                boxMargin: 20,
-                boxPadding: 20,
-                boxRadius: 20,
-                boxBorderWidth: 2,
-              },
-            }}
+            className="my-own-class"
         >
-      </div>
+    </div>
   )
 };
 ```
 
-Each breakpoint will generate a CSS mobile-first media rule such as `@media (min-width: 375px)`.
+Then, disable any style you want to replace via props, so that no variables or classes for that specific style will be generated/injected:
+
+```jsx
+<Rating
+    value={ratingValue}
+    onChange={(currentValue) => setRatingValue(currentValue)}
+    className="my-own-class"
+    spaceBetween="none"
+    radius="none"
+    transition="none"
+>
+```
+
+Then you can target the child elements and style them:
+
+```css
+.my-own-class {
+  gap: 20px;
+}
+
+.my-own-class .rar--box {
+  border-radius: 20px;
+}
+
+.my-own-class .rar--svg-item {
+  transform: scale(1);
+  transition: all 300ms cubic-bezier(0.87, 0, 0.13, 1);
+  opacity: 0.5;
+}
+
+.my-own-class .rar--box.rar--on .rar--svg-item {
+  transform: scale(2);
+  opacity: 1;
+}
+```
 
 <br />
 
@@ -573,6 +741,12 @@ To navigate the rating items:
 
 Check that you have imported the CSS as displayed in the [Basic usage]() section.
 
+### I passed an array of SVGs but the stroke width looks different for each item.
+
+This package enforces you to use icons from the same package and author to keep design consistency. Be sure you are doing that.
+
+You can find clean, attribution-free SVG collections at [SVG Repo](https://www.svgrepo.com/collections/monocolor).
+
 ### I keep getting the error "svgChildNodes is not a valid JSX element".
 
 Check that you are passing a JSX element and not a functional component:
@@ -588,10 +762,6 @@ const Star = <path d="M100,10L40 198 190 78 10 78 160 198z" />;
 ```jsx
 const Star = () => <path d="M100,10L40 198 190 78 10 78 160 198z" />;
 ```
-
-<br />
-
-For any other issue feel free to open an issue.
 
 <br />
 

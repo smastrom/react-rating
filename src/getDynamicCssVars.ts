@@ -1,12 +1,7 @@
-import { setDyamicCssVars } from './setStaticCssVars';
+import { setDyamicCssVars } from './setColorsCssVars';
 
-import {
-  CSSVariables,
-  ItemStylesProp,
-  MaybeArrayColors,
-  RequireAtLeastOne,
-  RatingProps,
-} from './types';
+import { ItemStylesProp, MaybeArrayColors, RatingProps } from './exportedTypes';
+import { CSSVariables, RequireAtLeastOne } from './internalTypes';
 
 type ValidArrayColors = {
   [key in keyof MaybeArrayColors]: string[];
@@ -34,7 +29,7 @@ export const getDynamicCssVars = (
     return [];
   }
 
-  if (itemStrokeWidth > 0) {
+  if (itemStrokeWidth >= 0) {
     delete arrayColors.activeStrokeColor;
   }
 

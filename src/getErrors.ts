@@ -36,10 +36,10 @@ export const getErrors = (
     return setErrors(errorsObj, 'value is invalid');
   }
   if (typeof readOnly !== 'boolean') {
-    return setErrors(errorsObj, 'readOnly is not a boolean');
+    return setErrors(errorsObj, 'readOnly type mismatch');
   }
   if (typeof highlightOnlySelected !== 'boolean') {
-    return setErrors(errorsObj, 'highlightOnlySelected is not a boolean');
+    return setErrors(errorsObj, 'highlightOnlySelected type mismatch');
   }
   if (readOnly === false && typeof onChange !== 'function') {
     return setErrors(errorsObj, 'onChange is required');

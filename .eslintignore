@@ -1,2 +1,5 @@
 vite.config.ts
 dist
+examples
+dev
+node_modules

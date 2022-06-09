@@ -4,15 +4,17 @@
   },
   "extends": [
     "eslint:recommended",
-    "airbnb-typescript",
     "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
-    "plugin:import/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:@typescript-eslint/recommended"
   ],
   "env": {
     "browser": true,
     "node": true
+  },
+  "settings": {
+    "react": {
+      "version": "17.0.2"
+    }
   },
   "rules": {
     "comma-dangle": "off",
@@ -22,8 +24,6 @@
     "space-before-blocks": "off",
     "@typescript-eslint/space-before-blocks": "off",
     "react/display-name": "off",
-    "react/prop-types": "off",
-    "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/prop-types": "off"
   }
 }

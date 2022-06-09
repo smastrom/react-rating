@@ -1,11 +1,8 @@
-import { InputProps } from './exportedTypes';
 import { CSSClassName, MaybeEmptyCSSClassName } from './internalTypes';
 
 const BASE_TRANSITION: CSSClassName = 'rar--fx-colors';
 
-export const getTransitionClassNames = (
-  transitionProp: NonNullable<InputProps['transition']>
-): MaybeEmptyCSSClassName => {
+export const getTransitionClassNames = (transitionProp: string): MaybeEmptyCSSClassName => {
   switch (transitionProp) {
     case 'zoom':
       return `rar--fx-zoom ${BASE_TRANSITION}`;
@@ -20,7 +17,7 @@ export const getTransitionClassNames = (
   }
 };
 
-export const getRadiusClassName = (radiusProp: any): MaybeEmptyCSSClassName => {
+export const getRadiusClassName = (radiusProp: string): MaybeEmptyCSSClassName => {
   switch (radiusProp) {
     case 'small':
       return 'rar--rx-sm';
@@ -35,7 +32,7 @@ export const getRadiusClassName = (radiusProp: any): MaybeEmptyCSSClassName => {
   }
 };
 
-export const getGapClassName = (gapProp: any): MaybeEmptyCSSClassName => {
+export const getGapClassName = (gapProp: string): MaybeEmptyCSSClassName => {
   switch (gapProp) {
     case 'small':
       return 'rar--gap-sm';
@@ -48,7 +45,7 @@ export const getGapClassName = (gapProp: any): MaybeEmptyCSSClassName => {
   }
 };
 
-export const getPaddingClassName = (paddingProp: any): MaybeEmptyCSSClassName => {
+export const getPaddingClassName = (paddingProp: string): MaybeEmptyCSSClassName => {
   switch (paddingProp) {
     case 'small':
       return 'rar--space-sm';

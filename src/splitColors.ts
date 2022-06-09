@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { isSSR } from './utils';
 
 import { ValidArrayColors } from './internalTypes';

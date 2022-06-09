@@ -5,7 +5,7 @@ import { CSSVariables, StaticColors } from './internalTypes';
 
 export const getStaticCssVars = (
   staticColors: StaticColors,
-  boxBorderWidth: any,
+  boxBorderWidth: NonNullable<ItemStylesProp['boxBorderWidth']>,
   itemStrokeWidth: NonNullable<ItemStylesProp['itemStrokeWidth']>,
   deservesHalfFill: boolean,
   halfFillModeProp: RatingProps['halfFillMode']
@@ -25,7 +25,8 @@ export const getStaticCssVars = (
   }
 
   if (itemStrokeWidth === 0) {
-    delete staticColors.activeStrokeColor, delete staticColors.inactiveStrokeColor;
+    delete staticColors.activeStrokeColor;
+    delete staticColors.inactiveStrokeColor;
   }
 
   Object.entries(staticColors).forEach(([key, value]) => {

@@ -727,11 +727,12 @@ const App = () => (
 
 ### Keyboard navigation
 
-To navigate the rating items:
-
-- **Tab** - Focus or blur the current selected rating item
+- **Tab** - Default behavior
+- **Shift + Tab** - Default behavior
 - **Left Arrow | Down Arrow** - Select the next rating item
-- **Right Arrow | Up Arrow** - Select the previous item
+- **Right Arrow | Up Arrow** - Select the previous rating item
+- **Spacebar | Enter** - Confirm the selection and set the rating value
+- **Esc | Backspace** - Reset the rating value to 0
 
 <br />
 

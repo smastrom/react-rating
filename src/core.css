@@ -4,18 +4,34 @@
 }
 
 .rar--box {
+  --rar--offset: 5px;
   display: flex;
-  padding: 5px 0;
-}
-
-.rar--box:focus-visible {
-  border: 4px solid white !important;
-  border-radius: var(--rar--box-radius, 0);
-  box-shadow: 0 0 0 4px #0079ff; /* Firefox user-agent stylesheet focus color */
-  outline: 10px red;
+  padding: var(--rar--offset) 0;
+  width: 100%;
+  flex-grow: 1;
 }
 
 .rar--svg {
   display: flex;
   aspect-ratio: 1;
+  width: 100%;
+  flex-grow: 1;
+}
+
+/* Focus */
+
+.rar--box:focus-visible {
+  position: relative;
+  outline: rgba(0, 0, 0, 0);
+}
+
+.rar--box:focus-visible::after {
+  position: absolute;
+  content: '';
+  box-shadow: inset 0 0 0 3px white;
+  border: 3px solid #0079ff;
+  width: unset;
+  left: unset;
+  height: calc(100% - calc(var(--rar--offset) * 2));
+  box-sizing: border-box;
 }

@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import { ForwardRefExoticComponent, CSSProperties } from 'react';
 
 export type MaybeArrayColors = {
   activeFillColor?: string | string[];
@@ -21,7 +21,7 @@ export type ItemStylesProp = NonArrayColors &
     boxBorderWidth?: number;
   };
 
-type StyleOptions = 'none' | 'small' | 'medium' | 'large';
+export type StyleOptions = 'none' | 'small' | 'medium' | 'large';
 
 /** Props always injected whether readOnly equals to false or not. */
 export type SharedProps = {
@@ -59,6 +59,6 @@ export type InputProps = {
 export type RatingProps = SharedProps & ReadOnlyProps & InputProps;
 
 /** Props injected only if readOnly equals to false. */
-export declare const Rating: React.ForwardRefExoticComponent<
+export declare const Rating: ForwardRefExoticComponent<
   SharedProps & ReadOnlyProps & InputProps & React.RefAttributes<HTMLDivElement>
 >;

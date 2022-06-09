@@ -22,6 +22,7 @@ export const setDyamicCssVars = (
       break;
     case 'activeStrokeColor':
       targetObj[ACTIVE_STROKE_COLOR_VAR] = value;
+      break;
   }
 };
 
@@ -50,5 +51,6 @@ export const setColorCssVars = (targetObj: CSSVariables, key: string, value: str
       break;
     case 'inactiveStrokeColor':
       targetObj['--rar--stroke-off-color'] = value;
+      break;
   }
 };

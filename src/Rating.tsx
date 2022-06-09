@@ -2,8 +2,7 @@ import React, { forwardRef, useRef, useState, useEffect } from 'react';
 
 import { RatingItem } from './RatingItem';
 import { getDynamicCssVars } from './getDynamicCssVars';
-import { getActiveClassNames } from './getDynamicClassNames';
-import { getHalfFillClassNames } from './getDynamicClassNames';
+import { getActiveClassNames, getHalfFillClassNames } from './getDynamicClassNames';
 import { getStaticCssVars } from './getStaticCssVars';
 import { splitColors } from './splitColors';
 import { getErrors } from './getErrors';
@@ -23,7 +22,7 @@ import {
 
 import { RatingProps, ItemStylesProp, Rating as RatingComponent } from './exportedTypes';
 import {
-  CSSVariables,
+  StylesState,
   CSSClassName,
   MaybeEmptyCSSClassName,
   RequireAtLeastOne,
@@ -36,15 +35,9 @@ const Star = (
 
 export const defaultItemStyles: ItemStylesProp = {
   svgChildNodes: Star,
-  itemStrokeWidth: 25,
-  boxBorderWidth: 2,
-  // activeFillColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
   activeFillColor: '#ffb23f',
   inactiveFillColor: '#FFF7ED',
   activeStrokeColor: '#e17b21',
-  activeBoxBorderColor: 'red',
-  activeBoxColor: 'green',
-  inactiveBoxColor: 'blue',
   inactiveStrokeColor: '#eda76a',
 };
 
@@ -75,6 +68,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     externalRef
   ) => {
     const { svgChildNodes, itemStrokeWidth, boxBorderWidth, ...colors } = itemStyles;
+
+    /* Prevent rendering */
 
     const { shouldRender, errorReason } = getErrors(
       limit,
@@ -113,6 +108,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     const hasArrayColors = Object.keys(arrayColors).length > 0;
 
     const absoluteStrokeWidth = isValidStroke(itemStrokeWidth) ? itemStrokeWidth : 0;
+    const absoluteBoxBorderWidth = isValidStroke(boxBorderWidth) ? boxBorderWidth : 0;
     const absoluteHalfFillMode = halfFillMode === 'box' ? 'box' : 'svg';
 
     /* Refs */
@@ -125,7 +121,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     const getStaticStyles = () => ({
       staticCssVars: getStaticCssVars(
         staticColors,
-        boxBorderWidth,
+        absoluteBoxBorderWidth as number,
         absoluteStrokeWidth as number,
         deservesHalfFill,
         absoluteHalfFillMode
@@ -156,12 +152,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     /* State */
 
-    type StylesState = {
-      staticCssVars: CSSVariables;
-      dynamicCssVars: CSSVariables[] | [];
-      dynamicClassNames: string[];
-    };
-
     const [styles, setStyles] = useState<StylesState>({
       ...getStaticStyles(),
       ...getDynamicStyles(),
@@ -183,7 +173,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       boxBorderWidth,
       halfFillMode,
       orientation,
-      highlightOnlySelected, // To do: check again the deps
+      highlightOnlySelected,
+      limit,
     ]);
 
     /* Mouse handlers */
@@ -233,9 +224,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     /* Keyboard handler */
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
-      event.preventDefault();
-      event.stopPropagation();
-
       const previousSibling = index - 1;
       const nextSibling = index + 1;
       const lastSibling = ratingValues.length - 1;
@@ -245,9 +233,14 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
       switch (event.code) {
         case 'Tab':
-          roleRadioDivs.current[index].blur();
+          return true;
+        case 'Enter':
+        case 'Space':
+          onChange(ratingValues[index]);
           break;
         case 'Escape':
+        case 'Backspace':
+          onChange(0);
           roleRadioDivs.current[index].blur();
           break;
         case 'ArrowDown':
@@ -255,18 +248,18 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
           {
             const siblingToFocus = isEventFiringFromLastItem ? 0 : nextSibling;
             roleRadioDivs.current[siblingToFocus].focus();
-            if (typeof onChange === 'function') {
-              onChange(ratingValues[siblingToFocus]);
-            }
           }
           break;
         case 'ArrowUp':
         case 'ArrowLeft': {
           const siblingToFocus = isEventFiringFromFistItem ? lastSibling : previousSibling;
           roleRadioDivs.current[siblingToFocus].focus();
-          onChange(ratingValues[siblingToFocus]);
+          break;
         }
       }
+
+      event.preventDefault();
+      event.stopPropagation();
     };
 
     /* Radio-group props */
@@ -279,7 +272,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       const radiusClassName: MaybeEmptyCSSClassName =
         typeof radius === 'string' && radius !== 'none' ? getRadiusClassName(radius) : '';
       const borderClassName: MaybeEmptyCSSClassName =
-        typeof boxBorderWidth === 'number' && boxBorderWidth > 0 ? 'rar--has-border' : '';
+        (absoluteBoxBorderWidth as number) > 0 ? 'rar--has-border' : '';
       const strokeClassName: MaybeEmptyCSSClassName =
         (absoluteStrokeWidth as number) > 0 ? 'rar--has-stroke' : '';
       const transitionClassName: MaybeEmptyCSSClassName =
@@ -300,6 +293,19 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         .trimEnd();
     };
 
+    const getTabIndex = (childIndex: number): 0 | -1 => {
+      if (enableKeyboard === true) {
+        if (ratingValue === 0 && childIndex === 0) {
+          return 0;
+        }
+        if (ratingValues[childIndex] === ratingValue) {
+          return 0;
+        }
+        return -1;
+      }
+      return -1;
+    };
+
     /* Radios */
 
     const getRadioProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
@@ -313,8 +319,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
           onClick: (event: React.MouseEvent<HTMLDivElement>) => handleClick(event, childIndex),
           onMouseEnter: () => handleMouseEnter(childIndex),
           onMouseLeave: handleMouseLeave,
-          tabIndex:
-            enableKeyboard === true && ratingValues[childIndex] === ratingValue ? 0 : -1,
+          tabIndex: getTabIndex(childIndex),
           onKeyDown:
             enableKeyboard === true
               ? (event: React.KeyboardEvent<HTMLDivElement>) =>
@@ -344,14 +349,14 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     /* SVG */
 
     const getSvgRatingItemProps = (childNodeIndex: number) => {
-      const sharedProps: any = {
+      const sharedProps = {
         svgChildNodes: Array.isArray(svgChildNodes)
           ? svgChildNodes[childNodeIndex]
           : svgChildNodes,
-        itemStrokeWidth: absoluteStrokeWidth,
+        itemStrokeWidth: absoluteStrokeWidth as number,
+        hasHalfFill: false,
       };
       if (deservesHalfFill && absoluteHalfFillMode === 'svg') {
-        // To do: check that this condition is strong enough
         sharedProps['hasHalfFill'] = childNodeIndex === currentRatingIndex;
       }
       return sharedProps;

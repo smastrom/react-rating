@@ -9,21 +9,13 @@ export const RatingItem = ({
   itemStrokeWidth = 0,
   hasHalfFill = false,
 }: RatingItemProps) => {
-  /* Helpers */
-
   const strokeOffset = itemStrokeWidth > 0 ? -(itemStrokeWidth / 2) : 0;
   const translateOffset = itemStrokeWidth > 0 ? `${strokeOffset} ${strokeOffset}` : '0 0';
-
-  /* Refs */
 
   const svgRef = useRef<SVGPathElement | null>(null);
   const uniqId = useRef<string | null>(null);
 
-  /* State */
-
   const [svgData, setSvgData] = useState<KeyAndValueStrings | null>(null);
-
-  /* Helpers */
 
   useIsomorphicLayoutEffect(() => {
     if (hasHalfFill && !uniqId.current) {
@@ -56,7 +48,7 @@ export const RatingItem = ({
         translateData,
       });
     }
-  }, [svgChildNodes, itemStrokeWidth, hasHalfFill]); // To do: maybe add orientation
+  }, [svgChildNodes, itemStrokeWidth, hasHalfFill]);
 
   /* Props */
 

@@ -6,6 +6,12 @@ export type RatingItemProps = NonNullable<
   }
 >;
 
+export type StylesState = {
+  staticCssVars: CSSVariables;
+  dynamicCssVars: CSSVariables[] | [];
+  dynamicClassNames: string[];
+};
+
 type CSSPrefix = 'rar';
 
 export type CSSVariables = {
@@ -17,8 +23,6 @@ export type CSSClassName = `${CSSPrefix}--${string}`;
 export type TagID = `${CSSPrefix}_${string}`;
 
 export type MaybeEmptyCSSClassName = CSSClassName | '';
-
-// Maybe create a new type for repetetions of classNames
 
 export type ActiveColorsStrings = {
   [key in keyof MaybeArrayColors]: string;

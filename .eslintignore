@@ -1,4 +1,7 @@
+e2e
+playwright.config.ts
 vite.config.ts
+tests
 dist
 examples
 dev

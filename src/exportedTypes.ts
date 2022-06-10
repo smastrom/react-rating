@@ -54,6 +54,7 @@ export type InputProps = {
   labelledBy?: string;
   accessibleLabels?: string[];
   transition?: 'colors' | 'zoom' | 'position' | 'opacity' | 'none';
+  isRequired?: boolean;
 };
 
 export type RatingProps = SharedProps & ReadOnlyProps & InputProps;

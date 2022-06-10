@@ -1,17 +1,5 @@
 import { ItemStylesProp, MaybeArrayColors, NonArrayColors } from './exportedTypes';
 
-export type RatingItemProps = NonNullable<
-  Pick<ItemStylesProp, 'svgChildNodes' | 'itemStrokeWidth'> & {
-    hasHalfFill: boolean;
-  }
->;
-
-export type StylesState = {
-  staticCssVars: CSSVariables;
-  dynamicCssVars: CSSVariables[] | [];
-  dynamicClassNames: string[];
-};
-
 type CSSPrefix = 'rar';
 
 export type CSSVariables = {
@@ -40,4 +28,18 @@ export type RequireAtLeastOne<T> = {
 
 export type KeyAndValueStrings = {
   [key: string]: string;
+};
+
+export type TabIndex = -1 | 0;
+
+export type RatingItemProps = NonNullable<
+  Pick<ItemStylesProp, 'svgChildNodes' | 'itemStrokeWidth'> & {
+    hasHalfFill: boolean;
+  }
+>;
+
+export type StylesState = {
+  staticCssVars: CSSVariables;
+  dynamicCssVars: CSSVariables[] | [];
+  dynamicClassNames: CSSClassName[];
 };

@@ -27,6 +27,7 @@ import {
   MaybeEmptyCSSClassName,
   RequireAtLeastOne,
   ValidArrayColors,
+  TabIndex,
 } from './internalTypes';
 
 const Star = (
@@ -57,6 +58,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       radius = 'none',
       transition = 'colors',
       itemStyles = defaultItemStyles,
+      isRequired = true,
       halfFillMode = 'svg',
       labelledBy,
       accessibleLabels,
@@ -150,11 +152,36 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
           : [],
     });
 
+    const getTabIndex = (currentSelectedIndex: number) => {
+      const tabIndexArray = ratingValues.map((_, index) => {
+        if (currentSelectedIndex === -1 || currentSelectedIndex === 0) {
+          if (index === 0) {
+            return 0;
+          }
+          return -1;
+        }
+        if (currentSelectedIndex > 0) {
+          if (index === currentSelectedIndex) {
+            return 0;
+          }
+          return -1;
+        }
+      });
+      return tabIndexArray as TabIndex[];
+    };
+
     /* State */
 
     const [styles, setStyles] = useState<StylesState>({
       ...getStaticStyles(),
       ...getDynamicStyles(),
+    });
+
+    const [tabIndex, setTabIndex] = useState<TabIndex[] | []>(() => {
+      if (!readOnly && enableKeyboard === true) {
+        return getTabIndex(currentRatingIndex);
+      }
+      return [];
     });
 
     /* Effect */
@@ -176,6 +203,12 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       highlightOnlySelected,
       limit,
     ]);
+
+    useEffect(() => {
+      if (!readOnly && enableKeyboard === true) {
+        setTabIndex(getTabIndex(currentRatingIndex));
+      }
+    }, [ratingValue]);
 
     /* Mouse handlers */
 
@@ -208,7 +241,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         onHoverChange(0);
       }
 
-      const dynamicClassNames = getDynamicClassNames(ratingValues.indexOf(ratingValue));
+      const dynamicClassNames = getDynamicClassNames(currentRatingIndex);
       const dynamicCssVars =
         hasArrayColors && ratingValue >= 0.25
           ? getDynamicCssVars(
@@ -218,44 +251,53 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
               highlightOnlySelected
             )
           : [];
+
       setStyles({ ...styles, dynamicCssVars, dynamicClassNames });
     };
 
     /* Keyboard handler */
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
-      const previousSibling = index - 1;
-      const nextSibling = index + 1;
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, childIndex: number) => {
+      const previousSibling = childIndex - 1;
+      const nextSibling = childIndex + 1;
       const lastSibling = ratingValues.length - 1;
 
-      const isEventFiringFromLastItem = lastSibling === index;
-      const isEventFiringFromFistItem = index === 0;
+      const isEventFiringFromLastItem = lastSibling === childIndex;
+      const isEventFiringFromFistItem = childIndex === 0;
 
       switch (event.code) {
+        case 'Shift':
+          return true;
         case 'Tab':
+          if (currentRatingIndex !== childIndex) {
+            setTimeout(() => {
+              setTabIndex(getTabIndex(currentRatingIndex));
+            });
+          }
           return true;
         case 'Enter':
-        case 'Space':
-          onChange(ratingValues[index]);
-          break;
-        case 'Escape':
-        case 'Backspace':
-          onChange(0);
-          roleRadioDivs.current[index].blur();
-          break;
+        case 'Space': {
+          if (childIndex !== currentRatingIndex) {
+            return onChange(ratingValues[childIndex]);
+          }
+          return onChange(0);
+        }
         case 'ArrowDown':
         case 'ArrowRight':
           {
             const siblingToFocus = isEventFiringFromLastItem ? 0 : nextSibling;
+            setTabIndex(getTabIndex(siblingToFocus));
             roleRadioDivs.current[siblingToFocus].focus();
           }
           break;
         case 'ArrowUp':
-        case 'ArrowLeft': {
-          const siblingToFocus = isEventFiringFromFistItem ? lastSibling : previousSibling;
-          roleRadioDivs.current[siblingToFocus].focus();
+        case 'ArrowLeft':
+          {
+            const siblingToFocus = isEventFiringFromFistItem ? lastSibling : previousSibling;
+            setTabIndex(getTabIndex(siblingToFocus));
+            roleRadioDivs.current[siblingToFocus].focus();
+          }
           break;
-        }
       }
 
       event.preventDefault();
@@ -269,13 +311,13 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       const orientationClassName: CSSClassName = `rar--dir-${
         orientation === 'vertical' ? 'y' : 'x'
       }`;
-      const radiusClassName: MaybeEmptyCSSClassName =
+      const radiusClassName =
         typeof radius === 'string' && radius !== 'none' ? getRadiusClassName(radius) : '';
       const borderClassName: MaybeEmptyCSSClassName =
         (absoluteBoxBorderWidth as number) > 0 ? 'rar--has-border' : '';
       const strokeClassName: MaybeEmptyCSSClassName =
         (absoluteStrokeWidth as number) > 0 ? 'rar--has-stroke' : '';
-      const transitionClassName: MaybeEmptyCSSClassName =
+      const transitionClassName =
         !readOnly && transition !== 'none' ? getTransitionClassNames(transition) : '';
       const gapClassName =
         typeof spaceBetween === 'string' && spaceBetween !== 'none'
@@ -293,38 +335,31 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         .trimEnd();
     };
 
-    const getTabIndex = (childIndex: number): 0 | -1 => {
-      if (enableKeyboard === true) {
-        if (ratingValue === 0 && childIndex === 0) {
-          return 0;
-        }
-        if (ratingValues[childIndex] === ratingValue) {
-          return 0;
-        }
-        return -1;
-      }
-      return -1;
-    };
-
     /* Radios */
+
+    const getKeyboardProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
+      if (enableKeyboard === true) {
+        return {
+          'aria-checked': ratingValues[childIndex] === ratingValue,
+          tabIndex: tabIndex[childIndex],
+          onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) =>
+            handleKeyDown(event, childIndex),
+        };
+      }
+      return {};
+    };
 
     const getRadioProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
       if (!readOnly) {
         return {
           role: 'radio',
           'aria-labelledby': `rar_label_${uniqueLabelsIds.current[childIndex]}`,
-          'aria-checked': ratingValues[childIndex] === ratingValue,
           ref: (radioChildNode: HTMLDivElement) =>
             (roleRadioDivs.current[childIndex] = radioChildNode),
           onClick: (event: React.MouseEvent<HTMLDivElement>) => handleClick(event, childIndex),
           onMouseEnter: () => handleMouseEnter(childIndex),
           onMouseLeave: handleMouseLeave,
-          tabIndex: getTabIndex(childIndex),
-          onKeyDown:
-            enableKeyboard === true
-              ? (event: React.KeyboardEvent<HTMLDivElement>) =>
-                  handleKeyDown(event, childIndex)
-              : undefined,
+          ...getKeyboardProps(childIndex),
         };
       }
       return {};
@@ -332,7 +367,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     const getRatingAriaProps = (): React.HTMLProps<HTMLDivElement> => {
       if (!readOnly) {
-        const ariaProps: React.HTMLProps<HTMLDivElement> = { role: 'radiogroup' };
+        const ariaProps: React.HTMLProps<HTMLDivElement> = {
+          role: 'radiogroup',
+          'aria-required': isRequired === true, // To do: set required as prop as well
+        };
         if (typeof labelledBy === 'string' && labelledBy.length > 0) {
           ariaProps['aria-labelledby'] = labelledBy;
         } else {

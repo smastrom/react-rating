@@ -128,7 +128,7 @@ const onRender: ProfilerOnRenderCallback = (
 const App = () => {
   const ratingInputRef = useRef(null);
 
-  const [value, setValue] = useState<number>(3);
+  const [value, setValue] = useState<number>(0);
   const [hoveredValue, setHoveredValue] = useState<number>(0);
 
   // @ts-ignore
@@ -156,6 +156,7 @@ const App = () => {
         flexDirection: 'column',
       }}
     >
+      <button onClick={() => setValue(0)}>Reset</button>
       <div
         style={{
           maxWidth: '600px',
@@ -176,7 +177,8 @@ const App = () => {
             orientation="horizontal"
             spaceBetween="small"
             spaceInside="large"
-            radius="medium"
+            radius="large"
+            // enableKeyboard={false}
             accessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}
             halfFillMode="box"
             onHoverChange={(hoveredVal: number): void => setHoveredValue(hoveredVal)}

@@ -29,7 +29,7 @@ export default defineConfig({
           react: 'React',
         },
         assetFileNames: (assetInfo) =>
-          assetInfo.name === 'style.css' ? 'index.css' : assetInfo.name,
+          assetInfo.name === 'style.css' ? 'index.min.css' : (assetInfo.name as string),
       },
       plugins: [
         terser({

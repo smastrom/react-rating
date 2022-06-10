@@ -36,7 +36,7 @@
 ## Installation
 
 ```console
-yarn add react-rating-input
+yarn add react-advanced-rating
 ```
 
 <br />
@@ -54,7 +54,7 @@ const App = () => {
   const [ratingValue, setRatingValue] = useState(3); // <-- Initial value, init with 0 for no value
 
   return (
-      <div style={{ maxWidth: 600 }}> {/* <-- Wrap it in a container */}
+      <div style={{ maxWidth: 600, width: "100%" }}> {/* <-- Wrap it in a responsive container */}
         <Rating
             value={ratingValue}
             onChange={(currentValue) => setRatingValue(currentValue)}
@@ -72,7 +72,7 @@ import { Rating } from 'react-advanced-rating';
 import 'react-advanced-rating/dist/index.css';
 
 const App = () => (
-  <div style={{ maxWidth: 600 }}>
+  <div style={{ maxWidth: 600, width: "100%" }}>
     <Rating readOnly value={3.78} />
   </div>
 );
@@ -97,7 +97,7 @@ import { useState } from 'react';
 import { Rating } from 'react-advanced-rating';
 
 const ProductPage = ({ ratingFromServer }) => (
-  <div style={{ maxWidth: 600 }}>
+  <div style={{ maxWidth: 600, width: "100%" }}>
     <Rating value={ratingFromServer} readOnly />
   </div>
 );
@@ -156,7 +156,7 @@ Same as NextJS, but the CSS must be imported in **gatsby-browser.js**.
 | orientation           | `horizontal` \| `vertical`                              | Orientation of the rating items                                                            | `horizontal`                                                      | No                              | :green_circle:      |
 | spaceInside           | `none` \| `small` \| `regular` \| `large`               | Responsive padding of each rating item                                                     | `regular`                                                         | No                              | :green_circle:      |
 | spaceBetween          | `none` \| `small` \| `regular` \| `large`               | Responsive gap between the rating items                                                    | `small`                                                           | No                              | :green_circle:      |
-| radius                | `none` \| `small` \| `medium` \| `full`                 | Radius of each rating item                                                      | `small`                                                           | No                              | :green_circle:      |
+| radius                | `none` \| `small` \| `medium` \| `full`                 | Radius of each rating item                                                                 | `small`                                                           | No                              | :green_circle:      |
 | transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting                                                | `colors`                                                          | No                              | :large_blue_circle: |
 | itemStyles            | [ItemStyle]()                                           | Custom SVGs and colors                                                                     | [defaultStyles]()                                                 | No                              | :green_circle:      |
 
@@ -169,8 +169,9 @@ Would you like to style it via CSS? Take a look [here]().
 | Prop                  | Type                                                    | Description                                                                                | Default                                                           | Required                        | :thinking:          |
 | --------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------- | ------------------- |
 | enableKeyboard        | boolean                                                 | Whether or not to enable keyboard navigation                                               | true                                                              | No                              | :large_blue_circle: |
-| labelledBy            | string                                                  | `id` of the element to be used as radio-group label. Value of `aria-labelledby` attribute. | undefined                                                         | No                              | :large_blue_circle: |
-| accessibleLabels      | string[]                                                | Accessible labels for each rating item                                                     | `Rate 1`, `Rate 2`...                                             | No                              | :large_blue_circle: |
+| isRequired            | boolean                                                 | Whether or not to tell assistive technologies that rating is required                  | true                                                              | No                              | :large_blue_circle: |
+| labelledBy            | string                                                  | `id` of the element to be used as radio-group label. If set, takes precedence over `accessibleLabel` | undefined                                                         | No                              | :large_blue_circle: |
+| accessibleLabels      | string[]                                                | Accessible labels of each rating item                                                     | `Rate 1`, `Rate 2`...                                             | No                              | :large_blue_circle: |
 | accessibleLabel       | string                                                  | Value of `aria-label` attribute                                                            | `Rated <value> on <limit>` or `Rating` if `readOnly` is **false** | No                              | :green_circle:      |
 
 <br />
@@ -502,7 +503,7 @@ const App = () => {
   const [ratingValue, setRatingValue] = useState(0);
 
   return (
-      <div style={{ maxWidth: 600 }}>
+      <div style={{ maxWidth: 600, width: "100%" }}>
         <RatingInput
             limit={3}
             itemStyles={itemStyles}
@@ -522,7 +523,7 @@ If `readOnly` is set to **true**, `value` prop accepts a float:
 
 ```jsx
 const App = () => (
-  <div style={{ maxWidth: 300 }}>
+  <div style={{ maxWidth: 300, width: "100%" }}>
     <Rating readOnly value={1.38} />
   </div>
 );
@@ -549,7 +550,7 @@ You can switch between `svg` and `box`:
 
 ```jsx
 const App = () => (
-  <div style={{ maxWidth: 300 }}>
+  <div style={{ maxWidth: 300, width: "100%" }}>
     <Rating readOnly value={2.38} halfFillMode="box" />
   </div>
 );
@@ -576,7 +577,7 @@ const App = () => {
   const [ratingValue, setRatingValue] = useState(3);
 
   return (
-      <div style={{ maxWidth: 250 }}>
+      <div style={{ maxWidth: 250, width: "100%" }}>
         <Rating
             value={ratingValue}
             onChange={(currentValue) => setRatingValue(currentValue)}
@@ -640,7 +641,7 @@ const App = () => {
   const [ratingValue, setRatingValue] = useState(3);
 
   return (
-      <div style={{ maxWidth: 250, display: 'flex', flexDirection: "column", gap: '10px' }}>
+      <div style={{ maxWidth: 250, width: "100%", display: 'flex', flexDirection: "column", gap: '10px' }}>
         <h3 id={LABEL_DOM_ID}>Rate this product</h3>
         <Rating
             value={ratingValue}
@@ -659,7 +660,7 @@ const App = () => {
   const [ratingValue, setRatingValue] = useState(3);
 
   return (
-      <div style={{ maxWidth: 250 }}>
+      <div style={{ maxWidth: 250, width: "100%" }}>
         <Rating
             value={ratingValue}
             onChange={(currentValue) => setRatingValue(currentValue)}
@@ -693,7 +694,7 @@ const App = () => {
   const [ratingValue, setRatingValue] = useState(3);
 
   return (
-      <div style={{ maxWidth: 250 }}>
+      <div style={{ maxWidth: 250, width: "100%" }}>
         <h3 id={LABEL_DOM_ID}>Rate this product</h3>
         <Rating
             value={ratingValue}
@@ -719,7 +720,7 @@ const ratingValue = 3.5;
 const ratingLabel = `This product is rated ${ratingValue} on 5`;
 
 const App = () => (
-  <div style={{ maxWidth: 600 }}>
+  <div style={{ maxWidth: 600, width: "100%" }}>
     <Rating readOnly value={ratingValue} accessibleLabel={ratingLabel} />
   </div>
 );
@@ -731,8 +732,8 @@ const App = () => (
 - **Shift + Tab** - Default behavior
 - **Left Arrow | Down Arrow** - Select the next rating item
 - **Right Arrow | Up Arrow** - Select the previous rating item
-- **Spacebar | Enter** - Confirm the selection and set the rating value
-- **Esc | Backspace** - Reset the rating value to 0
+- **Spacebar | Enter** - Set/unset the current selection
+- **Esc** - Blur selection and reset the rating value to 0
 
 <br />
 

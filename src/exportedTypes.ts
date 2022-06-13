@@ -14,19 +14,18 @@ export type NonArrayColors = {
   inactiveBoxBorderColor?: string;
 };
 
-export type ItemStylesProp = NonArrayColors &
-  MaybeArrayColors & {
-    svgChildNodes: JSX.Element | JSX.Element[];
-    itemStrokeWidth?: number;
-    boxBorderWidth?: number;
-  };
+export type Colors = MaybeArrayColors & NonArrayColors;
+
+export type ItemStylesProp = Colors & {
+  svgChildNodes: JSX.Element | JSX.Element[];
+  itemStrokeWidth?: number;
+  boxBorderWidth?: number;
+};
 
 export type StyleOptions = 'none' | 'small' | 'medium' | 'large';
 
-/** Props always injected whether readOnly equals to false or not. */
 export type SharedProps = {
   value: number;
-  /**  Wheter or not */
   readOnly?: boolean;
   limit?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
   highlightOnlySelected?: boolean;
@@ -40,13 +39,11 @@ export type SharedProps = {
   className?: string;
 };
 
-/** Props injected only if readOnly equals to true. */
 export type ReadOnlyProps = {
   halfFillMode?: 'svg' | 'box';
   accessibleLabel?: string;
 };
 
-/** Props injected only if readOnly equals to false. */
 export type InputProps = {
   onChange: (value: number) => void | undefined;
   onHoverChange: (value: number) => void | undefined;
@@ -59,7 +56,6 @@ export type InputProps = {
 
 export type RatingProps = SharedProps & ReadOnlyProps & InputProps;
 
-/** Props injected only if readOnly equals to false. */
 export declare const Rating: ForwardRefExoticComponent<
   SharedProps & ReadOnlyProps & InputProps & React.RefAttributes<HTMLDivElement>
 >;

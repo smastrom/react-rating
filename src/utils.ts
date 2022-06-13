@@ -13,10 +13,13 @@ export const isObjectWithKeys = (object: any) =>
 
 export const isValidPositiveNumber = (value: any) => typeof value === 'number' && value > 0;
 
+export const toSecondDecimal = (number: number): number => Math.round(number * 100) / 100;
+
 export const isValidColor = (color: any) =>
   typeof color === 'string' && CSS.supports('color', color);
 
-export const toSecondDecimal = (number: number): number => Math.round(number * 100) / 100;
+export const isValidColorSSR = (color: any) =>
+  isSSR ? typeof color === 'string' : isValidColor(color);
 
 export const roundToHalf = (number: number) => Math.round(number * 2) / 2;
 

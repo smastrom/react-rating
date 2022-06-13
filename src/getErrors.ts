@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { isValidElement } from 'react';
 
 import Package from '../package.json';

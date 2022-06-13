@@ -33,29 +33,28 @@ export const getColors = (
     delete allColors.inactiveStrokeColor;
   }
 
-  if (Object.keys(allColors).length === 0) {
-    return { arrayColors, staticColors: allColors as StaticColors };
-  }
+  const colorsEntries = Object.entries(allColors);
 
-  Object.entries(allColors).forEach(([key, value]) => {
-    if (!Array.isArray(value) && !isValidColorSSR(value)) {
-      delete allColors[key as keyof typeof allColors];
-    } else if (Array.isArray(value)) {
-      validArrayColorKeys.forEach((validKey) => {
-        if (validKey === key) {
-          const cleanedArrayColors = value.filter((color) => isValidColorSSR(color));
-          if (cleanedArrayColors.length > 0) {
-            arrayColors[key as keyof ValidArrayColors] = cleanedArrayColors;
-            delete allColors[key as keyof typeof allColors];
+  colorsEntries.length > 0 &&
+    colorsEntries.forEach(([key, value]) => {
+      if (!Array.isArray(value) && !isValidColorSSR(value)) {
+        delete allColors[key as keyof typeof allColors];
+      } else if (Array.isArray(value)) {
+        validArrayColorKeys.forEach((validKey) => {
+          if (validKey === key) {
+            const cleanedArrayColors = value.filter((color) => isValidColorSSR(color));
+            if (cleanedArrayColors.length > 0) {
+              arrayColors[key as keyof ValidArrayColors] = cleanedArrayColors;
+              delete allColors[key as keyof typeof allColors];
+            } else {
+              delete allColors[key as keyof typeof allColors];
+            }
           } else {
             delete allColors[key as keyof typeof allColors];
           }
-        } else {
-          delete allColors[key as keyof typeof allColors];
-        }
-      });
-    }
-  });
+        });
+      }
+    });
 
   return { arrayColors, staticColors: allColors as StaticColors };
 };

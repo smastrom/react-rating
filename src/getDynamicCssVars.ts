@@ -3,9 +3,6 @@ import { setDyamicCssVars } from './setColorsCssVars';
 import { RatingProps } from './exportedTypes';
 import { CSSVariables, RequireAtLeastOne, ValidArrayColors } from './internalTypes';
 
-/** This function gets called on select and on mouse hover but only if the user
- * supplied valid array colors and the rating value is greater than 0.25 */
-
 export const getDynamicCssVars = (
   arrayColors: RequireAtLeastOne<ValidArrayColors>,
   currentSelectedIndex: number,

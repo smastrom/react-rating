@@ -4,7 +4,8 @@ import { RatingItem } from './RatingItem';
 import { getDynamicCssVars } from './getDynamicCssVars';
 import { getActiveClassNames, getHalfFillClassNames } from './getDynamicClassNames';
 import { getStaticCssVars } from './getStaticCssVars';
-import { splitColors } from './splitColors';
+import { getColors } from './getColors';
+import { getTabIndex } from './getTabIndex';
 import { getErrors } from './getErrors';
 import {
   getGapClassName,
@@ -15,7 +16,7 @@ import {
 import {
   isFinalValueFloat,
   getIntersectionIndex,
-  isValidPositiveNumber as isValidStroke,
+  isValidPositiveNumber,
   useIsomorphicLayoutEffect,
   getUniqueId,
 } from './utils';
@@ -36,6 +37,7 @@ const Star = (
 
 export const defaultItemStyles: ItemStylesProp = {
   svgChildNodes: Star,
+  itemStrokeWidth: 40,
   activeFillColor: '#ffb23f',
   inactiveFillColor: '#FFF7ED',
   activeStrokeColor: '#e17b21',
@@ -43,7 +45,7 @@ export const defaultItemStyles: ItemStylesProp = {
 };
 
 export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingProps>(
-  (
+  function RatingParent /* Named function is required for DevTools and Playwright tests */(
     {
       value = undefined,
       limit = 5,
@@ -68,7 +70,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       style,
     },
     externalRef
-  ) => {
+  ) {
     const { svgChildNodes, itemStrokeWidth, boxBorderWidth, ...colors } = itemStyles;
 
     /* Prevent rendering */
@@ -106,12 +108,22 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     /* CSS helpers */
 
-    const { staticColors, arrayColors } = splitColors(colors);
-    const hasArrayColors = Object.keys(arrayColors).length > 0;
-
-    const absoluteStrokeWidth = isValidStroke(itemStrokeWidth) ? itemStrokeWidth : 0;
-    const absoluteBoxBorderWidth = isValidStroke(boxBorderWidth) ? boxBorderWidth : 0;
+    const absoluteStrokeWidth = isValidPositiveNumber(itemStrokeWidth)
+      ? (itemStrokeWidth as number)
+      : 0;
+    const absoluteBoxBorderWidth = isValidPositiveNumber(boxBorderWidth)
+      ? (boxBorderWidth as number)
+      : 0;
     const absoluteHalfFillMode = halfFillMode === 'box' ? 'box' : 'svg';
+
+    const { staticColors, arrayColors } = getColors(
+      colors,
+      absoluteStrokeWidth,
+      deservesHalfFill,
+      absoluteHalfFillMode
+    );
+
+    const hasArrayColors = Object.keys(arrayColors).length > 0;
 
     /* Refs */
 
@@ -121,13 +133,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     /* State getters */
 
     const getStaticStyles = () => ({
-      staticCssVars: getStaticCssVars(
-        staticColors,
-        absoluteBoxBorderWidth as number,
-        absoluteStrokeWidth as number,
-        deservesHalfFill,
-        absoluteHalfFillMode
-      ),
+      staticCssVars: getStaticCssVars(staticColors, absoluteBoxBorderWidth),
     });
 
     const getDynamicClassNames = (currentSelectedIndex: number) => {
@@ -143,32 +149,11 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         hasArrayColors && ratingValue >= 0.25
           ? getDynamicCssVars(
               arrayColors as RequireAtLeastOne<ValidArrayColors>,
-              absoluteStrokeWidth as number,
               currentRatingIndex,
-              highlightOnlySelected,
-              absoluteHalfFillMode,
-              deservesHalfFill
+              highlightOnlySelected
             )
           : [],
     });
-
-    const getTabIndex = (currentSelectedIndex: number) => {
-      const tabIndexArray = ratingValues.map((_, index) => {
-        if (currentSelectedIndex === -1 || currentSelectedIndex === 0) {
-          if (index === 0) {
-            return 0;
-          }
-          return -1;
-        }
-        if (currentSelectedIndex > 0) {
-          if (index === currentSelectedIndex) {
-            return 0;
-          }
-          return -1;
-        }
-      });
-      return tabIndexArray as TabIndex[];
-    };
 
     /* State */
 
@@ -179,12 +164,12 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     const [tabIndex, setTabIndex] = useState<TabIndex[] | []>(() => {
       if (!readOnly && enableKeyboard === true) {
-        return getTabIndex(currentRatingIndex);
+        return getTabIndex(ratingValues, currentRatingIndex);
       }
       return [];
     });
 
-    /* Effect */
+    /* Effects */
 
     useIsomorphicLayoutEffect(() => {
       if (!readOnly && uniqueLabelsIds.current.length === 0) {
@@ -206,16 +191,16 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     useEffect(() => {
       if (!readOnly && enableKeyboard === true) {
-        setTabIndex(getTabIndex(currentRatingIndex));
+        setTabIndex(getTabIndex(ratingValues, currentRatingIndex));
       }
     }, [ratingValue]);
 
     /* Mouse handlers */
 
-    const handleClick = (event: React.MouseEvent<HTMLDivElement>, index: number): void => {
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>, clickedIndex: number) => {
       event.preventDefault();
       event.stopPropagation();
-      onChange(ratingValues[index]);
+      onChange(ratingValues[clickedIndex]);
     };
 
     const handleMouseEnter = (hoveredIndex: number) => {
@@ -227,7 +212,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       const dynamicCssVars = hasArrayColors
         ? getDynamicCssVars(
             arrayColors as RequireAtLeastOne<ValidArrayColors>,
-            absoluteStrokeWidth as number,
             hoveredIndex,
             highlightOnlySelected
           )
@@ -246,7 +230,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         hasArrayColors && ratingValue >= 0.25
           ? getDynamicCssVars(
               arrayColors as RequireAtLeastOne<ValidArrayColors>,
-              absoluteStrokeWidth as number,
               currentRatingIndex,
               highlightOnlySelected
             )
@@ -271,7 +254,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         case 'Tab':
           if (currentRatingIndex !== childIndex) {
             setTimeout(() => {
-              setTabIndex(getTabIndex(currentRatingIndex));
+              setTabIndex(getTabIndex(ratingValues, currentRatingIndex));
             });
           }
           return true;
@@ -286,7 +269,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         case 'ArrowRight':
           {
             const siblingToFocus = isEventFiringFromLastItem ? 0 : nextSibling;
-            setTabIndex(getTabIndex(siblingToFocus));
+            setTabIndex(getTabIndex(ratingValues, siblingToFocus));
             roleRadioDivs.current[siblingToFocus].focus();
           }
           break;
@@ -294,7 +277,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         case 'ArrowLeft':
           {
             const siblingToFocus = isEventFiringFromFistItem ? lastSibling : previousSibling;
-            setTabIndex(getTabIndex(siblingToFocus));
+            setTabIndex(getTabIndex(ratingValues, siblingToFocus));
             roleRadioDivs.current[siblingToFocus].focus();
           }
           break;
@@ -314,9 +297,9 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       const radiusClassName =
         typeof radius === 'string' && radius !== 'none' ? getRadiusClassName(radius) : '';
       const borderClassName: MaybeEmptyCSSClassName =
-        (absoluteBoxBorderWidth as number) > 0 ? 'rar--has-border' : '';
+        absoluteBoxBorderWidth > 0 ? 'rar--has-border' : '';
       const strokeClassName: MaybeEmptyCSSClassName =
-        (absoluteStrokeWidth as number) > 0 ? 'rar--has-stroke' : '';
+        absoluteStrokeWidth > 0 ? 'rar--has-stroke' : '';
       const transitionClassName =
         !readOnly && transition !== 'none' ? getTransitionClassNames(transition) : '';
       const gapClassName =
@@ -369,7 +352,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       if (!readOnly) {
         const ariaProps: React.HTMLProps<HTMLDivElement> = {
           role: 'radiogroup',
-          'aria-required': isRequired === true, // To do: set required as prop as well
+          'aria-required': isRequired === true,
         };
         if (typeof labelledBy === 'string' && labelledBy.length > 0) {
           ariaProps['aria-labelledby'] = labelledBy;
@@ -391,11 +374,11 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         svgChildNodes: Array.isArray(svgChildNodes)
           ? svgChildNodes[childNodeIndex]
           : svgChildNodes,
-        itemStrokeWidth: absoluteStrokeWidth as number,
+        itemStrokeWidth: absoluteStrokeWidth,
         hasHalfFill: false,
       };
       if (deservesHalfFill && absoluteHalfFillMode === 'svg') {
-        sharedProps['hasHalfFill'] = childNodeIndex === currentRatingIndex;
+        sharedProps.hasHalfFill = childNodeIndex === currentRatingIndex;
       }
       return sharedProps;
     };

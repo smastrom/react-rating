@@ -184,24 +184,24 @@ You can pass a `ItemStyle` object to `itemStyles` prop:
 
 ```ts
 type ItemStyle = {
-  itemNodes: JSX.Element | JSX.Element[];
+  itemShapes: JSX.Element | JSX.Element[];
 
   itemStrokeWidth?: number;
   boxBorderWidth?: number;
 
-  activeItemColor?: string | string[];
-  activeItemStrokeColor?: string | string[];
+  activeFillColor?: string | string[];
+  activeStrokeColor?: string | string[];
   activeBoxColor?: string | string[];
   activeBoxBorderColor?: string | string[];
 
-  inactiveItemColor?: string;
-  inactiveItemStrokeColor?: string;
+  inactiveFillColor?: string; 
+  inactiveStrokeColor?: string;
   inactiveBoxColor?: string;
   inactiveBoxBorderColor?: string;
 };
 ```
 
-It may seem a lot of properties, but they are all optional (except for `svgChildNodes`), if a property is not set, no classes nor CSS variables will be added to the rendered HTML. Just set the ones that you need and that's it.
+It may seem a lot of properties but they are all optional (except for `itemShapes`), if a property is not set, no classes nor CSS variables will be added to the HTML. Just set the ones you need and that's it.
 
 <details><summary><strong>Default styles</strong></summary>
 <br />
@@ -210,7 +210,7 @@ It may seem a lot of properties, but they are all optional (except for `svgChild
 const Star = <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />;
 
 const defaultItemStyles = {
-  svgChildNodes: Star,
+  itemShapes: Star,
   itemStrokeWidth: 40,
 
   activeFillColor: '#ffb23f',
@@ -244,55 +244,85 @@ You can pass any valid CSS color string such as `aliceblue`, `#FFF332`, `rgba(0,
 
 <br />
 
-### `IMPORTANT` How to create itemNodes elements
+### How to create `itemShapes` elements
 
-In short, you should include in the JSX element only the inner **<u><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">basic shapes</a></u>** of your SVG: `path`, `circle`, `rect`, `polygon`, `ellipse`, `polyline` and `line`.
+This package is designed to work with SVGs from any source.
 
-Then you should delete any **transform**, fill and stroke-related attribute from such elements. You can safely delete also any `data-*` and `id` attribute. 
+Just provide the shapes and the component will take care of rendering a brand-new, **responsive** SVG for you.
 
-The component will take care of rendering a brand-new responsive SVG element with the elements you provided, re-applying proper transforms when necessary.
+1. Create a JSX element including only the **<u><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">basic shapes</a></u>** of your SVG: `path`, `circle`, `rect`, `polygon`, `ellipse`, `polyline` and `line`.
 
-You will be able to control the fill and the stroke for each rating item directly from `itemStyles` prop.
+2. Delete any fill and stroke-related attribute from those elements. You will be able to control such values directly from `itemStyles` prop. You can safely delete also any `data-name` and `id` attribute.
 
-Just paste or open the SVG with a text editor, it will take 20 seconds:
 
-**Example - SVG Source**
+> :warning: This example describes the worst-case scenario with a very messy SVG code pasted from Adobe XD which automatically applies translations, useless attributes and groups. If your SVGs comes from quality sources like 
+[css.gg](https://css.gg/), [Feather](https://feathericons.com/) or [SVG Repo](https://www.svgrepo.com/collections/monocolor/), you won't have to do anything else than just removing strokes and fill attributes.
+
+**SVG Source**
 
 ```html
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-  <g transform="translate(0 -0.073)">
-    <!-- Include from here -->
-    <circle
-      cx="4"
-      cy="4"
-      r="4"
-      transform="translate(8 3)" <!-- Delete -->
-      fill="red" <!-- Delete -->
-      stroke="2" <!-- Delete -->
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+  <g id="sad-face-svgrepo-com" transform="translate(-1 -1)">
+    <line
+      id="Linea_2"
+      data-name="Linea 2"
+      y2="4"
+      transform="translate(15 7)"
+      fill="none"
+      stroke="#000"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
     />
     <path
-      transform="translate(0.4 2)" <!-- Delete -->
-      d="M11,13a6.006,6.006,0,0,0-6,6,1,1,0,0,0,1,1H18a1,1,0,0,0,1-1,6.006,6.006,0,0,0-6-6Z"
+      id="Tracciato_1" // <-- Delete
+      data-name="Tracciato 1" // <-- Delete
+      d="M8,16a8.858,8.858,0,0,1,4-1,8.87,8.87,0,0,1,4,1"
+      fill="none" // <-- Delete
+      stroke="#000" // <-- Delete
+      stroke-linecap="round" // <-- Delete
+      stroke-linejoin="round" // <-- Delete
+      stroke-width="2" // <-- Delete
     />
-    <!-- To here -->
+    <circle
+      id="Ellisse_1"
+      data-name="Ellisse 1"
+      cx="10"
+      cy="10"
+      r="10"
+      transform="translate(2 2)"
+      fill="none"
+      stroke="#000"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+    />
   </g>
-</svg>
+</svg>;
 ```
 
-**Example - Destination**
+**Destination**
 
 ```jsx
-const SmilingFace = (
+const StrangeFace = (
   <>
-    <circle cx="4" cy="4" r="4" />
-    <path d="M11,13a6.006,6.006,0,0,0-6,6,1,1,0,0,0,1,1H18a1,1,0,0,0,1-1,6.006,6.006,0,0,0-6-6Z" />
+    <line y2="4" transform="translate(15 7)" />
+    <path d="M8,16a8.858,8.858,0,0,1,4-1,8.87,8.87,0,0,1,4,1" />
+    <circle cx="10" cy="10" r="10" transform="translate(2 2)" />
   </>
 );
 
+/**
+ * Since this is an outline icon without any fill color 
+ * we just set the desidered stroke width and color.
+ */
+
 const itemStyle = {
-  svgChildNodes: SmilingFace,
-  activeItemColor: 'green',
-  inactiveItemColor: 'gray',
+  itemShapes: StrangeFace,
+  itemStrokeWidth: 2,
+
+  activeStrokeColor: 'green',
+  inactiveStrokeColor: 'gray',
 };
 ```
 
@@ -336,8 +366,8 @@ const SmilingFace = (
 
 const itemStyle = {
   svgChildNodes: SmilingFace,
-  activeItemColor: 'green',
-  inactiveItemColor: 'gray',
+  activeFillColor: 'green',
+  inactiveFillColor: 'gray',
 };
 ```
 
@@ -381,8 +411,8 @@ const SmilingFace = (
 
 const itemStyle = {
   svgChildNodes: SmilingFace,
-  activeItemColor: 'green',
-  inactiveItemColor: 'gray',
+  activeFillColor: 'green',
+  inactiveFillColor: 'gray',
 };
 ```
 
@@ -426,8 +456,8 @@ const SmilingFace = (
 
 const itemStyle = {
   svgChildNodes: SmilingFace,
-  activeItemColor: 'green',
-  inactiveItemColor: 'gray',
+  activeFillColor: 'green',
+  inactiveFillColor: 'gray',
 };
 ```
 
@@ -471,8 +501,8 @@ const SmilingFace = (
 
 const itemStyle = {
   svgChildNodes: SmilingFace,
-  activeItemColor: 'green',
-  inactiveItemColor: 'gray',
+  activeFillColor: 'green',
+  inactiveFillColor: 'gray',
 };
 ```
 
@@ -493,9 +523,9 @@ const HappyFace = <polygon points="100,10 40,198 190,78 10,78 160,198" />;
 
 const itemStyles = {
     svgChildNodes: [SadFace, Face, HappyFace],
-    activeItemColor: ['white', 'white', 'white'],
+    activeFillColor: ['white', 'white', 'white'],
     activeBoxColor: '#22C55E',
-    inactiveItemColor: '#DCFCE7',
+    inactiveFillColor: '#DCFCE7',
     inactiveBoxColor: '#D4D4D4',
 };
 
@@ -529,8 +559,6 @@ const App = () => (
 );
 ```
 
-
-
 The component will try to round it to the nearest half integer:
 
 ```js
@@ -539,6 +567,8 @@ The component will try to round it to the nearest half integer:
 3.62 = 3.5
 3.75 = 4
 ```
+
+> :warning: The value will be rounded "internally" for graphical purposes but the accessible label will always display the value you provided.
 
 If necessary, the SVG will be half-filled by default (`halfFillMode = 'svg'`):
 
@@ -562,15 +592,15 @@ In this case instead, all the SVGs will have the same fill color (inactiveFillCo
 
 If you don't want the half-fill feature, simply pass an integer to `value`.
 
-> :warning: If `highlightOnlySelected` is set to **true**, any float value provided will be rounded to nearest integer and no half-fill will ever take place.
+> :warning: If `highlightOnlySelected` is set to **true**, no half-fill will take place.
 
 <br />
 
 ### Styling via CSS
 
-Although the component already comes with optimal styles configurable via props, and it shouldn't be necessary to touch any CSS it may happen that you have or prefer to.
+Although the component already comes with optimal styles configurable via props and it shouldn't be necessary to touch any CSS, it may happen that you have or prefer to.
 
-You can assign a custom class to `<Rating />`:
+1. Assign a custom class to `<Rating />`:
 
 ```jsx
 const App = () => {
@@ -588,7 +618,7 @@ const App = () => {
 };
 ```
 
-Then, disable any style you want to replace via props, so that no variables or classes for that specific style will be generated/injected:
+2. Disable any style you want to replace via props, so that no variables or classes for that specific style will be generated/injected:
 
 ```jsx
 <Rating
@@ -601,7 +631,7 @@ Then, disable any style you want to replace via props, so that no variables or c
 >
 ```
 
-Then you can target the child elements and style them:
+3. Target the child elements and style them:
 
 ```css
 .my-own-class {
@@ -618,7 +648,7 @@ Then you can target the child elements and style them:
   opacity: 0.5;
 }
 
-.my-own-class .rar--box.rar--on .rar--svg-item {
+.my-own-class .rar--box.rar--on:hover .rar--svg-item {
   transform: scale(2);
   opacity: 1;
 }
@@ -675,7 +705,7 @@ If you have set both props, `labelledBy` will take precedence over `accessibleLa
 
 ### Rating items labels
 
-By default, if no `accessibleLabels` prop is set, an hidden label will automatically be generated for each rating item. The first item will have the label `Rate 1`, the second one `Rate 2` and so on.
+By default, if no `accessibleLabels` prop is set, an hidden label will automatically be generated for each rating item. The first item will be labelled `Rate 1`, the second one `Rate 2` and so on.
 
 To customize them, pass an array of strings to `accessibleLabels`:
 
@@ -709,15 +739,16 @@ const App = () => {
 
 ### Image element label
 
-By default if `readOnly` is set to **true**, an accessible label for the image element will be equal to `Rated ${value}`. To customize it, simply set the `accessibleLabel` prop:
+By default if `readOnly` is set to **true**, an accessible label for the image element will be equal to `Rated ${value} on ${limit}`. To customize it, simply set the `accessibleLabel` prop:
 
 ```jsx
 import React from 'react';
 import { Rating } from 'react-advanced-rating';
 import 'react-advanced-rating/dist/index.min.css';
 
+const productName = "Yellow tomato"
 const ratingValue = 3.5;
-const ratingLabel = `This product is rated ${ratingValue} on 5`;
+const ratingLabel = `${productName} is rated ${ratingValue} on 5`;
 
 const App = () => (
   <div style={{ maxWidth: 600, width: "100%" }}>
@@ -733,7 +764,6 @@ const App = () => (
 - **Left Arrow | Down Arrow** - Select the next rating item
 - **Right Arrow | Up Arrow** - Select the previous rating item
 - **Spacebar | Enter** - Set/unset the current selection
-- **Esc** - Blur selection and reset the rating value to 0
 
 <br />
 
@@ -745,11 +775,11 @@ Check that you have imported the CSS as displayed in the [Basic usage]() section
 
 ### I passed an array of SVGs but the stroke width looks different for each item.
 
-This package enforces you to use icons from the same package and author to keep design consistency. Be sure you are doing that.
+When passing different shapes for each rating item, this package forces you to use icons from the same package and author to keep design consistency. Be sure you are doing that.
 
 You can find clean, attribution-free SVG collections at [SVG Repo](https://www.svgrepo.com/collections/monocolor).
 
-### I keep getting the error "svgChildNodes is not a valid JSX element".
+### I keep getting the error "itemShapes" is not a valid JSX element".
 
 Check that you are passing a JSX element and not a functional component:
 

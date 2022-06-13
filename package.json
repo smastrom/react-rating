@@ -11,6 +11,7 @@
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
     "@vitejs/plugin-react": "^1.3.2",
+    "cssom": "^0.5.0",
     "eslint": "^8.2.0",
     "eslint-plugin-react": "^7.28.0",
     "jest": "^28.1.1",
@@ -67,7 +68,7 @@
     "examples:gatsby": "yarn build && cd dist && cp index.css index.js index.d.ts ../examples/gatsby/react-advanced-rating/",
     "examples:next": "yarn build && cd dist && cp index.css index.js index.d.ts ../examples/next/react-advanced-rating/",
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
-    "test:e2e": "yarn playwright e2e",
+    "test:e2e": "yarn playwright test && yarn playwright show-report",
     "test:unit": "yarn jest"
   },
   "style": "dist/index.css",

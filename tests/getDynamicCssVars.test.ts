@@ -1,5 +1,5 @@
-import { MaybeArrayColors } from '../src/exportedTypes';
 import { getDynamicCssVars } from '../src/getDynamicCssVars';
+
 import { CSSVariables, RequireAtLeastOne, ValidArrayColors } from '../src/internalTypes';
 
 const Test1 = `If highlightOnlySelected is true and the current rating is 3,

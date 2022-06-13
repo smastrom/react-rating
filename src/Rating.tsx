@@ -126,6 +126,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     const hasArrayColors = Object.keys(arrayColors).length > 0;
 
+    console.log(Object.entries({}).length);
+
     /* Refs */
 
     const uniqueLabelsIds = useRef<string[] | []>([]);

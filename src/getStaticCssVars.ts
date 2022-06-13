@@ -13,9 +13,12 @@ export const getStaticCssVars = (
     cssVars['--rar--border-width'] = `${boxBorderWidth}px`;
   }
 
-  Object.entries(staticColors).forEach(([key, value]) => {
-    setColorCssVars(cssVars, key, value as string);
-  });
+  const colorsEntries = Object.entries(staticColors);
+
+  colorsEntries.length > 0 &&
+    colorsEntries.forEach(([key, value]) => {
+      setColorCssVars(cssVars, key, value as string);
+    });
 
   return cssVars;
 };

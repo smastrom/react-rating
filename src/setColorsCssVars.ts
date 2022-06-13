@@ -1,9 +1,9 @@
 import { CSSVariables } from './internalTypes';
 
-const ACTIVE_FILL_COLOR_VAR = '--rar--fill-on-color';
-const ACTIVE_BOX_COLOR_VAR = '--rar--box-on-color';
-const ACTIVE_BORDER_COLOR_VAR = '--rar--border-on-color';
-const ACTIVE_STROKE_COLOR_VAR = '--rar--stroke-on-color';
+export const ACTIVE_FILL_COLOR_VAR = '--rar--fill-on-color';
+export const ACTIVE_BOX_COLOR_VAR = '--rar--box-on-color';
+export const ACTIVE_BORDER_COLOR_VAR = '--rar--border-on-color';
+export const ACTIVE_STROKE_COLOR_VAR = '--rar--stroke-on-color';
 
 export const setDyamicCssVars = (
   targetObj: CSSVariables,

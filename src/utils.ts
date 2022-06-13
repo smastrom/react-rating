@@ -25,13 +25,8 @@ export const roundToHalf = (number: number) => Math.round(number * 2) / 2;
 
 export const getUniqueId = () => (Math.random() + 1).toString(36).substring(7);
 
-export const isFinalValueFloat = (ratingValue: number) => {
-  const roundedHalf = Number.isInteger(roundToHalf(ratingValue));
-  if (Number.isInteger(roundedHalf)) {
-    return false;
-  }
-  return true;
-};
+export const isGraphicalValueInteger = (ratingValue: number) =>
+  Number.isInteger(roundToHalf(ratingValue));
 
 export const getIntersectionIndex = (ratingValues: number[], ratingValue: number) => {
   const roundedHalf = roundToHalf(ratingValue);

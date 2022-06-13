@@ -102,12 +102,12 @@ const App = () => {
       >
         <Profiler onRender={onRender} id="rating">
           <Rating
-            // readOnly
+            readOnly
             ref={ratingInputRef}
             limit={5} // Rename to items
             aria-label="Ciao"
             onChange={(value) => setValue(value)}
-            value={value}
+            value={0.5}
             itemStyles={testStylesArr}
             transition="colors"
             // highlightOnlySelected

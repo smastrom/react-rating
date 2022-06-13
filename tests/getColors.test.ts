@@ -61,8 +61,7 @@ test(Test2, () => {
   ).toStrictEqual(expectedObject2);
 });
 
-const Test3 =
-  'Should return an empty object for arrayColors if no colors are provided as array';
+const Test3 = 'Should return an empty object for arrayColors if no colors are provided as array';
 
 const sourceObject3 = {
   activeFillColor: '#ffb23f',

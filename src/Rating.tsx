@@ -2,7 +2,8 @@ import React, { forwardRef, useRef, useState, useEffect } from 'react';
 
 import { RatingItem } from './RatingItem';
 import { getDynamicCssVars } from './getDynamicCssVars';
-import { getActiveClassNames, getHalfFillClassNames } from './getDynamicClassNames';
+import { getActiveClassNames } from './getActiveClassNames';
+import { getHalfFillClassNames } from './getHFClassNames';
 import { getStaticCssVars } from './getStaticCssVars';
 import { getColors } from './getColors';
 import { getTabIndex } from './getTabIndex';
@@ -14,11 +15,11 @@ import {
   getTransitionClassNames,
 } from './getStaticClassNames';
 import {
-  isFinalValueFloat,
   getIntersectionIndex,
   isValidPositiveNumber,
   useIsomorphicLayoutEffect,
   getUniqueId,
+  isGraphicalValueInteger,
 } from './utils';
 
 import { RatingProps, ItemStylesProp, Rating as RatingComponent } from './exportedTypes';
@@ -104,7 +105,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       ? getIntersectionIndex(ratingValues, ratingValue)
       : ratingValues.indexOf(ratingValue);
 
-    const deservesHalfFill = isEligibleForHalfFill && isFinalValueFloat(ratingValue);
+    const deservesHalfFill = isEligibleForHalfFill && !isGraphicalValueInteger(ratingValue);
 
     /* CSS helpers */
 

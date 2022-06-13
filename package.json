@@ -62,8 +62,7 @@
     "url": "https://github.com/smastrom/react-advanced-rating"
   },
   "scripts": {
-    "build": "yarn clean && tsc && vite build",
-    "clean": "rimraf dist",
+    "build": "rimraf dist && tsc && vite build",
     "dev": "vite",
     "examples:gatsby": "yarn build && cd dist && cp index.css index.js index.d.ts ../examples/gatsby/react-advanced-rating/",
     "examples:next": "yarn build && cd dist && cp index.css index.js index.d.ts ../examples/next/react-advanced-rating/",

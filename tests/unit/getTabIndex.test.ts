@@ -1,4 +1,4 @@
-import { getTabIndex } from '../src/getTabIndex';
+import { getTabIndex } from '../../src/getTabIndex';
 
 const ratingValues = [1, 2, 3, 4, 5];
 

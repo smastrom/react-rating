@@ -1,6 +1,6 @@
-import { getActiveClassNames } from '../src/getActiveClassNames';
+import { getActiveClassNames } from '../../src/getActiveClassNames';
 
-import { CSSClassName } from '../src/internalTypes';
+import { CSSClassName } from '../../src/internalTypes';
 
 const ratingValues = [1, 2, 3, 4, 5];
 

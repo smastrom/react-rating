@@ -1,4 +1,4 @@
-import { getColors } from '../src/getColors';
+import { getColors } from '../../src/getColors';
 
 const Test1 = 'Should return an object including only properties with string values';
 
@@ -61,7 +61,8 @@ test(Test2, () => {
   ).toStrictEqual(expectedObject2);
 });
 
-const Test3 = 'Should return an empty object for arrayColors if no colors are provided as array';
+const Test3 =
+  'Should return an empty object for arrayColors if no colors are provided as array';
 
 const sourceObject3 = {
   activeFillColor: '#ffb23f',
@@ -78,15 +79,7 @@ const sourceObject3 = {
 const expectedObject3 = {
   arrayColors: {},
   staticColors: {
-    activeFillColor: '#ffb23f',
-    activeBoxColor: 'red',
-    activeBoxBorderColor: 'blue',
-    activeStrokeColor: '#e17b21',
-
-    inactiveFillColor: '#FFF7ED',
-    inactiveStrokeColor: '#eda76a',
-    inactiveBoxColor: 'green',
-    inactiveBoxBorderColor: 'aliceblue',
+    ...sourceObject3,
   },
 };
 
@@ -98,9 +91,12 @@ test(Test3, () => {
 
 const Test4 = 'Should never include stroke colors if stroke width is not greater than 0';
 
+const arrayColors = ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'];
+const arrayDarkerColors = ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'];
+
 const sourceObject4 = {
-  activeFillColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
-  activeStrokeColor: ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'],
+  activeFillColor: arrayColors,
+  activeStrokeColor: arrayDarkerColors,
 
   inactiveFillColor: '#FFF7ED',
   inactiveStrokeColor: '#eda76a',
@@ -108,7 +104,7 @@ const sourceObject4 = {
 
 const expectedObject4 = {
   arrayColors: {
-    activeFillColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
+    activeFillColor: arrayColors,
   },
   staticColors: {
     inactiveFillColor: '#FFF7ED',
@@ -125,8 +121,8 @@ const Test5 = `Should never include activeFillColor if halfFillMode is set to "b
 and activeBoxColor if is set to 'svg'.`;
 
 const sourceObject5 = {
-  activeFillColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
-  activeStrokeColor: ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'],
+  activeFillColor: arrayColors,
+  activeStrokeColor: arrayDarkerColors,
   activeBoxColor: 'red',
 
   inactiveFillColor: '#FFF7ED',
@@ -135,7 +131,7 @@ const sourceObject5 = {
 
 const expectedObject5A = {
   arrayColors: {
-    activeStrokeColor: ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'],
+    activeStrokeColor: arrayDarkerColors,
   },
   staticColors: {
     activeBoxColor: 'red',
@@ -146,8 +142,8 @@ const expectedObject5A = {
 
 const expectedObject5B = {
   arrayColors: {
-    activeFillColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
-    activeStrokeColor: ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'],
+    activeFillColor: arrayColors,
+    activeStrokeColor: arrayDarkerColors,
   },
   staticColors: {
     inactiveFillColor: '#FFF7ED',

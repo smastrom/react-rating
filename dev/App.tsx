@@ -102,12 +102,12 @@ const App = () => {
       >
         <Profiler onRender={onRender} id="rating">
           <Rating
-            readOnly
+            // readOnly
             ref={ratingInputRef}
             limit={5} // Rename to items
             aria-label="Ciao"
             onChange={(value) => setValue(value)}
-            value={0.5}
+            value={value}
             itemStyles={testStylesArr}
             transition="colors"
             // highlightOnlySelected
@@ -120,6 +120,7 @@ const App = () => {
             halfFillMode="box"
             onHoverChange={(hoveredVal: number): void => setHoveredValue(hoveredVal)}
           />
+          <Rating readOnly value={2} spaceBetween="none" spaceInside="none" />
         </Profiler>
       </div>
 

@@ -32,6 +32,15 @@ import {
   TabIndex,
 } from './internalTypes';
 
+const devTestId = __DEV__ ? { 'data-testid': 'rating' } : {};
+
+const getChildTestIds = (childIndex: number) =>
+  __DEV__
+    ? {
+        'data-testid': `rating-child-${childIndex + 1}`,
+      }
+    : {};
+
 const Star = (
   <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
 );
@@ -101,6 +110,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     const ratingValue = (
       isNotEligibleForHalfFill ? Math.round(value as number) : value
     ) as number;
+
     const currentRatingIndex = isEligibleForHalfFill
       ? getIntersectionIndex(ratingValues, ratingValue)
       : ratingValues.indexOf(ratingValue);
@@ -125,8 +135,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     );
 
     const hasArrayColors = Object.keys(arrayColors).length > 0;
-
-    console.log(Object.entries({}).length);
 
     /* Refs */
 
@@ -203,7 +211,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     const handleClick = (event: React.MouseEvent<HTMLDivElement>, clickedIndex: number) => {
       event.preventDefault();
       event.stopPropagation();
-      onChange(ratingValues[clickedIndex]);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      onChange!(ratingValues[clickedIndex]);
     };
 
     const handleMouseEnter = (hoveredIndex: number) => {
@@ -264,9 +273,11 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         case 'Enter':
         case 'Space': {
           if (childIndex !== currentRatingIndex) {
-            return onChange(ratingValues[childIndex]);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            return onChange!(ratingValues[childIndex]);
           }
-          return onChange(0);
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          return onChange!(0);
         }
         case 'ArrowDown':
         case 'ArrowRight':
@@ -357,6 +368,9 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
           role: 'radiogroup',
           'aria-required': isRequired === true,
         };
+        if (isRequired === true) {
+          ariaProps['aria-invalid'] = ratingValue <= 0;
+        }
         if (typeof labelledBy === 'string' && labelledBy.length > 0) {
           ariaProps['aria-labelledby'] = labelledBy;
         } else {
@@ -397,6 +411,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     return (
       <div
+        {...devTestId}
         ref={externalRef}
         id={id}
         style={{ ...style, ...styles.staticCssVars }}
@@ -412,6 +427,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
             className={`rar--box ${styles.dynamicClassNames[childIndex]}`}
             style={styles?.dynamicCssVars?.[childIndex]}
             {...getRadioProps(childIndex)}
+            {...getChildTestIds(childIndex)}
           >
             {/* */}
             {/* */}

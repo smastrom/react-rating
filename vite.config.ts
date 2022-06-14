@@ -7,7 +7,10 @@ import { terser } from 'rollup-plugin-terser';
 
 import Package from './package.json';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  define: {
+    __DEV__: command !== 'build',
+  },
   build: {
     minify: 'terser',
     lib: {
@@ -64,4 +67,4 @@ export default defineConfig({
       },
     }),
   ],
-});
+}));

@@ -45,8 +45,8 @@ export type ReadOnlyProps = {
 };
 
 export type InputProps = {
-  onChange: (value: number) => void | undefined;
-  onHoverChange: (value: number) => void | undefined;
+  onChange?: (value: number) => void | undefined;
+  onHoverChange?: (value: number) => void | undefined;
   enableKeyboard?: boolean;
   labelledBy?: string;
   accessibleLabels?: string[];

@@ -1,5 +1,5 @@
-e2e
 playwright.config.ts
+jest.config.ts
 vite.config.ts
 tests
 dist

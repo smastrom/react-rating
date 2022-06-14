@@ -1,6 +1,6 @@
-import { getHalfFillClassNames } from '../src/getHFClassNames';
+import { getHalfFillClassNames } from '../../src/getHFClassNames';
 
-import { CSSClassName } from '../src/internalTypes';
+import { CSSClassName } from '../../src/internalTypes';
 
 const ratingValues = [1, 2, 3, 4, 5];
 

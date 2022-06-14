@@ -1,6 +1,6 @@
-import { getDynamicCssVars } from '../src/getDynamicCssVars';
+import { getDynamicCssVars } from '../../src/getDynamicCssVars';
 
-import { CSSVariables, RequireAtLeastOne, ValidArrayColors } from '../src/internalTypes';
+import { CSSVariables, RequireAtLeastOne, ValidArrayColors } from '../../src/internalTypes';
 
 const Test1 = `If highlightOnlySelected is true and the current rating is 3,
 it should return an array of the same length containing active colors only at

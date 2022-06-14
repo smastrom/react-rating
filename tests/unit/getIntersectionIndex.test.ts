@@ -1,4 +1,4 @@
-import { getIntersectionIndex } from '../src/utils';
+import { getIntersectionIndex } from '../../src/utils';
 
 const ratingValues = [1, 2, 3, 4, 5];
 

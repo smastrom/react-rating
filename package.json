@@ -1,7 +1,10 @@
 {
   "name": "react-advanced-rating",
   "version": "0.1.0",
-  "homepage": "smastromattei.dev",
+  "homepage": "https://react-advanced-rating.onrender.com/",
+  "bugs": {
+    "url": "https://github.com/smastrom/react-advanced-rating/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/smastrom/react-advanced-rating"
@@ -12,13 +15,30 @@
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.umd.min.js"
+    },
+    "./dist/index.min.css": {
+      "import": "./dist/index.min.css",
+      "require": "./dist/index.min.css"
     }
   },
+  "keywords": [
+    "react",
+    "react-rating",
+    "react-reviews",
+    "react-component",
+    "rating",
+    "rating-star",
+    "rating-component",
+    "star-component",
+    "stars",
+    "reviews",
+    "reviews-component"
+  ],
   "main": "dist/index.umd.min.js",
   "module": "dist/index.js",
   "browser": "dist/index.umd.min.js",
   "types": "dist/index.d.ts",
-  "style": "dist/index.css",
+  "style": "dist/index.min.css",
   "files": [
     "dist"
   ],
@@ -28,10 +48,10 @@
     "examples:gatsby": "yarn build && cd dist && cp index.css index.js index.d.ts ../examples/gatsby/react-advanced-rating/",
     "examples:next": "yarn build && cd dist && cp index.css index.js index.d.ts ../examples/next/react-advanced-rating/",
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
+    "test": "yarn test:unit && yarn test:dom && yarn test:e2e",
     "test:dom": "yarn jest --testPathPattern=tests/dom",
     "test:e2e": "yarn playwright test && yarn playwright show-report",
-    "test:unit": "yarn jest --testPathPattern=tests/unit",
-    "test": "yarn test:unit && yarn test:dom && yarn test:e2e"
+    "test:unit": "yarn jest --testPathPattern=tests/unit"
   },
   "devDependencies": {
     "@playwright/test": "^1.22.2",

@@ -337,7 +337,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     const getKeyboardProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
       if (enableKeyboard === true) {
         return {
-          'aria-checked': ratingValues[childIndex] === ratingValue,
           tabIndex: tabIndex[childIndex],
           onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) =>
             handleKeyDown(event, childIndex),
@@ -349,6 +348,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     const getRadioProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
       if (!readOnly) {
         return {
+          'aria-checked': ratingValues[childIndex] === ratingValue,
           role: 'radio',
           'aria-labelledby': `rar_label_${uniqueLabelsIds.current[childIndex]}`,
           ref: (radioChildNode: HTMLDivElement) =>

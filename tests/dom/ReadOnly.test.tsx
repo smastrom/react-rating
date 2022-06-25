@@ -1,46 +1,15 @@
 import React from 'react';
 
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { beforeEach, afterEach, ID } from './domSetup';
 
 import { Rating } from '../../src/Rating';
-import { StrangeFace } from '../../dev/TestShapes';
+import { StrangeFace } from '../../dev/Shapes';
 
-beforeEach(() => {
-  // @ts-ignore
-  window.SVGElement.prototype.getBBox = () => ({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
-});
+beforeEach();
+afterEach();
 
-afterEach(() => {
-  // @ts-ignore
-  delete window.SVGElement.prototype.getBBox;
-});
-
-const ID = 'rating';
-
-test('Should be in the document if value equals to zero', () => {
-  render(<Rating readOnly value={0} />);
-  const item = screen.getByTestId(ID);
-  expect(item).toBeInTheDocument();
-});
-
-test('Should return null if value greather than limit', () => {
-  render(<Rating readOnly value={6} />);
-  const item = screen.queryByTestId(ID);
-  expect(item).not.toBeInTheDocument();
-});
-
-test('Should return null if value invalid', () => {
-  // @ts-ignore
-  render(<Rating readOnly value="6" />);
-  const item = screen.queryByTestId(ID);
-  expect(item).not.toBeInTheDocument();
-});
+/* A11y - Parent */
 
 test('Should have readOnly attributes', () => {
   render(<Rating readOnly value={2} />);
@@ -59,6 +28,14 @@ test('Should not be focusable and have radio-group specific attributes and class
   expect(item).not.toHaveAttribute('aria-invalid');
   expect(item).not.toHaveClass('rar--cursor');
   expect(item).not.toHaveClass('rar--fx-colors');
+});
+
+test('User should be able to customize aria-label', () => {
+  const CUSTOM_LABEL = 'Rated two';
+
+  render(<Rating readOnly value={2} accessibleLabel={CUSTOM_LABEL} />);
+  const item = screen.getByTestId(ID);
+  expect(item).toHaveAccessibleName(CUSTOM_LABEL);
 });
 
 const itemStyles = {
@@ -131,6 +108,25 @@ test('Should contain only n child as per limit', () => {
   expect(item).not.toContainElement(child4);
 });
 
+test('No child should contain accessible attributes', () => {
+  render(<Rating readOnly value={2} limit={3} />);
+
+  const expectToNotHaveAccesibleAttributes = (child: HTMLElement) => {
+    expect(child).not.toHaveAttribute('tabindex');
+    expect(child).not.toHaveAttribute('aria-labelledby');
+    expect(child).not.toHaveAttribute('role', 'radio');
+  };
+
+  const child1 = screen.getByTestId(CHILD_ID_1);
+  expectToNotHaveAccesibleAttributes(child1);
+
+  const child2 = screen.getByTestId(CHILD_ID_2);
+  expectToNotHaveAccesibleAttributes(child2);
+
+  const child3 = screen.getByTestId(CHILD_ID_3);
+  expectToNotHaveAccesibleAttributes(child3);
+});
+
 const boxOnClasses = 'rar--box rar--on';
 const boxOffClasses = 'rar--box rar--off';
 
@@ -147,6 +143,8 @@ test('Should have active classNames added properly', () => {
   expect(child3).toHaveClass(boxOffClasses, { exact: true });
 });
 
+/* Half fill */
+
 test("If user passes a float but doesn't deserve half-fill, should have classes added as usual", () => {
   render(<Rating readOnly value={2.12} limit={3} />);
 
@@ -160,12 +158,32 @@ test("If user passes a float but doesn't deserve half-fill, should have classes 
   expect(child3).toHaveClass(boxOffClasses, { exact: true });
 });
 
-test("If user passes a float but doesn't deserve half-fill, aria-label value should display the float in any case", () => {
+test('Wheter or not deserves half-fill, aria-label value should display the original value in any case', () => {
   const floatValue = 2.12;
   const items = 3;
-  render(<Rating readOnly value={floatValue} limit={items} />);
+  const { rerender } = render(<Rating readOnly value={floatValue} limit={items} />);
   const item = screen.getByTestId(ID);
   expect(item).toHaveAccessibleName(`Rated ${floatValue} on ${items}`);
+
+  const floatValueHF = 2.44;
+  rerender(<Rating readOnly value={floatValueHF} limit={items} />);
+  expect(item).toHaveAccessibleName(`Rated ${floatValueHF} on ${items}`);
+});
+
+test('If user passes a float, deserves half-fill but highlightOnlySelected is enabled, should have default on/off classNames', () => {
+  render(<Rating readOnly value={2.42} limit={4} halfFillMode="box" highlightOnlySelected />);
+
+  const child1 = screen.getByTestId(CHILD_ID_1);
+  expect(child1).toHaveClass(boxOffClasses, { exact: true });
+
+  const child2 = screen.getByTestId(CHILD_ID_2);
+  expect(child2).toHaveClass(boxOnClasses, { exact: true });
+
+  const child3 = screen.getByTestId(CHILD_ID_3);
+  expect(child3).toHaveClass(boxOffClasses, { exact: true });
+
+  const child4 = screen.getByTestId(CHILD_ID_4);
+  expect(child4).toHaveClass(boxOffClasses, { exact: true });
 });
 
 test('If user passes a float and deserves half-fill, should have proper classes if halfFillMode is set to "box"', () => {

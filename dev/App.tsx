@@ -1,7 +1,7 @@
 import React, { Profiler, ProfilerOnRenderCallback, useEffect, useRef, useState } from 'react';
 
 import { Rating } from '../src/Rating';
-import { StrangeFace } from './TestShapes';
+import { StrangeFace } from './Shapes';
 
 import { ItemStylesProp } from '../src/exportedTypes';
 
@@ -115,12 +115,13 @@ const App = () => {
             spaceBetween="small"
             spaceInside="small"
             radius="none"
+            isRequired={false}
             // enableKeyboard={false}
             accessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}
             halfFillMode="box"
             onHoverChange={(hoveredVal: number): void => setHoveredValue(hoveredVal)}
           />
-          <Rating readOnly value={2} spaceBetween="none" spaceInside="none" />
+          <Rating readOnly value={2.72} limit={4} highlightOnlySelected />
         </Profiler>
       </div>
 

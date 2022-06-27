@@ -47,11 +47,13 @@ test('Should not have aria-label attribute if aria-labelledby has been set', () 
   expect(item).not.toHaveAttribute('aria-label');
 });
 
-/* A11y - Child components */
+/* A11y - Child */
 
 const CHILD_ID_1 = 'rating-child-1';
 const CHILD_ID_2 = 'rating-child-2';
 const CHILD_ID_3 = 'rating-child-3';
+const CHILD_ID_4 = 'rating-child-4';
+const CHILD_ID_5 = 'rating-child-5';
 
 test('Each child should have accessible attributes', () => {
   render(<Rating value={2} limit={3} onChange={() => {}} />);
@@ -158,7 +160,7 @@ const itemStyles = {
   svgChildNodes: StrangeFace,
 };
 
-test('Should have no stroke nor border classNames and no CSS inlinde vars if not included in itemStyles', () => {
+test('Should have no stroke nor border classNames and no CSS inline vars if not included in itemStyles', () => {
   const defaultClasses = 'rar--group rar--dir-x rar--pointer';
 
   render(
@@ -178,7 +180,7 @@ test('Should have no stroke nor border classNames and no CSS inlinde vars if not
   expect(item).not.toHaveAttribute('style');
 });
 
-test('Should have stroke and border classNames if applied in itemStyles', () => {
+test('Should have stroke and border classNames if set in itemStyles', () => {
   const classNames = 'rar--group rar--dir-x rar--pointer rar--has-stroke rar--has-border';
 
   render(
@@ -198,3 +200,53 @@ test('Should have stroke and border classNames if applied in itemStyles', () => 
 });
 
 /* Styles - Child */
+
+const toHaveActiveClassName = (childId: string) => {
+  const child = screen.getByTestId(childId);
+  expect(child).toHaveClass('rar--box rar--on', { exact: true });
+};
+
+const toHaveInactiveClassName = (childId: string) => {
+  const child = screen.getByTestId(childId);
+  expect(child).toHaveClass('rar--box rar--off', { exact: true });
+};
+
+test('If ratingValue equals to n, first n child should have correspondent active className', () => {
+  render(<Rating value={3} limit={6} onChange={() => {}} />);
+
+  toHaveActiveClassName(CHILD_ID_1);
+  toHaveActiveClassName(CHILD_ID_2);
+  toHaveActiveClassName(CHILD_ID_3);
+
+  toHaveInactiveClassName(CHILD_ID_4);
+  toHaveInactiveClassName(CHILD_ID_5);
+});
+
+test('If ratingValue equals to n, only n child should have correspondent active className if highlightOnlySelected is enabled', () => {
+  render(<Rating value={3} limit={6} onChange={() => {}} highlightOnlySelected />);
+  toHaveInactiveClassName(CHILD_ID_1);
+  toHaveInactiveClassName(CHILD_ID_2);
+
+  toHaveActiveClassName(CHILD_ID_3);
+
+  toHaveInactiveClassName(CHILD_ID_4);
+  toHaveInactiveClassName(CHILD_ID_5);
+});
+
+test('If ratingValue equals to 0, no child should have active className, wheter or not highlightOnlySelected is enabled', () => {
+  const { rerender } = render(<Rating value={0} limit={6} onChange={() => {}} />);
+
+  const toNotHaveActiveClassNames = () => {
+    toHaveInactiveClassName(CHILD_ID_1);
+    toHaveInactiveClassName(CHILD_ID_2);
+    toHaveInactiveClassName(CHILD_ID_3);
+    toHaveInactiveClassName(CHILD_ID_4);
+    toHaveInactiveClassName(CHILD_ID_5);
+  };
+
+  toNotHaveActiveClassNames();
+
+  rerender(<Rating value={0} limit={6} onChange={() => {}} highlightOnlySelected />);
+
+  toNotHaveActiveClassNames();
+});

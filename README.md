@@ -13,7 +13,7 @@
 - Fully responsive and mobile-first
 - Fully accessible with keyboard navigation and custom labels
 - Fully typed with IntelliSense infos and autocomplete
-- Dependency-free, ~3.5Kb gzipped.
+- Dependency-free, ~4Kb gzipped.
 
 <br />
 
@@ -37,6 +37,12 @@
 
 ```console
 yarn add react-advanced-rating
+```
+
+Or with NPM:
+
+```console
+npm i -S react-advanced-rating
 ```
 
 <br />

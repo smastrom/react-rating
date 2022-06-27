@@ -1,12 +1,9 @@
 import { test, expect } from '@playwright/test';
 
-import { pressShiftTab, pressTab } from './testUtils';
+import { beforeAny, pressShiftTab, pressTab } from './testUtils';
 
 test.beforeEach(async ({ page, browserName }) => {
-  await page.goto('http://localhost:3000');
-  if (browserName === 'webkit') {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-  }
+  await beforeAny(page, browserName);
 });
 
 test('Tab navigation should respect focusable elements order', async ({

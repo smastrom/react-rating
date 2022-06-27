@@ -47,3 +47,10 @@ export const expectNoneToBeChecked = async (page: Page) => {
     await expect(page.locator(childName)).not.toBeChecked();
   }
 };
+
+export const beforeAny = async (page: Page, browserName: string) => {
+  await page.goto('http://localhost:3000');
+  if (browserName === 'webkit') {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+};

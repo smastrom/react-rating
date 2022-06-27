@@ -6,6 +6,7 @@ import { RatingItemProps, KeyAndValueStrings } from './internalTypes';
 
 export const RatingItem = ({
   svgChildNodes,
+  testId = '',
   itemStrokeWidth = 0,
   hasHalfFill = false,
 }: RatingItemProps) => {
@@ -81,11 +82,21 @@ export const RatingItem = ({
     return { transform: undefined };
   };
 
+  const getTestIds = () => {
+    if (testId.length > 0) {
+      return {
+        'data-testid': testId,
+      };
+    }
+    return {};
+  };
+
   /* Render */
 
   return (
     <svg
       {...getStrokeAttribute()}
+      {...getTestIds()}
       aria-hidden="true"
       className="rar--svg"
       xmlns="http://www.w3.org/2000/svg"

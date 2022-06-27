@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { render, screen } from '@testing-library/react';
-import { beforeEach, afterEach, ID } from './domSetup';
-import '@testing-library/jest-dom';
+import { beforeEach, afterEach, ID } from './testUtils';
 
 import { Rating } from '../../src/Rating';
 
@@ -28,6 +27,13 @@ test('Should not render the component if value is not a number', () => {
   expect(item).not.toBeInTheDocument();
 });
 
+test('Should not render the component if limit greater than 10', () => {
+  // @ts-ignore
+  render(<Rating value={6} limit={11} />);
+  const item = screen.queryByTestId(ID);
+  expect(item).not.toBeInTheDocument();
+});
+
 test('Should not render the component if value greather than limit (default: 5)', () => {
   const { rerender } = render(<Rating value={6} />);
   const item = screen.queryByTestId(ID);
@@ -49,7 +55,7 @@ test('If onChange provided and readOnly is false, it should render the component
   expect(item).toBeInTheDocument();
 });
 
-test('If readOnly is false and value provided is not an integer, should not render the component', () => {
+test('If readOnly is false and value provided is not an integer, it should not render the component', () => {
   render(<Rating value={3.6} onChange={() => {}} />);
   const item = screen.queryByTestId(ID);
   expect(item).not.toBeInTheDocument();

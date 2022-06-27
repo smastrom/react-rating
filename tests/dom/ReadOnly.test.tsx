@@ -42,6 +42,51 @@ const itemStyles = {
   svgChildNodes: StrangeFace,
 };
 
+/* A11y - Child */
+
+const CHILD_ID_1 = 'rating-child-1';
+const CHILD_ID_2 = 'rating-child-2';
+const CHILD_ID_3 = 'rating-child-3';
+const CHILD_ID_4 = 'rating-child-4';
+
+test('Should contain only n child as per limit', () => {
+  render(<Rating readOnly value={2} limit={3} />);
+  const item = screen.getByTestId(ID);
+
+  const child1 = screen.getByTestId(CHILD_ID_1);
+  expect(item).toContainElement(child1);
+
+  const child2 = screen.getByTestId(CHILD_ID_2);
+  expect(item).toContainElement(child2);
+
+  const child3 = screen.getByTestId(CHILD_ID_3);
+  expect(item).toContainElement(child3);
+
+  const child4 = screen.queryByTestId(CHILD_ID_4);
+  expect(item).not.toContainElement(child4);
+});
+
+test('No child should contain accessible attributes', () => {
+  render(<Rating readOnly value={2} limit={3} />);
+
+  const expectToNotHaveAccesibleAttributes = (child: HTMLElement) => {
+    expect(child).not.toHaveAttribute('tabindex');
+    expect(child).not.toHaveAttribute('aria-labelledby');
+    expect(child).not.toHaveAttribute('role', 'radio');
+  };
+
+  const child1 = screen.getByTestId(CHILD_ID_1);
+  expectToNotHaveAccesibleAttributes(child1);
+
+  const child2 = screen.getByTestId(CHILD_ID_2);
+  expectToNotHaveAccesibleAttributes(child2);
+
+  const child3 = screen.getByTestId(CHILD_ID_3);
+  expectToNotHaveAccesibleAttributes(child3);
+});
+
+/* Styles - Parent*/
+
 test('If styles are deactivated/unset, no classNames should be added', () => {
   const defaultClasses = 'rar--group rar--dir-x';
 
@@ -86,46 +131,7 @@ test('If no colors are defined, the style attribute should not be defined', () =
   expect(item).not.toHaveAttribute('style');
 });
 
-const CHILD_ID_1 = 'rating-child-1';
-const CHILD_ID_2 = 'rating-child-2';
-const CHILD_ID_3 = 'rating-child-3';
-const CHILD_ID_4 = 'rating-child-4';
-
-test('Should contain only n child as per limit', () => {
-  render(<Rating readOnly value={2} limit={3} />);
-  const item = screen.getByTestId(ID);
-
-  const child1 = screen.getByTestId(CHILD_ID_1);
-  expect(item).toContainElement(child1);
-
-  const child2 = screen.getByTestId(CHILD_ID_2);
-  expect(item).toContainElement(child2);
-
-  const child3 = screen.getByTestId(CHILD_ID_3);
-  expect(item).toContainElement(child3);
-
-  const child4 = screen.queryByTestId(CHILD_ID_4);
-  expect(item).not.toContainElement(child4);
-});
-
-test('No child should contain accessible attributes', () => {
-  render(<Rating readOnly value={2} limit={3} />);
-
-  const expectToNotHaveAccesibleAttributes = (child: HTMLElement) => {
-    expect(child).not.toHaveAttribute('tabindex');
-    expect(child).not.toHaveAttribute('aria-labelledby');
-    expect(child).not.toHaveAttribute('role', 'radio');
-  };
-
-  const child1 = screen.getByTestId(CHILD_ID_1);
-  expectToNotHaveAccesibleAttributes(child1);
-
-  const child2 = screen.getByTestId(CHILD_ID_2);
-  expectToNotHaveAccesibleAttributes(child2);
-
-  const child3 = screen.getByTestId(CHILD_ID_3);
-  expectToNotHaveAccesibleAttributes(child3);
-});
+/* Styles - Child */
 
 const boxOnClasses = 'rar--box rar--on';
 const boxOffClasses = 'rar--box rar--off';
@@ -143,7 +149,7 @@ test('Should have active classNames added properly', () => {
   expect(child3).toHaveClass(boxOffClasses, { exact: true });
 });
 
-/* Half fill */
+/* Styles - Half fill */
 
 test("If user passes a float but doesn't deserve half-fill, should have classes added as usual", () => {
   render(<Rating readOnly value={2.12} limit={3} />);

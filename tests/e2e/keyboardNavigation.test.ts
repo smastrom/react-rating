@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 import {
+  beforeAny,
   expectNoneToBeChecked,
   expectToBeTheOnlyChecked,
   expectToBeTheOnlyFocusable,
@@ -13,10 +14,7 @@ import {
  */
 
 test.beforeEach(async ({ page, browserName }) => {
-  await page.goto('http://localhost:3000');
-  if (browserName === 'webkit') {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-  }
+  await beforeAny(page, browserName);
 
   await pressTab(page, browserName);
   await pressTab(page, browserName);

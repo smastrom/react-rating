@@ -25,7 +25,7 @@ test('Should have default classNames applied', () => {
   const defaultClasses =
     'rar--group rar--dir-x rar--fx-colors rar--pointer rar--has-stroke rar--gap-sm rar--space-sm';
 
-  render(<Rating value={2} limit={3} onChange={() => {}} />);
+  render(<Rating value={2} items={3} onChange={() => {}} />);
 
   const item = screen.queryByTestId(ID);
   expect(item).toHaveClass(defaultClasses, { exact: true });
@@ -37,7 +37,7 @@ test('Should not have classNames if styling props are disabled', () => {
   render(
     <Rating
       value={2}
-      limit={3}
+      items={3}
       onChange={() => {}}
       transition="none"
       spaceBetween="none"
@@ -55,7 +55,7 @@ test('Should have no stroke nor border classNames and no CSS inline vars if not 
   render(
     <Rating
       value={2}
-      limit={3}
+      items={3}
       itemStyles={itemStyles}
       onChange={() => {}}
       transition="none"
@@ -75,7 +75,7 @@ test('Should have stroke and border classNames if set in itemStyles', () => {
   render(
     <Rating
       value={2}
-      limit={3}
+      items={3}
       itemStyles={{ ...itemStyles, boxBorderWidth: 20, itemStrokeWidth: 20 }}
       onChange={() => {}}
       transition="none"
@@ -101,7 +101,7 @@ const toHaveInactiveClassName = (childId: string) => {
 };
 
 test('If ratingValue equals to n, first n child should have correspondent active className', () => {
-  render(<Rating value={3} limit={6} onChange={() => {}} />);
+  render(<Rating value={3} items={6} onChange={() => {}} />);
 
   toHaveActiveClassName(CHILD_ID_1);
   toHaveActiveClassName(CHILD_ID_2);
@@ -112,7 +112,7 @@ test('If ratingValue equals to n, first n child should have correspondent active
 });
 
 test('If ratingValue equals to n, only n child should have correspondent active className if highlightOnlySelected is enabled', () => {
-  render(<Rating value={3} limit={6} onChange={() => {}} highlightOnlySelected />);
+  render(<Rating value={3} items={6} onChange={() => {}} highlightOnlySelected />);
   toHaveInactiveClassName(CHILD_ID_1);
   toHaveInactiveClassName(CHILD_ID_2);
 
@@ -123,7 +123,7 @@ test('If ratingValue equals to n, only n child should have correspondent active 
 });
 
 test('If ratingValue equals to 0, no child should have active className, wheter or not highlightOnlySelected is enabled', () => {
-  const { rerender } = render(<Rating value={0} limit={6} onChange={() => {}} />);
+  const { rerender } = render(<Rating value={0} items={6} onChange={() => {}} />);
 
   const toNotHaveActiveClassNames = () => {
     toHaveInactiveClassName(CHILD_ID_1);
@@ -135,7 +135,7 @@ test('If ratingValue equals to 0, no child should have active className, wheter 
 
   toNotHaveActiveClassNames();
 
-  rerender(<Rating value={0} limit={6} onChange={() => {}} highlightOnlySelected />);
+  rerender(<Rating value={0} items={6} onChange={() => {}} highlightOnlySelected />);
 
   toNotHaveActiveClassNames();
 });

@@ -19,17 +19,17 @@
 
 ## Table of contents
 
-* [Installation](#installation)
-* [Basic usage](#basic-usage)
-* [API](#api)
-* [Styling](#styling)
-  + [Rating items](#rating-items)
-  + [How to create itemNodes elements](#-`important`--how-to-create-itemnodes-elements)
-  + [Advanced rating items styling](#advanced-rating-items-styling)
-  + [Rating items half-fill and float values](#rating-items-half-fill-and-float-values)
-  + [Styling via CSS](#styling-via-css)
-* [Accessibility](#accessibility)
-* [Troubleshooting](#troubleshooting)
+- [Installation](#installation)
+- [Basic usage](#basic-usage)
+- [API](#api)
+- [Styling](#styling)
+  - [Rating items](#rating-items)
+  - [How to create itemNodes elements](#-`important`--how-to-create-itemnodes-elements)
+  - [Advanced rating items styling](#advanced-rating-items-styling)
+  - [Rating items half-fill and float values](#rating-items-half-fill-and-float-values)
+  - [Styling via CSS](#styling-via-css)
+- [Accessibility](#accessibility)
+- [Troubleshooting](#troubleshooting)
 
 <br/>
 
@@ -78,51 +78,19 @@ import { Rating } from 'react-advanced-rating';
 import 'react-advanced-rating/dist/index.css';
 
 const App = () => (
-  <div style={{ maxWidth: 600, width: "100%" }}>
+  <div style={{ maxWidth: 600, width: '100%' }}>
     <Rating readOnly value={3.78} />
   </div>
 );
 ```
 
-### Usage with NextJS
+### NextJS
 
-**\_app.js**
+Import the CSS in **\_app.js**.
 
-```jsx
-import 'react-advanced-rating/dist/index.css'; // <-- Import CSS
+### Gatsby
 
-const MyApp = ({ Component, pageProps }) => <Component {...pageProps} />;
-
-export default MyApp;
-```
-
-**page.js**
-
-```jsx
-import { useState } from 'react';
-import { Rating } from 'react-advanced-rating';
-
-const ProductPage = ({ ratingFromServer }) => (
-  <div style={{ maxWidth: 600, width: "100%" }}>
-    <Rating value={ratingFromServer} readOnly />
-  </div>
-);
-
-export default ProductPage;
-
-export const getServerSideProps = async (req, res) => {
-  // Async ops...
-  return {
-    props: {
-      ratingFromServer,
-    },
-  };
-};
-```
-
-### Usage with Gatsby
-
-Same as NextJS, but the CSS must be imported in **gatsby-browser.js**.
+Import the CSS in **gatsby-browser.js**.
 
 <br />
 
@@ -138,16 +106,16 @@ Same as NextJS, but the CSS must be imported in **gatsby-browser.js**.
 
 <br />
 
-
 ### :cyclone: Core
 
-| Prop                  | Type                                                    | Description                                                                                | Default                                                           | Required                        | :thinking:          |
-| --------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------- | ------------------- |
-| value                 | number                                                  | An integer from 0 to **limit**, can be a float if `readOnly` is **true**.                  | undefined                                                         | **Yes**                         | :green_circle:      |
-| onChange              | function                                                | Callback to update `value`                                                                 | undefined                                                         | Only if `readOnly` is **false** | :large_blue_circle: |
-| onHoverChange         | function                                                | Callback to update the hovered rating value                                                | undefined                                                         | No                              | :large_blue_circle: |
-| limit                 | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10         | Maximum number of rating items to display                                                  | 5                                                                 | No                              | :green_circle:      |
-| readOnly              | boolean                                                 | Whether or not the component should be an accessible image element                         | false                                                             | No                              | :green_circle:      |
+| Prop               | Type                                            | Description                                                                        | Default   | Required                        | :thinking:          |
+| ------------------ | ----------------------------------------------- | ---------------------------------------------------------------------------------- | --------- | ------------------------------- | ------------------- |
+| value              | number                                          | An integer from 0 to \***\*, can be a float if `readOnly` is **true\*\*.           | undefined | **Yes**                         | :green_circle:      |
+| onChange           | function                                        | Callback to update `value`                                                         | undefined | Only if `readOnly` is **false** | :large_blue_circle: |
+| onHoverChange      | function                                        | Callback to update the hovered rating value                                        | undefined | No                              | :large_blue_circle: |
+| resetOnSecondClick | boolean                                         | Wheter or not to reset the rating value if clicking again on the current selection | false     | No                              | :large_blue_circle: |
+|                    | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | Maximum number of rating items to display                                          | 5         | No                              | :green_circle:      |
+| readOnly           | boolean                                         | Whether or not the component should be an accessible image element                 | false     | No                              | :green_circle:      |
 
 `ref`, `id`, `className` and `style` are also available.
 
@@ -155,16 +123,16 @@ Same as NextJS, but the CSS must be imported in **gatsby-browser.js**.
 
 ### :nail_care: Appearance
 
-| Prop                  | Type                                                    | Description                                                                                | Default                                                           | Required                        | :thinking:          |
-| --------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------- | ------------------- |
-| highlightOnlySelected | boolean                                                 | Whether or not to highlight only the selected rating item.                                 | false                                                             | No                              | :green_circle:      |
-| halfFillMode          | `svg` \| `box`                                          | Whether to half-fill the SVG or the box if `value` is a float                              | `svg`                                                             | No                              | :purple_circle:     |
-| orientation           | `horizontal` \| `vertical`                              | Orientation of the rating items                                                            | `horizontal`                                                      | No                              | :green_circle:      |
-| spaceInside           | `none` \| `small` \| `regular` \| `large`               | Responsive padding of each rating item                                                     | `regular`                                                         | No                              | :green_circle:      |
-| spaceBetween          | `none` \| `small` \| `regular` \| `large`               | Responsive gap between the rating items                                                    | `small`                                                           | No                              | :green_circle:      |
-| radius                | `none` \| `small` \| `medium` \| `full`                 | Radius of each rating item                                                                 | `small`                                                           | No                              | :green_circle:      |
-| transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting                                                | `colors`                                                          | No                              | :large_blue_circle: |
-| itemStyles            | [ItemStyle]()                                           | Custom SVGs and colors                                                                     | [defaultStyles]()                                                 | No                              | :green_circle:      |
+| Prop                  | Type                                                    | Description                                                   | Default           | Required | :thinking:          |
+| --------------------- | ------------------------------------------------------- | ------------------------------------------------------------- | ----------------- | -------- | ------------------- |
+| highlightOnlySelected | boolean                                                 | Whether or not to highlight only the selected rating item.    | false             | No       | :green_circle:      |
+| halfFillMode          | `svg` \| `box`                                          | Whether to half-fill the SVG or the box if `value` is a float | `svg`             | No       | :purple_circle:     |
+| orientation           | `horizontal` \| `vertical`                              | Orientation of the rating items                               | `horizontal`      | No       | :green_circle:      |
+| spaceInside           | `none` \| `small` \| `medium` \| `large`                | Responsive padding of each rating item                        | `regular`         | No       | :green_circle:      |
+| spaceBetween          | `none` \| `small` \| `medium` \| `large`                | Responsive gap between the rating items                       | `small`           | No       | :green_circle:      |
+| radius                | `none` \| `small` \| `medium` \| `full`                 | Radius of each rating item                                    | `small`           | No       | :green_circle:      |
+| transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting                   | `colors`          | No       | :large_blue_circle: |
+| itemStyles            | [ItemStyle]()                                           | Custom SVGs and colors                                        | [defaultStyles]() | No       | :green_circle:      |
 
 Would you like to style it via CSS? Take a look [here]().
 
@@ -172,13 +140,13 @@ Would you like to style it via CSS? Take a look [here]().
 
 ### :open_umbrella: Accessibility
 
-| Prop                  | Type                                                    | Description                                                                                | Default                                                           | Required                        | :thinking:          |
-| --------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------- | ------------------- |
-| enableKeyboard        | boolean                                                 | Whether or not to enable keyboard navigation                                               | true                                                              | No                              | :large_blue_circle: |
-| isRequired            | boolean                                                 | Whether or not to tell assistive technologies that rating is required                  | true                                                              | No                              | :large_blue_circle: |
-| labelledBy            | string                                                  | `id` of the element to be used as radio-group label. If set, takes precedence over `accessibleLabel` | undefined                                                         | No                              | :large_blue_circle: |
-| accessibleLabels      | string[]                                                | Accessible labels of each rating item                                                     | `Rate 1`, `Rate 2`...                                             | No                              | :large_blue_circle: |
-| accessibleLabel       | string                                                  | Value of `aria-label` attribute                                                            | `Rated <value> on <limit>` or `Rating` if `readOnly` is **false** | No                              | :green_circle:      |
+| Prop             | Type     | Description                                                                                          | Default                                                      | Required | :thinking:          |
+| ---------------- | -------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | -------- | ------------------- |
+| enableKeyboard   | boolean  | Whether or not to enable keyboard navigation                                                         | true                                                         | No       | :large_blue_circle: |
+| isRequired       | boolean  | Whether or not to tell assistive technologies that rating is required                                | true                                                         | No       | :large_blue_circle: |
+| labelledBy       | string   | `id` of the element to be used as radio-group label. If set, takes precedence over `accessibleLabel` | undefined                                                    | No       | :large_blue_circle: |
+| accessibleLabels | string[] | Accessible labels of each rating item                                                                | `Rate 1`, `Rate 2`...                                        | No       | :large_blue_circle: |
+| accessibleLabel  | string   | Value of `aria-label` attribute                                                                      | `Rated <value> on <>` or `Rating` if `readOnly` is **false** | No       | :green_circle:      |
 
 <br />
 
@@ -200,20 +168,22 @@ type ItemStyle = {
   activeBoxColor?: string | string[];
   activeBoxBorderColor?: string | string[];
 
-  inactiveFillColor?: string; 
+  inactiveFillColor?: string;
   inactiveStrokeColor?: string;
   inactiveBoxColor?: string;
   inactiveBoxBorderColor?: string;
 };
 ```
 
-It may seem a lot of properties but they are all optional (except for `itemShapes`), if a property is not set, no classes nor CSS variables will be added to the HTML. Just set the ones you need and that's it.
+They may seem a lot of properties but they are **all optional** (except for `itemShapes`). If a property is not set, no classes nor CSS variables will be added to the rendered HTML. Just set the ones you need and that's it.
 
 <details><summary><strong>Default styles</strong></summary>
 <br />
 
 ```jsx
-const Star = <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />;
+const Star = (
+  <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
+);
 
 const defaultItemStyles = {
   itemShapes: Star,
@@ -221,12 +191,12 @@ const defaultItemStyles = {
 
   activeFillColor: '#ffb23f',
   activeStrokeColor: '#e17b21',
-  
+
   inactiveFillColor: '#fff7ed',
   inactiveStrokeColor: '#e17b21',
 };
 ```
- 
+
 </details>
 
 <details><summary><strong>How itemStrokeWidth works</strong></summary>
@@ -254,15 +224,14 @@ You can pass any valid CSS color string such as `aliceblue`, `#FFF332`, `rgba(0,
 
 This package is designed to work with SVGs from any source.
 
-Just provide the shapes and the component will take care of rendering a brand-new, **responsive** SVG for you.
+Just provide the shapes and the component will take care of rendering a brand-new, responsive SVG for you.
 
 1. Create a JSX element including only the **<u><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">basic shapes</a></u>** of your SVG: `path`, `circle`, `rect`, `polygon`, `ellipse`, `polyline` and `line`.
 
 2. Delete any fill and stroke-related attribute from those elements. You will be able to control such values directly from `itemStyles` prop. You can safely delete also any `data-name` and `id` attribute.
 
-
-> :warning: This example describes the worst-case scenario with a very messy SVG code pasted from Adobe XD which automatically applies translations, useless attributes and groups. If your SVGs comes from quality sources like 
-[css.gg](https://css.gg/), [Feather](https://feathericons.com/) or [SVG Repo](https://www.svgrepo.com/collections/monocolor/), you won't have to do anything else than just removing strokes and fill attributes.
+> :warning: This example describes the worst-case scenario with a very messy SVG code pasted from Adobe XD which automatically applies translations, useless attributes and groups. If your SVGs comes from quality sources like
+> [css.gg](https://css.gg/), [Feather](https://feathericons.com/) or [SVG Repo](https://www.svgrepo.com/collections/monocolor/), you won't have to do anything else than just removing strokes and fill attributes.
 
 **SVG Source**
 
@@ -280,16 +249,10 @@ Just provide the shapes and the component will take care of rendering a brand-ne
       stroke-linejoin="round"
       stroke-width="2"
     />
-    <path
-      id="Tracciato_1" // <-- Delete
-      data-name="Tracciato 1" // <-- Delete
-      d="M8,16a8.858,8.858,0,0,1,4-1,8.87,8.87,0,0,1,4,1"
-      fill="none" // <-- Delete
-      stroke="#000" // <-- Delete
-      stroke-linecap="round" // <-- Delete
-      stroke-linejoin="round" // <-- Delete
-      stroke-width="2" // <-- Delete
-    />
+    <path id="Tracciato_1" // <-- Delete data-name="Tracciato 1" // <-- Delete
+    d="M8,16a8.858,8.858,0,0,1,4-1,8.87,8.87,0,0,1,4,1" fill="none" // <-- Delete stroke="#000"
+    // <-- Delete stroke-linecap="round" // <-- Delete stroke-linejoin="round" // <-- Delete
+    stroke-width="2" // <-- Delete />
     <circle
       id="Ellisse_1"
       data-name="Ellisse 1"
@@ -303,8 +266,8 @@ Just provide the shapes and the component will take care of rendering a brand-ne
       stroke-linejoin="round"
       stroke-width="2"
     />
-  </g>
-</svg>;
+  </g></svg
+>;
 ```
 
 **Destination**
@@ -319,7 +282,7 @@ const StrangeFace = (
 );
 
 /**
- * Since this is an outline icon without any fill color 
+ * Since this is an outline icon without any fill color
  * we just set the desidered stroke width and color.
  */
 
@@ -371,7 +334,7 @@ const SmilingFace = (
 );
 
 const itemStyle = {
-  svgChildNodes: SmilingFace,
+  itemShapes: SmilingFace,
   activeFillColor: 'green',
   inactiveFillColor: 'gray',
 };
@@ -416,7 +379,7 @@ const SmilingFace = (
 );
 
 const itemStyle = {
-  svgChildNodes: SmilingFace,
+  itemShapes: SmilingFace,
   activeFillColor: 'green',
   inactiveFillColor: 'gray',
 };
@@ -461,7 +424,7 @@ const SmilingFace = (
 );
 
 const itemStyle = {
-  svgChildNodes: SmilingFace,
+  itemShapes: SmilingFace,
   activeFillColor: 'green',
   inactiveFillColor: 'gray',
 };
@@ -506,7 +469,7 @@ const SmilingFace = (
 );
 
 const itemStyle = {
-  svgChildNodes: SmilingFace,
+  itemShapes: SmilingFace,
   activeFillColor: 'green',
   inactiveFillColor: 'gray',
 };
@@ -528,7 +491,7 @@ const Face = <polygon points="100,10 40,198 190,78 10,78 160,198" />;
 const HappyFace = <polygon points="100,10 40,198 190,78 10,78 160,198" />;
 
 const itemStyles = {
-    svgChildNodes: [SadFace, Face, HappyFace],
+    itemShapes: [SadFace, Face, HappyFace],
     activeFillColor: ['white', 'white', 'white'],
     activeBoxColor: '#22C55E',
     inactiveFillColor: '#DCFCE7',
@@ -541,7 +504,7 @@ const App = () => {
   return (
       <div style={{ maxWidth: 600, width: "100%" }}>
         <RatingInput
-            limit={3}
+           items={3}
             itemStyles={itemStyles}
             value={ratingValue}
             onChange={(currentValue) => setValue(currentValue)}
@@ -559,7 +522,7 @@ If `readOnly` is set to **true**, `value` prop accepts a float:
 
 ```jsx
 const App = () => (
-  <div style={{ maxWidth: 300, width: "100%" }}>
+  <div style={{ maxWidth: 300, width: '100%' }}>
     <Rating readOnly value={1.38} />
   </div>
 );
@@ -586,7 +549,7 @@ You can switch between `svg` and `box`:
 
 ```jsx
 const App = () => (
-  <div style={{ maxWidth: 300, width: "100%" }}>
+  <div style={{ maxWidth: 300, width: '100%' }}>
     <Rating readOnly value={2.38} halfFillMode="box" />
   </div>
 );
@@ -745,19 +708,19 @@ const App = () => {
 
 ### Image element label
 
-By default if `readOnly` is set to **true**, an accessible label for the image element will be equal to `Rated ${value} on ${limit}`. To customize it, simply set the `accessibleLabel` prop:
+By default if `readOnly` is set to **true**, an accessible label for the image element will be equal to `Rated ${value} on ${}`. To customize it, simply set the `accessibleLabel` prop:
 
 ```jsx
 import React from 'react';
 import { Rating } from 'react-advanced-rating';
 import 'react-advanced-rating/dist/index.min.css';
 
-const productName = "Yellow tomato"
+const productName = 'Yellow tomato';
 const ratingValue = 3.5;
 const ratingLabel = `${productName} is rated ${ratingValue} on 5`;
 
 const App = () => (
-  <div style={{ maxWidth: 600, width: "100%" }}>
+  <div style={{ maxWidth: 600, width: '100%' }}>
     <Rating readOnly value={ratingValue} accessibleLabel={ratingLabel} />
   </div>
 );

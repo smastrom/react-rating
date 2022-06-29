@@ -44,6 +44,9 @@ export default defineConfig(({ command }) => ({
       ],
     },
   },
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' },
+  },
   plugins: [
     react({ jsxRuntime: 'classic' }),
     dts({

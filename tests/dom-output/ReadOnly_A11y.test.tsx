@@ -48,8 +48,8 @@ test('User should be able to customize aria-label', () => {
 
 /* A11y - Child */
 
-test('Should contain only n child as per limit', () => {
-  render(<Rating readOnly value={2} limit={3} />);
+test('Should contain only n child as per ', () => {
+  render(<Rating readOnly value={2} items={3} />);
   const item = screen.getByTestId(ID);
 
   const child1 = screen.getByTestId(CHILD_ID_1);
@@ -66,7 +66,7 @@ test('Should contain only n child as per limit', () => {
 });
 
 test('No child should contain accessible attributes', () => {
-  render(<Rating readOnly value={2} limit={3} />);
+  render(<Rating readOnly value={2} items={3} />);
 
   const expectToNotHaveAccesibleAttributes = (child: HTMLElement) => {
     expect(child).not.toHaveAttribute('tabindex');

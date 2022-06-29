@@ -32,7 +32,7 @@ export const CHILD_ID_4 = 'rating-child-4';
 export const CHILD_ID_5 = 'rating-child-5';
 
 export const itemStyles: ItemStylesProp = {
-  svgChildNodes: StrangeFace,
+  itemShapes: StrangeFace,
 };
 
 export const useSelectedRatingValue = (initialValue: number) => {

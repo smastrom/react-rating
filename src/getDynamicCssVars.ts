@@ -17,7 +17,7 @@ export const getDynamicCssVars = (
     setDyamicCssVars(arrayStylesVars, key, color[currentSelectedIndex])
   );
 
-  if (highlightOnlySelected) {
+  if (highlightOnlySelected === true) {
     cssVars = Array(currentSelectedIndex).fill({});
     cssVars.push(arrayStylesVars);
   } else {

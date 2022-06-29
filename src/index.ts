@@ -1,7 +1,8 @@
-import './css/core.css';
-import './css/utils.css';
-import './css/colors.css';
-import './css/transitions.css';
-import './css/half-fill.css';
+import './styles/core.css';
+import './styles/utils.css';
+import './styles/colors.css';
+import './styles/transitions.css';
+import './styles/half-fill.css';
 
 export { Rating } from './Rating';
+export { Star } from './styles/DefaultItemStyles';

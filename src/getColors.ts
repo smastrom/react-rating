@@ -12,8 +12,8 @@ const validArrayColorKeys: Array<keyof ValidArrayColors> = [
 
 export const getColors = (
   colorsObj: Colors | object,
-  absoluteStrokeWidth: NonNullable<ItemStylesProp['itemStrokeWidth']>,
   deservesHalfFill: boolean,
+  absoluteStrokeWidth: NonNullable<ItemStylesProp['itemStrokeWidth']>,
   absoluteHalfFill: NonNullable<RatingProps['halfFillMode']>
 ) => {
   const allColors = { ...colorsObj };

@@ -27,14 +27,14 @@ test('Should not render the component if value is not a number', () => {
   expect(item).not.toBeInTheDocument();
 });
 
-test('Should not render the component if limit greater than 10', () => {
+test('Should not render the component if  greater than 10', () => {
   // @ts-ignore
-  render(<Rating value={6} limit={11} />);
+  render(<Rating value={6} items={11} />);
   const item = screen.queryByTestId(ID);
   expect(item).not.toBeInTheDocument();
 });
 
-test('Should not render the component if value greather than limit (default: 5)', () => {
+test('Should not render the component if value greather than  (default: 5)', () => {
   const { rerender } = render(<Rating value={6} />);
   const item = screen.queryByTestId(ID);
   expect(item).not.toBeInTheDocument();

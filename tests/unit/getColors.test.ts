@@ -33,7 +33,7 @@ const expectedObject = {
 
 test(Test1, () => {
   expect(
-    getColors(sourceObject, absoluteStrokeWidth, deservesHalfFill, absoluteHalfFill)
+    getColors(sourceObject, deservesHalfFill, absoluteStrokeWidth, absoluteHalfFill)
   ).toStrictEqual(expectedObject);
 });
 
@@ -57,7 +57,7 @@ const expectedObject2 = {
 
 test(Test2, () => {
   expect(
-    getColors(sourceObject2, absoluteStrokeWidth, deservesHalfFill, absoluteHalfFill)
+    getColors(sourceObject2, deservesHalfFill, absoluteStrokeWidth, absoluteHalfFill)
   ).toStrictEqual(expectedObject2);
 });
 
@@ -85,7 +85,7 @@ const expectedObject3 = {
 
 test(Test3, () => {
   expect(
-    getColors(sourceObject3, absoluteStrokeWidth, deservesHalfFill, absoluteHalfFill)
+    getColors(sourceObject3, deservesHalfFill, absoluteStrokeWidth, absoluteHalfFill)
   ).toStrictEqual(expectedObject3);
 });
 
@@ -112,7 +112,7 @@ const expectedObject4 = {
 };
 
 test(Test4, () => {
-  expect(getColors(sourceObject4, 0, deservesHalfFill, absoluteHalfFill)).toStrictEqual(
+  expect(getColors(sourceObject4, deservesHalfFill, 0, absoluteHalfFill)).toStrictEqual(
     expectedObject4
   );
 });
@@ -152,6 +152,6 @@ const expectedObject5B = {
 };
 
 test(Test5, () => {
-  expect(getColors(sourceObject5, 10, true, 'box')).toStrictEqual(expectedObject5A);
-  expect(getColors(sourceObject5, 10, true, 'svg')).toStrictEqual(expectedObject5B);
+  expect(getColors(sourceObject5, true, 10, 'box')).toStrictEqual(expectedObject5A);
+  expect(getColors(sourceObject5, true, 10, 'svg')).toStrictEqual(expectedObject5B);
 });

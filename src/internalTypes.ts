@@ -33,7 +33,7 @@ export type KeyAndValueStrings = {
 export type TabIndex = -1 | 0;
 
 export type RatingItemProps = NonNullable<
-  Pick<ItemStylesProp, 'svgChildNodes' | 'itemStrokeWidth'>
+  Pick<ItemStylesProp, 'itemShapes' | 'itemStrokeWidth'>
 > & {
   hasHalfFill: boolean;
   testId?: string;

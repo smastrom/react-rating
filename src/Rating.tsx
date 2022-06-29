@@ -24,7 +24,7 @@ import {
   getSvgChildTestIds,
   devTestId,
 } from './utils';
-import { defaultItemStyles } from './styles/DefaultItemStyles';
+import { defaultItemStyles } from './defaultItemStyles';
 
 import { RatingProps, Rating as RatingComponent } from './exportedTypes';
 import {
@@ -91,13 +91,15 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     const { itemShapes, itemStrokeWidth, boxBorderWidth } = itemStyles;
 
-    const absoluteStrokeWidth = isValidPositiveNumber(itemStyles.itemStrokeWidth)
+    const absoluteStrokeWidth = isValidPositiveNumber(itemStrokeWidth)
       ? (itemStrokeWidth as number)
       : 0;
-    const absoluteBoxBorderWidth = isValidPositiveNumber(itemStyles.boxBorderWidth)
+    const absoluteBoxBorderWidth = isValidPositiveNumber(boxBorderWidth)
       ? (boxBorderWidth as number)
       : 0;
     const absoluteHalfFillMode = halfFillMode === 'box' ? 'box' : 'svg';
+
+    const needsDynamicCssVars = ratingValue >= 0.25;
 
     /* Colors */
 
@@ -115,7 +117,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       () => ({
         staticCssVars: getStaticCssVars(staticColors, absoluteBoxBorderWidth),
       }),
-      [absoluteBoxBorderWidth, staticColors]
+      [staticColors, absoluteBoxBorderWidth]
     );
 
     const getDynamicClassNames = useCallback(
@@ -125,14 +127,14 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         }
         return getActiveClassNames(highlightOnlySelected, items, currentSelectedIndex);
       },
-      [absoluteHalfFillMode, deservesHalfFill, highlightOnlySelected, ratingValue, items]
+      [deservesHalfFill, highlightOnlySelected, ratingValue, items, absoluteHalfFillMode]
     );
 
     const getDynamicStyles = useCallback(
       (currentSelectedIndex: number, shouldGetCssVars: boolean) => ({
         dynamicClassNames: getDynamicClassNames(currentSelectedIndex),
         dynamicCssVars:
-          hasArrayColors && shouldGetCssVars
+          shouldGetCssVars && hasArrayColors
             ? getDynamicCssVars(
                 arrayColors as RequireAtLeastOne<ValidArrayColors>,
                 currentSelectedIndex,
@@ -147,7 +149,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     const [styles, setStyles] = useState<StylesState>({
       ...getStaticStyles(),
-      ...getDynamicStyles(currentRatingIndex, ratingValue >= 0.25),
+      ...getDynamicStyles(currentRatingIndex, needsDynamicCssVars),
     });
 
     const [tabIndex, setTabIndex] = useState<TabIndex[] | []>(() => {
@@ -168,27 +170,15 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     useEffect(() => {
       setStyles({
         ...getStaticStyles(),
-        ...getDynamicStyles(currentRatingIndex, ratingValue >= 0.25),
+        ...getDynamicStyles(currentRatingIndex, needsDynamicCssVars),
       });
-    }, [
-      getStaticStyles,
-      getDynamicStyles,
-      currentRatingIndex,
-      readOnly,
-      ratingValue,
-      itemStyles,
-      boxBorderWidth,
-      halfFillMode,
-      orientation,
-      highlightOnlySelected,
-      items,
-    ]);
+    }, [getStaticStyles, getDynamicStyles, currentRatingIndex, needsDynamicCssVars]);
 
     useEffect(() => {
       if (readOnly === false && enableKeyboard === true) {
         setTabIndex(() => getTabIndex(items, currentRatingIndex));
       }
-    }, [ratingValue, currentRatingIndex, readOnly, enableKeyboard, items]);
+    }, [currentRatingIndex, readOnly, enableKeyboard, items]);
 
     /* Prevent rendering */
 
@@ -224,7 +214,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       if (typeof onHoverChange === 'function') {
         onHoverChange(ratingValues[hoveredIndex]);
       }
-
       setStyles({ ...styles, ...getDynamicStyles(hoveredIndex, true) });
     };
 
@@ -232,8 +221,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       if (typeof onHoverChange === 'function') {
         onHoverChange(0);
       }
-
-      setStyles({ ...styles, ...getDynamicStyles(currentRatingIndex, ratingValue >= 0.25) });
+      setStyles({ ...styles, ...getDynamicStyles(currentRatingIndex, needsDynamicCssVars) });
     };
 
     /* Keyboard handler */

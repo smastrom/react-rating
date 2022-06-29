@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
-
-import { Rating } from '../src/Rating';
-import { StrangeFace } from './Shapes';
-
-import { ItemStylesProp } from '../src/exportedTypes';
 import { Profiler } from './Profiler';
 
-const testStylesArr: ItemStylesProp = {
-  itemShapes: StrangeFace,
+import { Rating } from '../src/Rating';
+import { Star } from '../src';
+import { ItemStylesProp } from '../src/exportedTypes';
 
-  itemStrokeWidth: 2,
-  boxBorderWidth: 3,
+const StarDrawing = (
+  <path d="M62 25.154H39.082L32 3l-7.082 22.154H2l18.541 13.693L13.459 61L32 47.309L50.541 61l-7.082-22.152L62 25.154z" />
+);
 
-  activeStrokeColor: ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'],
-  inactiveStrokeColor: 'white',
+const customStyles: ItemStylesProp = {
+  itemShapes: Star,
+  boxBorderWidth: 2,
 
+  itemStrokeWidth: 6,
+
+  activeFillColor: ['#FEE2E2', '#FFEDD5', '#FEF9C3', '#ECFCCB', '#D1FAE5'],
   activeBoxColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
-  inactiveBoxColor: '#dddddd',
-
   activeBoxBorderColor: ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'],
+
+  inactiveFillColor: 'white',
+  inactiveBoxColor: '#dddddd',
   inactiveBoxBorderColor: '#a8a8a8',
 };
 
@@ -42,25 +44,26 @@ const App = () => {
       </button>
       <div
         style={{
-          maxWidth: '430px',
+          maxWidth: 300,
           width: '100%',
         }}
       >
         <Profiler>
           <Rating
             id="rating"
+            // readOnly
             resetOnSecondClick
             items={5} // Rename to items
             aria-label="Ciao"
             onChange={(value) => setValue(value)}
             value={value}
-            itemStyles={testStylesArr}
-            transition="colors"
+            itemStyles={customStyles}
+            transition="zoom"
             // highlightOnlySelected
             orientation="horizontal"
             spaceBetween="small"
-            spaceInside="small"
-            radius="none"
+            spaceInside="large"
+            radius="small"
             isRequired={false}
             accessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}
             halfFillMode="box"

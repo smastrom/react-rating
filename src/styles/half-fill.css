@@ -1,17 +1,17 @@
 .rar--svg-stop-1 {
-  stop-color: var(--rar--fill-on-color, none);
+  stop-color: var(--rar--fill-on-color, rgba(0, 0, 0, 0));
 }
 
 [dir='rtl'] .rar--svg-stop-1 {
-  stop-color: var(--rar--fill-off-color, none);
+  stop-color: var(--rar--fill-off-color, rgba(0, 0, 0, 0));
 }
 
 .rar--svg-stop-2 {
-  stop-color: var(--rar--fill-off-color, none);
+  stop-color: var(--rar--fill-off-color, rgba(0, 0, 0, 0));
 }
 
 [dir='rtl'] .rar--svg-stop-2 {
-  stop-color: var(--rar--fill-on-color, none);
+  stop-color: var(--rar--fill-on-color, rgba(0, 0, 0, 0));
 }
 
 /* SVG Half Fill */
@@ -47,7 +47,7 @@
 
 /* Box half fill */
 
-.rar--hf-box-int .rar--svg {
+.rar--dir-x .rar--hf-box-int .rar--svg {
   background: linear-gradient(
     to right,
     var(--rar--box-on-color, none) 50%,
@@ -55,9 +55,17 @@
   );
 }
 
-[dir='rtl'] .rar--hf-box-int .rar--svg {
+[dir='rtl'] .rar--dir-x .rar--hf-box-int .rar--svg {
   background: linear-gradient(
     to left,
+    var(--rar--box-on-color, none) 50%,
+    var(--rar--box-off-color, none) 50%
+  );
+}
+
+.rar--dir-y .rar--hf-box-int .rar--svg {
+  background: linear-gradient(
+    to bottom,
     var(--rar--box-on-color, none) 50%,
     var(--rar--box-off-color, none) 50%
   );
@@ -80,7 +88,7 @@
 .rar--has-stroke .rar--hf-box-on .rar--svg,
 .rar--has-stroke .rar--hf-box-off .rar--svg,
 .rar--has-stroke .rar--hf-box-int .rar--svg {
-  stroke: var(--rar--stroke-off-color, none);
+  stroke: var(--rar--stroke-off-color, currentColor);
 }
 
 .rar--has-border .rar--hf-box-on .rar--svg,

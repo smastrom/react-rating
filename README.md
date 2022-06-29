@@ -114,7 +114,7 @@ Import the CSS in **gatsby-browser.js**.
 | onChange           | function                                        | Callback to update `value`                                                         | undefined | Only if `readOnly` is **false** | :large_blue_circle: |
 | onHoverChange      | function                                        | Callback to update the hovered rating value                                        | undefined | No                              | :large_blue_circle: |
 | resetOnSecondClick | boolean                                         | Wheter or not to reset the rating value if clicking again on the current selection | false     | No                              | :large_blue_circle: |
-|                    | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | Maximum number of rating items to display                                          | 5         | No                              | :green_circle:      |
+| items              | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | Maximum number of rating items to display                                          | 5         | No                              | :green_circle:      |
 | readOnly           | boolean                                         | Whether or not the component should be an accessible image element                 | false     | No                              | :green_circle:      |
 
 `ref`, `id`, `className` and `style` are also available.

@@ -5,8 +5,8 @@ export const getActiveClassNames = (
   highlightOnlySelectedProp: NonNullable<SharedProps['highlightOnlySelected']>,
   items: number,
   selectedIndex: number
-): CSSClassName[] =>
-  Array(items)
+): CSSClassName[] => {
+  const activeClassNames = Array(items)
     .fill(undefined)
     .map((_, index) => {
       if (highlightOnlySelectedProp === false) {
@@ -20,3 +20,6 @@ export const getActiveClassNames = (
       }
       return 'rar--off';
     });
+
+  return activeClassNames;
+};

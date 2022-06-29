@@ -17,7 +17,7 @@ export type NonArrayColors = {
 export type Colors = MaybeArrayColors & NonArrayColors;
 
 export type ItemStylesProp = Colors & {
-  svgChildNodes: JSX.Element | JSX.Element[];
+  itemShapes: JSX.Element | JSX.Element[];
   itemStrokeWidth?: number;
   boxBorderWidth?: number;
 };
@@ -27,7 +27,7 @@ export type StyleOptions = 'none' | 'small' | 'medium' | 'large';
 export type SharedProps = {
   value: number;
   readOnly?: boolean;
-  limit?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+  items?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
   highlightOnlySelected?: boolean;
   orientation?: 'horizontal' | 'vertical';
   itemStyles?: ItemStylesProp;
@@ -45,8 +45,9 @@ export type ReadOnlyProps = {
 };
 
 export type InputProps = {
-  onChange?: (value: number) => void | undefined;
-  onHoverChange?: (value: number) => void | undefined;
+  onChange?: (value: number) => void | Promise<void>;
+  onHoverChange?: (value: number) => void;
+  resetOnSecondClick?: boolean;
   enableKeyboard?: boolean;
   labelledBy?: string;
   accessibleLabels?: string[];

@@ -5,7 +5,7 @@ import { getUniqueId, toSecondDecimal, useIsomorphicLayoutEffect } from './utils
 import { RatingItemProps, KeyAndValueStrings } from './internalTypes';
 
 export const RatingItem = ({
-  svgChildNodes,
+  itemShapes,
   testId = '',
   itemStrokeWidth = 0,
   hasHalfFill = false,
@@ -49,7 +49,7 @@ export const RatingItem = ({
         translateData,
       });
     }
-  }, [svgChildNodes, itemStrokeWidth, hasHalfFill]);
+  }, [itemShapes, itemStrokeWidth, hasHalfFill]);
 
   /* Props */
 
@@ -113,7 +113,7 @@ export const RatingItem = ({
       )}
 
       <g ref={svgRef} {...getTransform()} {...getHalfFillAttr()}>
-        {svgChildNodes}
+        {itemShapes}
       </g>
     </svg>
   );

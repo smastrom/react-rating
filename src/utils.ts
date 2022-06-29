@@ -35,3 +35,14 @@ export const getIntersectionIndex = (ratingValues: number[], ratingValue: number
   const intersectionIndex = Math.floor(roundedHalf);
   return intersectionIndex;
 };
+
+export const devTestId = __DEV__ ? { 'data-testid': 'rating' } : {};
+
+export const getChildTestIds = (childIndex: number) =>
+  __DEV__
+    ? {
+        'data-testid': `rating-child-${childIndex + 1}`,
+      }
+    : {};
+
+export const getSvgChildTestIds = (childIndex: number) => `rating-child-svg-${childIndex + 1}`;

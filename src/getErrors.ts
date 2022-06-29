@@ -18,47 +18,40 @@ const setErrors = (targetObj: ErrorsObj, reason: string) => {
   return targetObj;
 };
 
-const invalidJSXMsg = 'svgChildNodes is not a valid JSX element';
+const invalidJSXMsg = 'itemShapes is not a valid JSX element';
 
 export const getErrors = (
-  limit: any,
+  items: any,
   value: any,
   readOnly: any,
-  highlightOnlySelected: any,
   onChange: any,
-  svgChildNodes: any
+  itemShapes: any
 ) => {
   const errorsObj: ErrorsObj = { shouldRender: true, errorReason: '' };
 
-  if (typeof limit !== 'number' || limit < 1 || limit > 10) {
-    return setErrors(errorsObj, 'limit is invalid');
+  if (typeof items !== 'number' || items < 1 || items > 10) {
+    return setErrors(errorsObj, ' is invalid');
   }
-  if (typeof value !== 'number' || value < 0 || value > limit) {
+  if (typeof value !== 'number' || value < 0 || value > items) {
     return setErrors(errorsObj, 'value is invalid');
-  }
-  if (typeof readOnly !== 'boolean') {
-    return setErrors(errorsObj, 'readOnly type mismatch');
-  }
-  if (typeof highlightOnlySelected !== 'boolean') {
-    return setErrors(errorsObj, 'highlightOnlySelected type mismatch');
   }
   if (readOnly === false && typeof onChange !== 'function') {
     return setErrors(errorsObj, 'onChange is required');
   }
   if (readOnly === false && !Number.isInteger(value)) {
-    return setErrors(errorsObj, 'The value provided is not an integer');
+    return setErrors(errorsObj, 'Value is not an integer');
   }
-  if (!svgChildNodes) {
-    return setErrors(errorsObj, 'itemStyles needs at least the property svgChildNodes set');
+  if (!itemShapes) {
+    return setErrors(errorsObj, 'itemStyles needs at least the property itemShapes set');
   }
-  if (!Array.isArray(svgChildNodes) && !isValidElement(svgChildNodes)) {
+  if (!Array.isArray(itemShapes) && !isValidElement(itemShapes)) {
     return setErrors(errorsObj, invalidJSXMsg);
   }
-  if (Array.isArray(svgChildNodes)) {
-    if (svgChildNodes.length !== limit) {
-      return setErrors(errorsObj, 'svgChildNodes length mismatch');
+  if (Array.isArray(itemShapes)) {
+    if (itemShapes.length !== items) {
+      return setErrors(errorsObj, 'itemShapes length mismatch');
     }
-    const areValid = (svgChildNodes as any[]).every((svgChildNode) =>
+    const areValid = (itemShapes as any[]).every((svgChildNode) =>
       isValidElement(svgChildNode)
     );
     if (!areValid) {

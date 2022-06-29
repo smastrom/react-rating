@@ -4,10 +4,10 @@ import { Rating } from '../src/Rating';
 import { StrangeFace } from './Shapes';
 
 import { ItemStylesProp } from '../src/exportedTypes';
+import { Profiler } from './Profiler';
 
 const testStylesArr: ItemStylesProp = {
-  // svgChildNodes: [Heart, Heart, Heart, Heart, Heart],
-  svgChildNodes: StrangeFace,
+  itemShapes: StrangeFace,
 
   itemStrokeWidth: 2,
   boxBorderWidth: 3,
@@ -46,23 +46,26 @@ const App = () => {
           width: '100%',
         }}
       >
-        <Rating
-          id="rating"
-          limit={5} // Rename to items
-          aria-label="Ciao"
-          onChange={(value) => setValue(value)}
-          value={value}
-          itemStyles={testStylesArr}
-          transition="colors"
-          // highlightOnlySelected
-          orientation="horizontal"
-          spaceBetween="small"
-          spaceInside="small"
-          radius="none"
-          isRequired={false}
-          accessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}
-          halfFillMode="box"
-        />
+        <Profiler>
+          <Rating
+            id="rating"
+            resetOnSecondClick
+            items={5} // Rename to items
+            aria-label="Ciao"
+            onChange={(value) => setValue(value)}
+            value={value}
+            itemStyles={testStylesArr}
+            transition="colors"
+            // highlightOnlySelected
+            orientation="horizontal"
+            spaceBetween="small"
+            spaceInside="small"
+            radius="none"
+            isRequired={false}
+            accessibleLabels={['One', 'Two', 'Three', 'Four', 'Five']}
+            halfFillMode="box"
+          />
+        </Profiler>
       </div>
       <button id="second_button" type="button" onClick={() => {}}>
         Second Button

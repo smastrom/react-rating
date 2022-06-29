@@ -38,7 +38,7 @@ test('While navigating, only the current focused item should be focusable', asyn
   await expectToBeTheOnlyFocusable(page, 'data-testid=rating-child-3');
 });
 
-test('Should loop through rating items if navigating beyond the limit', async ({ page }) => {
+test('Should loop through rating items if navigating beyond the ', async ({ page }) => {
   const toBeFocused = async (locatorId: string) => {
     await expect(page.locator(locatorId)).toBeFocused();
     await expectToBeTheOnlyFocusable(page, locatorId);

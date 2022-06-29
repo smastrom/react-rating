@@ -75,7 +75,7 @@ const toHaveClassNames = (childId: string, classNames: string) => {
 };
 
 test('Should have active classNames added properly', () => {
-  render(<Rating readOnly value={2} limit={3} />);
+  render(<Rating readOnly value={2} items={3} />);
 
   toHaveClassNames(CHILD_ID_1, activeClassNames);
   toHaveClassNames(CHILD_ID_2, activeClassNames);
@@ -85,7 +85,7 @@ test('Should have active classNames added properly', () => {
 /* Styles - Half fill */
 
 test("If user passes a float but doesn't deserve half-fill, should have classes added as usual", () => {
-  render(<Rating readOnly value={2.12} limit={3} />);
+  render(<Rating readOnly value={2.12} items={3} />);
 
   toHaveClassNames(CHILD_ID_1, activeClassNames);
   toHaveClassNames(CHILD_ID_2, activeClassNames);
@@ -95,17 +95,17 @@ test("If user passes a float but doesn't deserve half-fill, should have classes 
 test('Wheter or not deserves half-fill, aria-label value should display the original value in any case', () => {
   const floatValue = 2.12;
   const items = 3;
-  const { rerender } = render(<Rating readOnly value={floatValue} limit={items} />);
+  const { rerender } = render(<Rating readOnly value={floatValue} items={items} />);
   const item = screen.getByTestId(ID);
   expect(item).toHaveAccessibleName(`Rated ${floatValue} on ${items}`);
 
   const floatValueHF = 2.44;
-  rerender(<Rating readOnly value={floatValueHF} limit={items} />);
+  rerender(<Rating readOnly value={floatValueHF} items={items} />);
   expect(item).toHaveAccessibleName(`Rated ${floatValueHF} on ${items}`);
 });
 
 test('If user passes a float, deserves half-fill but highlightOnlySelected is enabled, should have default on/off classNames', () => {
-  render(<Rating readOnly value={2.42} limit={4} halfFillMode="box" highlightOnlySelected />);
+  render(<Rating readOnly value={2.42} items={4} halfFillMode="box" highlightOnlySelected />);
 
   toHaveClassNames(CHILD_ID_1, inactiveClassNames);
   toHaveClassNames(CHILD_ID_2, activeClassNames);
@@ -114,7 +114,7 @@ test('If user passes a float, deserves half-fill but highlightOnlySelected is en
 });
 
 test('If user passes a float and deserves half-fill, should have proper classes if halfFillMode is set to "box"', () => {
-  render(<Rating readOnly value={2.42} limit={4} halfFillMode="box" />);
+  render(<Rating readOnly value={2.42} items={4} halfFillMode="box" />);
 
   const boxOnClassNames = 'rar--box rar--hf-box-on';
 
@@ -125,7 +125,7 @@ test('If user passes a float and deserves half-fill, should have proper classes 
 });
 
 test('If user passes a float and deserves half-fill, should have proper classes if halfFillMode is set to "svg"', () => {
-  render(<Rating readOnly value={2.42} limit={4} />);
+  render(<Rating readOnly value={2.42} items={4} />);
 
   const svgOnClassNames = 'rar--box rar--hf-svg-on';
 

@@ -47,7 +47,7 @@ test('Should be invalid if no value is set and isRequired equals to true (defaul
 });
 
 test('Should not have aria-label attribute if aria-labelledby has been set', () => {
-  render(<Rating value={3} limit={3} onChange={() => {}} labelledBy="any_dom_id" />);
+  render(<Rating value={3} items={3} onChange={() => {}} labelledBy="any_dom_id" />);
   const item = screen.queryByTestId(ID);
   expect(item).toHaveAttribute('aria-labelledby', 'any_dom_id');
   expect(item).not.toHaveAttribute('aria-label');
@@ -56,7 +56,7 @@ test('Should not have aria-label attribute if aria-labelledby has been set', () 
 /* A11y - Child */
 
 test('Each child should have accessible attributes', () => {
-  render(<Rating value={2} limit={3} onChange={() => {}} />);
+  render(<Rating value={2} items={3} onChange={() => {}} />);
 
   const expectAccessibleAttributes = (child: HTMLElement) => {
     expect(child).toHaveAttribute('tabindex');
@@ -75,7 +75,7 @@ test('Each child should have accessible attributes', () => {
 });
 
 test('Only the selected child should be checked', () => {
-  render(<Rating value={2} limit={3} onChange={() => {}} />);
+  render(<Rating value={2} items={3} onChange={() => {}} />);
 
   const child1 = screen.getByTestId(CHILD_ID_1);
   expect(child1).not.toBeChecked();
@@ -88,7 +88,7 @@ test('Only the selected child should be checked', () => {
 });
 
 test('Only the selected child should be focusable on initial render', () => {
-  render(<Rating value={2} limit={3} onChange={() => {}} />);
+  render(<Rating value={2} items={3} onChange={() => {}} />);
 
   const child1 = screen.getByTestId(CHILD_ID_1);
   expect(child1).toHaveAttribute('tabindex', '-1');
@@ -101,7 +101,7 @@ test('Only the selected child should be focusable on initial render', () => {
 });
 
 test('If keyboard is disabled should not be focusable via tabindex', () => {
-  render(<Rating value={2} limit={3} onChange={() => {}} enableKeyboard={false} />);
+  render(<Rating value={2} items={3} onChange={() => {}} enableKeyboard={false} />);
 
   const child1 = screen.getByTestId(CHILD_ID_1);
   expect(child1).not.toHaveAttribute('tabindex');
@@ -114,7 +114,7 @@ test('If keyboard is disabled should not be focusable via tabindex', () => {
 });
 
 test('If keyboard is disabled should have aria-checked in any case', () => {
-  render(<Rating value={2} limit={3} onChange={() => {}} enableKeyboard={false} />);
+  render(<Rating value={2} items={3} onChange={() => {}} enableKeyboard={false} />);
 
   const child1 = screen.getByTestId(CHILD_ID_1);
   expect(child1).not.toBeChecked();

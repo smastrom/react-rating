@@ -12,6 +12,7 @@ import {
   CHILD_ID_4,
   CHILD_ID_5,
   useSelectedRatingValue,
+  CHILD_ID_1,
 } from './testUtils';
 
 import { Rating } from '../../src/Rating';
@@ -25,7 +26,7 @@ test('Initial value is set correctly', () => {
   render(
     <Rating
       value={result.current.ratingValue}
-      onChange={(currentValue) => result.current.setRatingValue(currentValue)}
+      onChange={(selectedValue) => result.current.setRatingValue(selectedValue)}
     />
   );
 
@@ -39,7 +40,7 @@ test('Rating value is updated correctly', async () => {
   render(
     <Rating
       value={result.current.ratingValue}
-      onChange={(currentValue) => result.current.setRatingValue(currentValue)}
+      onChange={(selectedValue) => result.current.setRatingValue(selectedValue)}
     />
   );
 
@@ -50,7 +51,23 @@ test('Rating value is updated correctly', async () => {
   expect(result.current.ratingValue).toBe(5);
 });
 
-test('Rating value is reset correctly', async () => {
+test('Rating value is reset correctly if resetOnSecondClick is active', async () => {
+  const user = userEvent.setup();
+  const { result } = renderHook(() => useSelectedRatingValue(3));
+
+  render(
+    <Rating
+      resetOnSecondClick
+      value={result.current.ratingValue}
+      onChange={(selectedValue) => result.current.setRatingValue(selectedValue)}
+    />
+  );
+
+  await user.click(screen.getByTestId(CHILD_ID_3));
+  expect(result.current.ratingValue).toBe(0);
+});
+
+test('Rating value is reset correctly if clicking on button', async () => {
   const { result } = renderHook(() => useSelectedRatingValue(1));
   const user = userEvent.setup();
 
@@ -58,7 +75,7 @@ test('Rating value is reset correctly', async () => {
     <div style={{ maxWidth: 350, width: '100%' }}>
       <Rating
         value={result.current.ratingValue}
-        onChange={(currentValue) => result.current.setRatingValue(currentValue)}
+        onChange={(selectedValue) => result.current.setRatingValue(selectedValue)}
       />
       <button data-testid="reset-btn" onClick={() => result.current.setRatingValue(0)}>
         Reset
@@ -68,6 +85,9 @@ test('Rating value is reset correctly', async () => {
 
   await user.click(screen.getByTestId('reset-btn'));
   expect(result.current.ratingValue).toBe(0);
+
+  await user.click(screen.getByTestId(CHILD_ID_1));
+  expect(result.current.ratingValue).toBe(1);
 });
 
 test('Hovered rating value is updated correctly and does not interfere with selected value', async () => {
@@ -81,7 +101,7 @@ test('Hovered rating value is updated correctly and does not interfere with sele
   render(
     <Rating
       value={result.current.ratingValue}
-      onChange={(currentValue) => result.current.setRatingValue(currentValue)}
+      onChange={(selectedValue) => result.current.setRatingValue(selectedValue)}
       onHoverChange={(hoveredValue) => hoveredResult.current.setRatingValue(hoveredValue)}
     />
   );

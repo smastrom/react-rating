@@ -46,9 +46,17 @@ test('User should be able to customize aria-label', () => {
   expect(item).toHaveAccessibleName(CUSTOM_LABEL);
 });
 
+test('If a custom visible label id is set, it should take precedence over invisible label', () => {
+  const CUSTOM_LABEL = 'Rated two';
+
+  render(<Rating readOnly value={2} invisibleLabel={CUSTOM_LABEL} />);
+  const item = screen.getByTestId(ID);
+  expect(item).toHaveAccessibleName(CUSTOM_LABEL);
+});
+
 /* A11y - Child */
 
-test('Should contain only n child as per ', () => {
+test('Should contain only n child as per items', () => {
   render(<Rating readOnly value={2} items={3} />);
   const item = screen.getByTestId(ID);
 

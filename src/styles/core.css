@@ -30,6 +30,6 @@
   border: 2px solid #0079ff;
   width: unset;
   left: unset;
-  height: calc(100% - calc(var(--rar--offset) * 2));
+  height: 100%;
   box-sizing: border-box;
 }

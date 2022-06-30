@@ -8,3 +8,4 @@ test-results
 .eslintcache
 playwright-report
 playwright/.cache
+*.tgz

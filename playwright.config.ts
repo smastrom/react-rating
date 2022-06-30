@@ -1,6 +1,6 @@
 import { devices, PlaywrightTestConfig } from '@playwright/test';
 
-const timeout = 30000;
+const timeout = 40000;
 
 const config: PlaywrightTestConfig = {
   testDir: './tests/e2e',

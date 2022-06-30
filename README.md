@@ -8,13 +8,13 @@
 
 ## Features
 
-- **Use any SVG**: No headaches, icon fonts or packages to install in order to use vectors from any source.
-- Highly customizable: fills, strokes, colors, transitions and much more.
+- **Use any SVG**: No headaches, icon fonts or packages to install in order to use your favorite vectors.
+- Highly customizable: behavior, colors, transitions and much more.
 - Fully responsive and mobile-first
 - Fully accessible with keyboard navigation and custom labels
 - Works both on the server and the client
 - Fully typed with IntelliSense infos and autocomplete
-- Dependency-free, ~3.8Kb gzipped.
+- Dependency-free, ~3.5Kb gzipped.
 
 <br />
 
@@ -130,7 +130,7 @@ const App = () => (
 | orientation           | `horizontal` \| `vertical`                              | Orientation of the rating items                           | `horizontal`  | No       | :green_circle:      |
 | spaceInside           | `none` \| `small` \| `medium` \| `large`                | Responsive padding of each rating item                    | `regular`     | No       | :green_circle:      |
 | spaceBetween          | `none` \| `small` \| `medium` \| `large`                | Responsive gap between the rating items                   | `small`       | No       | :green_circle:      |
-| radius                | `none` \| `small` \| `medium` \| `full`                 | Radius of each rating item                                | `small`       | No       | :green_circle:      |
+| radius                | `none` \| `small` \| `medium` \| `large` \| `full`      | Radius of each rating item                                | `none`        | No       | :green_circle:      |
 | transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting               | `colors`      | No       | :large_blue_circle: |
 | itemStyles            | ItemStyle                                               | Custom SVGs and colors                                    | defaultStyles | No       | :green_circle:      |
 
@@ -140,13 +140,14 @@ Would you like to style it via CSS? Take a look [here](#styling-via-css).
 
 ### :open_umbrella: Accessibility
 
-| Prop             | Type     | Description                                                                                          | Default                                                           | Required | :thinking:          |
-| ---------------- | -------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | -------- | ------------------- |
-| enableKeyboard   | boolean  | Whether or not to enable keyboard navigation                                                         | true                                                              | No       | :large_blue_circle: |
-| isRequired       | boolean  | Whether or not to tell assistive technologies that rating is required                                | true                                                              | No       | :large_blue_circle: |
-| labelledBy       | string   | `id` of the element to be used as radio-group label. If set, takes precedence over `accessibleLabel` | undefined                                                         | No       | :large_blue_circle: |
-| accessibleLabels | string[] | Accessible labels of each rating item                                                                | `Rate 1`, `Rate 2`...                                             | No       | :large_blue_circle: |
-| accessibleLabel  | string   | Value of `aria-label` attribute                                                                      | `Rated <value> on <items>` or `Rating` if `readOnly` is **false** | No       | :green_circle:      |
+| Prop                | Type     | Description                                                                                           | Default                                                          | Required | :thinking:          |
+| ------------------- | -------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | -------- | ------------------- |
+| enableKeyboard      | boolean  | Whether or not to enable keyboard navigation                                                          | true                                                             | No       | :large_blue_circle: |
+| isRequired          | boolean  | Whether or not to tell assistive technologies that rating is required                                 | true                                                             | No       | :large_blue_circle: |
+| invisibleLabel      | string   | Accessible label of the rating group / image                                                          | `Rating` or `Rated <value> on <items>` if `readOnly` is **true** | No       | :green_circle:      |
+| invisibleItemLabels | string[] | Accessible labels of each each rating item                                                            | `Rate 1`, `Rate 2`...                                            | No       | :large_blue_circle: |
+| visibleLabelId      | string   | Id of the element used as rating group label. Takes precedence over `invisibleLabel`.                 | undefined                                                        | No       | :large_blue_circle: |
+| visibleItemLabelIds | string[] | Ids of the elements used as labels for each rating item. Takes precedence over `invisibleItemLabels`. | undefined                                                        | No       | :large_blue_circle: |
 
 <br />
 
@@ -255,104 +256,57 @@ You can pass any valid CSS color string such as `aliceblue`, `#FFF332`, `rgba(0,
 
 ### How to create itemShapes elements
 
-This package is designed to work with SVGs from any source: just provide the inner shapes and the component will take care of rendering a brand-new, responsive SVG for you.
+All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute from them (except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones). Then create a new JSX Element that renders the cleaned shapes.
 
-1. Extract the **<u><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">basic shapes</a></u>** from the SVG: `path`, `circle`, `rect`, `polygon`, `ellipse`, `polyline` or `line`.
+The component will take care of rendering a brand-new, responsive SVG for you.
 
-2. Delete any fill and stroke-related attribute from the shapes. You will be able to control such values directly from `itemStyles` prop. You can safely delete also any `data-name` and `id` attribute.
-
-3. Delete also any **top-level** parent group (`g`), whether or not it has transforms applied.
-
-4. Create a new JSX Element from the shapes and assign it to `itemShapes` property.
-
-> :warning: This example describes the worst-case scenario with a very messy SVG code pasted from Adobe XD which automatically applies translations, useless attributes and groups. If your SVGs comes from quality sources like
-> [css.gg](https://css.gg/), [Feather](https://feathericons.com/) or [SVG Repo](https://www.svgrepo.com/collections/monocolor/), you won't have to do anything else than removing stroke and fill attributes.
-
-**SVG Source**
+If the SVG comes from quality sources (or you made it) such as [Feather](https://feathericons.com/), [SVG Repo](https://www.svgrepo.com/collections/monocolor/), [Bootstrap Icons](https://icons.getbootstrap.com)
+or [css.gg](https://css.gg/) all you have to do is to delete a couple of fill and stroke attributes (if any):
 
 ```html
-<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
-  <g transform="translate(-1 -1)">
-    <line
-      id="Line_2"
-      data-name="Line 2"
-      y2="4"
-      transform="translate(15 7)"
-      fill="none"
-      stroke="#000"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-    />
-    <path
-      id="Path_1"
-      data-name="Path 1"
-      d="M8,16a8.858,8.858,0,0,1,4-1,8.87,8.87,0,0,1,4,1"
-      fill="none"
-      stroke="#000"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-    />
-    <circle
-      id="Ellipsis_1"
-      data-name="Ellipsis 1"
-      cx="10"
-      cy="10"
-      r="10"
-      transform="translate(2 2)"
-      fill="none"
-      stroke="#000"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-    />
-  </g></svg
->;
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <path
+    fill="currentColor"
+    stroke="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+  />
+</svg>
 ```
-
-**Destination**
 
 ```jsx
-const StrangeFace = (
-  <>
-    <line y2="4" transform="translate(15 7)" />
-    <path d="M8,16a8.858,8.858,0,0,1,4-1,8.87,8.87,0,0,1,4,1" />
-    <circle cx="10" cy="10" r="10" transform="translate(2 2)" />
-  </>
+const CustomStar = (
+  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
 );
 
-/**
- * Since this is an outline icon without any fill color
- * we just set the desired stroke width and color.
- */
-
 const customStyles = {
-  itemShapes: StrangeFace,
+  itemShapes: CustomStar,
   itemStrokeWidth: 2,
-  activeStrokeColor: 'green',
-  inactiveStrokeColor: 'gray',
+  activeFillColor: 'LightSeaGreen',
+  activeStrokeColor: '#99F6E4',
+  inactiveFillColor: '#99F6E4',
+  inactiveStrokeColor: 'LightSeaGreen',
 };
 
-const App = () => {
-  const [ratingValue, setRatingValue] = useState(4);
-
-  return (
-    <div
-      style={{
-        maxWidth: 300,
-        width: '100%',
-      }}
-    >
-      <Rating
-        value={ratingValue}
-        onChange={(selectedValue) => setRatingValue(selectedValue)}
-        itemStyles={customStyles}
-      />
-    </div>
-  );
-};
+<Rating
+  value={ratingValue}
+  onChange={(selectedValue) => setRatingValue(selectedValue)}
+  itemStyles={customStyles}
+/>;
 ```
+
+<br />
+
+**Quick guide for complex or messy SVGs**
+
+1. Keep only the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/g">groups</a> and the inner shapes of the svg: `g`, `path`, `circle`, `rect`, `polygon`, `ellipse`, `polyline` or `line` and delete any other node (e.g. `<defs>`).
+
+2. If a group is present, check if it has the `transform` attribute set. If the attribute is not set, keep the inner shapes and delete the `g` node.
+
+3. Delete any attribute **except** geometric, draw and <u><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a></u> ones from any group and shape.
+
+4. If present, delete any empty node like `<circle></circle>` or `<g></g>`.
 
 <br />
 
@@ -486,7 +440,7 @@ If you don't want the half-fill feature, simply pass an integer to `value`.
 
 ### Styling via CSS
 
-It shouldn't be necessary to touch any CSS, however it may happen that you have to:
+It shouldn't be necessary, however if you really want to, you can do it as shown below:
 
 1. Assign a custom class to `<Rating />`:
 
@@ -540,103 +494,6 @@ It shouldn't be necessary to touch any CSS, however it may happen that you have 
 
 ## Accessibility
 
-### Radio group label
-
-By default, the radio-group element has an invisible label whose value equals to `Rate`. Depending on your needs you can customize it:
-
-**1. With a visible label**
-
-Add `role="radiogroup"` to the container, create a label element and pass its `id` to `labelledBy`:
-
-```jsx
-const LABEL_ID = 'rating_group_label';
-
-const App = () => {
-  const [ratingValue, setRatingValue] = useState(3);
-
-  return (
-    <div role="radiogroup" style={{ maxWidth: 300, width: '100%' }}>
-      <h3 id={LABEL_ID}>Rate this product</h3>
-      <Rating
-        value={ratingValue}
-        onChange={(currentValue) => setRatingValue(currentValue)}
-        labelledBy={LABEL_ID}
-      />
-    </div>
-  );
-};
-```
-
-**2. With an invisible label**
-
-```jsx
-const App = () => {
-  const [ratingValue, setRatingValue] = useState(3);
-
-  return (
-    <div style={{ maxWidth: 250, width: '100%' }}>
-      <Rating
-        value={ratingValue}
-        onChange={(currentValue) => setRatingValue(currentValue)}
-        accessibleLabel="Rate this product"
-      />
-    </div>
-  );
-};
-```
-
-If you have set both props, `labelledBy` will take precedence over `accessibleLabel`.
-
-### Rating items labels
-
-By default, if no `accessibleLabels` prop is set, an hidden label-element will automatically be rendered for each rating item. The first item will be labelled `Rate 1`, the second one `Rate 2` and so on.
-
-To customize them, pass an array of strings to `accessibleLabels`:
-
-```jsx
-const LABEL_ID = 'rating_group_label';
-
-const labels = [
-  'Rate 1 - Not recommended',
-  'Rate 2 - Poor',
-  'Rate 3 - Average',
-  'Rate 4 - Very Good',
-  'Rate 5 - Excellent',
-];
-
-const App = () => {
-  const [ratingValue, setRatingValue] = useState(3);
-
-  return (
-    <div role="radiogroup" style={{ maxWidth: 300, width: '100%' }}>
-      <h3 id={LABEL_ID}>Rate this product</h3>
-      <Rating
-        value={ratingValue}
-        onChange={(currentValue) => setRatingValue(currentValue)}
-        labelledBy={LABEL_ID}
-        accessibleLabels={labels}
-      />
-    </div>
-  );
-};
-```
-
-### Image element label
-
-By default, if `readOnly` is set to **true**, an accessible label equal to `Rated <value> on <items>` will be added to the image element. To customize it, simply set the `accessibleLabel` prop:
-
-```jsx
-const productName = 'Yellow tomato';
-const ratingValue = 3.5;
-const ratingLabel = `${productName} is rated ${ratingValue} on 5`;
-
-const App = () => (
-  <div style={{ maxWidth: 600, width: '100%' }}>
-    <Rating readOnly value={ratingValue} accessibleLabel={ratingLabel} />
-  </div>
-);
-```
-
 ### Keyboard navigation
 
 - **Tab** - Default behavior
@@ -645,13 +502,17 @@ const App = () => (
 - **Right Arrow | Up Arrow** - Select the previous rating item
 - **Spacebar | Enter** - Set/unset the current selection
 
+### Labels
+
+Check the examples on the [demo website](https://react-advanced-rating.onrender.com/).
+
 <br />
 
 ## Troubleshooting
 
 ### I can see the nodes returned from rendering, but no styles have been applied.
 
-Check that you have imported the CSS as displayed in the [Basic usage]() section.
+Check that you have imported the CSS as displayed in the [Basic usage](#basic-usage) section.
 
 ### I passed an array of SVGs but the stroke width looks different for each item.
 

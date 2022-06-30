@@ -49,13 +49,10 @@ export type InputProps = {
   onHoverChange?: (value: number) => void;
   resetOnSecondClick?: boolean;
   enableKeyboard?: boolean;
-
-  visibleLabelId?: string;
-  visibleItemLabelIds?: string[];
-
   invisibleLabel?: string;
   invisibleItemLabels?: string[];
-
+  visibleLabelId?: string;
+  visibleItemLabelIds?: string[];
   transition?: 'colors' | 'zoom' | 'position' | 'opacity' | 'none';
   isRequired?: boolean;
 };

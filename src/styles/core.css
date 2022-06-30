@@ -4,9 +4,7 @@
 }
 
 .rar--box {
-  --rar--offset: 5px;
   display: flex;
-  padding: var(--rar--offset) 0;
   width: 100%;
   flex-grow: 1;
 }

@@ -47,7 +47,7 @@ test('Should be invalid if no value is set and isRequired equals to true (defaul
 });
 
 test('Should not have aria-label attribute if aria-labelledby has been set', () => {
-  render(<Rating value={3} items={3} onChange={() => {}} labelledBy="any_dom_id" />);
+  render(<Rating value={3} items={3} onChange={() => {}} visibleLabelId="any_dom_id" />);
   const item = screen.queryByTestId(ID);
   expect(item).toHaveAttribute('aria-labelledby', 'any_dom_id');
   expect(item).not.toHaveAttribute('aria-label');
@@ -60,7 +60,7 @@ test('Each child should have accessible attributes', () => {
 
   const expectAccessibleAttributes = (child: HTMLElement) => {
     expect(child).toHaveAttribute('tabindex');
-    expect(child).toHaveAttribute('aria-labelledby');
+    expect(child).toHaveAttribute('aria-label');
     expect(child).toHaveAttribute('role', 'radio');
   };
 

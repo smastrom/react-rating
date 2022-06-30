@@ -17,8 +17,6 @@ import {
 import {
   getIntersectionIndex,
   isValidPositiveNumber,
-  useIsomorphicLayoutEffect,
-  getUniqueId,
   isGraphicalValueInteger,
   getChildTestIds,
   getSvgChildTestIds,
@@ -55,9 +53,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       itemStyles = defaultItemStyles,
       isRequired = true,
       halfFillMode = 'svg',
-      labelledBy,
-      accessibleLabels,
-      accessibleLabel = readOnly === false ? 'Rating' : `Rated ${value} on ${items}`,
+      visibleLabelId,
+      visibleItemLabelIds,
+      invisibleLabel = readOnly === false ? 'Rating' : `Rated ${value} on ${items}`,
+      invisibleItemLabels,
       id,
       className,
       style,
@@ -66,7 +65,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
   ) => {
     /* Refs */
 
-    const uniqueLabelsIds = useRef<string[] | []>([]);
     const roleRadioDivs = useRef<HTMLDivElement[] | []>([]);
 
     /* Value helpers */
@@ -113,13 +111,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     /* Callbacks */
 
-    const getStaticStyles = useCallback(
-      () => ({
-        staticCssVars: getStaticCssVars(staticColors, absoluteBoxBorderWidth),
-      }),
-      [staticColors, absoluteBoxBorderWidth]
-    );
-
     const getDynamicClassNames = useCallback(
       (currentSelectedIndex: number) => {
         if (deservesHalfFill) {
@@ -148,7 +139,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     /* State */
 
     const [styles, setStyles] = useState<StylesState>({
-      ...getStaticStyles(),
+      staticCssVars: getStaticCssVars(staticColors, absoluteBoxBorderWidth),
       ...getDynamicStyles(currentRatingIndex, needsDynamicCssVars),
     });
 
@@ -161,18 +152,18 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     /* Effects */
 
-    useIsomorphicLayoutEffect(() => {
-      if (readOnly === false && uniqueLabelsIds.current.length === 0) {
-        uniqueLabelsIds.current = ratingValues.map(() => getUniqueId());
-      }
-    }, []);
-
     useEffect(() => {
       setStyles({
-        ...getStaticStyles(),
+        staticCssVars: getStaticCssVars(staticColors, absoluteBoxBorderWidth),
         ...getDynamicStyles(currentRatingIndex, needsDynamicCssVars),
       });
-    }, [getStaticStyles, getDynamicStyles, currentRatingIndex, needsDynamicCssVars]);
+    }, [
+      staticColors,
+      getDynamicStyles,
+      absoluteBoxBorderWidth,
+      currentRatingIndex,
+      needsDynamicCssVars,
+    ]);
 
     useEffect(() => {
       if (readOnly === false && enableKeyboard === true) {
@@ -275,7 +266,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       event.stopPropagation();
     };
 
-    /* Radio-group props */
+    /* Radio Group props */
 
     const getClassNames = (): string => {
       const cursorClassName: MaybeEmptyCSSClassName = readOnly === false ? 'rar--pointer' : '';
@@ -306,7 +297,29 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         .trimEnd();
     };
 
-    /* Radios */
+    const getGroupAriaProps = (): React.HTMLProps<HTMLDivElement> => {
+      if (readOnly === false) {
+        const ariaProps: React.HTMLProps<HTMLDivElement> = {
+          role: 'radiogroup',
+          'aria-required': isRequired === true,
+        };
+        if (isRequired === true) {
+          ariaProps['aria-invalid'] = ratingValue <= 0;
+        }
+        if (typeof visibleLabelId === 'string' && visibleLabelId.length > 0) {
+          ariaProps['aria-labelledby'] = visibleLabelId;
+        } else {
+          ariaProps['aria-label'] = invisibleLabel;
+        }
+        return ariaProps;
+      }
+      return {
+        role: 'img',
+        'aria-label': invisibleLabel,
+      };
+    };
+
+    /* Radio Props */
 
     const getKeyboardProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
       if (enableKeyboard === true) {
@@ -321,10 +334,23 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     const getRadioProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
       if (readOnly === false) {
+        const getRadioLabels = () =>
+          Array.isArray(invisibleItemLabels)
+            ? invisibleItemLabels
+            : ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`);
+
+        const labelProps: React.HTMLProps<HTMLDivElement> = {};
+
+        if (Array.isArray(visibleItemLabelIds)) {
+          labelProps['aria-labelledby'] = visibleItemLabelIds[childIndex];
+        } else {
+          labelProps['aria-label'] = getRadioLabels()?.[childIndex];
+        }
+
         return {
+          ...labelProps,
           'aria-checked': ratingValues[childIndex] === ratingValue,
           role: 'radio',
-          'aria-labelledby': `rar_label_${uniqueLabelsIds.current[childIndex]}`,
           ref: (radioChildNode: HTMLDivElement) =>
             (roleRadioDivs.current[childIndex] = radioChildNode),
           onClick: (event: React.MouseEvent<HTMLDivElement>) => handleClick(event, childIndex),
@@ -336,28 +362,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       return {};
     };
 
-    const getRatingAriaProps = (): React.HTMLProps<HTMLDivElement> => {
-      if (readOnly === false) {
-        const ariaProps: React.HTMLProps<HTMLDivElement> = {
-          role: 'radiogroup',
-          'aria-required': isRequired === true,
-        };
-        if (isRequired === true) {
-          ariaProps['aria-invalid'] = ratingValue <= 0;
-        }
-        if (typeof labelledBy === 'string' && labelledBy.length > 0) {
-          ariaProps['aria-labelledby'] = labelledBy;
-        } else {
-          ariaProps['aria-label'] = accessibleLabel;
-        }
-        return ariaProps;
-      }
-      return {
-        role: 'img',
-        'aria-label': accessibleLabel,
-      };
-    };
-
     /* SVG */
 
     const getSvgRatingItemProps = (childNodeIndex: number) => {
@@ -366,19 +370,13 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         itemShapes: Array.isArray(itemShapes) ? itemShapes[childNodeIndex] : itemShapes,
         itemStrokeWidth: absoluteStrokeWidth,
         hasHalfFill: false,
+        orientationProp: orientation,
       };
       if (deservesHalfFill && absoluteHalfFillMode === 'svg') {
         sharedProps.hasHalfFill = childNodeIndex === currentRatingIndex;
       }
       return sharedProps;
     };
-
-    /* Labels */
-
-    const getRadioLabels = () =>
-      Array.isArray(accessibleLabels)
-        ? accessibleLabels
-        : ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`);
 
     /* Render */
 
@@ -389,7 +387,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         id={id}
         style={{ ...style, ...styles.staticCssVars }}
         className={getClassNames()}
-        {...getRatingAriaProps()}
+        {...getGroupAriaProps()}
       >
         {/* */}
         {/* */}
@@ -406,17 +404,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
             {/* */}
             {/* SVG */}
             <RatingItem {...getSvgRatingItemProps(childIndex)} />
-            {/* */}
-            {/* */}
-            {/* Labels */}
-            {readOnly === false && (
-              <span
-                className="rar--hidden"
-                id={`rar_label_${uniqueLabelsIds.current[childIndex]}`}
-              >
-                {getRadioLabels()?.[childIndex]}
-              </span>
-            )}
           </div>
         ))}
         {/* */}

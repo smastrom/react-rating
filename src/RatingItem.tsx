@@ -101,6 +101,15 @@ export const RatingItem = ({
     return {};
   };
 
+  const getDefsTestId = () => {
+    if (__DEV__) {
+      return {
+        'data-testid': 'svg-defs-testid',
+      };
+    }
+    return {};
+  };
+
   /* Render */
 
   return (
@@ -114,7 +123,7 @@ export const RatingItem = ({
       preserveAspectRatio="xMidYMid meet"
     >
       {hasHalfFill && (
-        <defs>
+        <defs {...getDefsTestId()}>
           <linearGradient id={`${uniqId.current}_rar_hf`} {...getGradientTransformAttr()}>
             <stop className="rar--svg-stop-1" offset="50%" />
             <stop className="rar--svg-stop-2" offset="50%" />

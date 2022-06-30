@@ -75,6 +75,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     const isEligibleForHalfFill = hasPrecision && highlightOnlySelected === false;
     const isNotEligibleForHalfFill = hasPrecision && highlightOnlySelected === true;
 
+    const hasTabNavigation = readOnly === false && enableKeyboard === true;
+
     const ratingValue = (
       isNotEligibleForHalfFill ? Math.round(value as number) : value
     ) as number;
@@ -144,7 +146,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     });
 
     const [tabIndex, setTabIndex] = useState<TabIndex[] | []>(() => {
-      if (readOnly === false && enableKeyboard === true) {
+      if (hasTabNavigation) {
         return getTabIndex(items, currentRatingIndex);
       }
       return [];
@@ -166,10 +168,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     ]);
 
     useEffect(() => {
-      if (readOnly === false && enableKeyboard === true) {
+      if (hasTabNavigation) {
         setTabIndex(() => getTabIndex(items, currentRatingIndex));
       }
-    }, [currentRatingIndex, readOnly, enableKeyboard, items]);
+    }, [hasTabNavigation, currentRatingIndex, items]);
 
     /* Prevent rendering */
 

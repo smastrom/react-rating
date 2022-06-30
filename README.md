@@ -65,7 +65,7 @@ const App = () => {
       <div style={{ maxWidth: 600, width: "100%" }}> {/* <-- Wrap it in a container */}
         <Rating
             value={ratingValue}
-            onChange={(currentValue) => setRatingValue(currentValue)}
+            onChange={(selectedValue) => setRatingValue(selectedValue)}
         >
       </div>
   )
@@ -208,6 +208,18 @@ const App = () => {
       />
     </div>
   );
+};
+```
+
+If you want to use the default rating star coming with this package, just import it:
+
+```js
+import { Star } from 'react-advanced-rating';
+
+const customStyles = {
+  itemShapes: Star,
+  activeFillColor: '#22C55E',
+  inactiveFillColor: '#BBF7D0',
 };
 ```
 
@@ -440,14 +452,14 @@ If you don't want the half-fill feature, simply pass an integer to `value`.
 
 ### Styling via CSS
 
-It shouldn't be necessary, however if you really want to, you can do it as shown below:
+It is not necessary, however if you want to, you can do it as shown below:
 
 1. Assign a custom class to `<Rating />`:
 
 ```jsx
 <Rating
   value={ratingValue}
-  onChange={(currentValue) => setRatingValue(currentValue)}
+  onChange={(selectedValue) => setRatingValue(selectedValue)}
   className="my-own-class"
 />
 ```
@@ -457,7 +469,7 @@ It shouldn't be necessary, however if you really want to, you can do it as shown
 ```jsx
 <Rating
   value={ratingValue}
-  onChange={(currentValue) => setRatingValue(currentValue)}
+  onChange={(selectedValue) => setRatingValue(selectedValue)}
   className="my-own-class"
   spaceBetween="none"
   spaceInside="none"

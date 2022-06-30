@@ -1,12 +1,24 @@
 import React from 'react';
 
 import { render, screen } from '@testing-library/react';
-import { beforeEach, afterEach, ID } from './testUtils';
+import {
+  beforeEach,
+  afterEach,
+  ID,
+  CHILD_ID_1,
+  CHILD_ID_2,
+  CHILD_ID_3,
+  SVGCHILD_ID_1,
+  SVGCHILD_ID_2,
+  SVGCHILD_ID_3,
+} from './testUtils';
 
 import { Rating } from '../../src/Rating';
 
 beforeEach();
 afterEach();
+
+/* Parent */
 
 test('Should be in the document if value equals to zero', () => {
   const { rerender } = render(<Rating value={0} onChange={() => {}} />);
@@ -34,7 +46,7 @@ test('Should not render the component if  greater than 10', () => {
   expect(item).not.toBeInTheDocument();
 });
 
-test('Should not render the component if value greather than  (default: 5)', () => {
+test('Should not render the component if value greater than items (default: 5)', () => {
   const { rerender } = render(<Rating value={6} />);
   const item = screen.queryByTestId(ID);
   expect(item).not.toBeInTheDocument();
@@ -59,4 +71,29 @@ test('If readOnly is false and value provided is not an integer, it should not r
   render(<Rating value={3.6} onChange={() => {}} />);
   const item = screen.queryByTestId(ID);
   expect(item).not.toBeInTheDocument();
+});
+
+/* Child */
+
+test('It should render 3 boxes and each box should have a non-empty SVG child', () => {
+  render(<Rating value={3} items={3} onChange={() => {}} />);
+
+  const areChildNodesRendered = (boxId: string, svgId: string) => {
+    const box = screen.getByTestId(boxId);
+    expect(box).not.toBeEmptyDOMElement();
+    const svg = screen.getByTestId(svgId);
+    expect(svg).not.toBeEmptyDOMElement();
+  };
+
+  areChildNodesRendered(CHILD_ID_1, SVGCHILD_ID_1);
+  areChildNodesRendered(CHILD_ID_2, SVGCHILD_ID_2);
+  areChildNodesRendered(CHILD_ID_3, SVGCHILD_ID_3);
+});
+
+test('If halfFillMode equals to svg (default) and deserves half-fill, it should render defs', () => {
+  render(<Rating readOnly value={1.5} items={3} onChange={() => {}} />);
+
+  const defs = screen.getByTestId('svg-defs-testid');
+  expect(defs).toBeInTheDocument();
+  expect(defs).not.toBeEmptyDOMElement();
 });

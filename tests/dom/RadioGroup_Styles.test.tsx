@@ -122,7 +122,7 @@ test('If ratingValue equals to n, only n child should have correspondent active 
   toHaveInactiveClassName(CHILD_ID_5);
 });
 
-test('If ratingValue equals to 0, no child should have active className, wheter or not highlightOnlySelected is enabled', () => {
+test('If ratingValue equals to 0, no child should have active className, whether or not highlightOnlySelected is enabled', () => {
   const { rerender } = render(<Rating value={0} items={6} onChange={() => {}} />);
 
   const toNotHaveActiveClassNames = () => {

@@ -32,6 +32,12 @@ export const CHILD_ID_3 = 'rating-child-3';
 export const CHILD_ID_4 = 'rating-child-4';
 export const CHILD_ID_5 = 'rating-child-5';
 
+export const SVGCHILD_ID_1 = 'rating-child-svg-1';
+export const SVGCHILD_ID_2 = 'rating-child-svg-2';
+export const SVGCHILD_ID_3 = 'rating-child-svg-3';
+export const SVGCHILD_ID_4 = 'rating-child-svg-4';
+export const SVGCHILD_ID_5 = 'rating-child-svg-5';
+
 export const itemStyles: ItemStylesProp = {
   itemShapes: StrangeFace,
 };

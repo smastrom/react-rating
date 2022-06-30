@@ -1,4 +1,9 @@
-import { ItemStylesProp, MaybeArrayColors, NonArrayColors } from './exportedTypes';
+import {
+  ItemStylesProp,
+  MaybeArrayColors,
+  NonArrayColors,
+  SharedProps,
+} from './exportedTypes';
 
 type CSSPrefix = 'rar';
 
@@ -37,6 +42,7 @@ export type RatingItemProps = NonNullable<
 > & {
   hasHalfFill: boolean;
   testId?: string;
+  orientationProp?: SharedProps['orientation'];
 };
 
 export type StylesState = {

@@ -41,7 +41,7 @@ export type SharedProps = {
 
 export type ReadOnlyProps = {
   halfFillMode?: 'svg' | 'box';
-  accessibleLabel?: string;
+  invisibleLabel?: string;
 };
 
 export type InputProps = {
@@ -49,8 +49,13 @@ export type InputProps = {
   onHoverChange?: (value: number) => void;
   resetOnSecondClick?: boolean;
   enableKeyboard?: boolean;
-  labelledBy?: string;
-  accessibleLabels?: string[];
+
+  visibleLabelId?: string;
+  visibleItemLabelIds?: string[];
+
+  invisibleLabel?: string;
+  invisibleItemLabels?: string[];
+
   transition?: 'colors' | 'zoom' | 'position' | 'opacity' | 'none';
   isRequired?: boolean;
 };

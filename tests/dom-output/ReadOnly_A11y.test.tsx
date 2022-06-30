@@ -41,7 +41,7 @@ test('Should not be focusable and have radio-group specific attributes and class
 test('User should be able to customize aria-label', () => {
   const CUSTOM_LABEL = 'Rated two';
 
-  render(<Rating readOnly value={2} accessibleLabel={CUSTOM_LABEL} />);
+  render(<Rating readOnly value={2} invisibleLabel={CUSTOM_LABEL} />);
   const item = screen.getByTestId(ID);
   expect(item).toHaveAccessibleName(CUSTOM_LABEL);
 });

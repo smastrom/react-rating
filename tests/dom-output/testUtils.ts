@@ -7,6 +7,7 @@ import { ItemStylesProp } from '../../src/exportedTypes';
 
 const before = () =>
   beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
     // @ts-ignore
     window.SVGElement.prototype.getBBox = () => ({
       x: 0,

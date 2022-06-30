@@ -8,6 +8,7 @@ export const RatingItem = ({
   itemShapes,
   testId = '',
   itemStrokeWidth = 0,
+  orientationProp = 'horizontal',
   hasHalfFill = false,
 }: RatingItemProps) => {
   const strokeOffset = itemStrokeWidth > 0 ? -(itemStrokeWidth / 2) : 0;
@@ -62,6 +63,15 @@ export const RatingItem = ({
     return {};
   };
 
+  const getGradientTransformAttr = () => {
+    if (orientationProp === 'vertical') {
+      return {
+        gradientTransform: 'rotate(90)',
+      };
+    }
+    return {};
+  };
+
   const getStrokeAttribute = () => {
     if (itemStrokeWidth > 0) {
       return {
@@ -105,7 +115,7 @@ export const RatingItem = ({
     >
       {hasHalfFill && (
         <defs>
-          <linearGradient id={`${uniqId.current}_rar_hf`}>
+          <linearGradient id={`${uniqId.current}_rar_hf`} {...getGradientTransformAttr()}>
             <stop className="rar--svg-stop-1" offset="50%" />
             <stop className="rar--svg-stop-2" offset="50%" />
           </linearGradient>

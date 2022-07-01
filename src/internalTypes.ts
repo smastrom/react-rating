@@ -1,9 +1,4 @@
-import {
-  ItemStylesProp,
-  MaybeArrayColors,
-  NonArrayColors,
-  SharedProps,
-} from './exportedTypes';
+import { ItemStyles, MaybeArrayColors, NonArrayColors, SharedProps } from './exportedTypes';
 
 type CSSPrefix = 'rar';
 
@@ -38,7 +33,7 @@ export type KeyAndValueStrings = {
 export type TabIndex = -1 | 0;
 
 export type RatingItemProps = NonNullable<
-  Pick<ItemStylesProp, 'itemShapes' | 'itemStrokeWidth'>
+  Pick<ItemStyles, 'itemShapes' | 'itemStrokeWidth'>
 > & {
   hasHalfFill: boolean;
   testId?: string;

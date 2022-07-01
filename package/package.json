@@ -46,7 +46,7 @@
   "scripts": {
     "build": "rimraf dist && tsc && vite build",
     "dev": "vite",
-    "postinstall": "husky install",
+    "_postinstall": "husky install",
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",

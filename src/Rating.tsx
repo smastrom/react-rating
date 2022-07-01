@@ -34,6 +34,8 @@ import {
   TabIndex,
 } from './internalTypes';
 
+/** Zero-dependency, highly customizable rating component for React.
+ * Visit https://github.com/smastrom/react-advanced-rating for the full documentation.*/
 export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingProps>(
   (
     {
@@ -44,7 +46,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       onHoverChange,
       highlightOnlySelected = false,
       resetOnSecondClick = false,
-      enableKeyboard = true,
+      disableKeyboard = false,
       orientation = 'horizontal',
       spaceBetween = 'small',
       spaceInside = 'small',
@@ -75,7 +77,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     const isEligibleForHalfFill = hasPrecision && highlightOnlySelected === false;
     const isNotEligibleForHalfFill = hasPrecision && highlightOnlySelected === true;
 
-    const hasTabNavigation = readOnly === false && enableKeyboard === true;
+    const hasTabNavigation = readOnly === false && disableKeyboard === false;
 
     const ratingValue = (
       isNotEligibleForHalfFill ? Math.round(value as number) : value
@@ -324,7 +326,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     /* Radio Props */
 
     const getKeyboardProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
-      if (enableKeyboard === true) {
+      if (disableKeyboard === false) {
         return {
           tabIndex: tabIndex[childIndex],
           onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) =>

@@ -1,4 +1,4 @@
-import { RatingProps, ItemStylesProp, Colors } from './exportedTypes';
+import { RatingProps, ItemStyles, Colors } from './exportedTypes';
 import { StaticColors, ValidArrayColors } from './internalTypes';
 import { isString } from './utils';
 
@@ -12,7 +12,7 @@ const validArrayColorKeys: Array<keyof ValidArrayColors> = [
 export const getColors = (
   colorsObj: Colors | object,
   deservesHalfFill: boolean,
-  absoluteStrokeWidth: NonNullable<ItemStylesProp['itemStrokeWidth']>,
+  absoluteStrokeWidth: NonNullable<ItemStyles['itemStrokeWidth']>,
   absoluteHalfFill: NonNullable<RatingProps['halfFillMode']>
 ) => {
   const allColors = { ...colorsObj };

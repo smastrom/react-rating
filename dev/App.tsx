@@ -26,7 +26,7 @@ const CUSTOM_LABELS = ['Bad', 'Poor', 'Average', 'Very Good', 'Excellent'];
 const CUSTOM_LABELS_IDS = ['label_1', 'label_2', 'label_3', 'label_4', 'label_5'];
 
 const App = () => {
-  const [value, setValue] = useState<number>(4);
+  const [value, setValue] = useState<number>(3);
 
   return (
     <div
@@ -58,7 +58,6 @@ const App = () => {
             aria-label="Ciao"
             onChange={(value) => setValue(value)}
             value={value}
-            // enableKeyboard={false}
             itemStyles={customStyles}
             transition="zoom"
             // highlightOnlySelected
@@ -66,7 +65,6 @@ const App = () => {
             spaceBetween="small"
             spaceInside="large"
             radius="small"
-            // halfFillMode="box"
             isRequired={false}
             visibleLabelId={CUSTOM_GROUP_LABEL_ID}
             visibleItemLabelIds={CUSTOM_LABELS_IDS}

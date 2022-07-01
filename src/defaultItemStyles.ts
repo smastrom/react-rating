@@ -1,8 +1,8 @@
 import { Star } from './Star';
 
-import { ItemStylesProp } from './exportedTypes';
+import { ItemStyles } from './exportedTypes';
 
-export const defaultItemStyles: ItemStylesProp = {
+export const defaultItemStyles: ItemStyles = {
   itemShapes: Star,
   itemStrokeWidth: 40,
   activeFillColor: '#ffb23f',

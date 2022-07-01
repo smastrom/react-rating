@@ -153,7 +153,7 @@ describe('Accessibility DOM Output Test - Child', () => {
   });
 
   test('If keyboard is disabled should not be focusable via tabindex', () => {
-    render(<Rating value={2} items={3} onChange={() => {}} enableKeyboard={false} />);
+    render(<Rating value={2} items={3} onChange={() => {}} disableKeyboard />);
 
     const child1 = screen.getByTestId(CHILD_ID_1);
     expect(child1).not.toHaveAttribute('tabindex');
@@ -166,7 +166,7 @@ describe('Accessibility DOM Output Test - Child', () => {
   });
 
   test('If keyboard is disabled should have aria-checked in any case', () => {
-    render(<Rating value={2} items={3} onChange={() => {}} enableKeyboard={false} />);
+    render(<Rating value={2} items={3} onChange={() => {}} disableKeyboard />);
 
     const child1 = screen.getByTestId(CHILD_ID_1);
     expect(child1).not.toBeChecked();

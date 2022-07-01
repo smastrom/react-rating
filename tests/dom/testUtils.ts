@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 
 import { StrangeFace } from '../../dev/Shapes';
 import { useState } from 'react';
-import { ItemStylesProp } from '../../src/exportedTypes';
+import { ItemStyles } from '../../src/exportedTypes';
 
 const before = () =>
   beforeEach(() => {
@@ -38,7 +38,7 @@ export const SVGCHILD_ID_3 = 'rating-child-svg-3';
 export const SVGCHILD_ID_4 = 'rating-child-svg-4';
 export const SVGCHILD_ID_5 = 'rating-child-svg-5';
 
-export const itemStyles: ItemStylesProp = {
+export const itemStyles: ItemStyles = {
   itemShapes: StrangeFace,
 };
 

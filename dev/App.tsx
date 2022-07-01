@@ -4,9 +4,9 @@ import { Profiler } from './Profiler';
 import { Rating } from '../src/Rating';
 import { SimpleStar } from './Shapes';
 
-import { ItemStylesProp } from '../src/exportedTypes';
+import { ItemStyles } from '../src/exportedTypes';
 
-const customStyles: ItemStylesProp = {
+const customStyles: ItemStyles = {
   itemShapes: SimpleStar,
   boxBorderWidth: 2,
 

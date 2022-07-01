@@ -56,7 +56,7 @@ As an accessible [radio-group](https://developer.mozilla.org/en-US/docs/web/acce
 import React, { useState } from "react";
 import { Rating } from 'react-advanced-rating';
 
-import 'react-advanced-rating/dist/index.min.css'; // <-- Import CSS
+import 'react-advanced-rating/dist/index.css'; // <-- Import CSS
 
 const App = () => {
   const [ratingValue, setRatingValue] = useState(3); // <-- Initial value, init with 0 for no value
@@ -78,7 +78,7 @@ or as an accessible, non-interactive [image element](https://developer.mozilla.o
 import React from 'react';
 import { Rating } from 'react-advanced-rating';
 
-import 'react-advanced-rating/dist/index.min.css';
+import 'react-advanced-rating/dist/index.css';
 
 const App = () => (
   <div style={{ maxWidth: 600, width: '100%' }}>
@@ -132,7 +132,7 @@ const App = () => (
 | spaceBetween          | `none` \| `small` \| `medium` \| `large`                | Responsive gap between the rating items                   | `small`       | No       | :green_circle:      |
 | radius                | `none` \| `small` \| `medium` \| `large` \| `full`      | Radius of each rating item                                | `none`        | No       | :green_circle:      |
 | transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting               | `colors`      | No       | :large_blue_circle: |
-| itemStyles            | ItemStyle                                               | Custom shapes and colors                                  | defaultStyles | No       | :green_circle:      |
+| itemStyles            | ItemStyle                                               | Custom SVGs and colors                                    | defaultStyles | No       | :green_circle:      |
 
 Would you like to style it via CSS? Take a look [here](#styling-via-css).
 
@@ -142,7 +142,7 @@ Would you like to style it via CSS? Take a look [here](#styling-via-css).
 
 | Prop                | Type     | Description                                                                                           | Default                                                          | Required | :thinking:          |
 | ------------------- | -------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | -------- | ------------------- |
-| disableKeyboard     | boolean  | Whether or not to disable keyboard navigation                                                         | false                                                            | No       | :large_blue_circle: |
+| enableKeyboard      | boolean  | Whether or not to enable keyboard navigation                                                          | true                                                             | No       | :large_blue_circle: |
 | isRequired          | boolean  | Whether or not to tell assistive technologies that rating is required                                 | true                                                             | No       | :large_blue_circle: |
 | invisibleLabel      | string   | Accessible label of the rating group / image                                                          | `Rating` or `Rated <value> on <items>` if `readOnly` is **true** | No       | :green_circle:      |
 | invisibleItemLabels | string[] | Accessible labels of each each rating item                                                            | `Rate 1`, `Rate 2`...                                            | No       | :large_blue_circle: |
@@ -264,32 +264,11 @@ You can pass any valid CSS color string such as `aliceblue`, `#FFF332`, `rgba(0,
 
 </details>
 
-<details><summary><strong>TypeScript</strong></summary>
-<br />
-
-```tsx
-import type { ItemStyles } from 'react-advanced-rating';
-
-const Star = (
-  <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
-);
-
-const customStyles: ItemStyles = {
-  itemShapes: Star,
-  activeFillColor: 'green',
-  inactiveFillColor: 'gray',
-};
-```
-
-<br />
-
-</details>
-
 <br />
 
 ### How to create itemShapes elements
 
-All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute (except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones) from them. Then create a new JSX Element to render the shapes.
+All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute from them (except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones). Then create a new JSX Element that renders the cleaned shapes.
 
 The component will take care of rendering a brand-new, responsive SVG for you.
 

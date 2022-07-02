@@ -1,6 +1,10 @@
 # React Advanced Rating
 
-:star: Zero-dependency, highly customizable rating component for React.
+Zero-dependency, highly customizable rating component for React.
+
+<br />
+
+![react-advanced-rating](https://i.ibb.co/0X7djmF/examples.png)
 
 [Live demo and examples](https://react-advanced-rating.onrender.com/)
 
@@ -15,22 +19,6 @@
 - Works both on the server and the client
 - Fully typed with IntelliSense infos and autocomplete
 - Dependency-free, ~3.5Kb gzipped.
-
-<br />
-
-## Table of contents
-
-- [Installation](#installation)
-- [Basic usage](#basic-usage)
-- [API](#api)
-- [Styling](#styling)
-  - [Rating items](#rating-items)
-  - [How to create itemShapes elements](#how-to-create-itemshapes-elements)
-  - [Advanced styling](#advanced-styling)
-  - [Half-fill and float values](#half-fill-and-float-values)
-  - [Styling via CSS](#styling-via-css)
-- [Accessibility](#accessibility)
-- [Troubleshooting](#troubleshooting)
 
 <br/>
 

@@ -46,7 +46,7 @@ As an accessible [radio-group](https://developer.mozilla.org/en-US/docs/web/acce
 import React, { useState } from "react";
 import { Rating } from '@smastrom/react-rating';
 
-import '@smastrom/react-rating/dist/index.min.css'; // <-- Import CSS
+import '@smastrom/react-rating/style.css'; // <-- Import CSS
 
 const App = () => {
   const [ratingValue, setRatingValue] = useState(3); // <-- Initial value, init with 0 for no value
@@ -68,7 +68,7 @@ or as an accessible, non-interactive [image element](https://developer.mozilla.o
 import React from 'react';
 import { Rating } from '@smastrom/react-rating';
 
-import '@smastrom/react-rating/dist/index.min.css';
+import '@smastrom/react-rating/style.css';
 
 const App = () => (
   <div style={{ maxWidth: 600, width: '100%' }}>
@@ -79,8 +79,8 @@ const App = () => (
 
 ### Usage with frameworks
 
-- **NextJS** - Import the CSS once in **\_app.js**
-- **Gatsby** - Import the CSS once in **gatsby-browser.js**
+- **NextJS** - Import CSS once in **\_app.js**
+- **Gatsby** - Import CSS once in **gatsby-browser.js**
 
 <br />
 

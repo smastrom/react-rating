@@ -24,10 +24,10 @@ export type NonArrayColors = {
 
 export type Colors = MaybeArrayColors & NonArrayColors;
 
-/** Custom shapes and colors, visit https://github.com/smastrom/react-advanced-rating for more info. */
+/** Custom shapes and colors, visit https://github.com/smastrom/react-rating for more info. */
 export type ItemStyles = Colors & {
   /** JSX element to render the inner shapes of the SVG.
-   * Visit https://github.com/smastrom/react-advanced-rating#how-to-create-itemshapes-elements for more info. */
+   * Visit https://github.com/smastrom/react-rating#how-to-create-itemshapes-elements for more info. */
   itemShapes: JSX.Element | JSX.Element[];
   /** Stroke width of the SVG, expressed in viewBox user coordinate's unit size */
   itemStrokeWidth?: number;
@@ -54,7 +54,7 @@ export type SharedProps = {
   spaceBetween?: StyleOptions;
   /** Radius of each rating item */
   radius?: StyleOptions | 'full';
-  /** Custom shapes and colors, visit https://github.com/smastrom/react-advanced-rating for more info. */
+  /** Custom shapes and colors, visit https://github.com/smastrom/react-rating for more info. */
   itemStyles?: ItemStyles;
   id?: string;
   className?: string;

@@ -50,7 +50,6 @@
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "test": "yarn test:unit && yarn test:dom && sleep 10 && yarn test:e2e",
     "test:dom": "yarn jest --testPathPattern=tests/dom",
     "test:e2e": "yarn playwright test && yarn playwright show-report",
     "test:unit": "yarn jest --testPathPattern=tests/unit"

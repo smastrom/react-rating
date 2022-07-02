@@ -31,7 +31,7 @@ yarn add react-advanced-rating
 Or with NPM:
 
 ```console
-npm i -S react-advanced-rating
+npm install --save react-advanced-rating
 ```
 
 <br />

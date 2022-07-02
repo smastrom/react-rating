@@ -1,6 +1,8 @@
-# React Advanced Rating
+# React Rating
 
 Zero-dependency, highly customizable rating component for React.
+
+First release: July 2nd, 2022
 
 <br />
 

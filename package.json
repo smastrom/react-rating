@@ -4,10 +4,10 @@
   "private": false,
   "keywords": [
     "react",
+    "rating",
     "react-rating",
     "react-reviews",
     "react-component",
-    "rating",
     "rating-star",
     "rating-component",
     "star-component",
@@ -30,33 +30,27 @@
       "import": "./dist/index.js",
       "require": "./dist/index.umd.min.js"
     },
-    "./dist/index.min.css": {
-      "import": "./dist/index.min.css",
-      "require": "./dist/index.min.css"
+    "./style.css": {
+      "import": "./style.css",
+      "require": "./style.css"
     }
   },
   "main": "dist/index.umd.min.js",
   "module": "dist/index.js",
   "browser": "dist/index.umd.min.js",
   "types": "dist/index.d.ts",
-  "style": "dist/index.min.css",
+  "style": "style.css",
   "files": [
-    "dist"
+    "dist",
+    "style.css"
   ],
   "scripts": {
-    "build": "rimraf dist && tsc && vite build",
+    "build": "rimraf dist && tsc && vite build && cp dist/style.css style.css && rimraf dist/style.css",
     "dev": "vite",
-    "postinstall": "husky install",
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable",
     "test:dom": "yarn jest --testPathPattern=tests/dom",
     "test:e2e": "yarn playwright test && yarn playwright show-report",
     "test:unit": "yarn jest --testPathPattern=tests/unit"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
   },
   "devDependencies": {
     "@playwright/test": "^1.23.0",
@@ -74,12 +68,9 @@
     "eslint": "^8.18.0",
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "husky": ">=6",
     "jest": "^28.1.1",
     "jest-environment-jsdom": "^28.1.1",
     "jsdom": "^19.0.0",
-    "lint-staged": ">=10",
-    "pinst": "^3.0.0",
     "prettier": "^2.7.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

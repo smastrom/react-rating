@@ -4,9 +4,9 @@ Zero-dependency, highly customizable rating component for React.
 
 <br />
 
-![react-advanced-rating](https://i.ibb.co/0X7djmF/examples.png)
+![react-rating](https://i.ibb.co/0X7djmF/examples.png)
 
-[Live demo and examples](https://react-advanced-rating.onrender.com/)
+[Live demo and examples](https://react-rating.onrender.com/)
 
 <br />
 
@@ -25,13 +25,13 @@ Zero-dependency, highly customizable rating component for React.
 ## Installation
 
 ```console
-yarn add react-advanced-rating
+yarn add @smastrom/react-rating
 ```
 
 Or with NPM:
 
 ```console
-npm install --save react-advanced-rating
+npm install --save @smastrom/react-rating
 ```
 
 <br />
@@ -42,9 +42,9 @@ As an accessible [radio-group](https://developer.mozilla.org/en-US/docs/web/acce
 
 ```jsx
 import React, { useState } from "react";
-import { Rating } from 'react-advanced-rating';
+import { Rating } from '@smastrom/react-rating';
 
-import 'react-advanced-rating/dist/index.min.css'; // <-- Import CSS
+import '@smastrom/react-rating/dist/index.min.css'; // <-- Import CSS
 
 const App = () => {
   const [ratingValue, setRatingValue] = useState(3); // <-- Initial value, init with 0 for no value
@@ -64,9 +64,9 @@ or as an accessible, non-interactive [image element](https://developer.mozilla.o
 
 ```jsx
 import React from 'react';
-import { Rating } from 'react-advanced-rating';
+import { Rating } from '@smastrom/react-rating';
 
-import 'react-advanced-rating/dist/index.min.css';
+import '@smastrom/react-rating/dist/index.min.css';
 
 const App = () => (
   <div style={{ maxWidth: 600, width: '100%' }}>
@@ -202,7 +202,7 @@ const App = () => {
 If you want to use the default rating star coming with this package, just import it:
 
 ```js
-import { Star } from 'react-advanced-rating';
+import { Star } from '@smastrom/react-rating';
 
 const customStyles = {
   itemShapes: Star,
@@ -256,7 +256,7 @@ You can pass any valid CSS color string such as `aliceblue`, `#FFF332`, `rgba(0,
 <br />
 
 ```tsx
-import type { ItemStyles } from 'react-advanced-rating';
+import type { ItemStyles } from '@smastrom/react-rating';
 
 const Star = (
   <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
@@ -335,7 +335,7 @@ const customStyles = {
 
 If you wish to style each rating item, you can optionally pass an array of JSX elements to `itemShapes` and an array of valid CSS colors to any **<u>active color</u>** property:
 
-![react-advanced-rating](https://i.ibb.co/QXsDp8B/Schermata-2022-06-30-alle-01-30-51.png)
+![react-rating](https://i.ibb.co/QXsDp8B/Schermata-2022-06-30-alle-01-30-51.png)
 
 ```jsx
 const SadFace = (
@@ -374,7 +374,7 @@ export const FacesRating = () => {
 };
 ```
 
-![react-advanced-rating](https://s8.gifyu.com/images/in_AdobeExpress.gif)
+![react-rating](https://s8.gifyu.com/images/in_AdobeExpress.gif)
 
 ```jsx
 const Star = (
@@ -439,7 +439,7 @@ The component will try to round it to the nearest half integer:
 
 If necessary, the SVG will be half-filled by default (`halfFillMode = 'svg'`):
 
-![react-advanced-rating](https://i.ibb.co/H29m0mQ/Schermata-2022-06-01-alle-23-41-53.png)
+![react-rating](https://i.ibb.co/H29m0mQ/Schermata-2022-06-01-alle-23-41-53.png)
 
 All the boxes will have the same background color (inactiveBoxColor) and `activeBoxColor` will have no effect.
 
@@ -449,7 +449,7 @@ You can switch between `svg` and `box`:
 <Rating readOnly value={2.38} halfFillMode="box" />
 ```
 
-![react-advanced-rating](https://i.ibb.co/sKpybbV/Schermata-2022-06-01-alle-23-43-29.png)
+![react-rating](https://i.ibb.co/sKpybbV/Schermata-2022-06-01-alle-23-43-29.png)
 
 In this case instead, all the SVGs will have the same fill color (inactiveFillColor) and `activeFillColor` will have no effect.
 
@@ -525,7 +525,7 @@ It is not necessary, however if you want to, you can do it as shown below:
 
 ### Labels
 
-Check the examples on the [demo website](https://react-advanced-rating.onrender.com/).
+Check the examples on the [demo website](https://react-rating.onrender.com/).
 
 <br />
 

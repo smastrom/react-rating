@@ -35,7 +35,7 @@ import {
 } from './internalTypes';
 
 /** Zero-dependency, highly customizable rating component for React.
- * Visit https://github.com/smastrom/react-advanced-rating for the full documentation.*/
+ * Visit https://github.com/smastrom/react-rating for the full documentation.*/
 export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingProps>(
   (
     {

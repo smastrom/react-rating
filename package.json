@@ -1,5 +1,5 @@
 {
-  "name": "react-advanced-rating",
+  "name": "@smastrom/react-rating",
   "version": "1.0.0",
   "private": false,
   "keywords": [
@@ -15,13 +15,13 @@
     "reviews",
     "reviews-component"
   ],
-  "homepage": "https://react-advanced-rating.onrender.com/",
+  "homepage": "https://react-rating.onrender.com/",
   "bugs": {
-    "url": "https://github.com/smastrom/react-advanced-rating/issues"
+    "url": "https://github.com/smastrom/react-rating/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/smastrom/react-advanced-rating"
+    "url": "https://github.com/smastrom/react-rating"
   },
   "license": "MIT",
   "author": "Simone Mastromattei <smastrom@proton.me>",

@@ -1,3 +1,6 @@
+![react-rating-vesion-badge](https://img.shields.io/npm/v/@smastrom/react-rating?color=22C55E)
+![react-rating-size](https://img.shields.io/bundlephobia/minzip/@smastrom/react-rating/1.0.0?color=22C55E) ![react-rating-code-quality](https://img.shields.io/lgtm/grade/javascript/github/smastrom/react-rating?color=22C55E)
+
 # React Rating
 
 Zero-dependency, highly customizable rating component for React.

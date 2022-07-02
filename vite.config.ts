@@ -31,8 +31,6 @@ export default defineConfig(({ command }) => ({
         globals: {
           react: 'React',
         },
-        assetFileNames: (assetInfo) =>
-          assetInfo.name === 'style.css' ? 'index.min.css' : (assetInfo.name as string),
       },
       plugins: [
         terser({
@@ -54,7 +52,6 @@ export default defineConfig(({ command }) => ({
       include: ['src/exportedTypes.ts'],
       beforeWriteFile: (_, content) => {
         const cleanContent = content.replace('export {};', '');
-
         appendFile('dist/index.d.ts', cleanContent, (err: any) => {
           if (err) {
             console.log(err);

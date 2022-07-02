@@ -8,4 +8,5 @@ test-results
 .eslintcache
 playwright-report
 playwright/.cache
+style.css
 *.tgz

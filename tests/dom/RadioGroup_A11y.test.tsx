@@ -16,7 +16,6 @@ import { Rating } from '../../src/Rating';
 beforeEach();
 afterEach();
 
-/* A11y - Parent */
 describe('Accessibility DOM Output Test - Parent', () => {
   test('Should have all default aria-attributes and if switching to read-only should not have such attrs anymore', () => {
     const { rerender } = render(<Rating value={2} onChange={() => {}} />);

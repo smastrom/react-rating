@@ -12,7 +12,7 @@ const config: PlaywrightTestConfig = {
   reporter: 'html',
   use: {
     actionTimeout: 0,
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.DEPLOY_URL || 'http://localhost:3000',
     trace: 'on-first-retry',
   },
 
@@ -35,20 +35,6 @@ const config: PlaywrightTestConfig = {
         ...devices['Desktop Safari'],
       },
     },
-
-    {
-      name: 'Microsoft Edge',
-      use: {
-        channel: 'msedge',
-      },
-    },
-    {
-      name: 'Google Chrome',
-      use: {
-        channel: 'chrome',
-      },
-    },
-
     {
       name: 'Mobile Chrome',
       use: {

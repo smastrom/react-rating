@@ -1,0 +1,37 @@
+name: Deploy and run tests
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14.x'
+      - name: Install dependencies
+        run: yarn
+      - name: Build dist folder
+        run: yarn build:ci
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        id: deploy-to-vercel
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+      - name: Install Playwright and its dependencies
+        run: npx playwright install --with-deps
+      - name: Run Jest unit tests
+        run: yarn test:unit
+      - name: Run Jest DOM tests
+        run: yarn test:dom
+      - name: Run e2e tests with Playwright
+        env:
+          DEPLOY_URL: ${{ steps.deploy-to-vercel.outputs.preview-url }}
+        run: yarn playwright test

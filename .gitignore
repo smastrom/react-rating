@@ -2,7 +2,6 @@ node_modules
 dist
 yarn.lock
 .DS_Store
-examples
 test-results
 .eslintcache
 playwright-report

@@ -49,7 +49,7 @@ export const expectNoneToBeChecked = async (page: Page) => {
 };
 
 export const beforeAny = async (page: Page, browserName: string) => {
-  await page.goto('http://localhost:3000');
+  await page.goto('/');
   if (browserName === 'webkit') {
     await new Promise((resolve) => setTimeout(resolve, 100));
   }

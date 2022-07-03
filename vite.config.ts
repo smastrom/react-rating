@@ -7,64 +7,74 @@ import { terser } from 'rollup-plugin-terser';
 
 import Package from './package.json';
 
-export default defineConfig(({ command }) => ({
-  define: {
-    __DEV__: command !== 'build',
-  },
-  build: {
-    minify: 'terser',
-    lib: {
-      name: Package.name,
-      entry: 'src/index.ts',
-      formats: ['es', 'umd'],
-      fileName: (format) => {
-        if (format === 'es') {
-          return 'index.js';
-        }
-        return `index.${format}.js`;
+export default defineConfig(({ command, mode }) => {
+  if (mode === 'ci') {
+    return {
+      define: {
+        __DEV__: true,
       },
+      plugins: [react()],
+    };
+  }
+  return {
+    define: {
+      __DEV__: command !== 'build',
     },
-    rollupOptions: {
-      external: ['react'],
-      input: 'src/index.ts',
-      output: {
-        globals: {
-          react: 'React',
+    build: {
+      minify: 'terser',
+      lib: {
+        name: Package.name,
+        entry: 'src/index.ts',
+        formats: ['es', 'umd'],
+        fileName: (format) => {
+          if (format === 'es') {
+            return 'index.js';
+          }
+          return `index.${format}.js`;
         },
       },
-      plugins: [
-        terser({
-          compress: {
-            defaults: true,
-            drop_console: false,
+      rollupOptions: {
+        external: ['react'],
+        input: 'src/index.ts',
+        output: {
+          globals: {
+            react: 'React',
           },
-        }),
-      ],
+        },
+        plugins: [
+          terser({
+            compress: {
+              defaults: true,
+              drop_console: false,
+            },
+          }),
+        ],
+      },
     },
-  },
-  esbuild: {
-    logOverride: { 'this-is-undefined-in-esm': 'silent' },
-  },
-  plugins: [
-    react({ jsxRuntime: 'classic' }),
-    dts({
-      outputDir: 'dist/types',
-      include: ['src/exportedTypes.ts'],
-      beforeWriteFile: (_, content) => {
-        const cleanContent = content.replace('export {};', '');
-        appendFile('dist/index.d.ts', cleanContent, (err: any) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      },
-      afterBuild: () => {
-        rm('dist/types', { recursive: true }, (err: any) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      },
-    }),
-  ],
-}));
+    esbuild: {
+      logOverride: { 'this-is-undefined-in-esm': command !== 'build' ? 'silent' : 'warning' },
+    },
+    plugins: [
+      react({ jsxRuntime: 'classic' }),
+      dts({
+        outputDir: 'dist/types',
+        include: ['src/exportedTypes.ts'],
+        beforeWriteFile: (_, content) => {
+          const cleanContent = content.replace('export {};', '');
+          appendFile('dist/index.d.ts', cleanContent, (err: any) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+        },
+        afterBuild: () => {
+          rm('dist/types', { recursive: true }, (err: any) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+        },
+      }),
+    ],
+  };
+});

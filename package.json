@@ -46,8 +46,10 @@
   ],
   "scripts": {
     "build": "rimraf dist && tsc && vite build && cp dist/style.css style.css && rimraf dist/style.css",
+    "build:ci": "rimraf dist && tsc && vite build --mode ci",
     "dev": "vite",
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
+    "test": "yarn test:unit && yarn test:dom",
     "test:dom": "yarn jest --testPathPattern=tests/dom",
     "test:e2e": "yarn playwright test && yarn playwright show-report",
     "test:unit": "yarn jest --testPathPattern=tests/unit"

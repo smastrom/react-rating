@@ -1,5 +1,5 @@
 ![react-rating-vesion-badge](https://img.shields.io/npm/v/@smastrom/react-rating?color=22C55E)
-![react-rating-size](https://img.shields.io/bundlephobia/minzip/@smastrom/react-rating/1.0.0?color=22C55E) ![react-rating-code-quality](https://img.shields.io/lgtm/grade/javascript/github/smastrom/react-rating?color=22C55E)
+![react-rating-build](https://img.shields.io/github/workflow/status/smastrom/react-rating/Deploy%20and%20run%20tests/main?color=22C55E) ![react-rating-size](https://img.shields.io/bundlephobia/minzip/@smastrom/react-rating/1.0.0?color=22C55E) ![react-rating-code-quality](https://img.shields.io/lgtm/grade/javascript/github/smastrom/react-rating?color=22C55E)
 
 # React Rating
 
@@ -148,10 +148,10 @@ Would you like to style it via CSS? Take a look [here](#styling-via-css).
 
 ### Rating items
 
-Pass an `ItemStyle` object to `itemStyles` prop:
+Pass an `ItemStyles` object to `itemStyles` prop:
 
 ```ts
-type ItemStyle = {
+type ItemStyles = {
   itemShapes: JSX.Element | JSX.Element[];
 
   itemStrokeWidth?: number;

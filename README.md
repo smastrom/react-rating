@@ -5,7 +5,7 @@
 
 Zero-dependency, highly customizable rating component for React.
 
-First release: July 2nd, 2022
+First released: July 2nd, 2022
 
 <br />
 
@@ -568,6 +568,8 @@ const Star = () => <path d="M100,10L40 198 190 78 10 78 160 198z" />;
 
 The `main` branch contains the latest version of this package. Rating component is imported in a simple test React App which runs on a [Vite](https://vitejs.dev/) dev server.
 
+:warning: Vite requires Node.js version >= 12.2.
+
 In `dev/` you can find the test app files. It is just a blank React app container with some CSS resets applied.
 
 In `src/` you can find the package core files, the build entry point is `src/index.ts`.
@@ -579,11 +581,13 @@ yarn
 yarn dev
 ```
 
-Vite's [Library Mode](https://vitejs.dev/guide/build.html#library-mode) is used to bundle the package. To build the package just run:
+Vite's [Library Mode](https://vitejs.dev/guide/build.html#library-mode) is used to bundle the package. To build it just run:
 
 ```console
 yarn build
 ```
+
+:warning: In order to test with Playwright, Node.js version >= 14 is required.
 
 <br />
 

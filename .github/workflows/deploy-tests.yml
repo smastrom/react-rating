@@ -27,11 +27,16 @@ jobs:
           vercel-args: '--prod'
       - name: Install Playwright and its dependencies
         run: npx playwright install --with-deps
-      - name: Run Jest unit tests
-        run: yarn test:unit
-      - name: Run Jest DOM tests
-        run: yarn test:dom
+      - name: Run Jest tests
+        run: yarn test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
       - name: Run e2e tests with Playwright
         env:
           DEPLOY_URL: ${{ steps.deploy-to-vercel.outputs.preview-url }}
         run: yarn playwright test
+      - name: Upload Playwright artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: playwright-report

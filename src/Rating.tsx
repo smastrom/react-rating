@@ -48,7 +48,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       resetOnSecondClick = false,
       disableKeyboard = false,
       orientation = 'horizontal',
-      spaceBetween = 'small',
+      spaceBetween = 'none',
       spaceInside = 'small',
       radius = 'none',
       transition = 'colors',
@@ -290,7 +290,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
           ? getGapClassName(spaceBetween)
           : '';
       const paddingClassName =
-        typeof spaceInside === 'string' && spaceBetween !== 'none'
+        typeof spaceInside === 'string' && spaceInside !== 'none'
           ? getPaddingClassName(spaceInside)
           : '';
 

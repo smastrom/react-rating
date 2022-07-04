@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* istanbul ignore file */
+
 import { isValidElement } from 'react';
 
 import Package from '../package.json';

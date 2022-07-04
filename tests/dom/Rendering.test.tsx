@@ -14,6 +14,7 @@ import {
 } from './testUtils';
 
 import { Rating } from '../../src/Rating';
+import { Star } from '../../src/Star';
 
 beforeEach();
 afterEach();
@@ -38,7 +39,7 @@ describe('Component rendering', () => {
     expect(item).not.toBeInTheDocument();
   });
 
-  test('Should not render the component if  greater than 10', () => {
+  test('Should not render the component if items greater than 10', () => {
     // @ts-ignore
     render(<Rating value={6} items={11} />);
     const item = screen.queryByTestId(ID);
@@ -51,6 +52,84 @@ describe('Component rendering', () => {
     expect(item).not.toBeInTheDocument();
 
     rerender(<Rating value={6} readOnly />);
+    expect(item).not.toBeInTheDocument();
+  });
+
+  test('Should not render the component if itemShapes is not a valid JSX element', () => {
+    const StarComponent = () => Star;
+
+    const { rerender } = render(
+      <Rating
+        readOnly
+        value={1.5}
+        // @ts-ignore
+        itemStyles={{ itemShapes: StarComponent }}
+        items={3}
+        onChange={() => {}}
+      />
+    );
+
+    const item = screen.queryByTestId(ID);
+    expect(item).not.toBeInTheDocument();
+
+    rerender(
+      <Rating
+        readOnly
+        value={1.5}
+        // @ts-ignore
+        itemStyles={{ itemShapes: [StarComponent, StarComponent, StarComponent] }}
+        items={3}
+        onChange={() => {}}
+      />
+    );
+
+    expect(item).not.toBeInTheDocument();
+  });
+
+  test('Should not render the component if itemShapes length not equal to items', () => {
+    const StarComponent = () => Star;
+
+    const { rerender } = render(
+      <Rating
+        readOnly
+        value={1.5}
+        itemStyles={{ itemShapes: [Star, Star] }}
+        items={3}
+        onChange={() => {}}
+      />
+    );
+
+    const item = screen.queryByTestId(ID);
+    expect(item).not.toBeInTheDocument();
+
+    rerender(
+      <Rating
+        readOnly
+        value={1.5}
+        itemStyles={{ itemShapes: [Star, Star, Star, Star] }}
+        items={4}
+        onChange={() => {}}
+      />
+    );
+
+    expect(item).not.toBeInTheDocument();
+  });
+
+  test('Should not render the component if no itemShapes provided JSX element', () => {
+    const StarComponent = () => Star;
+
+    render(
+      <Rating
+        readOnly
+        value={1.5}
+        // @ts-ignore
+        itemStyles={{ activeFillColor: 'red' }}
+        items={3}
+        onChange={() => {}}
+      />
+    );
+
+    const item = screen.queryByTestId(ID);
     expect(item).not.toBeInTheDocument();
   });
 

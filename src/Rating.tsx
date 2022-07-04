@@ -221,6 +221,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
     /* Keyboard handler */
 
+    /** Ignoring handleKeyDown from Jest coverage as it is
+     * tested with Playwright in tests/e2e/keyboardNavigation.test.ts */
+
+    /* istanbul ignore next */
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, childIndex: number) => {
       const previousSibling = childIndex - 1;
       const nextSibling = childIndex + 1;

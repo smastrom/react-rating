@@ -1,6 +1,5 @@
 import { RatingProps, ItemStyles, Colors } from './exportedTypes';
 import { StaticColors, ValidArrayColors } from './internalTypes';
-import { isString } from './utils';
 
 const validArrayColorKeys: Array<keyof ValidArrayColors> = [
   'activeFillColor',
@@ -36,12 +35,12 @@ export const getColors = (
 
   colorsEntries.length > 0 &&
     colorsEntries.forEach(([key, value]) => {
-      if (!Array.isArray(value) && !isString(value)) {
+      if (!Array.isArray(value) && typeof value !== 'string') {
         delete allColors[key as keyof typeof allColors];
       } else if (Array.isArray(value)) {
         validArrayColorKeys.forEach((validKey) => {
           if (validKey === key) {
-            const cleanedArrayColors = value.filter((color) => isString(color));
+            const cleanedArrayColors = value.filter((color) => typeof color === 'string');
             if (cleanedArrayColors.length > 0) {
               arrayColors[key as keyof ValidArrayColors] = cleanedArrayColors;
               delete allColors[key as keyof typeof allColors];

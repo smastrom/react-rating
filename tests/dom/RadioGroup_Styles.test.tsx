@@ -22,7 +22,7 @@ afterEach();
 describe('Classnames and inline css vars - RadioGroup element', () => {
   test('Should have default classNames applied', () => {
     const defaultClasses =
-      'rar--group rar--dir-x rar--fx-colors rar--pointer rar--has-stroke rar--gap-sm rar--space-sm';
+      'rar--group rar--dir-x rar--fx-colors rar--pointer rar--has-stroke rar--space-sm';
 
     render(<Rating value={2} items={3} onChange={() => {}} />);
 
@@ -83,6 +83,26 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
       />
     );
 
+    const item = screen.queryByTestId(ID);
+    expect(item).toHaveClass(classNames, { exact: true });
+  });
+
+  test('Should have no gap nor padding classNames if spaceInside is set to none (default: small)', () => {
+    const classNames = 'rar--group rar--dir-x rar--pointer rar--has-stroke';
+
+    render(
+      <Rating value={2} items={3} onChange={() => {}} transition="none" spaceInside="none" />
+    );
+    const item = screen.queryByTestId(ID);
+    expect(item).toHaveClass(classNames, { exact: true });
+  });
+
+  test('Should have default padding className if spaceInside set to none', () => {
+    const classNames = 'rar--group rar--dir-x rar--pointer rar--has-stroke rar--space-sm';
+
+    render(
+      <Rating value={2} items={3} onChange={() => {}} transition="none" spaceBetween="none" />
+    );
     const item = screen.queryByTestId(ID);
     expect(item).toHaveClass(classNames, { exact: true });
   });

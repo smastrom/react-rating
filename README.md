@@ -23,7 +23,7 @@ First release: July 2nd, 2022
 - Fully accessible with keyboard navigation and custom labels
 - Works both on the server and the client
 - Fully typed with IntelliSense infos and autocomplete
-- Dependency-free, ~3.5Kb gzipped.
+- Dependency-free, ~3.6Kb gzipped.
 
 <br/>
 
@@ -121,8 +121,8 @@ const App = () => (
 | highlightOnlySelected | boolean                                                 | Whether or not to highlight only the selected rating item | false         | No       | :green_circle:      |
 | halfFillMode          | `svg` \| `box`                                          | Whether to half-fill the SVG or the box                   | `svg`         | No       | :purple_circle:     |
 | orientation           | `horizontal` \| `vertical`                              | Orientation of the rating items                           | `horizontal`  | No       | :green_circle:      |
-| spaceInside           | `none` \| `small` \| `medium` \| `large`                | Responsive padding of each rating item                    | `regular`     | No       | :green_circle:      |
-| spaceBetween          | `none` \| `small` \| `medium` \| `large`                | Responsive gap between the rating items                   | `small`       | No       | :green_circle:      |
+| spaceInside           | `none` \| `small` \| `medium` \| `large`                | Responsive padding of each rating item                    | `small`       | No       | :green_circle:      |
+| spaceBetween          | `none` \| `small` \| `medium` \| `large`                | Responsive gap between the rating items                   | `none`        | No       | :green_circle:      |
 | radius                | `none` \| `small` \| `medium` \| `large` \| `full`      | Radius of each rating item                                | `none`        | No       | :green_circle:      |
 | transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting               | `colors`      | No       | :large_blue_circle: |
 | itemStyles            | ItemStyle                                               | Custom shapes and colors                                  | defaultStyles | No       | :green_circle:      |

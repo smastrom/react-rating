@@ -15,8 +15,6 @@ export const isValidPositiveNumber = (value: any) => typeof value === 'number' &
 
 export const toSecondDecimal = (number: number): number => Math.round(number * 100) / 100;
 
-export const isString = (color: any) => typeof color === 'string';
-
 export const roundToHalf = (number: number) => Math.round(number * 2) / 2;
 
 export const getUniqueId = () => (Math.random() + 1).toString(36).substring(7);

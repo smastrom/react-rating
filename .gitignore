@@ -4,6 +4,7 @@ yarn.lock
 .DS_Store
 test-results
 .eslintcache
+coverage
 playwright-report
 playwright/.cache
 style.css

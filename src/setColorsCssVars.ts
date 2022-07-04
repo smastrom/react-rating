@@ -1,10 +1,11 @@
 import { CSSVariables } from './internalTypes';
 
-export const ACTIVE_FILL_COLOR_VAR = '--rar--fill-on-color';
-export const ACTIVE_BOX_COLOR_VAR = '--rar--box-on-color';
-export const ACTIVE_BORDER_COLOR_VAR = '--rar--border-on-color';
-export const ACTIVE_STROKE_COLOR_VAR = '--rar--stroke-on-color';
+const ACTIVE_FILL_COLOR_VAR = '--rar--fill-on-color';
+const ACTIVE_BOX_COLOR_VAR = '--rar--box-on-color';
+const ACTIVE_BORDER_COLOR_VAR = '--rar--border-on-color';
+const ACTIVE_STROKE_COLOR_VAR = '--rar--stroke-on-color';
 
+/* istanbul ignore next */
 export const setDyamicCssVars = (
   targetObj: CSSVariables,
   key: string,
@@ -26,6 +27,7 @@ export const setDyamicCssVars = (
   }
 };
 
+/* istanbul ignore next */
 export const setColorCssVars = (targetObj: CSSVariables, key: string, value: string): void => {
   switch (key) {
     case 'activeFillColor':

@@ -49,7 +49,7 @@
     "build:ci": "rimraf dist && tsc && vite build --mode ci",
     "dev": "vite",
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
-    "test": "yarn test:unit && yarn test:dom",
+    "test": "yarn jest --coverage",
     "test:dom": "yarn jest --testPathPattern=tests/dom",
     "test:e2e": "yarn playwright test && yarn playwright show-report",
     "test:unit": "yarn jest --testPathPattern=tests/unit"

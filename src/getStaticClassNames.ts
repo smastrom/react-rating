@@ -2,6 +2,7 @@ import { CSSClassName, MaybeEmptyCSSClassName } from './internalTypes';
 
 const BASE_TRANSITION: CSSClassName = 'rar--fx-colors';
 
+/* istanbul ignore next */
 export const getTransitionClassNames = (transitionProp: string): MaybeEmptyCSSClassName => {
   switch (transitionProp) {
     case 'zoom':
@@ -17,6 +18,7 @@ export const getTransitionClassNames = (transitionProp: string): MaybeEmptyCSSCl
   }
 };
 
+/* istanbul ignore next */
 export const getRadiusClassName = (radiusProp: string): MaybeEmptyCSSClassName => {
   switch (radiusProp) {
     case 'small':
@@ -32,6 +34,7 @@ export const getRadiusClassName = (radiusProp: string): MaybeEmptyCSSClassName =
   }
 };
 
+/* istanbul ignore next */
 export const getGapClassName = (gapProp: string): MaybeEmptyCSSClassName => {
   switch (gapProp) {
     case 'small':
@@ -45,6 +48,7 @@ export const getGapClassName = (gapProp: string): MaybeEmptyCSSClassName => {
   }
 };
 
+/* istanbul ignore next */
 export const getPaddingClassName = (paddingProp: string): MaybeEmptyCSSClassName => {
   switch (paddingProp) {
     case 'small':

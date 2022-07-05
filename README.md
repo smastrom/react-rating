@@ -11,7 +11,7 @@ First released: July 2nd, 2022
 
 ![react-rating](https://i.ibb.co/0X7djmF/examples.png)
 
-[Live demo and examples](https://react-rating.onrender.com/)
+[Demo and examples](https://react-rating.onrender.com/)
 
 <br />
 
@@ -20,7 +20,7 @@ First released: July 2nd, 2022
 - **Use any SVG**: No headaches, icon fonts or packages to install in order to use your favorite vectors.
 - Highly customizable: behavior, colors, transitions and much more.
 - Fully responsive and mobile-first
-- Fully accessible with keyboard navigation and custom labels
+- Fully accessible with keyboard navigation and custom/default labels
 - Works both on the server and the client
 - Fully typed with IntelliSense infos and autocomplete
 - Dependency-free, ~3.6Kb gzipped.
@@ -43,47 +43,82 @@ npm install --save @smastrom/react-rating
 
 ## Basic usage
 
-As an accessible [radio-group](https://developer.mozilla.org/en-US/docs/web/accessibility/aria/roles/radiogroup_role) input:
+### 1. Import the component and the CSS
 
 ```jsx
-import React, { useState } from "react";
-import { Rating } from '@smastrom/react-rating';
-
-import '@smastrom/react-rating/style.css'; // <-- Import CSS
-
-const App = () => {
-  const [ratingValue, setRatingValue] = useState(3); // <-- Initial value, init with 0 for no value
-
-  return (
-      <div style={{ maxWidth: 600, width: "100%" }}> {/* <-- Wrap it in a container */}
-        <Rating
-            value={ratingValue}
-            onChange={(selectedValue) => setRatingValue(selectedValue)}
-        >
-      </div>
-  )
-};
-```
-
-or as an accessible, non-interactive [image element](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/img_role):
-
-```jsx
-import React from 'react';
 import { Rating } from '@smastrom/react-rating';
 
 import '@smastrom/react-rating/style.css';
-
-const App = () => (
-  <div style={{ maxWidth: 600, width: '100%' }}>
-    <Rating readOnly value={3.78} />
-  </div>
-);
 ```
 
-### Usage with frameworks
+### 2. Give it a max-width
 
-- **NextJS** - Import CSS once in **\_app.js**
-- **Gatsby** - Import CSS once in **gatsby-browser.js**
+Since **Rating** will span across the entire container, define a _maximum width_ via inline styles, css class or wrap it in its own responsive container:
+
+```jsx
+const App = () => {
+  const [ratingValue, setRatingValue] = useState(3); // <-- Init with 0 for no initial value
+
+  return (
+    <Rating
+      style={{ maxWidth: 600 }}
+      value={ratingValue}
+      onChange={(selectedValue) => setRatingValue(selectedValue)}
+    />
+  );
+};
+```
+
+<details><summary><strong>CSS Class</strong></summary>
+<br />
+
+**my-styles.css**
+
+```css
+.my-rating-class {
+  max-width: 600px;
+}
+```
+
+**App.jsx**
+
+```jsx
+import 'my-styles.css';
+
+const App = () => {
+  const [ratingValue, setRatingValue] = useState(3);
+
+  return (
+    <Rating
+      className="my-rating-class"
+      value={ratingValue}
+      onChange={(selectedValue) => setRatingValue(selectedValue)}
+    />
+  );
+};
+```
+
+</details>
+
+<details><summary><strong>Responsive container</strong></summary>
+<br />
+
+```jsx
+const App = () => {
+  const [ratingValue, setRatingValue] = useState(3);
+
+  return (
+    <div style={{ maxWidth: 600, width: '100%' }}>
+      <Rating
+        value={ratingValue}
+        onChange={(selectedValue) => setRatingValue(selectedValue)}
+      />
+    </div>
+  );
+};
+```
+
+</details>
 
 <br />
 
@@ -148,7 +183,7 @@ Would you like to style it via CSS? Take a look [here](#styling-via-css).
 
 ### Rating items
 
-Pass an `ItemStyles` object to `itemStyles` prop:
+You can pass an object with the following properties to `itemStyles` prop:
 
 ```ts
 type ItemStyles = {
@@ -169,7 +204,7 @@ type ItemStyles = {
 };
 ```
 
-All the properties are **optional** (except for `itemShapes`). If a property isn't defined, no classes nor CSS variables will be added to the rendered HTML.
+**<u>All the properties are optional</u>** (except for `itemShapes`). If a property isn't defined, no classes nor CSS variables will be added to the HTML.
 
 Just set the ones you need and that's it:
 
@@ -188,23 +223,17 @@ const App = () => {
   const [ratingValue, setRatingValue] = useState(4);
 
   return (
-    <div
-      style={{
-        maxWidth: 300,
-        width: '100%',
-      }}
-    >
-      <Rating
-        value={ratingValue}
-        onChange={(selectedValue) => setRatingValue(selectedValue)}
-        itemStyles={customStyles}
-      />
-    </div>
+    <Rating
+      style={{ maxWidth: 300 }}
+      value={ratingValue}
+      onChange={(selectedValue) => setRatingValue(selectedValue)}
+      itemStyles={customStyles}
+    />
   );
 };
 ```
 
-If you want to use the default rating star coming with this package, just import it:
+You can also use the default star coming with this package and customize any other color:
 
 ```js
 import { Star } from '@smastrom/react-rating';
@@ -361,20 +390,14 @@ export const FacesRating = () => {
   const [ratingValue, setRatingValue] = useState(0);
 
   return (
-    <div
-      style={{
-        maxWidth: 200,
-        width: '100%',
-      }}
-    >
-      <Rating
-        value={ratingValue}
-        onChange={(selectedValue) => setRatingValue(selectedValue)}
-        items={2}
-        itemStyles={customStyles}
-        highlightOnlySelected
-      />
-    </div>
+    <Rating
+      style={{ maxWidth: 200 }}
+      value={ratingValue}
+      onChange={(selectedValue) => setRatingValue(selectedValue)}
+      items={2}
+      itemStyles={customStyles}
+      highlightOnlySelected
+    />
   );
 };
 ```
@@ -403,20 +426,14 @@ export const App = () => {
   const [ratingValue, setRatingValue] = useState(4);
 
   return (
-    <div
-      style={{
-        maxWidth: 500,
-        width: '100%',
-      }}
-    >
-      <Rating
-        value={ratingValue}
-        onChange={(selectedValue) => setRatingValue(selectedValue)}
-        itemStyles={customStyles}
-        radius="large"
-        spaceInside="large"
-      />
-    </div>
+    <Rating
+      style={{ maxWidth: 500 }}
+      value={ratingValue}
+      onChange={(selectedValue) => setRatingValue(selectedValue)}
+      itemStyles={customStyles}
+      radius="large"
+      spaceInside="large"
+    />
   );
 };
 ```
@@ -425,7 +442,7 @@ export const App = () => {
 
 ### Half-fill and float values
 
-If `readOnly` is set to **true**, `value` prop accepts a float:
+If `readOnly` is set to **true**, the `value` prop accepts a float:
 
 ```jsx
 <Rating readOnly value={1.38} />

@@ -43,15 +43,13 @@ const App = () => {
       <button id="first_button" type="button" onClick={() => {}}>
         First Button
       </button>
-      <div
-        style={{
-          maxWidth: 300,
-          width: '100%',
-        }}
-      >
+      <div>
         <h2 id="rating_label">Rating Label</h2>
         <Profiler>
           <Rating
+            style={{
+              maxWidth: 300,
+            }}
             // readOnly
             resetOnSecondClick
             items={5}

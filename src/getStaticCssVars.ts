@@ -10,7 +10,7 @@ export const getStaticCssVars = (
   const cssVars: CSSVariables = {};
 
   if (typeof boxBorderWidth === 'number' && boxBorderWidth > 0) {
-    cssVars['--rar--border-width'] = `${boxBorderWidth}px`;
+    cssVars['--rr--border-width'] = `${boxBorderWidth}px`;
   }
 
   const colorsEntries = Object.entries(staticColors);

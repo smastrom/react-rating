@@ -18,8 +18,8 @@ import { Rating } from '../../src/Rating';
 beforeEach();
 afterEach();
 
-const activeClassNames = 'rar--box rar--on';
-const inactiveClassNames = 'rar--box rar--off';
+const activeClassNames = 'rr--box rr--on';
+const inactiveClassNames = 'rr--box rr--off';
 
 const toHaveClassNames = (childId: string, classNames: string) => {
   const child = screen.getByTestId(childId);
@@ -28,7 +28,7 @@ const toHaveClassNames = (childId: string, classNames: string) => {
 
 describe('Classnames and inline css vars - Image element', () => {
   test('If styles are deactivated/unset, no classNames should be added', () => {
-    const defaultClasses = 'rar--group rar--dir-x';
+    const defaultClasses = 'rr--group rr--dir-x';
 
     render(
       <Rating
@@ -54,7 +54,7 @@ describe('Classnames and inline css vars - Image element', () => {
       />
     );
     const item = screen.getByTestId(ID);
-    expect(item).toHaveAttribute('style', '--rar--fill-on-color: red;');
+    expect(item).toHaveAttribute('style', '--rr--fill-on-color: red;');
   });
 
   test('If no colors are defined, the style attribute should not be defined', () => {
@@ -115,22 +115,22 @@ describe('Half-fill classnames injection', () => {
   test('If user passes a float and deserves half-fill, should have proper classes if halfFillMode is set to "box"', () => {
     render(<Rating readOnly value={2.42} items={4} halfFillMode="box" />);
 
-    const boxOnClassNames = 'rar--box rar--hf-box-on';
+    const boxOnClassNames = 'rr--box rr--hf-box-on';
 
     toHaveClassNames(CHILD_ID_1, boxOnClassNames);
     toHaveClassNames(CHILD_ID_2, boxOnClassNames);
-    toHaveClassNames(CHILD_ID_3, 'rar--box rar--hf-box-int');
-    toHaveClassNames(CHILD_ID_4, 'rar--box rar--hf-box-off');
+    toHaveClassNames(CHILD_ID_3, 'rr--box rr--hf-box-int');
+    toHaveClassNames(CHILD_ID_4, 'rr--box rr--hf-box-off');
   });
 
   test('If user passes a float and deserves half-fill, should have proper classes if halfFillMode is set to "svg"', () => {
     render(<Rating readOnly value={2.42} items={4} />);
 
-    const svgOnClassNames = 'rar--box rar--hf-svg-on';
+    const svgOnClassNames = 'rr--box rr--hf-svg-on';
 
     toHaveClassNames(CHILD_ID_1, svgOnClassNames);
     toHaveClassNames(CHILD_ID_2, svgOnClassNames);
     toHaveClassNames(CHILD_ID_3, svgOnClassNames);
-    toHaveClassNames(CHILD_ID_4, 'rar--box rar--hf-svg-off');
+    toHaveClassNames(CHILD_ID_4, 'rr--box rr--hf-svg-off');
   });
 });

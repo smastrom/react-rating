@@ -1,6 +1,6 @@
 import { ItemStyles, MaybeArrayColors, NonArrayColors, SharedProps } from './exportedTypes';
 
-type CSSPrefix = 'rar';
+type CSSPrefix = 'rr';
 
 export type CSSVariables = {
   [key: `--${CSSPrefix}--${string}`]: string;

@@ -18,10 +18,10 @@ the current rating index`;
   };
 
   const expectedColors: CSSVariables = {
-    '--rar--fill-on-color': '#cca300',
-    '--rar--stroke-on-color': '#dcb000',
-    '--rar--box-on-color': '#cca300',
-    '--rar--border-on-color': '#dcb000',
+    '--rr--fill-on-color': '#cca300',
+    '--rr--stroke-on-color': '#dcb000',
+    '--rr--box-on-color': '#cca300',
+    '--rr--border-on-color': '#dcb000',
   };
 
   const expectedArray1: CSSVariables[] = [

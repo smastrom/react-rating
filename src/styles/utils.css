@@ -1,107 +1,107 @@
 /* direction */
 
-.rar--dir-x {
+.rr--dir-x {
   flex-direction: row;
 }
 
-.rar--dir-y {
+.rr--dir-y {
   flex-direction: column;
 }
 
 /* spaceInside */
 
-.rar--space-sm .rar--svg {
+.rr--space-sm .rr--svg {
   padding: 10%;
 }
 
-.rar--space-md .rar--svg {
+.rr--space-md .rr--svg {
   padding: 12.5%;
 }
 
-.rar--space-lg .rar--svg {
+.rr--space-lg .rr--svg {
   padding: 17.5%;
 }
 
 /* spaceBetween */
 
-.rar--dir-x.rar--gap-sm .rar--svg {
+.rr--dir-x.rr--gap-sm .rr--svg {
   margin: 0 6.25%;
 }
 
-.rar--dir-x.rar--gap-sm .rar--box:focus-visible::after {
+.rr--dir-x.rr--gap-sm .rr--box:focus-visible::after {
   width: calc(100% - 12.5%);
   left: 6.25%;
 }
 
-.rar--dir-x.rar--gap-md .rar--svg {
+.rr--dir-x.rr--gap-md .rr--svg {
   margin: 0 12.5%;
 }
 
-.rar--dir-x.rar--gap-md .rar--box:focus-visible::after {
+.rr--dir-x.rr--gap-md .rr--box:focus-visible::after {
   width: calc(100% - 25%);
   left: 12.5%;
 }
 
-.rar--dir-x.rar--gap-lg .rar--svg {
+.rr--dir-x.rr--gap-lg .rr--svg {
   margin: 0 25%;
 }
 
-.rar--dir-x.rar--gap-lg .rar--box:focus-visible::after {
+.rr--dir-x.rr--gap-lg .rr--box:focus-visible::after {
   width: calc(100% - 50%);
   left: 25%;
 }
 
-.rar--dir-y.rar--gap-sm .rar--svg {
+.rr--dir-y.rr--gap-sm .rr--svg {
   margin: 6.25% 0;
 }
 
-.rar--dir-y.rar--gap-md .rar--svg {
+.rr--dir-y.rr--gap-md .rr--svg {
   margin: 12.5% 0;
 }
 
-.rar--dir-y.rar--gap-lg .rar--svg {
+.rr--dir-y.rr--gap-lg .rr--svg {
   margin: 25% 0;
 }
 
 /* radius */
 
-.rar--rx-sm .rar--svg {
+.rr--rx-sm .rr--svg {
   border-radius: 5px;
 }
 
-.rar--rx-md .rar--svg {
+.rr--rx-md .rr--svg {
   border-radius: 10px;
 }
 
-.rar--rx-lg .rar--svg {
+.rr--rx-lg .rr--svg {
   border-radius: 20px;
 }
 
-.rar--rx-full .rar--svg {
+.rr--rx-full .rr--svg {
   border-radius: 100%;
 }
 
 /* SVG Stroke */
 
-.rar--has-stroke .rar--svg {
+.rr--has-stroke .rr--svg {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 /* Box border */
 
-.rar--has-border .rar--svg {
-  border-width: var(--rar--border-width);
+.rr--has-border .rr--svg {
+  border-width: var(--rr--border-width);
   border-style: solid;
 }
 
 /* Misc */
 
-.rar--pointer .rar--box {
+.rr--pointer .rr--box {
   cursor: pointer;
 }
 
-.rar--hidden {
+.rr--hidden {
   position: absolute;
   width: 1px;
   height: 1px;

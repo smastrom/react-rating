@@ -278,16 +278,16 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
     /* Radio Group props */
 
     const getClassNames = (): string => {
-      const cursorClassName: MaybeEmptyCSSClassName = readOnly === false ? 'rar--pointer' : '';
-      const orientationClassName: CSSClassName = `rar--dir-${
+      const cursorClassName: MaybeEmptyCSSClassName = readOnly === false ? 'rr--pointer' : '';
+      const orientationClassName: CSSClassName = `rr--dir-${
         orientation === 'vertical' ? 'y' : 'x'
       }`;
       const radiusClassName =
         typeof radius === 'string' && radius !== 'none' ? getRadiusClassName(radius) : '';
       const borderClassName: MaybeEmptyCSSClassName =
-        absoluteBoxBorderWidth > 0 ? 'rar--has-border' : '';
+        absoluteBoxBorderWidth > 0 ? 'rr--has-border' : '';
       const strokeClassName: MaybeEmptyCSSClassName =
-        absoluteStrokeWidth > 0 ? 'rar--has-stroke' : '';
+        absoluteStrokeWidth > 0 ? 'rr--has-stroke' : '';
       const transitionClassName =
         readOnly === false && transition !== 'none' ? getTransitionClassNames(transition) : '';
       const gapClassName =
@@ -299,7 +299,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
           ? getPaddingClassName(spaceInside)
           : '';
 
-      return `rar--group ${orientationClassName} ${strokeClassName} ${borderClassName}
+      return `rr--group ${orientationClassName} ${strokeClassName} ${borderClassName}
       ${transitionClassName} ${radiusClassName} ${cursorClassName} ${gapClassName}
       ${paddingClassName} ${className || ''}`
         .replace(/  +/g, ' ')
@@ -403,8 +403,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
         {/* Box */}
         {ratingValues.map((_, childIndex) => (
           <div
-            key={`rar_box_${childIndex}`}
-            className={`rar--box ${styles.dynamicClassNames[childIndex]}`}
+            key={`rr_box_${childIndex}`}
+            className={`rr--box ${styles.dynamicClassNames[childIndex]}`}
             style={styles?.dynamicCssVars?.[childIndex]}
             {...getRadioProps(childIndex)}
             {...getChildTestIds(childIndex)}

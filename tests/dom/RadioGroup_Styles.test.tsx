@@ -22,7 +22,7 @@ afterEach();
 describe('Classnames and inline css vars - RadioGroup element', () => {
   test('Should have default classNames applied', () => {
     const defaultClasses =
-      'rar--group rar--dir-x rar--fx-colors rar--pointer rar--has-stroke rar--space-sm';
+      'rr--group rr--dir-x rr--fx-colors rr--pointer rr--has-stroke rr--space-sm';
 
     render(<Rating value={2} items={3} onChange={() => {}} />);
 
@@ -31,7 +31,7 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
   });
 
   test('Should not have classNames if styling props are disabled', () => {
-    const defaultClasses = 'rar--group rar--dir-x rar--pointer rar--has-stroke';
+    const defaultClasses = 'rr--group rr--dir-x rr--pointer rr--has-stroke';
 
     render(
       <Rating
@@ -49,7 +49,7 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
   });
 
   test('Should have no stroke nor border classNames and no CSS inline vars if not included in itemStyles', () => {
-    const defaultClasses = 'rar--group rar--dir-x rar--pointer';
+    const defaultClasses = 'rr--group rr--dir-x rr--pointer';
 
     render(
       <Rating
@@ -69,7 +69,7 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
   });
 
   test('Should have stroke and border classNames if set in itemStyles', () => {
-    const classNames = 'rar--group rar--dir-x rar--pointer rar--has-stroke rar--has-border';
+    const classNames = 'rr--group rr--dir-x rr--pointer rr--has-stroke rr--has-border';
 
     render(
       <Rating
@@ -88,7 +88,7 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
   });
 
   test('Should have no gap nor padding classNames if spaceInside is set to none (default: small)', () => {
-    const classNames = 'rar--group rar--dir-x rar--pointer rar--has-stroke';
+    const classNames = 'rr--group rr--dir-x rr--pointer rr--has-stroke';
 
     render(
       <Rating value={2} items={3} onChange={() => {}} transition="none" spaceInside="none" />
@@ -98,7 +98,7 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
   });
 
   test('Should have default padding className if spaceInside set to none', () => {
-    const classNames = 'rar--group rar--dir-x rar--pointer rar--has-stroke rar--space-sm';
+    const classNames = 'rr--group rr--dir-x rr--pointer rr--has-stroke rr--space-sm';
 
     render(
       <Rating value={2} items={3} onChange={() => {}} transition="none" spaceBetween="none" />
@@ -111,12 +111,12 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 describe('Classnames and inline css vars - Radio elements', () => {
   const toHaveActiveClassName = (childId: string) => {
     const child = screen.getByTestId(childId);
-    expect(child).toHaveClass('rar--box rar--on', { exact: true });
+    expect(child).toHaveClass('rr--box rr--on', { exact: true });
   };
 
   const toHaveInactiveClassName = (childId: string) => {
     const child = screen.getByTestId(childId);
-    expect(child).toHaveClass('rar--box rar--off', { exact: true });
+    expect(child).toHaveClass('rr--box rr--off', { exact: true });
   };
 
   test('If ratingValue equals to n, first n child should have correspondent active className', () => {

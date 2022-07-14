@@ -24,7 +24,7 @@ describe('readOnly parent component displays proper a11y attributes', () => {
     expect(item).toBeInTheDocument();
     expect(item).toHaveAttribute('role', 'img');
     expect(item).toHaveAccessibleName('Rated 2 on 5');
-    expect(item).toHaveClass('rar--group');
+    expect(item).toHaveClass('rr--group');
   });
 
   test('Should not be focusable and have radio-group specific attributes and classes', () => {
@@ -33,8 +33,8 @@ describe('readOnly parent component displays proper a11y attributes', () => {
     expect(item).not.toHaveFocus();
     expect(item).not.toHaveAttribute('aria-required');
     expect(item).not.toHaveAttribute('aria-invalid');
-    expect(item).not.toHaveClass('rar--cursor');
-    expect(item).not.toHaveClass('rar--fx-colors');
+    expect(item).not.toHaveClass('rr--cursor');
+    expect(item).not.toHaveClass('rr--fx-colors');
   });
 
   test('User should be able to customize aria-label', () => {

@@ -1,39 +1,39 @@
 /* Fill */
 
-.rar--on .rar--svg {
-  fill: var(--rar--fill-on-color, none);
+.rr--on .rr--svg {
+  fill: var(--rr--fill-on-color, none);
 }
 
-.rar--off .rar--svg {
-  fill: var(--rar--fill-off-color, none);
+.rr--off .rr--svg {
+  fill: var(--rr--fill-off-color, none);
 }
 
 /* Stroke */
 
-.rar--has-stroke .rar--on .rar--svg {
-  stroke: var(--rar--stroke-on-color, currentColor);
+.rr--has-stroke .rr--on .rr--svg {
+  stroke: var(--rr--stroke-on-color, currentColor);
 }
 
-.rar--has-stroke .rar--off .rar--svg {
-  stroke: var(--rar--stroke-off-color, currentColor);
+.rr--has-stroke .rr--off .rr--svg {
+  stroke: var(--rr--stroke-off-color, currentColor);
 }
 
 /* Bounding box background */
 
-.rar--on .rar--svg {
-  background-color: var(--rar--box-on-color, none);
+.rr--on .rr--svg {
+  background-color: var(--rr--box-on-color, none);
 }
 
-.rar--off .rar--svg {
-  background-color: var(--rar--box-off-color, none);
+.rr--off .rr--svg {
+  background-color: var(--rr--box-off-color, none);
 }
 
 /* Bounding box border */
 
-.rar--has-border .rar--off .rar--svg {
-  border-color: var(--rar--border-off-color, currentColor);
+.rr--has-border .rr--off .rr--svg {
+  border-color: var(--rr--border-off-color, currentColor);
 }
 
-.rar--has-border .rar--on .rar--svg {
-  border-color: var(--rar--border-on-color, currentColor);
+.rr--has-border .rr--on .rr--svg {
+  border-color: var(--rr--border-on-color, currentColor);
 }

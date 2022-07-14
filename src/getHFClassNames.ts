@@ -15,17 +15,17 @@ export const getHalfFillClassNames = (
     .map((_, index) => {
       if (absoluteHalfFillMode === 'box') {
         if (index > intersectionIndex) {
-          return 'rar--hf-box-off';
+          return 'rr--hf-box-off';
         }
         if (index === intersectionIndex) {
-          return 'rar--hf-box-int';
+          return 'rr--hf-box-int';
         }
-        return 'rar--hf-box-on';
+        return 'rr--hf-box-on';
       }
       if (index > intersectionIndex) {
-        return 'rar--hf-svg-off';
+        return 'rr--hf-svg-off';
       }
-      return 'rar--hf-svg-on';
+      return 'rr--hf-svg-on';
     });
 
   return classNames;

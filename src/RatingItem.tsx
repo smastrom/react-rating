@@ -57,7 +57,7 @@ export const RatingItem = ({
   const getHalfFillAttr = () => {
     if (hasHalfFill) {
       return {
-        fill: `url('#${uniqId.current}_rar_hf')`,
+        fill: `url('#${uniqId.current}_rr_hf')`,
       };
     }
     return {};
@@ -117,16 +117,16 @@ export const RatingItem = ({
       {...getStrokeAttribute()}
       {...getTestIds()}
       aria-hidden="true"
-      className="rar--svg"
+      className="rr--svg"
       xmlns="http://www.w3.org/2000/svg"
       viewBox={svgData ? svgData.viewBox : '0 0 0 0'}
       preserveAspectRatio="xMidYMid meet"
     >
       {hasHalfFill && (
         <defs {...getDefsTestId()}>
-          <linearGradient id={`${uniqId.current}_rar_hf`} {...getGradientTransformAttr()}>
-            <stop className="rar--svg-stop-1" offset="50%" />
-            <stop className="rar--svg-stop-2" offset="50%" />
+          <linearGradient id={`${uniqId.current}_rr_hf`} {...getGradientTransformAttr()}>
+            <stop className="rr--svg-stop-1" offset="50%" />
+            <stop className="rr--svg-stop-2" offset="50%" />
           </linearGradient>
         </defs>
       )}

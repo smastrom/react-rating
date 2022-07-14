@@ -4,8 +4,8 @@ import { CSSClassName } from '../../src/internalTypes';
 
 describe('getActiveClassNames returns proper array of active classes', () => {
   const items = 5;
-  const X: CSSClassName = 'rar--on';
-  const _: CSSClassName = 'rar--off';
+  const X: CSSClassName = 'rr--on';
+  const _: CSSClassName = 'rr--off';
 
   const Test1 = `If highlightOnlySelected is true, it should return an array
 with the length equal to the rating items, containing the active class only

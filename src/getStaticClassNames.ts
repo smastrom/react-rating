@@ -1,16 +1,16 @@
 import { CSSClassName, MaybeEmptyCSSClassName } from './internalTypes';
 
-const BASE_TRANSITION: CSSClassName = 'rar--fx-colors';
+const BASE_TRANSITION: CSSClassName = 'rr--fx-colors';
 
 /* istanbul ignore next */
 export const getTransitionClassNames = (transitionProp: string): MaybeEmptyCSSClassName => {
   switch (transitionProp) {
     case 'zoom':
-      return `rar--fx-zoom ${BASE_TRANSITION}`;
+      return `rr--fx-zoom ${BASE_TRANSITION}`;
     case 'position':
-      return `rar--fx-position ${BASE_TRANSITION}`;
+      return `rr--fx-position ${BASE_TRANSITION}`;
     case 'opacity':
-      return `rar--fx-opacity ${BASE_TRANSITION}`;
+      return `rr--fx-opacity ${BASE_TRANSITION}`;
     case 'colors':
       return BASE_TRANSITION;
     default:
@@ -22,13 +22,13 @@ export const getTransitionClassNames = (transitionProp: string): MaybeEmptyCSSCl
 export const getRadiusClassName = (radiusProp: string): MaybeEmptyCSSClassName => {
   switch (radiusProp) {
     case 'small':
-      return 'rar--rx-sm';
+      return 'rr--rx-sm';
     case 'medium':
-      return 'rar--rx-md';
+      return 'rr--rx-md';
     case 'large':
-      return 'rar--rx-lg';
+      return 'rr--rx-lg';
     case 'full':
-      return 'rar--rx-full';
+      return 'rr--rx-full';
     default:
       return '';
   }
@@ -38,11 +38,11 @@ export const getRadiusClassName = (radiusProp: string): MaybeEmptyCSSClassName =
 export const getGapClassName = (gapProp: string): MaybeEmptyCSSClassName => {
   switch (gapProp) {
     case 'small':
-      return 'rar--gap-sm';
+      return 'rr--gap-sm';
     case 'medium':
-      return 'rar--gap-md';
+      return 'rr--gap-md';
     case 'large':
-      return 'rar--gap-lg';
+      return 'rr--gap-lg';
     default:
       return '';
   }
@@ -52,11 +52,11 @@ export const getGapClassName = (gapProp: string): MaybeEmptyCSSClassName => {
 export const getPaddingClassName = (paddingProp: string): MaybeEmptyCSSClassName => {
   switch (paddingProp) {
     case 'small':
-      return 'rar--space-sm';
+      return 'rr--space-sm';
     case 'medium':
-      return 'rar--space-md';
+      return 'rr--space-md';
     case 'large':
-      return 'rar--space-lg';
+      return 'rr--space-lg';
     default:
       return '';
   }

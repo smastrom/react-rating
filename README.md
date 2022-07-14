@@ -516,18 +516,18 @@ It is not necessary, however if you want to, you can do it as shown below:
   gap: 20px;
 }
 
-.my-own-class .rar--svg {
+.my-own-class .rr--svg {
   border-radius: 10px;
   padding: 5px;
 }
 
-.my-own-class .rar--svg {
+.my-own-class .rr--svg {
   transform: scale(1);
   transition: all 300ms cubic-bezier(0.87, 0, 0.13, 1);
   opacity: 0.5;
 }
 
-.my-own-class .rar--on:hover .rar--svg {
+.my-own-class .rr--on:hover .rr--svg {
   transform: scale(1.5);
   opacity: 1;
 }

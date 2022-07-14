@@ -11,14 +11,14 @@ export const getActiveClassNames = (
     .map((_, index) => {
       if (highlightOnlySelectedProp === false) {
         if (index <= selectedIndex) {
-          return 'rar--on';
+          return 'rr--on';
         }
-        return 'rar--off';
+        return 'rr--off';
       }
       if (index === selectedIndex) {
-        return 'rar--on';
+        return 'rr--on';
       }
-      return 'rar--off';
+      return 'rr--off';
     });
 
   return activeClassNames;

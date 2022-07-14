@@ -1,20 +1,26 @@
 {
   "name": "@smastrom/react-rating",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": false,
   "keywords": [
     "react",
     "rating",
     "react rating",
     "react-rating",
-    "react-reviews",
-    "react-component",
+    "rating star",
     "rating-star",
     "rating-component",
-    "star-component",
+    "rating component",
     "stars",
+    "star",
+    "star-component",
+    "star component",
     "reviews",
-    "reviews-component"
+    "review",
+    "reviews-component",
+    "reviews component",
+    "react reviews",
+    "react-reviews"
   ],
   "homepage": "https://react-rating.onrender.com/",
   "bugs": {

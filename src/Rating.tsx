@@ -245,6 +245,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
           return true;
         case 'Enter':
         case 'Space': {
+          event.preventDefault();
           if (childIndex !== currentRatingIndex) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             return onChange!(ratingValues[childIndex]);

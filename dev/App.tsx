@@ -50,18 +50,17 @@ const App = () => {
             style={{
               maxWidth: 300,
             }}
-            readOnly
+            // readOnly
             resetOnSecondClick
             items={5}
             aria-label="Ciao"
             onChange={(value) => setValue(value)}
-            value={3.4}
+            value={value}
             itemStyles={customStyles}
             transition="zoom"
             // highlightOnlySelected
             orientation="horizontal"
             spaceBetween="small"
-            halfFillMode="box"
             spaceInside="large"
             radius="small"
             isRequired={false}

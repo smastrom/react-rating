@@ -5,6 +5,7 @@
   "keywords": [
     "react",
     "rating",
+    "react rating",
     "react-rating",
     "react-reviews",
     "react-component",
@@ -48,12 +49,16 @@
     "build": "rimraf dist && tsc && vite build && cp dist/style.css style.css && rimraf dist/style.css",
     "build:ci": "rimraf dist && tsc && vite build --mode ci",
     "dev": "vite --port 3000",
-    "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "yarn eslint . --ext .ts,.tsx && prettier --write \"**/*.{ts,tsx,css,md}\"",
+    "prepare": "husky install",
     "test": "yarn jest --coverage",
     "test:dom": "yarn jest --testPathPattern=tests/dom",
     "test:e2e": "yarn playwright test && yarn playwright show-report",
-    "test:unit": "yarn jest --testPathPattern=tests/unit",
-    "prepare": "husky install"
+    "test:unit": "yarn jest --testPathPattern=tests/unit"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --cache --fix",
+    "*.{ts,tsx,css,md}": "prettier --write"
   },
   "devDependencies": {
     "@playwright/test": "^1.23.3",
@@ -90,9 +95,5 @@
   "peerDependencies": {
     "react": "^16.8.0 || ^17 || ^18",
     "react-dom": "^16.8.0 || ^17 || ^18"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
   }
 }

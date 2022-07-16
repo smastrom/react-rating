@@ -9,12 +9,6 @@ First released: July 2nd, 2022
 
 <br />
 
-| Prop         | Description                                                           | Type      | Default   | Required           |
-| ------------ | --------------------------------------------------------------------- | --------- | --------- | ------------------ |
-| value        | Variable to bind to the value                                         | undefined | undefined | :white_check_mark: |
-| baseList     | Array of max 6 domains to show before the user types `@`              | string[]  | undefined | :white_check_mark: |
-| extendedList | Array of n domains to refine the suggestions after the user types `@` | string[]  | undefined | :x:                |
-
 ![react-rating](https://i.ibb.co/0X7djmF/examples.png)
 
 [Demo and examples](https://react-rating.onrender.com/)
@@ -54,10 +48,11 @@ npm install --save @smastrom/react-rating
 ```jsx
 import { Rating } from '@smastrom/react-rating';
 
-import '@smastrom/react-rating/style.css';
+import '@smastrom/react-rating/style';
+// or '@smastrom/react-rating/style.css' if eslint(import/no-unresolved) false positive
 ```
 
-### 2. Give it a max-width
+### 2. Give it a max-width and init the state
 
 Since **Rating** will span across the entire container, define a _maximum width_ via inline styles, css class or wrap it in its own responsive container:
 

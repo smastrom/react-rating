@@ -48,9 +48,82 @@ npm install --save @smastrom/react-rating
 ```jsx
 import { Rating } from '@smastrom/react-rating';
 
-import '@smastrom/react-rating/style';
-// or '@smastrom/react-rating/style.css' if eslint(import/no-unresolved) false positive
+import '@smastrom/react-rating/style.css';
 ```
+
+<details><summary><strong>CSS import with Remix</strong></summary>
+<br />
+
+**app/root.tsx**
+
+```tsx
+import styles from '@smastrom/react-rating/style.css';
+
+export function links() {
+  return [{ rel: 'stylesheet', href: styles }];
+}
+
+export default function App() {
+  // ...
+```
+
+**In any other page/component:**
+
+```tsx
+import { Rating } from '@smastrom/react-rating';
+
+export default function Index() {
+  // ...
+```
+
+</details>
+
+<details><summary><strong>CSS import with Next</strong></summary>
+
+<br />
+
+**pages/\_app.js**
+
+```jsx
+import "@smastrom/react-rating/style.css";
+
+function MyApp({ Component, pageProps }) {
+  // ...
+```
+
+**In any other page/component:**
+
+```tsx
+import { Rating } from '@smastrom/react-rating';
+
+export default function Home() {
+  // ...
+```
+
+</details>
+
+<details><summary><strong>CSS import with Gatsby</strong></summary>
+
+<br />
+
+**gatsby-browser.js** - Create the file at the root of your project if it doesn't exist, and relaunch the dev server.
+
+```jsx
+import '@smastrom/react-rating/style.css';
+```
+
+**In any other page/component:**
+
+```tsx
+import { Rating } from '@smastrom/react-rating';
+
+const IndexPage = () => {
+  // ...
+```
+
+</details>
+
+<br />
 
 ### 2. Give it a max-width and init the state
 
@@ -62,7 +135,7 @@ const App = () => {
 
   return (
     <Rating
-      style={{ maxWidth: 600 }}
+      style={{ maxWidth: 250 }}
       value={ratingValue}
       onChange={(selectedValue) => setRatingValue(selectedValue)}
     />
@@ -234,7 +307,7 @@ const App = () => {
 };
 ```
 
-You can also use the default star coming with this package and customize any other color:
+You can also use the default star coming with this package and customize the colors:
 
 ```js
 import { Star } from '@smastrom/react-rating';
@@ -312,7 +385,7 @@ const customStyles: ItemStyles = {
 
 ### How to create itemShapes elements
 
-All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute (except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones) from them. Then create a new JSX Element to render the shapes.
+All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute from them (except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones). Then create a new JSX Element that renders the shapes.
 
 The component will take care of rendering a brand-new, responsive SVG for you.
 

@@ -9,6 +9,12 @@ First released: July 2nd, 2022
 
 <br />
 
+| Prop         | Description                                                           | Type      | Default   | Required           |
+| ------------ | --------------------------------------------------------------------- | --------- | --------- | ------------------ |
+| value        | Variable to bind to the value                                         | undefined | undefined | :white_check_mark: |
+| baseList     | Array of max 6 domains to show before the user types `@`              | string[]  | undefined | :white_check_mark: |
+| extendedList | Array of n domains to refine the suggestions after the user types `@` | string[]  | undefined | :x:                |
+
 ![react-rating](https://i.ibb.co/0X7djmF/examples.png)
 
 [Demo and examples](https://react-rating.onrender.com/)

@@ -1,4 +1,4 @@
-import { appendFile, rm } from 'fs';
+import { appendFile, copyFile, rm } from 'fs';
 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -30,7 +30,7 @@ export default defineConfig(({ command, mode }) => {
           if (format === 'es') {
             return 'index.js';
           }
-          return `index.${format}.js`;
+          return `index.${format}.min.js`;
         },
       },
       rollupOptions: {
@@ -69,6 +69,11 @@ export default defineConfig(({ command, mode }) => {
         },
         afterBuild: () => {
           rm('dist/types', { recursive: true }, (err: any) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+          copyFile('dist/style.css', 'style.css', (err) => {
             if (err) {
               console.log(err);
             }

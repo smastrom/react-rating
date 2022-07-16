@@ -7,5 +7,5 @@ test-results
 coverage
 playwright-report
 playwright/.cache
-style.css
 *.tgz
+style.css

@@ -1,6 +1,6 @@
 {
   "name": "@smastrom/react-rating",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": false,
   "keywords": [
     "react",
@@ -40,6 +40,10 @@
     "./style.css": {
       "import": "./style.css",
       "require": "./style.css"
+    },
+    "./style": {
+      "import": "./style.css",
+      "require": "./style.css"
     }
   },
   "main": "dist/index.umd.min.js",
@@ -52,7 +56,7 @@
     "style.css"
   ],
   "scripts": {
-    "build": "rimraf dist && tsc && vite build && cp dist/style.css style.css && rimraf dist/style.css",
+    "build": "rimraf dist && rimraf style.css && tsc && vite build && rimraf dist/style.css",
     "build:ci": "rimraf dist && tsc && vite build --mode ci",
     "dev": "vite --port 3000",
     "lint": "yarn eslint . --ext .ts,.tsx && prettier --write \"**/*.{ts,tsx,css,md}\"",

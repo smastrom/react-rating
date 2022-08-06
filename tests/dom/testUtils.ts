@@ -1,27 +1,27 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import { StrangeFace } from '../../dev/Shapes';
+import { StrangeFace } from '../../vite/Shapes';
 import { useState } from 'react';
 import { ItemStyles } from '../../src/exportedTypes';
 
 const before = () =>
-  beforeEach(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-    // @ts-ignore
-    window.SVGElement.prototype.getBBox = () => ({
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0,
-    });
-  });
+	beforeEach(() => {
+		jest.spyOn(console, 'error').mockImplementation(() => {});
+		// @ts-ignore
+		window.SVGElement.prototype.getBBox = () => ({
+			x: 0,
+			y: 0,
+			width: 0,
+			height: 0,
+		});
+	});
 
 const after = () =>
-  afterEach(() => {
-    // @ts-ignore
-    delete window.SVGElement.prototype.getBBox;
-  });
+	afterEach(() => {
+		// @ts-ignore
+		delete window.SVGElement.prototype.getBBox;
+	});
 
 export { render, screen, before as beforeEach, after as afterEach };
 
@@ -39,11 +39,11 @@ export const SVGCHILD_ID_4 = 'rating-child-svg-4';
 export const SVGCHILD_ID_5 = 'rating-child-svg-5';
 
 export const itemStyles: ItemStyles = {
-  itemShapes: StrangeFace,
+	itemShapes: StrangeFace,
 };
 
 export const useSelectedRatingValue = (initialValue: number) => {
-  const [ratingValue, setRatingValue] = useState(initialValue);
+	const [ratingValue, setRatingValue] = useState(initialValue);
 
-  return { ratingValue, setRatingValue };
+	return { ratingValue, setRatingValue };
 };

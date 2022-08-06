@@ -1,114 +1,114 @@
 /* direction */
 
 .rr--dir-x {
-  flex-direction: row;
+	flex-direction: row;
 }
 
 .rr--dir-y {
-  flex-direction: column;
+	flex-direction: column;
 }
 
 /* spaceInside */
 
 .rr--space-sm .rr--svg {
-  padding: 10%;
+	padding: 10%;
 }
 
 .rr--space-md .rr--svg {
-  padding: 12.5%;
+	padding: 12.5%;
 }
 
 .rr--space-lg .rr--svg {
-  padding: 17.5%;
+	padding: 17.5%;
 }
 
 /* spaceBetween */
 
 .rr--dir-x.rr--gap-sm .rr--svg {
-  margin: 0 6.25%;
+	margin: 0 6.25%;
 }
 
 .rr--dir-x.rr--gap-sm .rr--box:focus-visible::after {
-  width: calc(100% - 12.5%);
-  left: 6.25%;
+	width: calc(100% - 12.5%);
+	left: 6.25%;
 }
 
 .rr--dir-x.rr--gap-md .rr--svg {
-  margin: 0 12.5%;
+	margin: 0 12.5%;
 }
 
 .rr--dir-x.rr--gap-md .rr--box:focus-visible::after {
-  width: calc(100% - 25%);
-  left: 12.5%;
+	width: calc(100% - 25%);
+	left: 12.5%;
 }
 
 .rr--dir-x.rr--gap-lg .rr--svg {
-  margin: 0 25%;
+	margin: 0 25%;
 }
 
 .rr--dir-x.rr--gap-lg .rr--box:focus-visible::after {
-  width: calc(100% - 50%);
-  left: 25%;
+	width: calc(100% - 50%);
+	left: 25%;
 }
 
 .rr--dir-y.rr--gap-sm .rr--svg {
-  margin: 6.25% 0;
+	margin: 6.25% 0;
 }
 
 .rr--dir-y.rr--gap-md .rr--svg {
-  margin: 12.5% 0;
+	margin: 12.5% 0;
 }
 
 .rr--dir-y.rr--gap-lg .rr--svg {
-  margin: 25% 0;
+	margin: 25% 0;
 }
 
 /* radius */
 
 .rr--rx-sm .rr--svg {
-  border-radius: 5px;
+	border-radius: 5px;
 }
 
 .rr--rx-md .rr--svg {
-  border-radius: 10px;
+	border-radius: 10px;
 }
 
 .rr--rx-lg .rr--svg {
-  border-radius: 20px;
+	border-radius: 20px;
 }
 
 .rr--rx-full .rr--svg {
-  border-radius: 100%;
+	border-radius: 100%;
 }
 
 /* SVG Stroke */
 
 .rr--has-stroke .rr--svg {
-  stroke-linecap: round;
-  stroke-linejoin: round;
+	stroke-linecap: round;
+	stroke-linejoin: round;
 }
 
 /* Box border */
 
 .rr--has-border .rr--svg {
-  border-width: var(--rr--border-width);
-  border-style: solid;
+	border-width: var(--rr--border-width);
+	border-style: solid;
 }
 
 /* Misc */
 
 .rr--pointer .rr--box {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .rr--hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
 }

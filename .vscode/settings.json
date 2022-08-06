@@ -1,8 +1,0 @@
-{
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "yaml.schemas": {
-    "file:///Users/smastromattei/.vscode/extensions/atlassian.atlascode-2.10.6/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
-    "https://json.schemastore.org/github-workflow.json": "file:///Users/smastromattei/Desktop/react-rating/.github/workflows/build.yml"
-  }
-}

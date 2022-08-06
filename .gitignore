@@ -9,3 +9,4 @@ playwright-report
 playwright/.cache
 *.tgz
 style.css
+.vscode

@@ -1,101 +1,101 @@
 .rr--svg-stop-1 {
-  stop-color: var(--rr--fill-on-color, rgba(0, 0, 0, 0));
+	stop-color: var(--rr--fill-on-color, rgba(0, 0, 0, 0));
 }
 
 [dir='rtl'] .rr--svg-stop-1 {
-  stop-color: var(--rr--fill-off-color, rgba(0, 0, 0, 0));
+	stop-color: var(--rr--fill-off-color, rgba(0, 0, 0, 0));
 }
 
 .rr--svg-stop-2 {
-  stop-color: var(--rr--fill-off-color, rgba(0, 0, 0, 0));
+	stop-color: var(--rr--fill-off-color, rgba(0, 0, 0, 0));
 }
 
 [dir='rtl'] .rr--svg-stop-2 {
-  stop-color: var(--rr--fill-on-color, rgba(0, 0, 0, 0));
+	stop-color: var(--rr--fill-on-color, rgba(0, 0, 0, 0));
 }
 
 /* SVG Half Fill */
 
 .rr--hf-svg-on {
-  fill: var(--rr--fill-on-color, none);
+	fill: var(--rr--fill-on-color, none);
 }
 
 .rr--hf-svg-off {
-  fill: var(--rr--fill-off-color, none);
+	fill: var(--rr--fill-off-color, none);
 }
 
 .rr--has-stroke .rr--hf-svg-on {
-  stroke: var(--rr--stroke-on-color, currentColor);
+	stroke: var(--rr--stroke-on-color, currentColor);
 }
 
 .rr--has-stroke .rr--hf-svg-off {
-  stroke: var(--rr--stroke-off-color, currentColor);
+	stroke: var(--rr--stroke-off-color, currentColor);
 }
 
 .rr--hf-svg-on .rr--svg,
 .rr--hf-svg-off .rr--svg {
-  background-color: var(--rr--box-off-color, none);
+	background-color: var(--rr--box-off-color, none);
 }
 
 .rr--has-border .rr--hf-svg-on .rr--svg {
-  border-color: var(--rr--border-on-color, currentColor);
+	border-color: var(--rr--border-on-color, currentColor);
 }
 
 .rr--has-border .rr--hf-svg-off .rr--svg {
-  border-color: var(--rr--border-off-color, currentColor);
+	border-color: var(--rr--border-off-color, currentColor);
 }
 
 /* Box half fill */
 
 .rr--dir-x .rr--hf-box-int .rr--svg {
-  background: linear-gradient(
-    to right,
-    var(--rr--box-on-color, none) 50%,
-    var(--rr--box-off-color, none) 50%
-  );
+	background: linear-gradient(
+		to right,
+		var(--rr--box-on-color, none) 50%,
+		var(--rr--box-off-color, none) 50%
+	);
 }
 
 [dir='rtl'] .rr--dir-x .rr--hf-box-int .rr--svg {
-  background: linear-gradient(
-    to left,
-    var(--rr--box-on-color, none) 50%,
-    var(--rr--box-off-color, none) 50%
-  );
+	background: linear-gradient(
+		to left,
+		var(--rr--box-on-color, none) 50%,
+		var(--rr--box-off-color, none) 50%
+	);
 }
 
 .rr--dir-y .rr--hf-box-int .rr--svg {
-  background: linear-gradient(
-    to bottom,
-    var(--rr--box-on-color, none) 50%,
-    var(--rr--box-off-color, none) 50%
-  );
+	background: linear-gradient(
+		to bottom,
+		var(--rr--box-on-color, none) 50%,
+		var(--rr--box-off-color, none) 50%
+	);
 }
 
 .rr--hf-box-on .rr--svg {
-  background-color: var(--rr--box-on-color, none);
+	background-color: var(--rr--box-on-color, none);
 }
 
 .rr--hf-box-off .rr--svg {
-  background-color: var(--rr--box-off-color, none);
+	background-color: var(--rr--box-off-color, none);
 }
 
 .rr--hf-box-on .rr--svg,
 .rr--hf-box-off .rr--svg,
 .rr--hf-box-int .rr--svg {
-  fill: var(--rr--fill-off-color, none);
+	fill: var(--rr--fill-off-color, none);
 }
 
 .rr--has-stroke .rr--hf-box-on .rr--svg,
 .rr--has-stroke .rr--hf-box-off .rr--svg,
 .rr--has-stroke .rr--hf-box-int .rr--svg {
-  stroke: var(--rr--stroke-off-color, currentColor);
+	stroke: var(--rr--stroke-off-color, currentColor);
 }
 
 .rr--has-border .rr--hf-box-on .rr--svg,
 .rr--has-border .rr--hf-box-int .rr--svg {
-  border-color: var(--rr--border-on-color, currentColor);
+	border-color: var(--rr--border-on-color, currentColor);
 }
 
 .rr--has-border .rr--hf-box-off .rr--svg {
-  border-color: var(--rr--border-off-color, currentColor);
+	border-color: var(--rr--border-off-color, currentColor);
 }

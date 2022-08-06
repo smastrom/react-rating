@@ -12,8 +12,8 @@ import '../src/styles/transitions.css';
 import '../src/styles/half-fill.css';
 
 ReactDOM.render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-  document.getElementById('root')
+	<StrictMode>
+		<App />
+	</StrictMode>,
+	document.getElementById('root')
 );

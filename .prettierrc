@@ -1,15 +1,20 @@
 {
-  "trailingComma": "es5",
-  "tabWidth": 2,
-  "singleQuote": true,
-  "printWidth": 95,
-  "useTabs": false,
-  "overrides": [
-    {
-      "files": "tests/*.ts",
-      "options": {
-        "printWidth": 100
-      }
-    }
-  ]
+	"trailingComma": "es5",
+	"singleQuote": true,
+	"printWidth": 95,
+	"useTabs": true,
+	"overrides": [
+		{
+			"files": "README.md",
+			"options": {
+				"useTabs": false
+			}
+		},
+		{
+			"files": "tests/*.ts",
+			"options": {
+				"printWidth": 100
+			}
+		}
+	]
 }

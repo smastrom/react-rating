@@ -7,52 +7,52 @@ const ACTIVE_STROKE_COLOR_VAR = '--rr--stroke-on-color';
 
 /* istanbul ignore next */
 export const setDyamicCssVars = (
-  targetObj: CSSVariables,
-  key: string,
-  value: string
+	targetObj: CSSVariables,
+	key: string,
+	value: string
 ): void => {
-  switch (key) {
-    case 'activeFillColor':
-      targetObj[ACTIVE_FILL_COLOR_VAR] = value;
-      break;
-    case 'activeBoxColor':
-      targetObj[ACTIVE_BOX_COLOR_VAR] = value;
-      break;
-    case 'activeBoxBorderColor':
-      targetObj[ACTIVE_BORDER_COLOR_VAR] = value;
-      break;
-    case 'activeStrokeColor':
-      targetObj[ACTIVE_STROKE_COLOR_VAR] = value;
-      break;
-  }
+	switch (key) {
+		case 'activeFillColor':
+			targetObj[ACTIVE_FILL_COLOR_VAR] = value;
+			break;
+		case 'activeBoxColor':
+			targetObj[ACTIVE_BOX_COLOR_VAR] = value;
+			break;
+		case 'activeBoxBorderColor':
+			targetObj[ACTIVE_BORDER_COLOR_VAR] = value;
+			break;
+		case 'activeStrokeColor':
+			targetObj[ACTIVE_STROKE_COLOR_VAR] = value;
+			break;
+	}
 };
 
 /* istanbul ignore next */
 export const setColorCssVars = (targetObj: CSSVariables, key: string, value: string): void => {
-  switch (key) {
-    case 'activeFillColor':
-      targetObj[ACTIVE_FILL_COLOR_VAR] = value;
-      break;
-    case 'activeBoxColor':
-      targetObj[ACTIVE_BOX_COLOR_VAR] = value;
-      break;
-    case 'activeBoxBorderColor':
-      targetObj[ACTIVE_BORDER_COLOR_VAR] = value;
-      break;
-    case 'activeStrokeColor':
-      targetObj[ACTIVE_STROKE_COLOR_VAR] = value;
-      break;
-    case 'inactiveFillColor':
-      targetObj['--rr--fill-off-color'] = value;
-      break;
-    case 'inactiveBoxColor':
-      targetObj['--rr--box-off-color'] = value;
-      break;
-    case 'inactiveBoxBorderColor':
-      targetObj['--rr--border-off-color'] = value;
-      break;
-    case 'inactiveStrokeColor':
-      targetObj['--rr--stroke-off-color'] = value;
-      break;
-  }
+	switch (key) {
+		case 'activeFillColor':
+			targetObj[ACTIVE_FILL_COLOR_VAR] = value;
+			break;
+		case 'activeBoxColor':
+			targetObj[ACTIVE_BOX_COLOR_VAR] = value;
+			break;
+		case 'activeBoxBorderColor':
+			targetObj[ACTIVE_BORDER_COLOR_VAR] = value;
+			break;
+		case 'activeStrokeColor':
+			targetObj[ACTIVE_STROKE_COLOR_VAR] = value;
+			break;
+		case 'inactiveFillColor':
+			targetObj['--rr--fill-off-color'] = value;
+			break;
+		case 'inactiveBoxColor':
+			targetObj['--rr--box-off-color'] = value;
+			break;
+		case 'inactiveBoxBorderColor':
+			targetObj['--rr--border-off-color'] = value;
+			break;
+		case 'inactiveStrokeColor':
+			targetObj['--rr--stroke-off-color'] = value;
+			break;
+	}
 };

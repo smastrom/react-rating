@@ -17,33 +17,30 @@ First released: July 2nd, 2022
 
 ## Features
 
-- **Use any SVG**: No headaches, icon fonts or packages to install in order to use your favorite vectors.
-- Highly customizable: behavior, colors, transitions and much more.
-- Fully responsive and mobile-first
+- **Use any SVG**: No headaches, icon fonts or packages to install in order to use your favorite shapes.
+- Smart half-fill and advanced behavior customization
+- Dead simple per-active-item styling
+- Truly responsive and mobile-first
 - Fully accessible with keyboard navigation and custom/default labels
+- Simple and clean DOM structure
 - Works both on the server and the client
+- Lightweight with zero dependencies
 - Fully typed with IntelliSense infos and autocomplete
-- Dependency-free, ~3.6Kb gzipped.
 
 <br/>
 
 ## Installation
 
-```console
+```shell
 yarn add @smastrom/react-rating
-```
-
-Or with NPM:
-
-```console
-npm install --save @smastrom/react-rating
+# npm install --save @smastrom/react-rating
 ```
 
 <br />
 
 ## Basic usage
 
-### 1. Import the component and the CSS
+### 1. Import the CSS and the component
 
 ```jsx
 import { Rating } from '@smastrom/react-rating';
@@ -51,7 +48,7 @@ import { Rating } from '@smastrom/react-rating';
 import '@smastrom/react-rating/style.css';
 ```
 
-<details><summary><strong>CSS import with Remix</strong></summary>
+<details><summary><strong>Remix</strong></summary>
 <br />
 
 **app/root.tsx**
@@ -67,7 +64,7 @@ export default function App() {
   // ...
 ```
 
-**In any other page/component:**
+**in any page/component:**
 
 ```tsx
 import { Rating } from '@smastrom/react-rating';
@@ -78,20 +75,20 @@ export default function Index() {
 
 </details>
 
-<details><summary><strong>CSS import with Next</strong></summary>
+<details><summary><strong>Next</strong></summary>
 
 <br />
 
 **pages/\_app.js**
 
 ```jsx
-import "@smastrom/react-rating/style.css";
+import '@smastrom/react-rating/style.css';
 
 function MyApp({ Component, pageProps }) {
   // ...
 ```
 
-**In any other page/component:**
+**in any page/component:**
 
 ```tsx
 import { Rating } from '@smastrom/react-rating';
@@ -102,7 +99,7 @@ export default function Home() {
 
 </details>
 
-<details><summary><strong>CSS import with Gatsby</strong></summary>
+<details><summary><strong>Gatsby</strong></summary>
 
 <br />
 
@@ -112,7 +109,7 @@ export default function Home() {
 import '@smastrom/react-rating/style.css';
 ```
 
-**In any other page/component:**
+**in any page/component:**
 
 ```tsx
 import { Rating } from '@smastrom/react-rating';
@@ -123,11 +120,53 @@ const IndexPage = () => {
 
 </details>
 
+<details><summary><strong>Vite</strong></summary>
+
+<br />
+
+**main.jsx**
+
+```jsx
+import '@smastrom/react-rating/style.css';
+```
+
+**in any component:**
+
+```jsx
+import { Rating } from '@smastrom/react-rating';
+
+const App = () => {
+  // ...
+```
+
+</details>
+
+<details><summary><strong>Create React App</strong></summary>
+
+<br />
+
+**index.js**
+
+```jsx
+import '@smastrom/react-rating/style.css';
+```
+
+**in any component:**
+
+```jsx
+import { Rating } from '@smastrom/react-rating';
+
+const App = () => {
+  // ...
+```
+
+</details>
+
 <br />
 
 ### 2. Give it a max-width and init the state
 
-Since **Rating** will span across the entire container, define a _maximum width_ via inline styles, css class or wrap it in its own responsive container:
+Since **Rating** will span across the entire container, define a _maximum width_ via inline styles, css class or wrap it in a responsive container:
 
 ```jsx
 const App = () => {
@@ -210,14 +249,14 @@ const App = () => {
 
 ### :cyclone: Core
 
-| Prop               | Type                                            | Description                                                                        | Default   | Required                        | :thinking:          |
-| ------------------ | ----------------------------------------------- | ---------------------------------------------------------------------------------- | --------- | ------------------------------- | ------------------- |
-| value              | number                                          | An integer from 0 to `items`. It can be a float if `readOnly` is **true**.         | undefined | **Yes**                         | :green_circle:      |
-| onChange           | function                                        | Callback to set the rating value                                                   | undefined | Only if `readOnly` is **false** | :large_blue_circle: |
-| onHoverChange      | function                                        | Callback to set the hovered value                                                  | undefined | No                              | :large_blue_circle: |
-| items              | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | Number of rating items to display                                                  | 5         | No                              | :green_circle:      |
-| readOnly           | boolean                                         | Whether or not to render an accessible image element                               | false     | No                              | :green_circle:      |
-| resetOnSecondClick | boolean                                         | Whether or not to reset the rating value when clicking again on the current rating | false     | No                              | :large_blue_circle: |
+| Prop               | Type                                            | Description                                                                      | Default   | Required                        | :thinking:          |
+| ------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------- | --------- | ------------------------------- | ------------------- |
+| value              | number                                          | An integer from 0 to `items`. It can be a float if `readOnly` is **true**.       | undefined | :white_check_mark:              | :green_circle:      |
+| onChange           | function                                        | Callback to set the rating value                                                 | undefined | Only if `readOnly` is **false** | :large_blue_circle: |
+| onHoverChange      | function                                        | Callback to set the hovered value                                                | undefined | :x:                             | :large_blue_circle: |
+| items              | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | Number of rating items to display                                                | 5         | :x:                             | :green_circle:      |
+| readOnly           | boolean                                         | Whether or not to render an accessible image element                             | false     | :x:                             | :green_circle:      |
+| resetOnSecondClick | boolean                                         | Whether or not to reset the rating value if clicking again on the current rating | false     | :x:                             | :large_blue_circle: |
 
 `ref`, `id`, `className` and `style` are also available.
 
@@ -227,14 +266,14 @@ const App = () => {
 
 | Prop                  | Type                                                    | Description                                               | Default       | Required | :thinking:          |
 | --------------------- | ------------------------------------------------------- | --------------------------------------------------------- | ------------- | -------- | ------------------- |
-| highlightOnlySelected | boolean                                                 | Whether or not to highlight only the selected rating item | false         | No       | :green_circle:      |
-| halfFillMode          | `svg` \| `box`                                          | Whether to half-fill the SVG or the box                   | `svg`         | No       | :purple_circle:     |
-| orientation           | `horizontal` \| `vertical`                              | Orientation of the rating items                           | `horizontal`  | No       | :green_circle:      |
-| spaceInside           | `none` \| `small` \| `medium` \| `large`                | Responsive padding of each rating item                    | `small`       | No       | :green_circle:      |
-| spaceBetween          | `none` \| `small` \| `medium` \| `large`                | Responsive gap between the rating items                   | `none`        | No       | :green_circle:      |
-| radius                | `none` \| `small` \| `medium` \| `large` \| `full`      | Radius of each rating item                                | `none`        | No       | :green_circle:      |
-| transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting               | `colors`      | No       | :large_blue_circle: |
-| itemStyles            | ItemStyle                                               | Custom shapes and colors                                  | defaultStyles | No       | :green_circle:      |
+| highlightOnlySelected | boolean                                                 | Whether or not to highlight only the selected rating item | false         | :x:      | :green_circle:      |
+| halfFillMode          | `svg` \| `box`                                          | Whether to half-fill the SVG or the box                   | `svg`         | :x:      | :purple_circle:     |
+| orientation           | `horizontal` \| `vertical`                              | Orientation of the rating items                           | `horizontal`  | :x:      | :green_circle:      |
+| spaceInside           | `none` \| `small` \| `medium` \| `large`                | Responsive padding of each rating item                    | `small`       | :x:      | :green_circle:      |
+| spaceBetween          | `none` \| `small` \| `medium` \| `large`                | Responsive gap between the rating items                   | `none`        | :x:      | :green_circle:      |
+| radius                | `none` \| `small` \| `medium` \| `large` \| `full`      | Radius of each rating item                                | `none`        | :x:      | :green_circle:      |
+| transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting               | `colors`      | :x:      | :large_blue_circle: |
+| itemStyles            | ItemStyle                                               | Custom shapes and colors                                  | defaultStyles | :x:      | :green_circle:      |
 
 Would you like to style it via CSS? Take a look [here](#styling-via-css).
 
@@ -244,12 +283,12 @@ Would you like to style it via CSS? Take a look [here](#styling-via-css).
 
 | Prop                | Type     | Description                                                                                           | Default                                                          | Required | :thinking:          |
 | ------------------- | -------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | -------- | ------------------- |
-| disableKeyboard     | boolean  | Whether or not to disable keyboard navigation                                                         | false                                                            | No       | :large_blue_circle: |
-| isRequired          | boolean  | Whether or not to tell assistive technologies that rating is required                                 | true                                                             | No       | :large_blue_circle: |
-| invisibleLabel      | string   | Accessible label of the rating group / image                                                          | `Rating` or `Rated <value> on <items>` if `readOnly` is **true** | No       | :green_circle:      |
-| invisibleItemLabels | string[] | Accessible labels of each each rating item                                                            | `Rate 1`, `Rate 2`...                                            | No       | :large_blue_circle: |
-| visibleLabelId      | string   | Id of the element used as rating group label. Takes precedence over `invisibleLabel`.                 | undefined                                                        | No       | :large_blue_circle: |
-| visibleItemLabelIds | string[] | Ids of the elements used as labels for each rating item. Takes precedence over `invisibleItemLabels`. | undefined                                                        | No       | :large_blue_circle: |
+| disableKeyboard     | boolean  | Whether or not to disable keyboard navigation                                                         | false                                                            | :x:      | :large_blue_circle: |
+| isRequired          | boolean  | Whether or not to tell assistive technologies that rating is required                                 | true                                                             | :x:      | :large_blue_circle: |
+| invisibleLabel      | string   | Accessible label of the rating group / image                                                          | `Rating` or `Rated <value> on <items>` if `readOnly` is **true** | :x:      | :green_circle:      |
+| invisibleItemLabels | string[] | Accessible labels of each each rating item                                                            | `Rate 1`, `Rate 2`...                                            | :x:      | :large_blue_circle: |
+| visibleLabelId      | string   | Id of the element used as rating group label. Takes precedence over `invisibleLabel`.                 | undefined                                                        | :x:      | :large_blue_circle: |
+| visibleItemLabelIds | string[] | Ids of the elements used as labels for each rating item. Takes precedence over `invisibleItemLabels`. | undefined                                                        | :x:      | :large_blue_circle: |
 
 <br />
 
@@ -278,7 +317,7 @@ type ItemStyles = {
 };
 ```
 
-**<u>All the properties are optional</u>** (except for `itemShapes`). If a property isn't defined, no classes nor CSS variables will be added to the HTML.
+Besides `itemShapes`, **all the properties are optional**. If a property isn't defined, no classes nor CSS variables will be added to the HTML.
 
 Just set the ones you need and that's it:
 
@@ -629,15 +668,11 @@ Check the examples on the [demo website](https://react-rating.onrender.com/).
 
 ### I can see the nodes returned from rendering, but no styles have been applied.
 
-Check that you have imported the CSS as displayed in the [Basic usage](#basic-usage) section.
-
-### I passed an array of SVGs but the stroke width looks different for each item.
-
-When passing different shapes for each rating item, this package forces you to use icons from the same collection to keep design consistency. Be sure you are doing that.
+Check that you are importing the CSS as displayed in the [Basic usage](#basic-usage) section.
 
 You can find clean, attribution-free SVG collections at [SVG Repo](https://www.svgrepo.com/collections/monocolor).
 
-### I keep getting the error "itemShapes" is not a valid JSX element".
+### I keep getting the error "itemShapes is not a valid JSX element".
 
 Check that you are passing a JSX element and not a functional component:
 
@@ -653,15 +688,29 @@ const Star = <path d="M100,10L40 198 190 78 10 78 160 198z" />;
 const Star = () => <path d="M100,10L40 198 190 78 10 78 160 198z" />;
 ```
 
+### I passed an array of shapes but the stroke width looks different for each item.
+
+When passing different shapes for each rating item, this package forces you to use icons from the same collection to keep design consistency. Be sure you are doing that.
+
+### While tapping a rating item on mobile, the browser always highlights it. I don't like it.
+
+Since each rating item is basically a radio button, the browser treats it as a focusable element (such as an anchor or a button) if not `readOnly`. You can "disable" the highlight effect with this CSS:
+
+```css
+.rr--box {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+```
+
 <br />
 
 ## Local development
 
-The `main` branch contains the latest version of this package. Rating component is imported in a simple test React App which runs on a [Vite](https://vitejs.dev/) dev server.
+The `main` branch contains the latest version of this package. Rating component is imported in a blank React App which runs on a [Vite](https://vitejs.dev/) dev server.
 
 :warning: Vite requires Node.js version >= 12.2.
 
-In `dev/` you can find the test app files. It is just a blank React app container with some CSS resets applied.
+In `vite/` you can find the app files.
 
 In `src/` you can find the package core files, the build entry point is `src/index.ts`.
 

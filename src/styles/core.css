@@ -1,36 +1,36 @@
 .rr--group {
-  display: flex;
-  width: 100%;
+	display: flex;
+	width: 100%;
 }
 
 .rr--box {
-  display: flex;
-  width: 100%;
-  flex-grow: 1;
+	display: flex;
+	width: 100%;
+	flex-grow: 1;
 }
 
 .rr--svg {
-  display: flex;
-  aspect-ratio: 1;
-  width: 100%;
-  flex-grow: 1;
-  overflow: visible;
+	display: flex;
+	aspect-ratio: 1;
+	width: 100%;
+	flex-grow: 1;
+	overflow: visible;
 }
 
 /* Focus */
 
 .rr--box:focus-visible {
-  position: relative;
-  outline: rgba(0, 0, 0, 0);
+	position: relative;
+	outline: rgba(0, 0, 0, 0);
 }
 
 .rr--box:focus-visible::after {
-  position: absolute;
-  content: '';
-  box-shadow: inset 0 0 0 2px white;
-  border: 2px solid #0079ff;
-  width: 100%;
-  left: unset;
-  height: 100%;
-  box-sizing: border-box;
+	position: absolute;
+	content: '';
+	box-shadow: inset 0 0 0 2px white;
+	border: 2px solid #0079ff;
+	width: 100%;
+	left: unset;
+	height: 100%;
+	box-sizing: border-box;
 }

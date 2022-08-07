@@ -1,5 +1,5 @@
 ![react-rating-version](https://img.shields.io/npm/v/@smastrom/react-rating?color=22C55E) ![react-rating-build-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Build/main?color=22C55E)
-![react-rating-tests-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Tests/main?color=22C55E&label=tests) ![react-rating-coverage](https://img.shields.io/codecov/c/github/smastrom/react-rating?color=22C55E) ![react-rating-code-quality](https://img.shields.io/lgtm/grade/javascript/github/smastrom/react-rating?color=22C55E) ![react-rating-size](https://img.shields.io/bundlephobia/minzip/@smastrom/react-rating/1.0.0?color=22C55E)
+![react-rating-tests-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Tests/main?color=22C55E&label=tests) ![react-rating-coverage](https://img.shields.io/codecov/c/github/smastrom/react-rating?color=22C55E) ![react-rating-code-quality](https://img.shields.io/lgtm/grade/javascript/github/smastrom/react-rating?color=22C55E) ![react-rating-size](https://img.shields.io/bundlephobia/minzip/@smastrom/react-rating/1.0.0?color=22C55E) [![Featured on Openbase](https://badges.openbase.com/js/featured/@smastrom/react-rating.svg?token=lha1uuH2Y8+H3PfDv8oXdYvbQRh6f56bMxdWjEl7/3E=)](https://openbase.com/js/@smastrom/react-rating?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge)
 
 # React Rating
 
@@ -670,8 +670,6 @@ Check the examples on the [demo website](https://react-rating.onrender.com/).
 
 Check that you are importing the CSS as displayed in the [Basic usage](#basic-usage) section.
 
-You can find clean, attribution-free SVG collections at [SVG Repo](https://www.svgrepo.com/collections/monocolor).
-
 ### I keep getting the error "itemShapes is not a valid JSX element".
 
 Check that you are passing a JSX element and not a functional component:
@@ -691,6 +689,8 @@ const Star = () => <path d="M100,10L40 198 190 78 10 78 160 198z" />;
 ### I passed an array of shapes but the stroke width looks different for each item.
 
 When passing different shapes for each rating item, this package forces you to use icons from the same collection to keep design consistency. Be sure you are doing that.
+
+You can find clean, attribution-free SVG collections at [SVG Repo](https://www.svgrepo.com/collections/monocolor).
 
 ### While tapping a rating item on mobile, the browser always highlights it. I don't like it.
 

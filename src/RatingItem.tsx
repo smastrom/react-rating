@@ -110,7 +110,6 @@ export const RatingItem = ({
 		}
 		return {};
 	};
-
 	/* Render */
 
 	return (

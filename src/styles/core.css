@@ -14,7 +14,13 @@
 	aspect-ratio: 1;
 	width: 100%;
 	flex-grow: 1;
-	overflow: visible;
+	overflow: clip;
+}
+
+@supports not (overflow: clip) {
+	.rr--svg {
+		overflow: auto;
+	}
 }
 
 /* Focus */

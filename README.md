@@ -1,5 +1,6 @@
 ![react-rating-version](https://img.shields.io/npm/v/@smastrom/react-rating?color=22C55E) ![react-rating-build-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Build/main?color=22C55E)
 ![react-rating-tests-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Tests/main?color=22C55E&label=tests) ![react-rating-coverage](https://img.shields.io/codecov/c/github/smastrom/react-rating?color=22C55E) ![react-rating-code-quality](https://img.shields.io/lgtm/grade/javascript/github/smastrom/react-rating?color=22C55E) ![react-rating-size](https://img.shields.io/bundlephobia/minzip/@smastrom/react-rating/1.0.0?color=22C55E) [![Featured on Openbase](https://badges.openbase.com/js/featured/@smastrom/react-rating.svg?token=lha1uuH2Y8+H3PfDv8oXdYvbQRh6f56bMxdWjEl7/3E=)](https://openbase.com/js/@smastrom/react-rating?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge)
+[![kandi X-Ray](https://kandi.openweaver.com/badges/xray.svg)](https://kandi.openweaver.com/typescript/smastrom/react-rating)
 
 # React Rating
 

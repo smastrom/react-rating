@@ -1,5 +1,5 @@
 ![react-rating-version](https://img.shields.io/npm/v/@smastrom/react-rating?color=22C55E) ![react-rating-build-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Build/main?color=22C55E)
-![react-rating-tests-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Tests/main?color=22C55E&label=tests) ![react-rating-coverage](https://img.shields.io/codecov/c/github/smastrom/react-rating?color=22C55E) ![react-rating-code-quality](https://img.shields.io/lgtm/grade/javascript/github/smastrom/react-rating?color=22C55E) ![react-rating-size](https://img.shields.io/bundlephobia/minzip/@smastrom/react-rating/1.0.0?color=22C55E)
+![react-rating-tests-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Tests/main?color=22C55E&label=tests) ![react-rating-coverage](https://img.shields.io/codecov/c/github/smastrom/react-rating?color=22C55E) ![react-rating-code-quality](https://img.shields.io/lgtm/grade/javascript/github/smastrom/react-rating?color=22C55E)
 
 # React Rating
 
@@ -409,7 +409,7 @@ const customStyles: ItemStyles = {
 
 ### Using included shapes
 
-`react-rating` ships with six most-common shapes that you can import and use:
+React rating ships with six most-common shapes that you can import and use:
 
 ```js
 import { ThinStar } from '@smastrom/react-rating';
@@ -501,7 +501,7 @@ const customStyles = {
 
 <br />
 
-### Advanced styling
+### Per-active-item styling
 
 If you wish to style each rating item, you can optionally pass an array of JSX elements to `itemShapes` and an array of valid CSS colors to any **<u>active color</u>** property:
 
@@ -714,33 +714,6 @@ const Star = () => <path d="M100,10L40 198 190 78 10 78 160 198z" />;
 When passing different shapes for each rating item, this package forces you to use icons from the same collection to keep design consistency. Be sure you are doing that.
 
 You can find clean, attribution-free SVG collections at [SVG Repo](https://www.svgrepo.com/collections/monocolor).
-
-<br />
-
-## Local development
-
-The `main` branch contains the latest version of this package. Rating component is imported in a blank React App which runs on a [Vite](https://vitejs.dev/) dev server.
-
-:warning: Vite requires Node.js version >= 12.2.
-
-In `vite/` you can find the app files.
-
-In `src/` you can find the package core files, the build entry point is `src/index.ts`.
-
-Once cloned, just run:
-
-```console
-yarn
-yarn dev
-```
-
-Vite's [Library Mode](https://vitejs.dev/guide/build.html#library-mode) is used to bundle the package. To build it just run:
-
-```console
-yarn build
-```
-
-:warning: In order to test with Playwright, Node.js version >= 14 is required.
 
 <br />
 

@@ -2,21 +2,14 @@ import React, { useState } from 'react';
 import { Profiler } from './Profiler';
 
 import { Rating } from '../src/Rating';
-import { SimpleStar } from './Shapes';
 
 import { ItemStyles } from '../src/exportedTypes';
+import { ThinStar } from '../src';
 
 const customStyles: ItemStyles = {
-	itemShapes: SimpleStar,
-	boxBorderWidth: 2,
-
-	activeFillColor: ['#FEE2E2', '#FFEDD5', '#FEF9C3', '#ECFCCB', '#D1FAE5'],
-	activeBoxColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
-	activeBoxBorderColor: ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'],
-
-	inactiveFillColor: 'white',
-	inactiveBoxColor: '#dddddd',
-	inactiveBoxBorderColor: '#a8a8a8',
+	itemShapes: ThinStar,
+	activeFillColor: '#ff4136',
+	inactiveFillColor: '#cdecff',
 };
 
 const CUSTOM_GROUP_LABEL = 'Rate - GitHub Plaza Hotel';
@@ -40,40 +33,31 @@ const App = () => {
 				flexDirection: 'column',
 			}}
 		>
-			<button id="first_button" type="button" onClick={() => null}>
-				First Button
-			</button>
-			<div>
-				<h2 id="rating_label">Rating Label</h2>
-				<Profiler>
-					<Rating
-						style={{
-							maxWidth: 300,
-						}}
-						// readOnly
-						resetOnSecondClick
-						items={5}
-						aria-label="Ciao"
-						onChange={(value) => setValue(value)}
-						value={value}
-						itemStyles={customStyles}
-						transition="zoom"
-						// highlightOnlySelected
-						orientation="horizontal"
-						spaceBetween="small"
-						spaceInside="large"
-						radius="small"
-						isRequired={false}
-						visibleLabelId={CUSTOM_GROUP_LABEL_ID}
-						visibleItemLabelIds={CUSTOM_LABELS_IDS}
-						invisibleLabel={CUSTOM_GROUP_LABEL}
-						invisibleItemLabels={CUSTOM_LABELS}
-					/>
-				</Profiler>
-			</div>
-			<button id="second_button" type="button" onClick={() => null}>
-				Second Button
-			</button>
+			<Profiler>
+				<Rating
+					style={{
+						maxWidth: 150,
+					}}
+					// readOnly
+					resetOnSecondClick
+					items={5}
+					aria-label="Ciao"
+					onChange={(value) => setValue(value)}
+					value={value}
+					itemStyles={customStyles}
+					transition="zoom"
+					// highlightOnlySelected
+					orientation="horizontal"
+					spaceBetween="none"
+					spaceInside="small"
+					radius="small"
+					isRequired={false}
+					visibleLabelId={CUSTOM_GROUP_LABEL_ID}
+					visibleItemLabelIds={CUSTOM_LABELS_IDS}
+					invisibleLabel={CUSTOM_GROUP_LABEL}
+					invisibleItemLabels={CUSTOM_LABELS}
+				/>
+			</Profiler>
 		</div>
 	);
 };

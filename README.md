@@ -21,6 +21,7 @@ First released: July 2nd, 2022
 - Smart half-fill and advanced behavior customization
 - Dead simple per-active-item styling
 - Truly responsive and mobile-first
+- Ready-to-use most common star shapes
 - Fully accessible with keyboard navigation and custom/default labels
 - Simple and clean DOM structure
 - Works both on the server and the client
@@ -253,9 +254,10 @@ const App = () => {
 | ------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------- | --------- | ------------------------------- | ------------------- |
 | value              | number                                          | An integer from 0 to `items`. It can be a float if `readOnly` is **true**.       | undefined | :white_check_mark:              | :green_circle:      |
 | onChange           | function                                        | Callback to set the rating value                                                 | undefined | Only if `readOnly` is **false** | :large_blue_circle: |
-| onHoverChange      | function                                        | Callback to set the hovered value                                                | undefined | :x:                             | :large_blue_circle: |
-| items              | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | Number of rating items to display                                                | 5         | :x:                             | :green_circle:      |
+| onHoverChange      | function                                        | Callback to get the hovered value                                                | undefined | :x:                             | :large_blue_circle: |
+| items              | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | Rating items to display                                                          | 5         | :x:                             | :green_circle:      |
 | readOnly           | boolean                                         | Whether or not to render an accessible image element                             | false     | :x:                             | :green_circle:      |
+| disabled           | boolean                                         | Whether or not to disable the input field                                        | false     | :x:                             | :large_blue_circle: |
 | resetOnSecondClick | boolean                                         | Whether or not to reset the rating value if clicking again on the current rating | false     | :x:                             | :large_blue_circle: |
 
 `ref`, `id`, `className` and `style` are also available.
@@ -272,7 +274,7 @@ const App = () => {
 | spaceInside           | `none` \| `small` \| `medium` \| `large`                | Responsive padding of each rating item                    | `small`       | :x:      | :green_circle:      |
 | spaceBetween          | `none` \| `small` \| `medium` \| `large`                | Responsive gap between the rating items                   | `none`        | :x:      | :green_circle:      |
 | radius                | `none` \| `small` \| `medium` \| `large` \| `full`      | Radius of each rating item                                | `none`        | :x:      | :green_circle:      |
-| transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting               | `colors`      | :x:      | :large_blue_circle: |
+| transition            | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | Transition to apply when hovering/selecting               | `zoom`        | :x:      | :large_blue_circle: |
 | itemStyles            | ItemStyle                                               | Custom shapes and colors                                  | defaultStyles | :x:      | :green_circle:      |
 
 Would you like to style it via CSS? Take a look [here](#styling-via-css).
@@ -346,40 +348,6 @@ const App = () => {
 };
 ```
 
-You can also use the default star coming with this package and customize the colors:
-
-```js
-import { Star } from '@smastrom/react-rating';
-
-const customStyles = {
-  itemShapes: Star,
-  activeFillColor: '#22C55E',
-  inactiveFillColor: '#BBF7D0',
-};
-```
-
-<details><summary><strong>Default styles</strong></summary>
-<br />
-
-```jsx
-const Star = (
-  <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
-);
-
-const defaultItemStyles = {
-  itemShapes: Star,
-  itemStrokeWidth: 40,
-
-  activeFillColor: '#ffb23f',
-  activeStrokeColor: '#e17b21',
-
-  inactiveFillColor: '#fff7ed',
-  inactiveStrokeColor: '#e17b21',
-};
-```
-
-</details>
-
 <details><summary><strong>How itemStrokeWidth works</strong></summary>
 <br />
 
@@ -422,7 +390,31 @@ const customStyles: ItemStyles = {
 
 <br />
 
-### How to create itemShapes elements
+### Stars
+
+`react-rating` ships with six curated most-common shapes that you can import and use:
+
+```js
+import { ThinStar } from '@smastrom/react-rating';
+
+const customStyles = {
+  itemShapes: ThinStar,
+  activeFillColor: '#ffb700',
+  inactiveFillColor: '#fbf1a9',
+};
+```
+
+| Import Name       | Preview                                                                          | Source   |
+| ----------------- | -------------------------------------------------------------------------------- | -------- |
+| `Star`            | ![react-rating](https://i.ibb.co/0jS3F2P/Schermata-2022-09-29-alle-09-45-48.png) | [Link]() |
+| `ThinStar`        | ![react-rating](https://i.ibb.co/Dp7bT5t/Schermata-2022-09-29-alle-10-07-58.png) | [Link]() |
+| `RoundedStar`     | ![react-rating](https://i.ibb.co/FB0ft66/Schermata-2022-09-29-alle-10-32-22.png) | [Link]() |
+| `ThinRoundedStar` | ![react-rating](https://i.ibb.co/p2Q2xxM/Schermata-2022-09-29-alle-10-38-08.png) | [Link]() |
+| `Heart`           | ![react-rating](https://i.ibb.co/7gvN66m/Schermata-2022-09-29-alle-10-26-24.png) | [Link]() |
+
+<br />
+
+### Using your own shapes
 
 All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute from them (except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones). Then create a new JSX Element that renders the shapes.
 
@@ -456,17 +448,19 @@ const customStyles = {
   inactiveFillColor: '#99F6E4',
   inactiveStrokeColor: 'LightSeaGreen',
 };
+```
 
+```jsx
 <Rating
   value={ratingValue}
   onChange={(selectedValue) => setRatingValue(selectedValue)}
   itemStyles={customStyles}
-/>;
+/>
 ```
 
 <br />
 
-**Quick guide for complex or messy SVGs**
+<details><summary><strong>Quick guide for complex or messy SVGs</strong></summary>
 
 1. Keep only the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/g">groups</a> and the inner shapes of the svg: `g`, `path`, `circle`, `rect`, `polygon`, `ellipse`, `polyline` or `line` and delete any other node (e.g. `<defs>`).
 
@@ -475,6 +469,8 @@ const customStyles = {
 3. Delete any attribute **except** geometric, draw and <u><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a></u> ones from any group and shape.
 
 4. If present, delete any empty node like `<circle></circle>` or `<g></g>`.
+
+</details>
 
 <br />
 

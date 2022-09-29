@@ -4,6 +4,15 @@ import { getUniqueId, toSecondDecimal, useIsomorphicLayoutEffect } from './utils
 
 import { RatingItemProps, KeyAndValueStrings } from './internalTypes';
 
+const getDefsTestId = () => {
+	if (__DEV__) {
+		return {
+			'data-testid': 'svg-defs-testid',
+		};
+	}
+	return {};
+};
+
 export const RatingItem = ({
 	itemShapes,
 	testId = undefined,
@@ -102,14 +111,6 @@ export const RatingItem = ({
 		return {};
 	};
 
-	const getDefsTestId = () => {
-		if (__DEV__) {
-			return {
-				'data-testid': 'svg-defs-testid',
-			};
-		}
-		return {};
-	};
 	/* Render */
 
 	return (

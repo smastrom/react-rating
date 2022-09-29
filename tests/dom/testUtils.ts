@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-
 import { StrangeFace } from '../../vite/Shapes';
 import { useState } from 'react';
 import { ItemStyles } from '../../src/exportedTypes';
 
 const before = () =>
 	beforeEach(() => {
-		jest.spyOn(console, 'error').mockImplementation(() => {});
+		jest.spyOn(console, 'error').mockImplementation(() => null);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		window.SVGElement.prototype.getBBox = () => ({
 			x: 0,
@@ -19,6 +19,7 @@ const before = () =>
 
 const after = () =>
 	afterEach(() => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		delete window.SVGElement.prototype.getBBox;
 	});

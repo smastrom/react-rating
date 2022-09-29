@@ -19,7 +19,7 @@ First released: July 2nd, 2022
 
 - **Use any SVG**: No headaches, icon fonts or packages to install in order to use your favorite shapes.
 - Smart half-fill and advanced behavior customization
-- Ready-to-use most common shapes
+- Ready-to-use most common rating shapes
 - Dead simple per-active-item styling
 - Truly responsive and mobile-first
 - Fully accessible with keyboard navigation and custom/default labels
@@ -136,7 +136,7 @@ import '@smastrom/react-rating/style.css';
 ```jsx
 import { Rating } from '@smastrom/react-rating';
 
-const App = () => {
+function App() {
   // ...
 ```
 
@@ -157,7 +157,7 @@ import '@smastrom/react-rating/style.css';
 ```jsx
 import { Rating } from '@smastrom/react-rating';
 
-const App = () => {
+function App() {
   // ...
 ```
 
@@ -170,7 +170,7 @@ const App = () => {
 Since **Rating** will span across the entire container, define a _maximum width_ via inline styles, css class or wrap it in a responsive container:
 
 ```jsx
-const App = () => {
+function App() {
   const [ratingValue, setRatingValue] = useState(3); // <-- Init with 0 for no initial value
 
   return (
@@ -180,7 +180,7 @@ const App = () => {
       onChange={(selectedValue) => setRatingValue(selectedValue)}
     />
   );
-};
+}
 ```
 
 <details><summary><strong>CSS Class</strong></summary>
@@ -199,7 +199,7 @@ const App = () => {
 ```jsx
 import 'my-styles.css';
 
-const App = () => {
+function App() {
   const [ratingValue, setRatingValue] = useState(3);
 
   return (
@@ -209,7 +209,7 @@ const App = () => {
       onChange={(selectedValue) => setRatingValue(selectedValue)}
     />
   );
-};
+}
 ```
 
 </details>
@@ -334,7 +334,7 @@ const customStyles = {
   inactiveFillColor: '#BBF7D0',
 };
 
-const App = () => {
+function App() {
   const [ratingValue, setRatingValue] = useState(4);
 
   return (
@@ -345,7 +345,7 @@ const App = () => {
       itemStyles={customStyles}
     />
   );
-};
+}
 ```
 
 <details><summary><strong>Default styles</strong></summary>
@@ -411,26 +411,6 @@ const customStyles: ItemStyles = {
 
 React rating ships with six most-common shapes that you can import and use:
 
-```js
-import { ThinStar } from '@smastrom/react-rating';
-
-const customStyles = {
-  itemShapes: ThinStar,
-  activeFillColor: '#ffb700',
-  inactiveFillColor: '#fbf1a9',
-};
-```
-
-```jsx
-<Rating
-  value={ratingValue}
-  onChange={(selectedValue) => setRatingValue(selectedValue)}
-  itemStyles={customStyles}
-/>
-```
-
-<br />
-
 | Import Name       | Preview                                                                          | Source   |
 | ----------------- | -------------------------------------------------------------------------------- | -------- |
 | `Star`            | ![react-rating](https://i.ibb.co/0jS3F2P/Schermata-2022-09-29-alle-09-45-48.png) | [Link]() |
@@ -438,6 +418,29 @@ const customStyles = {
 | `RoundedStar`     | ![react-rating](https://i.ibb.co/FB0ft66/Schermata-2022-09-29-alle-10-32-22.png) | [Link]() |
 | `ThinRoundedStar` | ![react-rating](https://i.ibb.co/p2Q2xxM/Schermata-2022-09-29-alle-10-38-08.png) | [Link]() |
 | `Heart`           | ![react-rating](https://i.ibb.co/7gvN66m/Schermata-2022-09-29-alle-10-26-24.png) | [Link]() |
+
+```jsx
+import { Rating, ThinStar } from '@smastrom/react-rating';
+
+const customStyles = {
+  itemShapes: ThinStar,
+  activeFillColor: '#ffb700',
+  inactiveFillColor: '#fbf1a9',
+};
+
+function App() {
+  const [ratingValue, setRatingValue] = useState(4);
+
+  return (
+    <Rating
+      style={{ maxWidth: 300 }}
+      value={ratingValue}
+      onChange={(selectedValue) => setRatingValue(selectedValue)}
+      itemStyles={customStyles}
+    />
+  );
+}
+```
 
 <br />
 
@@ -475,14 +478,19 @@ const customStyles = {
   inactiveFillColor: '#99F6E4',
   inactiveStrokeColor: 'LightSeaGreen',
 };
-```
 
-```jsx
-<Rating
-  value={ratingValue}
-  onChange={(selectedValue) => setRatingValue(selectedValue)}
-  itemStyles={customStyles}
-/>
+function App() {
+  const [ratingValue, setRatingValue] = useState(4);
+
+  return (
+    <Rating
+      style={{ maxWidth: 300 }}
+      value={ratingValue}
+      onChange={(selectedValue) => setRatingValue(selectedValue)}
+      itemStyles={customStyles}
+    />
+  );
+}
 ```
 
 <br />
@@ -522,7 +530,7 @@ const customStyles = {
   inactiveFillColor: '#a8a8a8',
 };
 
-export const FacesRating = () => {
+function FacesRating() {
   const [ratingValue, setRatingValue] = useState(0);
 
   return (
@@ -535,7 +543,7 @@ export const FacesRating = () => {
       highlightOnlySelected
     />
   );
-};
+}
 ```
 
 ![react-rating](https://s8.gifyu.com/images/in_AdobeExpress.gif)
@@ -558,7 +566,7 @@ const customStyles = {
   inactiveBoxBorderColor: '#a8a8a8',
 };
 
-export const App = () => {
+function App() {
   const [ratingValue, setRatingValue] = useState(4);
 
   return (
@@ -571,7 +579,7 @@ export const App = () => {
       spaceInside="large"
     />
   );
-};
+}
 ```
 
 <br />
@@ -638,7 +646,6 @@ It is not necessary, however if you want to, you can do it as shown below:
   value={ratingValue}
   onChange={(selectedValue) => setRatingValue(selectedValue)}
   className="my-own-class"
-  spaceBetween="none"
   spaceInside="none"
   radius="none"
   transition="none"

@@ -1,13 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useLayoutEffect } from 'react';
 
 export const isSSR = typeof window === 'undefined';
 
 export const useIsomorphicLayoutEffect = isSSR ? useEffect : useLayoutEffect;
 
-export const isValidPositiveNumber = (value: any) => typeof value === 'number' && value > 0;
+export const isValidPositiveNumber = (value: unknown) =>
+	typeof value === 'number' && value > 0;
 
-export const toSecondDecimal = (number: number): number => Math.round(number * 100) / 100;
+export const toSecondDecimal = (number: number) => Math.round(number * 100) / 100;
 
 export const roundToHalf = (number: number) => Math.round(number * 2) / 2;
 
@@ -22,8 +22,7 @@ export function getIntersectionIndex(ratingValues: number[], ratingValue: number
 	if (Number.isInteger(roundedHalf)) {
 		return ratingValues.indexOf(roundedHalf);
 	}
-	const intersectionIndex = Math.floor(roundedHalf);
-	return intersectionIndex;
+	return Math.floor(roundedHalf);
 }
 
 /* istanbul ignore next */

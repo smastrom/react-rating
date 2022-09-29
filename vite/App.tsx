@@ -33,6 +33,10 @@ const App = () => {
 				flexDirection: 'column',
 			}}
 		>
+			<button id="first_button" type="button" onClick={() => null}>
+				First Button
+			</button>
+			<h2 id="rating_label">Rating Label</h2>
 			<Profiler>
 				<Rating
 					style={{
@@ -46,7 +50,7 @@ const App = () => {
 					onChange={(value) => setValue(value)}
 					value={value}
 					itemStyles={customStyles}
-					transition="zoom"
+					// transition="zoom"
 					// highlightOnlySelected
 					orientation="horizontal"
 					spaceBetween="none"
@@ -59,6 +63,9 @@ const App = () => {
 					invisibleItemLabels={CUSTOM_LABELS}
 				/>
 			</Profiler>
+			<button id="second_button" type="button" onClick={() => null}>
+				Second Button
+			</button>
 		</div>
 	);
 };

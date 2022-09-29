@@ -22,7 +22,7 @@ afterEach();
 describe('Classnames and inline css vars - RadioGroup element', () => {
 	test('Should have default classNames applied', () => {
 		const defaultClasses =
-			'rr--group rr--dir-x rr--fx-colors rr--pointer rr--has-stroke rr--space-sm';
+			'rr--group rr--dir-x rr--fx-colors rr--fx-zoom rr--pointer rr--has-stroke rr--space-sm';
 
 		render(<Rating value={2} items={3} onChange={() => {}} />);
 

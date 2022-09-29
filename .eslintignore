@@ -1,5 +1,3 @@
-playwright.config.ts
-jest.config.ts
 dist
-dev
 node_modules
+tests/dom

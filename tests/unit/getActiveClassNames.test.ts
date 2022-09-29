@@ -1,5 +1,4 @@
 import { getActiveClassNames } from '../../src/getActiveClassNames';
-
 import { CSSClassName } from '../../src/internalTypes';
 
 describe('getActiveClassNames returns proper array of active classes', () => {

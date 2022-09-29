@@ -37,7 +37,7 @@ import {
 export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingProps>(
 	(
 		{
-			value = undefined,
+			value,
 			items = 5,
 			readOnly = false,
 			onChange,
@@ -50,7 +50,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			spaceBetween = 'none',
 			spaceInside = 'small',
 			radius = 'none',
-			transition = 'colors',
+			transition = 'zoom',
 			itemStyles = defaultItemStyles,
 			isRequired = true,
 			halfFillMode = 'svg',
@@ -80,9 +80,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		const hasTabNavigation =
 			readOnly === false && disableKeyboard === false && isDisabled === false;
 
-		const ratingValue = (
-			isNotEligibleForHalfFill ? Math.round(value as number) : value
-		) as number;
+		const ratingValue = isNotEligibleForHalfFill ? Math.round(value) : value;
 
 		const currentRatingIndex = isEligibleForHalfFill
 			? getIntersectionIndex(ratingValues, ratingValue)
@@ -382,12 +380,12 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				}
 
 				return {
-					...labelProps,
 					'aria-checked': ratingValues[childIndex] === ratingValue,
 					role: 'radio',
 					ref: (radioChildNode: HTMLDivElement) =>
 						(roleRadioDivs.current[childIndex] = radioChildNode),
 					...events,
+					...labelProps,
 				};
 			}
 			return {};

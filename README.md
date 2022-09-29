@@ -348,6 +348,24 @@ const App = () => {
 };
 ```
 
+<details><summary><strong>Default styles</strong></summary>
+<br />
+
+```js
+import { Star } from '@smastrom/react-rating';
+
+const defaultItemStyles = {
+  itemShapes: Star,
+  itemStrokeWidth: 2,
+  activeFillColor: '#ffb23f',
+  activeStrokeColor: '#e17b21',
+  inactiveFillColor: '#fff7ed',
+  inactiveStrokeColor: '#e17b21',
+};
+```
+
+</details>
+
 <details><summary><strong>How itemStrokeWidth works</strong></summary>
 <br />
 
@@ -356,7 +374,6 @@ The stroke width is expressed in _viewBox user coordinate's unit size_ and **not
 Depending on the vector nodes provided you may have to input and try different values in order to reach the desired stroke width.
 
 It is responsive by nature, so expect it to increase/decrease when resizing the container.
-<br />
 
 </details>
 
@@ -390,9 +407,9 @@ const customStyles: ItemStyles = {
 
 <br />
 
-### Stars
+### Using included shapes
 
-`react-rating` ships with six curated most-common shapes that you can import and use:
+`react-rating` ships with six most-common shapes that you can import and use:
 
 ```js
 import { ThinStar } from '@smastrom/react-rating';
@@ -403,6 +420,16 @@ const customStyles = {
   inactiveFillColor: '#fbf1a9',
 };
 ```
+
+```jsx
+<Rating
+  value={ratingValue}
+  onChange={(selectedValue) => setRatingValue(selectedValue)}
+  itemStyles={customStyles}
+/>
+```
+
+<br />
 
 | Import Name       | Preview                                                                          | Source   |
 | ----------------- | -------------------------------------------------------------------------------- | -------- |
@@ -687,16 +714,6 @@ const Star = () => <path d="M100,10L40 198 190 78 10 78 160 198z" />;
 When passing different shapes for each rating item, this package forces you to use icons from the same collection to keep design consistency. Be sure you are doing that.
 
 You can find clean, attribution-free SVG collections at [SVG Repo](https://www.svgrepo.com/collections/monocolor).
-
-### While tapping a rating item on mobile, the browser always highlights it. I don't like it.
-
-Since each rating item is basically a radio button, the browser treats it as a focusable element (such as an anchor or a button) if not `readOnly`. You can "disable" the highlight effect with this CSS:
-
-```css
-.rr--box {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-```
 
 <br />
 

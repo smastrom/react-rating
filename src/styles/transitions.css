@@ -42,6 +42,12 @@
 	.rr--fx-zoom .rr--box:hover {
 		transform: scale(1.2);
 	}
+
+	@media (prefers-reduced-motion) {
+		.rr--fx-zoom .rr--box:hover {
+			transform: scale(1);
+		}
+	}
 }
 
 /* Position */
@@ -54,5 +60,11 @@
 
 	.rr--fx-position .rr--box:hover {
 		transform: translateY(-15%);
+	}
+
+	@media (prefers-reduced-motion) {
+		.rr--fx-position .rr--box:hover {
+			transform: translateY(0%);
+		}
 	}
 }

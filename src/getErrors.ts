@@ -42,14 +42,14 @@ export function getErrors(
 	if (!itemShapes) {
 		return setErrors(errorsObj, 'itemStyles needs at least the property itemShapes set');
 	}
-	if (!Array.isArray(itemShapes) && !isValidElement(itemShapes)) {
+	if (!Array.isArray(itemShapes) && !isValidElement(itemShapes as object | null | undefined)) {
 		return setErrors(errorsObj, invalidJSXMsg);
 	}
 	if (Array.isArray(itemShapes)) {
 		if (itemShapes.length !== items) {
 			return setErrors(errorsObj, 'itemShapes length mismatch');
 		}
-		const areValid = (itemShapes as any[]).every((svgChildNode) =>
+		const areValid = (itemShapes as (object | null | undefined)[]).every((svgChildNode) =>
 			isValidElement(svgChildNode)
 		);
 		if (!areValid) {

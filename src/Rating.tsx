@@ -1,5 +1,4 @@
 import React, { forwardRef, useRef, useState, useEffect, useCallback, useMemo } from 'react';
-
 import { RatingItem } from './RatingItem';
 import { getDynamicCssVars } from './getDynamicCssVars';
 import { getActiveClassNames } from './getActiveClassNames';
@@ -23,7 +22,6 @@ import {
 	devTestId,
 } from './utils';
 import { defaultItemStyles } from './defaultItemStyles';
-
 import { RatingProps, Rating as RatingComponent } from './exportedTypes';
 import {
 	StylesState,
@@ -446,3 +444,5 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		);
 	}
 );
+
+Rating.displayName = 'Rating';

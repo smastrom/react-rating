@@ -321,16 +321,12 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			if (readOnly === false) {
 				const ariaProps: React.HTMLProps<HTMLDivElement> = {
 					role: 'radiogroup',
-					'aria-required': isRequired === true,
+					'aria-required': isRequired === true && isDisabled === false,
 				};
 
 				/** Edited in v1.1.0 */
 				if (isRequired === true && isDisabled === false) {
 					ariaProps['aria-invalid'] = ratingValue <= 0;
-				}
-				/** New in v1.1.0 */
-				if (isDisabled === true) {
-					ariaProps['aria-disabled'] = 'true';
 				}
 
 				if (typeof visibleLabelId === 'string' && visibleLabelId.length > 0) {
@@ -371,6 +367,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 					labelProps['aria-labelledby'] = visibleItemLabelIds[childIndex];
 				} else {
 					labelProps['aria-label'] = getRadioLabels()?.[childIndex];
+				}
+
+				if (readOnly === false && isDisabled === true) {
+					labelProps['aria-disabled'] = 'true';
 				}
 
 				/** New in v1.1.0 */

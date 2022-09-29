@@ -36,7 +36,7 @@ const App = () => {
 			<button id="first_button" type="button" onClick={() => null}>
 				First Button
 			</button>
-			<h2 id="rating_label">Rating Label</h2>
+			<h2 id={CUSTOM_GROUP_LABEL_ID}>Rating Label</h2>
 			<Profiler>
 				<Rating
 					style={{

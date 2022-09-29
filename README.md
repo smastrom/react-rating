@@ -19,10 +19,10 @@ First released: July 2nd, 2022
 
 - **Use any SVG**: No headaches, icon fonts or packages to install in order to use your favorite shapes.
 - Smart half-fill and advanced behavior customization
-- Ready-to-use most common rating shapes
+- Most common _ready-to-use_ rating shapes
+- Fully accessible with keyboard navigation and custom/default labels
 - Dead simple per-active-item styling
 - Truly responsive and mobile-first
-- Fully accessible with keyboard navigation and custom/default labels
 - Simple and clean DOM structure
 - Works both on the server and the client
 - Lightweight with zero dependencies
@@ -276,8 +276,6 @@ const App = () => {
 | `transition`            | Transition to apply when hovering/selecting               | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `zoom`        | :x:      | :large_blue_circle: |
 | `itemStyles`            | Custom shapes and colors                                  | ItemStyle                                               | defaultStyles | :x:      | :green_circle:      |
 
-Would you like to style it via CSS? Take a look [here](#styling-via-css).
-
 <br />
 
 ### :open_umbrella: Accessibility
@@ -444,7 +442,7 @@ function App() {
 
 ### Using your own shapes
 
-All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute from them (except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones, if any). Then create a new JSX Element that renders the shapes.
+All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones (if any). Then create a new JSX Element that renders the shapes.
 
 The component will take care of rendering a brand-new, responsive SVG for you.
 
@@ -528,7 +526,7 @@ const customStyles = {
   inactiveFillColor: '#a8a8a8',
 };
 
-function FacesRating() {
+function App() {
   const [ratingValue, setRatingValue] = useState(0);
 
   return (

@@ -1,5 +1,5 @@
 ![react-rating-version](https://img.shields.io/npm/v/@smastrom/react-rating?color=22C55E) ![react-rating-build-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Build/main?color=22C55E)
-![react-rating-tests-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Tests/main?color=22C55E&label=tests) ![react-rating-coverage](https://img.shields.io/codecov/c/github/smastrom/react-rating?color=22C55E) ![react-rating-code-quality](https://img.shields.io/lgtm/grade/javascript/github/smastrom/react-rating?color=22C55E) ![react-rating-size](https://img.shields.io/bundlephobia/minzip/@smastrom/react-rating/1.0.0?color=22C55E) [![Featured on Openbase](https://badges.openbase.com/js/featured/@smastrom/react-rating.svg?token=lha1uuH2Y8+H3PfDv8oXdYvbQRh6f56bMxdWjEl7/3E=)](https://openbase.com/js/@smastrom/react-rating?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge)
+![react-rating-tests-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Tests/main?color=22C55E&label=tests) ![react-rating-coverage](https://img.shields.io/codecov/c/github/smastrom/react-rating?color=22C55E) ![react-rating-code-quality](https://img.shields.io/lgtm/grade/javascript/github/smastrom/react-rating?color=22C55E) ![react-rating-size](https://img.shields.io/bundlephobia/minzip/@smastrom/react-rating/1.0.0?color=22C55E)
 
 # React Rating
 
@@ -19,9 +19,9 @@ First released: July 2nd, 2022
 
 - **Use any SVG**: No headaches, icon fonts or packages to install in order to use your favorite shapes.
 - Smart half-fill and advanced behavior customization
+- Ready-to-use most common shapes
 - Dead simple per-active-item styling
 - Truly responsive and mobile-first
-- Ready-to-use most common star shapes
 - Fully accessible with keyboard navigation and custom/default labels
 - Simple and clean DOM structure
 - Works both on the server and the client
@@ -257,7 +257,7 @@ const App = () => {
 | onHoverChange      | function                                        | Callback to get the hovered value                                                | undefined | :x:                             | :large_blue_circle: |
 | items              | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | Rating items to display                                                          | 5         | :x:                             | :green_circle:      |
 | readOnly           | boolean                                         | Whether or not to render an accessible image element                             | false     | :x:                             | :green_circle:      |
-| disabled           | boolean                                         | Whether or not to disable the input field                                        | false     | :x:                             | :large_blue_circle: |
+| isDisabled         | boolean                                         | Whether or not to disable the input field                                        | false     | :x:                             | :large_blue_circle: |
 | resetOnSecondClick | boolean                                         | Whether or not to reset the rating value if clicking again on the current rating | false     | :x:                             | :large_blue_circle: |
 
 `ref`, `id`, `className` and `style` are also available.

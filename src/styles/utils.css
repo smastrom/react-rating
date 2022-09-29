@@ -112,3 +112,14 @@
 	white-space: nowrap;
 	border: 0;
 }
+
+/** New in v1.1.0 */
+
+.rr--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.rr--disabled .rr--svg {
+	pointer-events: none;
+}

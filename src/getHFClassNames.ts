@@ -1,13 +1,12 @@
 import { roundToHalf } from './utils';
-
 import { CSSClassName } from './internalTypes';
 import { ReadOnlyProps } from './exportedTypes';
 
-export const getHalfFillClassNames = (
+export function getHalfFillClassNames(
 	ratingValue: number,
 	items: number,
 	absoluteHalfFillMode: NonNullable<ReadOnlyProps['halfFillMode']>
-): CSSClassName[] => {
+): CSSClassName[] {
 	const intersectionIndex = Math.floor(roundToHalf(ratingValue));
 
 	const classNames = Array(items)
@@ -29,4 +28,4 @@ export const getHalfFillClassNames = (
 		});
 
 	return classNames;
-};
+}

@@ -40,6 +40,7 @@ const App = () => {
 					}}
 					// readOnly
 					resetOnSecondClick
+					isDisabled
 					items={5}
 					aria-label="Ciao"
 					onChange={(value) => setValue(value)}

@@ -8,12 +8,12 @@ const validArrayColorKeys: Array<keyof ValidArrayColors> = [
 	'activeBoxBorderColor',
 ];
 
-export const getColors = (
+export function getColors(
 	colorsObj: Colors | object,
 	deservesHalfFill: boolean,
 	absoluteStrokeWidth: NonNullable<ItemStyles['itemStrokeWidth']>,
 	absoluteHalfFill: NonNullable<RatingProps['halfFillMode']>
-) => {
+) {
 	const allColors = { ...colorsObj };
 
 	const arrayColors: ValidArrayColors = {};
@@ -55,4 +55,4 @@ export const getColors = (
 		});
 
 	return { arrayColors, staticColors: allColors as StaticColors };
-};
+}

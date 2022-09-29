@@ -1,6 +1,6 @@
 import { TabIndex } from './internalTypes';
 
-export const getTabIndex = (items: number, currentSelectedIndex: number) => {
+export function getTabIndex(items: number, currentSelectedIndex: number) {
 	const tabIndexArray = Array(items)
 		.fill(undefined)
 		.map((_, index) => {
@@ -18,4 +18,4 @@ export const getTabIndex = (items: number, currentSelectedIndex: number) => {
 			}
 		});
 	return tabIndexArray as TabIndex[];
-};
+}

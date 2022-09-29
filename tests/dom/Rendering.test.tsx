@@ -14,7 +14,7 @@ import {
 } from './testUtils';
 
 import { Rating } from '../../src/Rating';
-import { Star } from '../../src/Star';
+import { Star } from '../../src/Shapes';
 
 beforeEach();
 afterEach();

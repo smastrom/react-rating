@@ -1,11 +1,11 @@
 import { CSSClassName } from './internalTypes';
 import { SharedProps } from './exportedTypes';
 
-export const getActiveClassNames = (
+export function getActiveClassNames(
 	highlightOnlySelectedProp: NonNullable<SharedProps['highlightOnlySelected']>,
 	items: number,
 	selectedIndex: number
-): CSSClassName[] => {
+): CSSClassName[] {
 	const activeClassNames = Array(items)
 		.fill(undefined)
 		.map((_, index) => {
@@ -22,4 +22,4 @@ export const getActiveClassNames = (
 		});
 
 	return activeClassNames;
-};
+}

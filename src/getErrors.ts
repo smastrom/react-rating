@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { isValidElement } from 'react';
-
 import Package from '../package.json';
 
 type ErrorsObj = {
@@ -12,22 +9,22 @@ type ErrorsObj = {
 const getErrorReason = (reason: string) =>
 	`[${Package.name}] - Nothing's returned from rendering. Reason: ${reason}.`;
 
-const setErrors = (targetObj: ErrorsObj, reason: string) => {
+function setErrors(targetObj: ErrorsObj, reason: string) {
 	targetObj['shouldRender'] = false;
 	targetObj['errorReason'] = getErrorReason(reason);
 
 	return targetObj;
-};
+}
 
 const invalidJSXMsg = 'itemShapes is not a valid JSX element';
 
-export const getErrors = (
-	items: any,
-	value: any,
-	readOnly: any,
-	onChange: any,
-	itemShapes: any
-) => {
+export function getErrors(
+	items: unknown,
+	value: unknown,
+	readOnly: unknown,
+	onChange: unknown,
+	itemShapes: unknown
+) {
 	const errorsObj: ErrorsObj = { shouldRender: true, errorReason: '' };
 
 	if (typeof items !== 'number' || items < 1 || items > 10) {
@@ -61,4 +58,4 @@ export const getErrors = (
 	}
 
 	return errorsObj;
-};
+}

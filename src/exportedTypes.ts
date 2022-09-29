@@ -69,6 +69,8 @@ export type ReadOnlyProps = {
 export type InputProps = {
 	/** Callback to set the rating value */
 	onChange?: (value: number) => void | Promise<void>;
+	/** Whether or not to disable the input field */
+	isDisabled?: boolean;
 	/** Callback to set the hovered value */
 	onHoverChange?: (value: number) => void;
 	/** Whether or not to reset the rating value if clicking again on the current rating */

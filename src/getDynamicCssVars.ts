@@ -3,11 +3,11 @@ import { setDyamicCssVars } from './setColorsCssVars';
 import { RatingProps } from './exportedTypes';
 import { CSSVariables, RequireAtLeastOne, ValidArrayColors } from './internalTypes';
 
-export const getDynamicCssVars = (
+export function getDynamicCssVars(
 	arrayColors: RequireAtLeastOne<ValidArrayColors>,
 	currentSelectedIndex: number,
 	highlightOnlySelected: NonNullable<RatingProps['highlightOnlySelected']>
-): CSSVariables[] => {
+): CSSVariables[] {
 	const copyArrayColors = { ...arrayColors };
 	const arrayStylesVars: CSSVariables = {};
 
@@ -25,4 +25,4 @@ export const getDynamicCssVars = (
 	}
 
 	return cssVars;
-};
+}

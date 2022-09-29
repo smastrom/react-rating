@@ -1,25 +1,23 @@
 import React, { useRef, useState } from 'react';
-
 import { getUniqueId, toSecondDecimal, useIsomorphicLayoutEffect } from './utils';
-
 import { RatingItemProps, KeyAndValueStrings } from './internalTypes';
 
-const getDefsTestId = () => {
+function getDefsTestId() {
 	if (__DEV__) {
 		return {
 			'data-testid': 'svg-defs-testid',
 		};
 	}
 	return {};
-};
+}
 
-export const RatingItem = ({
+export function RatingItem({
 	itemShapes,
 	testId = undefined,
 	itemStrokeWidth = 0,
 	orientationProp = 'horizontal',
 	hasHalfFill = false,
-}: RatingItemProps) => {
+}: RatingItemProps) {
 	const strokeOffset = itemStrokeWidth > 0 ? -(itemStrokeWidth / 2) : 0;
 	const translateOffset = itemStrokeWidth > 0 ? `${strokeOffset} ${strokeOffset}` : '0 0';
 
@@ -63,35 +61,35 @@ export const RatingItem = ({
 
 	/* Props */
 
-	const getHalfFillAttr = () => {
+	function getHalfFillAttr() {
 		if (hasHalfFill) {
 			return {
 				fill: `url('#${uniqId.current}_rr_hf')`,
 			};
 		}
 		return {};
-	};
+	}
 
 	/* istanbul ignore next */
-	const getGradientTransformAttr = () => {
+	function getGradientTransformAttr() {
 		if (orientationProp === 'vertical') {
 			return {
 				gradientTransform: 'rotate(90)',
 			};
 		}
 		return {};
-	};
+	}
 
-	const getStrokeAttribute = () => {
+	function getStrokeAttribute() {
 		if (itemStrokeWidth > 0) {
 			return {
 				strokeWidth: itemStrokeWidth,
 			};
 		}
 		return {};
-	};
+	}
 
-	const getTransform = () => {
+	function getTransform() {
 		if (svgData) {
 			const translateProp = `translate(${svgData?.translateData})`;
 			if (translateProp === 'translate(0 0)') {
@@ -100,16 +98,16 @@ export const RatingItem = ({
 			return { transform: translateProp };
 		}
 		return { transform: undefined };
-	};
+	}
 
-	const getTestIds = () => {
+	function getTestIds() {
 		if (__DEV__ && testId && testId.length > 0) {
 			return {
 				'data-testid': testId,
 			};
 		}
 		return {};
-	};
+	}
 
 	/* Render */
 
@@ -137,4 +135,4 @@ export const RatingItem = ({
 			</g>
 		</svg>
 	);
-};
+}

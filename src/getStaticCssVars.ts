@@ -1,12 +1,11 @@
 import { setColorCssVars } from './setColorsCssVars';
-
 import { ItemStyles } from './exportedTypes';
 import { CSSVariables, StaticColors } from './internalTypes';
 
-export const getStaticCssVars = (
+export function getStaticCssVars(
 	staticColors: StaticColors,
 	boxBorderWidth: NonNullable<ItemStyles['boxBorderWidth']>
-): CSSVariables => {
+): CSSVariables {
 	const cssVars: CSSVariables = {};
 
 	if (typeof boxBorderWidth === 'number' && boxBorderWidth > 0) {
@@ -20,4 +19,4 @@ export const getStaticCssVars = (
 		});
 
 	return cssVars;
-};
+}

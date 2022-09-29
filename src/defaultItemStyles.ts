@@ -1,5 +1,4 @@
 import { Star } from './Shapes';
-
 import { ItemStyles } from './exportedTypes';
 
 export const defaultItemStyles: ItemStyles = {

@@ -16,7 +16,7 @@ export const getUniqueId = () => (Math.random() + 1).toString(36).substring(7);
 export const isGraphicalValueInteger = (ratingValue: number) =>
 	Number.isInteger(roundToHalf(ratingValue));
 
-export const getIntersectionIndex = (ratingValues: number[], ratingValue: number) => {
+export function getIntersectionIndex(ratingValues: number[], ratingValue: number) {
 	const roundedHalf = roundToHalf(ratingValue);
 
 	if (Number.isInteger(roundedHalf)) {
@@ -24,25 +24,25 @@ export const getIntersectionIndex = (ratingValues: number[], ratingValue: number
 	}
 	const intersectionIndex = Math.floor(roundedHalf);
 	return intersectionIndex;
-};
+}
 
 /* istanbul ignore next */
 export const devTestId = __DEV__ ? { 'data-testid': 'rating' } : {};
 
 /* istanbul ignore next */
-export const getChildTestIds = (childIndex: number) => {
+export function getChildTestIds(childIndex: number) {
 	if (__DEV__) {
 		return { 'data-testid': `rating-child-${childIndex + 1}` };
 	}
 	return {};
-};
+}
 
 /* istanbul ignore next */
-export const getSvgChildTestIds = (childIndex: number) => {
+export function getSvgChildTestIds(childIndex: number) {
 	if (__DEV__) {
 		return {
 			testId: `rating-child-svg-${childIndex + 1}`,
 		};
 	}
 	return {};
-};
+}

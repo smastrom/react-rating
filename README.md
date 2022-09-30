@@ -164,7 +164,7 @@ function App() {
 
 ### 2. Give it a max-width and init the state
 
-Since **Rating** will span across the entire container, define a _maximum width_ via inline styles, css class or wrap it in a responsive container:
+Since **Rating** will span across the entire container, define a _maximum width_ via inline styles or css class:
 
 ```jsx
 function App() {
@@ -207,26 +207,6 @@ function App() {
     />
   );
 }
-```
-
-</details>
-
-<details><summary><strong>Responsive container</strong></summary>
-<br />
-
-```jsx
-const App = () => {
-  const [ratingValue, setRatingValue] = useState(3);
-
-  return (
-    <div style={{ maxWidth: 600, width: '100%' }}>
-      <Rating
-        value={ratingValue}
-        onChange={(selectedValue) => setRatingValue(selectedValue)}
-      />
-    </div>
-  );
-};
 ```
 
 </details>

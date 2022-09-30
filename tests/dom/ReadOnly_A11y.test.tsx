@@ -10,6 +10,7 @@ import {
 	CHILD_ID_2,
 	CHILD_ID_3,
 	CHILD_ID_4,
+	childArr,
 } from './testUtils';
 
 import { Rating } from '../../src/Rating';
@@ -81,13 +82,9 @@ describe('readOnly child components display proper a11y attributes', () => {
 			expect(child).not.toHaveAttribute('role', 'radio');
 		};
 
-		const child1 = screen.getByTestId(CHILD_ID_1);
-		expectToNotHaveAccesibleAttributes(child1);
-
-		const child2 = screen.getByTestId(CHILD_ID_2);
-		expectToNotHaveAccesibleAttributes(child2);
-
-		const child3 = screen.getByTestId(CHILD_ID_3);
-		expectToNotHaveAccesibleAttributes(child3);
+		[CHILD_ID_1, CHILD_ID_2, CHILD_ID_3].forEach((testId) => {
+			const child = screen.getByTestId(testId);
+			expectToNotHaveAccesibleAttributes(child);
+		});
 	});
 });

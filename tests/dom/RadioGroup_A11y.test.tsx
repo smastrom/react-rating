@@ -9,8 +9,7 @@ import {
 	CHILD_ID_1,
 	CHILD_ID_2,
 	CHILD_ID_3,
-	CHILD_ID_4,
-	CHILD_ID_5,
+	childArr,
 } from './testUtils';
 
 import { Rating } from '../../src/Rating';
@@ -88,14 +87,10 @@ describe('Accessibility DOM Output Test - Child', () => {
 			expect(child).toHaveAttribute('role', 'radio');
 		};
 
-		const child1 = screen.getByTestId(CHILD_ID_1);
-		expectAccessibleAttributes(child1);
-
-		const child2 = screen.getByTestId(CHILD_ID_2);
-		expectAccessibleAttributes(child2);
-
-		const child3 = screen.getByTestId(CHILD_ID_3);
-		expectAccessibleAttributes(child3);
+		[CHILD_ID_1, CHILD_ID_2, CHILD_ID_3].forEach((testId) => {
+			const child = screen.getByTestId(testId);
+			expectAccessibleAttributes(child);
+		});
 	});
 
 	test('If both invisible label and visible label ids are set, visible labels should take precedence', () => {
@@ -168,8 +163,6 @@ describe('Accessibility DOM Output Test - Child', () => {
 		expect(item).not.toBeRequired();
 	});
 
-	const childArr = [CHILD_ID_1, CHILD_ID_2, CHILD_ID_3, CHILD_ID_4, CHILD_ID_5];
-
 	test('If isDisabled, all radios should be disabled', async () => {
 		render(<Rating isDisabled value={3} onChange={() => {}} />);
 
@@ -189,6 +182,7 @@ describe('Accessibility DOM Output Test - Child', () => {
 			expect(item).not.toHaveFocus();
 		});
 	});
+
 	test('If isDisabled, current rating should always be set', async () => {
 		render(<Rating isDisabled value={3} onChange={() => {}} />);
 

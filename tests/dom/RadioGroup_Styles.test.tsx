@@ -12,6 +12,7 @@ import {
 	CHILD_ID_3,
 	CHILD_ID_4,
 	CHILD_ID_5,
+	childArr,
 } from './testUtils';
 
 import { Rating } from '../../src/Rating';
@@ -144,18 +145,14 @@ describe('Classnames and inline css vars - Radio elements', () => {
 	test('If ratingValue equals to 0, no child should have active className, whether or not highlightOnlySelected is enabled', () => {
 		const { rerender } = render(<Rating value={0} items={6} onChange={() => {}} />);
 
-		const toNotHaveActiveClassNames = () => {
-			toHaveInactiveClassName(CHILD_ID_1);
-			toHaveInactiveClassName(CHILD_ID_2);
-			toHaveInactiveClassName(CHILD_ID_3);
-			toHaveInactiveClassName(CHILD_ID_4);
-			toHaveInactiveClassName(CHILD_ID_5);
-		};
-
-		toNotHaveActiveClassNames();
+		childArr.forEach((testId) => {
+			toHaveInactiveClassName(testId);
+		});
 
 		rerender(<Rating value={0} items={6} onChange={() => {}} highlightOnlySelected />);
 
-		toNotHaveActiveClassNames();
+		childArr.forEach((testId) => {
+			toHaveInactiveClassName(testId);
+		});
 	});
 });

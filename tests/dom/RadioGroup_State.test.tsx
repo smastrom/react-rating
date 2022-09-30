@@ -7,11 +7,11 @@ import {
 	screen,
 	beforeEach,
 	afterEach,
+	CHILD_ID_1,
 	CHILD_ID_3,
 	CHILD_ID_4,
 	CHILD_ID_5,
 	useSelectedRatingValue,
-	CHILD_ID_1,
 } from './testUtils';
 
 import { Rating } from '../../src/Rating';
@@ -26,7 +26,7 @@ describe('User-managed state is updated correctly by click and hover events', ()
 		render(
 			<Rating
 				value={result.current.ratingValue}
-				onChange={(selectedValue) => result.current.setRatingValue(selectedValue)}
+				onChange={(selectedValue: number) => result.current.setRatingValue(selectedValue)}
 			/>
 		);
 
@@ -40,7 +40,7 @@ describe('User-managed state is updated correctly by click and hover events', ()
 		render(
 			<Rating
 				value={result.current.ratingValue}
-				onChange={(selectedValue) => result.current.setRatingValue(selectedValue)}
+				onChange={(selectedValue: number) => result.current.setRatingValue(selectedValue)}
 			/>
 		);
 
@@ -59,7 +59,7 @@ describe('User-managed state is updated correctly by click and hover events', ()
 			<Rating
 				resetOnSecondClick
 				value={result.current.ratingValue}
-				onChange={(selectedValue) => result.current.setRatingValue(selectedValue)}
+				onChange={(selectedValue: number) => result.current.setRatingValue(selectedValue)}
 			/>
 		);
 
@@ -75,7 +75,7 @@ describe('User-managed state is updated correctly by click and hover events', ()
 			<div style={{ maxWidth: 350, width: '100%' }}>
 				<Rating
 					value={result.current.ratingValue}
-					onChange={(selectedValue) => result.current.setRatingValue(selectedValue)}
+					onChange={(selectedValue: number) => result.current.setRatingValue(selectedValue)}
 				/>
 				<button data-testid="reset-btn" onClick={() => result.current.setRatingValue(0)}>
 					Reset
@@ -101,7 +101,7 @@ describe('User-managed state is updated correctly by click and hover events', ()
 		render(
 			<Rating
 				value={result.current.ratingValue}
-				onChange={(selectedValue) => result.current.setRatingValue(selectedValue)}
+				onChange={(selectedValue: number) => result.current.setRatingValue(selectedValue)}
 				onHoverChange={(hoveredValue) => hoveredResult.current.setRatingValue(hoveredValue)}
 			/>
 		);

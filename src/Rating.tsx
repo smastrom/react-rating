@@ -32,7 +32,7 @@ import {
 	TabIndex,
 } from './internalTypes';
 
-/** Thank you for using **@smastrom/react-rating**.
+/** Thank you for using **React Rating**.
  * Visit https://github.com/smastrom/react-rating for the full documentation.*/
 export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingProps>(
 	(

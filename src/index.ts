@@ -5,4 +5,4 @@ import './styles/transitions.css';
 import './styles/half-fill.css';
 
 export { Rating } from './Rating';
-export { Star, ThinStar, RoundedStar, ThinRoundedStar, Heart } from './Shapes';
+export { Star, ThinStar, RoundedStar, ThinRoundedStar, StickerStar, Heart } from './Shapes';

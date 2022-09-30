@@ -214,7 +214,7 @@ function App() {
 
 <br />
 
-### 3. Start rating!
+### 3. Rate!
 
 ![react-rating](https://i.ibb.co/RT3pDV3/ezgif-com-gif-maker.gif)
 
@@ -237,8 +237,8 @@ function App() {
 | :thinking:          | Prop                    | Description                                                                     | Type                                            | Default   | Required                        |
 | ------------------- | ----------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------- | --------- | ------------------------------- |
 | :green_circle:      | `value`                 | An integer from 0 to `items`. It can be a float if `readOnly` is **true**.      | number                                          | undefined | :white_check_mark:              |
-| :large_blue_circle: | `onChange`              | Callback to set the rating value                                                | function                                        | undefined | Only if `readOnly` is **false** |
-| :large_blue_circle: | `onHoverChange`         | Callback to get the hovered value                                               | function                                        | undefined | :x:                             |
+| :large_blue_circle: | `onChange`              | Setter function to update the rating value                                      | RatingChange                                    | undefined | Only if `readOnly` is **false** |
+| :large_blue_circle: | `onHoverChange`         | Callback to execute when hovering different rating items                        | (value: number) => void                         | undefined | :x:                             |
 | :green_circle:      | `items`                 | Rating items to display                                                         | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
 | :green_circle:      | `readOnly`              | Whether or not to render an accessible image element                            | boolean                                         | false     | :x:                             |
 | :large_blue_circle: | `isDisabled`            | Whether or not to disable the input field                                       | boolean                                         | false     | :x:                             |
@@ -251,15 +251,15 @@ function App() {
 
 ### :nail_care: Appearance
 
-| :thinking:          | Prop           | Description                                                     | Type                                                    | Default       | Required |
-| ------------------- | -------------- | --------------------------------------------------------------- | ------------------------------------------------------- | ------------- | -------- |
-| :purple_circle:     | `halfFillMode` | Whether to half-fill the shape or the bounding box              | `svg` \| `box`                                          | `svg`         | :x:      |
-| :green_circle:      | `orientation`  | Orientation of the rating items                                 | `horizontal` \| `vertical`                              | `horizontal`  | :x:      |
-| :green_circle:      | `spaceInside`  | <u><strong>Responsive</strong></u> padding of each rating item  | `none` \| `small` \| `medium` \| `large`                | `small`       | :x:      |
-| :green_circle:      | `spaceBetween` | <u><strong>Responsive</strong></u> gap between the rating items | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
-| :green_circle:      | `radius`       | Radius of the SVG bounding box                                  | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
-| :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting                     | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `zoom`        | :x:      |
-| :green_circle:      | `itemStyles`   | Custom shapes and colors                                        | ItemStyles                                              | defaultStyles | :x:      |
+| :thinking:          | Prop           | Description                                                    | Type                                                    | Default       | Required |
+| ------------------- | -------------- | -------------------------------------------------------------- | ------------------------------------------------------- | ------------- | -------- |
+| :purple_circle:     | `halfFillMode` | Whether to half-fill the shape or the bounding box             | `svg` \| `box`                                          | `svg`         | :x:      |
+| :green_circle:      | `orientation`  | Orientation of the rating items                                | `horizontal` \| `vertical`                              | `horizontal`  | :x:      |
+| :green_circle:      | `spaceInside`  | <u><strong>Responsive</strong></u> padding of each rating item | `none` \| `small` \| `medium` \| `large`                | `small`       | :x:      |
+| :green_circle:      | `spaceBetween` | <u><strong>Responsive</strong></u> gap between rating items    | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
+| :green_circle:      | `radius`       | Radius of the SVG bounding box                                 | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
+| :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting                    | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `zoom`        | :x:      |
+| :green_circle:      | `itemStyles`   | Custom shapes and colors                                       | ItemStyles                                              | defaultStyles | :x:      |
 
 <br />
 
@@ -279,15 +279,16 @@ function App() {
 
 ### Using included shapes
 
-React rating ships with five most-common shapes that you can import and use:
+This package ships with six of the most common rating shapes that you can import and use _(all open-source)_:
 
-| Import Name       | Preview                                                                          | Source   |
-| ----------------- | -------------------------------------------------------------------------------- | -------- |
-| `Star`            | ![react-rating](https://i.ibb.co/0jS3F2P/Schermata-2022-09-29-alle-09-45-48.png) | [Link]() |
-| `ThinStar`        | ![react-rating](https://i.ibb.co/Dp7bT5t/Schermata-2022-09-29-alle-10-07-58.png) | [Link]() |
-| `RoundedStar`     | ![react-rating](https://i.ibb.co/FB0ft66/Schermata-2022-09-29-alle-10-32-22.png) | [Link]() |
-| `ThinRoundedStar` | ![react-rating](https://i.ibb.co/p2Q2xxM/Schermata-2022-09-29-alle-10-38-08.png) | [Link]() |
-| `Heart`           | ![react-rating](https://i.ibb.co/7gvN66m/Schermata-2022-09-29-alle-10-26-24.png) | [Link]() |
+| Import Name       | Preview                                                                          | Collection / Author                                          |
+| ----------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `Star`            | ![react-rating](https://i.ibb.co/0jS3F2P/Schermata-2022-09-29-alle-09-45-48.png) | [Feather](https://feathericons.com/)                         |
+| `ThinStar`        | ![react-rating](https://i.ibb.co/9hzfsmJ/Schermata-2022-10-01-alle-00-25-39.png) | [Raphael](https://github.com/dmitrybaranovskiy/raphael)      |
+| `RoundedStar`     | ![react-rating](https://i.ibb.co/V9P422w/Schermata-2022-09-30-alle-23-47-02.png) | [Phosphor](https://phosphoricons.com/)                       |
+| `ThinRoundedStar` | ![react-rating](https://i.ibb.co/tP3fRfz/Schermata-2022-09-30-alle-23-59-46.png) | [SVG Repo](https://www.svgrepo.com/svg/99804/star-favourite) |
+| `StickerStar`     | ![react-rating](https://i.ibb.co/C2sPq9X/Schermata-2022-10-01-alle-00-30-48.png) | [Raphael](https://www.svgrepo.com/svg/99804/star-favourite)  |
+| `Heart`           | ![react-rating](https://i.ibb.co/7gvN66m/Schermata-2022-09-29-alle-10-26-24.png) | [Feather](https://feathericons.com/)                         |
 
 ```jsx
 import { Rating, ThinStar } from '@smastrom/react-rating';
@@ -316,12 +317,11 @@ function App() {
 
 ### Using your own shapes
 
-All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones (if any). Then create a new JSX Element that renders the shapes.
+All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones (if any). Then create a JSX Element that renders the shapes.
 
 <u>The component will take care of rendering a brand-new, responsive SVG for you.</u>
 
-If the SVG comes from quality sources (or you made it) such as [Feather](https://feathericons.com/), [SVG Repo](https://www.svgrepo.com/collections/monocolor/), [Bootstrap Icons](https://icons.getbootstrap.com)
-or [css.gg](https://css.gg/) all you have to do is to delete a couple of fill and stroke attributes:
+If the SVG comes from quality sources (or you made it) such any collection you can find on [Icônes](https://icones.js.org/collection/all), all you have to do is to delete a couple of fill and stroke attributes (if any):
 
 ```html
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">

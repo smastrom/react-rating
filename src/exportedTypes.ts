@@ -66,14 +66,16 @@ export type ReadOnlyProps = {
 	halfFillMode?: 'svg' | 'box';
 };
 
+type RatingChange =
+	| React.Dispatch<React.SetStateAction<number>>
+	| ((value: number) => void | Promise<void>);
+
 export type InputProps = {
-	/** Callback to set the rating value */
-	onChange?:
-		| React.Dispatch<React.SetStateAction<number>>
-		| ((value: number) => void | Promise<void>);
+	/** Callback to update the rating value */
+	onChange?: RatingChange;
 	/** Whether or not to disable the input field */
 	isDisabled?: boolean;
-	/** Callback to set the hovered value */
+	/** Callback to run when hovering different items */
 	onHoverChange?: (value: number) => void;
 	/** Whether or not to reset the rating value if clicking again on the current rating */
 	resetOnSecondClick?: boolean;

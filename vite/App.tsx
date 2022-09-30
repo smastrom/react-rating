@@ -4,12 +4,12 @@ import { Profiler } from './Profiler';
 import { Rating } from '../src/Rating';
 
 import { ItemStyles } from '../src/exportedTypes';
-import { ThinStar } from '../src';
+import { StickerStar } from '../src';
 
 const customStyles: ItemStyles = {
-	itemShapes: ThinStar,
-	activeFillColor: '#ff4136',
-	inactiveFillColor: '#cdecff',
+	itemShapes: StickerStar,
+	activeFillColor: '#9333ea',
+	inactiveFillColor: '#f3e8ff',
 };
 
 const CUSTOM_GROUP_LABEL = 'Rate - GitHub Plaza Hotel';
@@ -40,7 +40,7 @@ const App = () => {
 			<Profiler>
 				<Rating
 					style={{
-						maxWidth: 100,
+						maxWidth: 150,
 					}}
 					// readOnly
 					resetOnSecondClick

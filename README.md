@@ -22,6 +22,7 @@ Zero-dependency, highly customizable rating component for React.
 - Dead simple per-active-item styling
 - Truly responsive and mobile-first
 - Simple and clean DOM structure
+- Zero-config RTL support
 - Works both on the server and the client
 - Lightweight with zero dependencies
 

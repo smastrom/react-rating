@@ -1,4 +1,4 @@
-import React, { ForwardRefExoticComponent, CSSProperties, SetStateAction } from 'react';
+import React from 'react';
 
 export type MaybeArrayColors = {
 	/** Active fill color of the SVG, it can be an array of colors in ascending order. */
@@ -58,7 +58,7 @@ export type SharedProps = {
 	itemStyles?: ItemStyles;
 	id?: string;
 	className?: string;
-	style?: CSSProperties;
+	style?: React.CSSProperties;
 };
 
 export type ReadOnlyProps = {
@@ -69,7 +69,7 @@ export type ReadOnlyProps = {
 export type InputProps = {
 	/** Callback to set the rating value */
 	onChange?:
-		| React.Dispatch<SetStateAction<number>>
+		| React.Dispatch<React.SetStateAction<number>>
 		| ((value: number) => void | Promise<void>);
 	/** Whether or not to disable the input field */
 	isDisabled?: boolean;
@@ -93,6 +93,6 @@ export type InputProps = {
 
 export type RatingProps = SharedProps & ReadOnlyProps & InputProps;
 
-export declare const Rating: ForwardRefExoticComponent<
+export declare const Rating: React.ForwardRefExoticComponent<
 	SharedProps & ReadOnlyProps & InputProps & React.RefAttributes<HTMLDivElement>
 >;

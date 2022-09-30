@@ -78,7 +78,7 @@
 		"@testing-library/react": "12.1.5",
 		"@testing-library/react-hooks": "^8.0.1",
 		"@testing-library/user-event": "^14.4.3",
-		"@types/jest": "^29.1.0",
+		"@types/jest": "^28.1.6",
 		"@types/node": "^18.7.23",
 		"@types/react": "^18.0.21",
 		"@types/react-dom": "^18.0.6",

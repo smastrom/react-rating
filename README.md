@@ -214,7 +214,7 @@ function App() {
 
 <br />
 
-### 3. Rate!
+### 3. Start rating!
 
 ![react-rating](https://i.ibb.co/RT3pDV3/ezgif-com-gif-maker.gif)
 
@@ -251,15 +251,15 @@ function App() {
 
 ### :nail_care: Appearance
 
-| :thinking:          | Prop           | Description                                                    | Type                                                    | Default       | Required |
-| ------------------- | -------------- | -------------------------------------------------------------- | ------------------------------------------------------- | ------------- | -------- |
-| :purple_circle:     | `halfFillMode` | Whether to half-fill the shape or the bounding box             | `svg` \| `box`                                          | `svg`         | :x:      |
-| :green_circle:      | `orientation`  | Orientation of the rating items                                | `horizontal` \| `vertical`                              | `horizontal`  | :x:      |
-| :green_circle:      | `spaceInside`  | <u><strong>Responsive</strong></u> padding of each rating item | `none` \| `small` \| `medium` \| `large`                | `small`       | :x:      |
-| :green_circle:      | `spaceBetween` | <u><strong>Responsive</strong></u> gap between rating items    | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
-| :green_circle:      | `radius`       | Radius of the SVG bounding box                                 | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
-| :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting                    | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `zoom`        | :x:      |
-| :green_circle:      | `itemStyles`   | Custom shapes and colors                                       | ItemStyles                                              | defaultStyles | :x:      |
+| :thinking:          | Prop           | Description                                                     | Type                                                    | Default       | Required |
+| ------------------- | -------------- | --------------------------------------------------------------- | ------------------------------------------------------- | ------------- | -------- |
+| :purple_circle:     | `halfFillMode` | Whether to half-fill the shape or the bounding box              | `svg` \| `box`                                          | `svg`         | :x:      |
+| :green_circle:      | `orientation`  | Orientation of the rating items                                 | `horizontal` \| `vertical`                              | `horizontal`  | :x:      |
+| :green_circle:      | `spaceInside`  | <u><strong>Responsive</strong></u> padding of each rating item  | `none` \| `small` \| `medium` \| `large`                | `small`       | :x:      |
+| :green_circle:      | `spaceBetween` | <u><strong>Responsive</strong></u> gap between the rating items | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
+| :green_circle:      | `radius`       | Radius of the SVG bounding box                                  | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
+| :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting                     | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `zoom`        | :x:      |
+| :green_circle:      | `itemStyles`   | Custom shapes and colors                                        | ItemStyles                                              | defaultStyles | :x:      |
 
 <br />
 

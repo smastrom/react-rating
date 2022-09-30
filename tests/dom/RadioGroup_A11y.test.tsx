@@ -153,32 +153,6 @@ describe('Accessibility DOM Output Test - Child', () => {
 		expect(child3).toHaveAttribute('tabindex', '-1');
 	});
 
-	test('If keyboard is disabled should not be focusable via tabindex', () => {
-		render(<Rating value={2} items={3} onChange={() => {}} disableKeyboard />);
-
-		const child1 = screen.getByTestId(CHILD_ID_1);
-		expect(child1).not.toHaveAttribute('tabindex');
-
-		const child2 = screen.getByTestId(CHILD_ID_2);
-		expect(child2).not.toHaveAttribute('tabindex');
-
-		const child3 = screen.getByTestId(CHILD_ID_3);
-		expect(child3).not.toHaveAttribute('tabindex');
-	});
-
-	test('If keyboard is disabled should have aria-checked in any case', () => {
-		render(<Rating value={2} items={3} onChange={() => {}} disableKeyboard />);
-
-		const child1 = screen.getByTestId(CHILD_ID_1);
-		expect(child1).not.toBeChecked();
-
-		const child2 = screen.getByTestId(CHILD_ID_2);
-		expect(child2).toBeChecked();
-
-		const child3 = screen.getByTestId(CHILD_ID_3);
-		expect(child3).not.toBeChecked();
-	});
-
 	/** New v1.1.0 */
 
 	test('If isDisabled, rating should never be required', async () => {

@@ -1,4 +1,4 @@
-import { ForwardRefExoticComponent, CSSProperties } from 'react';
+import React, { ForwardRefExoticComponent, CSSProperties, SetStateAction } from 'react';
 
 export type MaybeArrayColors = {
 	/** Active fill color of the SVG, it can be an array of colors in ascending order. */
@@ -68,7 +68,9 @@ export type ReadOnlyProps = {
 
 export type InputProps = {
 	/** Callback to set the rating value */
-	onChange?: (value: number) => void | Promise<void>;
+	onChange?:
+		| React.Dispatch<SetStateAction<number>>
+		| ((value: number) => void | Promise<void>);
 	/** Whether or not to disable the input field */
 	isDisabled?: boolean;
 	/** Callback to set the hovered value */
@@ -77,8 +79,6 @@ export type InputProps = {
 	resetOnSecondClick?: boolean;
 	/** Transition to apply when hovering/selecting */
 	transition?: 'colors' | 'zoom' | 'position' | 'opacity' | 'none';
-	/** Whether to disable keyboard navigation */
-	disableKeyboard?: boolean;
 	/** Whether or not to tell assistive technologies that rating is required */
 	isRequired?: boolean;
 	/** Accessible label of the rating group / image */

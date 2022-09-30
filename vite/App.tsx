@@ -40,21 +40,21 @@ const App = () => {
 			<Profiler>
 				<Rating
 					style={{
-						maxWidth: 150,
+						maxWidth: 100,
 					}}
 					// readOnly
 					resetOnSecondClick
-					isDisabled
+					// isDisabled
 					items={5}
 					aria-label="Ciao"
-					onChange={(value) => setValue(value)}
+					onChange={(value: number) => setValue(value)}
 					value={value}
 					itemStyles={customStyles}
 					// transition="zoom"
 					// highlightOnlySelected
 					orientation="horizontal"
-					spaceBetween="none"
-					spaceInside="small"
+					spaceBetween="small"
+					spaceInside="none"
 					radius="small"
 					isRequired={false}
 					visibleLabelId={CUSTOM_GROUP_LABEL_ID}

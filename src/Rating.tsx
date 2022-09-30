@@ -76,7 +76,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		const isNotEligibleForHalfFill = hasPrecision && highlightOnlySelected === true;
 
 		/** Edited in v1.1.0 */
-		const hasTabNavigation = readOnly === false && isDisabled === false;
+		const isDyanmic = readOnly === false && isDisabled === false;
 
 		const ratingValue = isNotEligibleForHalfFill ? Math.round(value) : value;
 
@@ -146,7 +146,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		});
 
 		const [tabIndex, setTabIndex] = useState<TabIndex[] | []>(() => {
-			if (hasTabNavigation) {
+			if (isDyanmic) {
 				return getTabIndex(items, currentRatingIndex);
 			}
 			return [];
@@ -168,10 +168,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		]);
 
 		useEffect(() => {
-			if (hasTabNavigation) {
+			if (isDyanmic) {
 				setTabIndex(() => getTabIndex(items, currentRatingIndex));
 			}
-		}, [hasTabNavigation, currentRatingIndex, items]);
+		}, [isDyanmic, currentRatingIndex, items]);
 
 		/* Prevent rendering */
 
@@ -276,14 +276,11 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		function getClassNames() {
 			/** Edited v1.1.0 */
-			const cursorClassName: MaybeEmptyCSSClassName =
-				readOnly === false && isDisabled === false ? 'rr--pointer' : '';
+			const cursorClassName: MaybeEmptyCSSClassName = isDyanmic ? 'rr--pointer' : '';
 			const disabledClassName: MaybeEmptyCSSClassName =
 				readOnly === false && isDisabled === true ? 'rr--disabled' : '';
 			const transitionClassName =
-				readOnly === false && isDisabled === false && transition !== 'none'
-					? getTransitionClassNames(transition)
-					: '';
+				isDyanmic && transition !== 'none' ? getTransitionClassNames(transition) : '';
 
 			const orientationClassName: CSSClassName = `rr--dir-${
 				orientation === 'vertical' ? 'y' : 'x'
@@ -313,13 +310,14 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		function getGroupAriaProps() {
 			if (readOnly === false) {
+				const isAriaRequired = isRequired === true && isDisabled === false;
 				const ariaProps: React.HTMLProps<HTMLDivElement> = {
 					role: 'radiogroup',
-					'aria-required': isRequired === true && isDisabled === false,
+					'aria-required': isAriaRequired,
 				};
 
 				/** Edited in v1.1.0 */
-				if (isRequired === true && isDisabled === false) {
+				if (isAriaRequired) {
 					ariaProps['aria-invalid'] = ratingValue <= 0;
 				}
 

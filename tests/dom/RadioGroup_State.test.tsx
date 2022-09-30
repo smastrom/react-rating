@@ -102,7 +102,9 @@ describe('User-managed state is updated correctly by click and hover events', ()
 			<Rating
 				value={result.current.ratingValue}
 				onChange={(selectedValue: number) => result.current.setRatingValue(selectedValue)}
-				onHoverChange={(hoveredValue) => hoveredResult.current.setRatingValue(hoveredValue)}
+				onHoverChange={(hoveredValue: number) =>
+					hoveredResult.current.setRatingValue(hoveredValue)
+				}
 			/>
 		);
 

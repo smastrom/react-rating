@@ -109,8 +109,6 @@ export function RatingItem({
 		return {};
 	}
 
-	/* Render */
-
 	return (
 		<svg
 			{...getStrokeAttribute()}

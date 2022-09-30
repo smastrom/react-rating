@@ -29,7 +29,7 @@ export type ItemStyles = Colors & {
 	/** JSX element to render the inner shapes of the SVG.
 	 * Visit https://github.com/smastrom/react-rating#how-to-create-itemshapes-elements for more info. */
 	itemShapes: JSX.Element | JSX.Element[];
-	/** Stroke width of the SVG, expressed in viewBox user coordinate's unit size */
+	/** Stroke width of the SVG, expressed in viewBox user coordinate's unit size. */
 	itemStrokeWidth?: number;
 	/** Border width of the SVG bounding box, expressed with an integer representing the pixels. */
 	boxBorderWidth?: number;
@@ -40,17 +40,17 @@ export type StyleOptions = 'none' | 'small' | 'medium' | 'large';
 export type SharedProps = {
 	/** An integer from 0 to items. It can be a float if readOnly is true. */
 	value: number;
-	/** Number of rating items to display */
+	/** Number of rating items to display. */
 	items?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-	/** Whether or not to render an accessible image element */
+	/** Whether or not to render an accessible image element. */
 	readOnly?: boolean;
-	/** Whether or not to highlight only the selected rating item */
+	/** Whether or not to highlight only the selected rating item. */
 	highlightOnlySelected?: boolean;
-	/** Orientation of the rating items */
+	/** Orientation of the rating items. */
 	orientation?: 'horizontal' | 'vertical';
-	/** Responsive padding of each rating item */
+	/** Responsive padding of each rating item. */
 	spaceInside?: StyleOptions;
-	/** Responsive gap between the rating items */
+	/** Responsive gap between rating items. */
 	spaceBetween?: StyleOptions;
 	/** Radius of each rating item */
 	radius?: StyleOptions | 'full';
@@ -62,7 +62,7 @@ export type SharedProps = {
 };
 
 export type ReadOnlyProps = {
-	/** Whether to half-fill the SVG or the box */
+	/** Whether to half-fill the SVG or the box. */
 	halfFillMode?: 'svg' | 'box';
 };
 
@@ -71,21 +71,21 @@ type RatingChange =
 	| ((value: number) => void | Promise<void>);
 
 export type InputProps = {
-	/** Callback to update the rating value */
+	/** Setter or custom callback to update the rating value. */
 	onChange?: RatingChange;
-	/** Whether or not to disable the input field */
+	/** Callback to execute when hovering different rating items. */
+	onHoverChange?: (value: number) => void | (() => void);
+	/** Whether or not to disable the input field. */
 	isDisabled?: boolean;
-	/** Callback to run when hovering different items */
-	onHoverChange?: (value: number) => void;
-	/** Whether or not to reset the rating value if clicking again on the current rating */
+	/** Whether or not to reset the rating value if clicking again on the current rating. */
 	resetOnSecondClick?: boolean;
-	/** Transition to apply when hovering/selecting */
+	/** Transition to apply when hovering/selecting. */
 	transition?: 'colors' | 'zoom' | 'position' | 'opacity' | 'none';
-	/** Whether or not to tell assistive technologies that rating is required */
+	/** Whether or not to tell assistive technologies that rating is required. */
 	isRequired?: boolean;
-	/** Accessible label of the rating group / image */
+	/** Accessible label of the rating group / image. */
 	invisibleLabel?: string;
-	/** Accessible labels of each each rating item */
+	/** Accessible labels of each each rating item. */
 	invisibleItemLabels?: string[];
 	/** Id of the element used as rating group label. Takes precedence over invisibleLabel. */
 	visibleLabelId?: string;

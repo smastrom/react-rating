@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { StrangeFace } from '../../vite/Shapes';
+import { ThinStar } from '../../src/Shapes';
 import { useState } from 'react';
 import { ItemStyles } from '../../src/exportedTypes';
 
@@ -44,7 +44,7 @@ export const SVGCHILD_ID_5 = 'rating-child-svg-5';
 export const childArr = [CHILD_ID_1, CHILD_ID_2, CHILD_ID_3, CHILD_ID_4, CHILD_ID_5];
 
 export const itemStyles: ItemStyles = {
-	itemShapes: StrangeFace,
+	itemShapes: ThinStar,
 };
 
 export const useSelectedRatingValue = (initialValue: number) => {

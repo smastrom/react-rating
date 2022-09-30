@@ -36,7 +36,7 @@ yarn add @smastrom/react-rating
 
 <br />
 
-## Basic usage
+## Usage
 
 ### 1. Import the CSS and the component
 
@@ -174,7 +174,7 @@ function App() {
     <Rating
       style={{ maxWidth: 250 }}
       value={ratingValue}
-      onChange={(selectedValue) => setRatingValue(selectedValue)}
+      onChange={(selectedValue) => setRatingValue(selectedValue)} // Or onChange={setRatingValue}
     />
   );
 }
@@ -230,6 +230,12 @@ const App = () => {
 ```
 
 </details>
+
+<br />
+
+### 3. Start rating!
+
+![react-rating](https://i.ibb.co/RT3pDV3/ezgif-com-gif-maker.gif)
 
 <br />
 

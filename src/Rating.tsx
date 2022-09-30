@@ -45,7 +45,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			isDisabled = false,
 			highlightOnlySelected = false,
 			resetOnSecondClick = false,
-			disableKeyboard = false,
 			orientation = 'horizontal',
 			spaceBetween = 'none',
 			spaceInside = 'small',
@@ -77,8 +76,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		const isNotEligibleForHalfFill = hasPrecision && highlightOnlySelected === true;
 
 		/** Edited in v1.1.0 */
-		const hasTabNavigation =
-			readOnly === false && disableKeyboard === false && isDisabled === false;
+		const hasTabNavigation = readOnly === false && isDisabled === false;
 
 		const ratingValue = isNotEligibleForHalfFill ? Math.round(value) : value;
 
@@ -340,16 +338,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		/* Radio Props */
 
-		function getKeyboardProps(childIndex: number): React.HTMLProps<HTMLDivElement> {
-			if (disableKeyboard === false) {
-				return {
-					tabIndex: tabIndex[childIndex],
-					onKeyDown: (event) => handleKeyDown(event, childIndex),
-				};
-			}
-			return {};
-		}
-
 		function getRadioProps(childIndex: number): React.HTMLProps<HTMLDivElement> {
 			if (readOnly === false) {
 				const getRadioLabels = () =>
@@ -370,13 +358,14 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				}
 
 				/** New in v1.1.0 */
-				let events: Partial<React.HTMLProps<HTMLDivElement>> = {};
+				const events: Partial<React.HTMLProps<HTMLDivElement>> = {};
 
 				if (isDisabled === false) {
 					events.onClick = (event) => handleClick(event, childIndex);
 					events.onMouseEnter = () => handleMouseEnter(childIndex);
 					events.onMouseLeave = handleMouseLeave;
-					events = { ...events, ...getKeyboardProps(childIndex) };
+					events.tabIndex = tabIndex[childIndex];
+					events.onKeyDown = (event) => handleKeyDown(event, childIndex);
 				}
 
 				return {

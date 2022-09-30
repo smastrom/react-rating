@@ -114,4 +114,13 @@ describe('User-managed state is updated correctly by click and hover events', ()
 
 		expect(result.current.ratingValue).toBe(1);
 	});
+
+	/** New v1.1.0 */
+
+	test('If isDisabled, no event listeners should be attached', async () => {
+		render(<Rating isDisabled value={3} onChange={() => {}} />);
+
+		const item = screen.queryByTestId(CHILD_ID_3);
+		expect(item).toBeChecked();
+	});
 });

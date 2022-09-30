@@ -19,8 +19,8 @@ First released: July 2nd, 2022
 
 - **Use any SVG**: No headaches, icon fonts or packages to install in order to use your favorite shapes.
 - Smart half-fill and advanced behavior customization
-- Most common _ready-to-use_ rating shapes
 - Fully accessible with keyboard navigation and custom/default labels
+- Most common rating shapes included
 - Dead simple per-active-item styling
 - Truly responsive and mobile-first
 - Simple and clean DOM structure

@@ -42,10 +42,10 @@ export function getColors(
 					if (validKey === key) {
 						const cleanedArrayColors = value.filter((color) => typeof color === 'string');
 						if (cleanedArrayColors.length > 0) {
-							arrayColors[key as keyof ValidArrayColors] = cleanedArrayColors;
-							delete allColors[key as keyof typeof allColors];
+							arrayColors[key] = cleanedArrayColors;
+							delete allColors[key];
 						} else {
-							delete allColors[key as keyof typeof allColors];
+							delete allColors[key];
 						}
 					} else {
 						delete allColors[key as keyof typeof allColors];

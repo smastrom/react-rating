@@ -17,5 +17,6 @@ export function getTabIndex(items: number, currentSelectedIndex: number) {
 				return -1;
 			}
 		});
+
 	return tabIndexArray as TabIndex[];
 }

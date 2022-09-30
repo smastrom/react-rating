@@ -9,6 +9,8 @@ import {
 	CHILD_ID_1,
 	CHILD_ID_2,
 	CHILD_ID_3,
+	CHILD_ID_4,
+	CHILD_ID_5,
 } from './testUtils';
 
 import { Rating } from '../../src/Rating';
@@ -175,5 +177,48 @@ describe('Accessibility DOM Output Test - Child', () => {
 
 		const child3 = screen.getByTestId(CHILD_ID_3);
 		expect(child3).not.toBeChecked();
+	});
+
+	/** New v1.1.0 */
+
+	test('If isDisabled, rating should never be required', async () => {
+		const { rerender } = render(
+			<Rating isRequired isDisabled value={3} onChange={() => {}} />
+		);
+
+		const item = screen.queryByTestId(ID);
+		expect(item).not.toBeRequired();
+
+		rerender(<Rating isDisabled value={3} onChange={() => {}} />);
+
+		expect(item).not.toBeRequired();
+	});
+
+	const childArr = [CHILD_ID_1, CHILD_ID_2, CHILD_ID_3, CHILD_ID_4, CHILD_ID_5];
+
+	test('If isDisabled, all radios should be disabled', async () => {
+		render(<Rating isDisabled value={3} onChange={() => {}} />);
+
+		/* Can't be tested with toBeDisabled() https://github.com/testing-library/jest-dom/issues/144 */
+
+		childArr.forEach((testID) => {
+			const item = screen.queryByTestId(testID);
+			expect(item).toHaveAttribute('aria-disabled', 'true');
+		});
+	});
+
+	test('If isDisabled, all radios should not have focus', async () => {
+		render(<Rating isDisabled value={3} onChange={() => {}} />);
+
+		childArr.forEach((testID) => {
+			const item = screen.queryByTestId(testID);
+			expect(item).not.toHaveFocus();
+		});
+	});
+	test('If isDisabled, current rating should always be set', async () => {
+		render(<Rating isDisabled value={3} onChange={() => {}} />);
+
+		const item = screen.queryByTestId(CHILD_ID_3);
+		expect(item).toBeChecked();
 	});
 });

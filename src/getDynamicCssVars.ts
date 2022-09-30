@@ -1,5 +1,4 @@
 import { setDyamicCssVars } from './setColorsCssVars';
-
 import { RatingProps } from './exportedTypes';
 import { CSSVariables, RequireAtLeastOne, ValidArrayColors } from './internalTypes';
 

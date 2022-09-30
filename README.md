@@ -272,7 +272,7 @@ const App = () => {
 | :green_circle:      | `spaceBetween` | <u><strong>Responsive</strong></u> gap between the rating items | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
 | :green_circle:      | `radius`       | Radius of the SVG bounding box                                  | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
 | :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting                     | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `zoom`        | :x:      |
-| :green_circle:      | `itemStyles`   | Custom shapes and colors                                        | ItemStyle                                               | defaultStyles | :x:      |
+| :green_circle:      | `itemStyles`   | Custom shapes and colors                                        | ItemStyles                                              | defaultStyles | :x:      |
 
 <br />
 
@@ -325,69 +325,13 @@ function App() {
 }
 ```
 
-<details><summary><strong> All customizable properties</strong></summary>
-
-<br/>
-
-You can pass an object with the following properties to `itemStyles` prop:
-
-```ts
-type ItemStyles = {
-  itemShapes: JSX.Element | JSX.Element[];
-
-  itemStrokeWidth?: number;
-  boxBorderWidth?: number;
-
-  activeFillColor?: string | string[];
-  activeStrokeColor?: string | string[];
-  activeBoxColor?: string | string[];
-  activeBoxBorderColor?: string | string[];
-
-  inactiveFillColor?: string;
-  inactiveStrokeColor?: string;
-  inactiveBoxColor?: string;
-  inactiveBoxBorderColor?: string;
-};
-```
-
-Besides `itemShapes`, **all the properties are optional**. If a property isn't defined, no classes nor CSS variables will be added to the HTML.
-
-Just set the ones you need and that's it:
-
-```jsx
-const CustomStar = (
-  <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
-);
-
-const customStyles = {
-  itemShapes: CustomStar,
-  activeFillColor: '#22C55E',
-  inactiveFillColor: '#BBF7D0',
-};
-
-function App() {
-  const [ratingValue, setRatingValue] = useState(4);
-
-  return (
-    <Rating
-      style={{ maxWidth: 300 }}
-      value={ratingValue}
-      onChange={(selectedValue) => setRatingValue(selectedValue)}
-      itemStyles={customStyles}
-    />
-  );
-}
-```
-
-</details>
-
 <br />
 
 ### Using your own shapes
 
 All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones (if any). Then create a new JSX Element that renders the shapes.
 
-The component will take care of rendering a brand-new, responsive SVG for you.
+<u>The component will take care of rendering a brand-new, responsive SVG for you.</u>
 
 If the SVG comes from quality sources (or you made it) such as [Feather](https://feathericons.com/), [SVG Repo](https://www.svgrepo.com/collections/monocolor/), [Bootstrap Icons](https://icons.getbootstrap.com)
 or [css.gg](https://css.gg/) all you have to do is to delete a couple of fill and stroke attributes:
@@ -547,7 +491,7 @@ const customStyles: ItemStyles = {
 
 </details>
 
-<details><summary><strong>Quick guide for complex or messy SVGs</strong></summary>
+<details><summary><strong>Quick guide for extenal complex or messy SVGs</strong></summary>
 
 1. Keep only the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/g">groups</a> and the inner shapes of the svg: `g`, `path`, `circle`, `rect`, `polygon`, `ellipse`, `polyline` or `line` and delete any other node (e.g. `<defs>`).
 

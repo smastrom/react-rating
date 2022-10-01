@@ -15,7 +15,7 @@ export function getStaticCssVars(
 
 	if (colorsEntries.length > 0) {
 		for (const [key, value] of colorsEntries) {
-			setColorCssVars(cssVars, key, value as string);
+			setColorCssVars(cssVars, key, value);
 		}
 	}
 

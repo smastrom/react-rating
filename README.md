@@ -291,8 +291,7 @@ type RatingChange =
 
 </details>
 
-If you need to perform some actions while setting the rating (like calling an API) or your state shape differs from the above case, `onChange` accepts a function with a single parameter equal to the
-selected rating value:
+If you need to perform some actions while setting the rating (like calling an API) or your state shape differs from the above case, `onChange` accepts a function with a single parameter corresponding to the selected rating value:
 
 ```js
 function App() {

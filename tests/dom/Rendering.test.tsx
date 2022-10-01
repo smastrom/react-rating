@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { render, screen } from '@testing-library/react';
 import {
 	beforeEach,
@@ -12,7 +11,6 @@ import {
 	SVGCHILD_ID_2,
 	SVGCHILD_ID_3,
 } from './testUtils';
-
 import { Rating } from '../../src/Rating';
 import { Star } from '../../src/Shapes';
 

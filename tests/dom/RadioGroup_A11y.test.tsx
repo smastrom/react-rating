@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
 	render,
 	screen,
@@ -11,7 +10,6 @@ import {
 	CHILD_ID_3,
 	childArr,
 } from './testUtils';
-
 import { Rating } from '../../src/Rating';
 
 beforeEach();

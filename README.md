@@ -247,7 +247,7 @@ function App() {
 | :green_circle:      | `spaceInside`  | <u><strong>Responsive</strong></u> padding of each rating item | `none` \| `small` \| `medium` \| `large`                | `small`       | :x:      |
 | :green_circle:      | `spaceBetween` | <u><strong>Responsive</strong></u> gap between rating items    | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
 | :green_circle:      | `radius`       | Radius of the bounding box                                     | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
-| :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting                    | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `zoom`        | :x:      |
+| :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting                    | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `colors`      | :x:      |
 | :green_circle:      | `itemStyles`   | Custom shapes and colors                                       | ItemStyles                                              | defaultStyles | :x:      |
 
 <br />
@@ -266,7 +266,7 @@ function App() {
 
 ## onChange
 
-If your app doesn't require any custom logic to set the rating, you should directly pass the setter to `onChange`:
+If your app doesn't require any custom logic to set the rating, just pass the setter to `onChange`:
 
 ```js
 function App() {
@@ -291,7 +291,8 @@ type RatingChange =
 
 </details>
 
-If you need to perform some actions while setting the rating (like calling an API) or your state shape differs from the above case, `onChange` accepts a function with a single parameter equal to the value of the selected rating:
+If you need to perform some actions while setting the rating (like calling an API) or your state shape differs from the above case, `onChange` accepts a function with a single parameter equal to the
+selected rating value:
 
 ```js
 function App() {

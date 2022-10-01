@@ -1,4 +1,4 @@
-import { ForwardRefExoticComponent, CSSProperties } from 'react';
+import React from 'react';
 
 export type MaybeArrayColors = {
 	/** Active fill color of the SVG, it can be an array of colors in ascending order. */
@@ -12,7 +12,7 @@ export type MaybeArrayColors = {
 };
 
 export type NonArrayColors = {
-	/** Active fill color of the SVG. */
+	/** Inactive fill color of the SVG. */
 	inactiveFillColor?: string;
 	/** Inactive stroke color of the SVG. */
 	inactiveStrokeColor?: string;
@@ -29,7 +29,7 @@ export type ItemStyles = Colors & {
 	/** JSX element to render the inner shapes of the SVG.
 	 * Visit https://github.com/smastrom/react-rating#how-to-create-itemshapes-elements for more info. */
 	itemShapes: JSX.Element | JSX.Element[];
-	/** Stroke width of the SVG, expressed in viewBox user coordinate's unit size */
+	/** Stroke width of the SVG, expressed in viewBox user coordinate's unit size. */
 	itemStrokeWidth?: number;
 	/** Border width of the SVG bounding box, expressed with an integer representing the pixels. */
 	boxBorderWidth?: number;
@@ -40,17 +40,17 @@ export type StyleOptions = 'none' | 'small' | 'medium' | 'large';
 export type SharedProps = {
 	/** An integer from 0 to items. It can be a float if readOnly is true. */
 	value: number;
-	/** Number of rating items to display */
+	/** Number of rating items to display. */
 	items?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-	/** Whether or not to render an accessible image element */
+	/** Whether or not to render an accessible image element. */
 	readOnly?: boolean;
-	/** Whether or not to highlight only the selected rating item */
+	/** Whether or not to highlight only the selected rating item. */
 	highlightOnlySelected?: boolean;
-	/** Orientation of the rating items */
+	/** Orientation of the rating items. */
 	orientation?: 'horizontal' | 'vertical';
-	/** Responsive padding of each rating item */
+	/** Responsive padding of each rating item. */
 	spaceInside?: StyleOptions;
-	/** Responsive gap between the rating items */
+	/** Responsive gap between rating items. */
 	spaceBetween?: StyleOptions;
 	/** Radius of each rating item */
 	radius?: StyleOptions | 'full';
@@ -58,30 +58,34 @@ export type SharedProps = {
 	itemStyles?: ItemStyles;
 	id?: string;
 	className?: string;
-	style?: CSSProperties;
+	style?: React.CSSProperties;
 };
 
 export type ReadOnlyProps = {
-	/** Whether to half-fill the SVG or the box */
+	/** Whether to half-fill the SVG or the box. */
 	halfFillMode?: 'svg' | 'box';
 };
 
+type RatingChange =
+	| React.Dispatch<React.SetStateAction<number>>
+	| ((ratingValue: number) => void | Promise<void>);
+
 export type InputProps = {
-	/** Callback to set the rating value */
-	onChange?: (value: number) => void | Promise<void>;
-	/** Callback to set the hovered value */
-	onHoverChange?: (value: number) => void;
-	/** Whether or not to reset the rating value if clicking again on the current rating */
+	/** Setter or custom callback to update the rating. */
+	onChange?: RatingChange;
+	/** Callback to execute when entering/leaving the rating items. */
+	onHoverChange?: (ratingValue: number) => void | (() => void);
+	/** Whether or not to disable the radio group. */
+	isDisabled?: boolean;
+	/** Whether or not to reset the rating value if clicking again on the current rating. */
 	resetOnSecondClick?: boolean;
-	/** Transition to apply when hovering/selecting */
+	/** Transition to apply when hovering/selecting. */
 	transition?: 'colors' | 'zoom' | 'position' | 'opacity' | 'none';
-	/** Whether to disable keyboard navigation */
-	disableKeyboard?: boolean;
-	/** Whether or not to tell assistive technologies that rating is required */
+	/** Whether or not to tell assistive technologies that rating is required. */
 	isRequired?: boolean;
-	/** Accessible label of the rating group / image */
+	/** Accessible label of the rating group / image. */
 	invisibleLabel?: string;
-	/** Accessible labels of each each rating item */
+	/** Accessible labels of each each rating item. */
 	invisibleItemLabels?: string[];
 	/** Id of the element used as rating group label. Takes precedence over invisibleLabel. */
 	visibleLabelId?: string;
@@ -91,6 +95,6 @@ export type InputProps = {
 
 export type RatingProps = SharedProps & ReadOnlyProps & InputProps;
 
-export declare const Rating: ForwardRefExoticComponent<
+export declare const Rating: React.ForwardRefExoticComponent<
 	SharedProps & ReadOnlyProps & InputProps & React.RefAttributes<HTMLDivElement>
 >;

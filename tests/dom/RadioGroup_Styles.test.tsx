@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
 	render,
 	screen,
@@ -12,8 +11,8 @@ import {
 	CHILD_ID_3,
 	CHILD_ID_4,
 	CHILD_ID_5,
+	childArr,
 } from './testUtils';
-
 import { Rating } from '../../src/Rating';
 
 beforeEach();
@@ -106,6 +105,15 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 		const item = screen.queryByTestId(ID);
 		expect(item).toHaveClass(classNames, { exact: true });
 	});
+
+	/* New in v1.1.0 */
+	test('If isDisabled, should have proper cursor classNames', async () => {
+		render(<Rating isDisabled value={3} onChange={() => {}} />);
+
+		const item = screen.queryByTestId(ID);
+		expect(item).toHaveClass('rr--disabled');
+		expect(item).not.toHaveClass('rr-cursor');
+	});
 });
 
 describe('Classnames and inline css vars - Radio elements', () => {
@@ -144,18 +152,14 @@ describe('Classnames and inline css vars - Radio elements', () => {
 	test('If ratingValue equals to 0, no child should have active className, whether or not highlightOnlySelected is enabled', () => {
 		const { rerender } = render(<Rating value={0} items={6} onChange={() => {}} />);
 
-		const toNotHaveActiveClassNames = () => {
-			toHaveInactiveClassName(CHILD_ID_1);
-			toHaveInactiveClassName(CHILD_ID_2);
-			toHaveInactiveClassName(CHILD_ID_3);
-			toHaveInactiveClassName(CHILD_ID_4);
-			toHaveInactiveClassName(CHILD_ID_5);
-		};
-
-		toNotHaveActiveClassNames();
+		childArr.forEach((testId) => {
+			toHaveInactiveClassName(testId);
+		});
 
 		rerender(<Rating value={0} items={6} onChange={() => {}} highlightOnlySelected />);
 
-		toNotHaveActiveClassNames();
+		childArr.forEach((testId) => {
+			toHaveInactiveClassName(testId);
+		});
 	});
 });

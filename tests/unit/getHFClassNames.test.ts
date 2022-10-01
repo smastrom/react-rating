@@ -1,5 +1,4 @@
 import { getHalfFillClassNames } from '../../src/getHFClassNames';
-
 import { CSSClassName } from '../../src/internalTypes';
 
 describe('getHalfFillClassNames returns classNames for box and svg', () => {

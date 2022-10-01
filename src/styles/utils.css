@@ -14,12 +14,48 @@
 	padding: 10%;
 }
 
+.rr--space-sm .rr--box:focus-visible .rr--svg {
+	transition: all 100ms ease-out;
+	padding: 12.5%;
+}
+
+@media (prefers-reduced-motion) {
+	.rr--space-sm .rr--box:focus-visible .rr--svg {
+		transition: unset;
+		padding: 10%;
+	}
+}
+
 .rr--space-md .rr--svg {
 	padding: 12.5%;
 }
 
+.rr--space-md .rr--box:focus-visible .rr--svg {
+	transition: all 100ms ease-out;
+	padding: 15%;
+}
+
+@media (prefers-reduced-motion) {
+	.rr--space-md .rr--box:focus-visible .rr--svg {
+		transition: unset;
+		padding: 12.5%;
+	}
+}
+
 .rr--space-lg .rr--svg {
 	padding: 17.5%;
+}
+
+.rr--space-lg .rr--box:focus-visible .rr--svg {
+	transition: all 100ms ease-out;
+	padding: 20%;
+}
+
+@media (prefers-reduced-motion) {
+	.rr--space-lg .rr--box:focus-visible .rr--svg {
+		transition: unset;
+		padding: 17.5%;
+	}
 }
 
 /* spaceBetween */
@@ -66,15 +102,15 @@
 /* radius */
 
 .rr--rx-sm .rr--svg {
-	border-radius: 5px;
+	border-radius: 5%;
 }
 
 .rr--rx-md .rr--svg {
-	border-radius: 10px;
+	border-radius: 15%;
 }
 
 .rr--rx-lg .rr--svg {
-	border-radius: 20px;
+	border-radius: 20%;
 }
 
 .rr--rx-full .rr--svg {
@@ -111,4 +147,14 @@
 	clip: rect(0, 0, 0, 0);
 	white-space: nowrap;
 	border: 0;
+}
+
+/* New in v1.1.0 */
+.rr--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.rr--disabled .rr--svg {
+	pointer-events: none;
 }

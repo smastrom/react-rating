@@ -1,5 +1,4 @@
 import React, { forwardRef, useRef, useState, useEffect, useCallback, useMemo } from 'react';
-
 import { RatingItem } from './RatingItem';
 import { getDynamicCssVars } from './getDynamicCssVars';
 import { getActiveClassNames } from './getActiveClassNames';
@@ -23,7 +22,6 @@ import {
 	devTestId,
 } from './utils';
 import { defaultItemStyles } from './defaultItemStyles';
-
 import { RatingProps, Rating as RatingComponent } from './exportedTypes';
 import {
 	StylesState,
@@ -32,21 +30,22 @@ import {
 	RequireAtLeastOne,
 	ValidArrayColors,
 	TabIndex,
+	RatingItemProps,
 } from './internalTypes';
 
-/** Thank you for using **@smastrom/react-rating**.
- * Visit https://github.com/smastrom/react-rating for the full documentation.*/
+/** Thank you for using **React Rating**.
+ * Visit https://github.com/smastrom/react-rating to read the full documentation.*/
 export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingProps>(
 	(
 		{
-			value = undefined,
+			value,
 			items = 5,
 			readOnly = false,
 			onChange,
 			onHoverChange,
+			isDisabled = false,
 			highlightOnlySelected = false,
 			resetOnSecondClick = false,
-			disableKeyboard = false,
 			orientation = 'horizontal',
 			spaceBetween = 'none',
 			spaceInside = 'small',
@@ -77,17 +76,18 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		const isEligibleForHalfFill = hasPrecision && highlightOnlySelected === false;
 		const isNotEligibleForHalfFill = hasPrecision && highlightOnlySelected === true;
 
-		const hasTabNavigation = readOnly === false && disableKeyboard === false;
+		/* New in v1.1.0 */
+		const isDyanmic = readOnly === false && isDisabled === false;
 
-		const ratingValue = (
-			isNotEligibleForHalfFill ? Math.round(value as number) : value
-		) as number;
+		const ratingValue = isNotEligibleForHalfFill ? Math.round(value) : value;
 
 		const currentRatingIndex = isEligibleForHalfFill
 			? getIntersectionIndex(ratingValues, ratingValue)
 			: ratingValues.indexOf(ratingValue);
 
 		const deservesHalfFill = isEligibleForHalfFill && !isGraphicalValueInteger(ratingValue);
+
+		const hasHoverChange = typeof onHoverChange === 'function';
 
 		/* Style helpers */
 
@@ -148,8 +148,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			...getDynamicStyles(currentRatingIndex, needsDynamicCssVars),
 		});
 
-		const [tabIndex, setTabIndex] = useState<TabIndex[] | []>(() => {
-			if (hasTabNavigation) {
+		const [tabIndex, setTabIndex] = useState<TabIndex[]>(() => {
+			if (isDyanmic) {
 				return getTabIndex(items, currentRatingIndex);
 			}
 			return [];
@@ -171,10 +171,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		]);
 
 		useEffect(() => {
-			if (hasTabNavigation) {
+			if (isDyanmic) {
 				setTabIndex(() => getTabIndex(items, currentRatingIndex));
 			}
-		}, [hasTabNavigation, currentRatingIndex, items]);
+		}, [isDyanmic, currentRatingIndex, items]);
 
 		/* Prevent rendering */
 
@@ -183,7 +183,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			value,
 			readOnly,
 			onChange,
-			itemShapes
+			itemShapes,
+			isDisabled
 		);
 
 		if (!shouldRender) {
@@ -193,7 +194,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		/* Mouse handlers */
 
-		const handleClick = (event: React.MouseEvent<HTMLDivElement>, clickedIndex: number) => {
+		function handleClick(event: React.MouseEvent<HTMLDivElement>, clickedIndex: number) {
 			event.stopPropagation();
 
 			if (resetOnSecondClick === true && currentRatingIndex === clickedIndex) {
@@ -203,29 +204,29 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				onChange!(ratingValues[clickedIndex]);
 			}
-		};
+		}
 
-		const handleMouseEnter = (hoveredIndex: number) => {
-			if (typeof onHoverChange === 'function') {
+		function handleMouseEnter(hoveredIndex: number) {
+			if (hasHoverChange) {
 				onHoverChange(ratingValues[hoveredIndex]);
 			}
 			setStyles({ ...styles, ...getDynamicStyles(hoveredIndex, true) });
-		};
+		}
 
-		const handleMouseLeave = () => {
-			if (typeof onHoverChange === 'function') {
+		function handleMouseLeave() {
+			if (hasHoverChange) {
 				onHoverChange(0);
 			}
 			setStyles({ ...styles, ...getDynamicStyles(currentRatingIndex, needsDynamicCssVars) });
-		};
+		}
 
-		/* Keyboard handler */
+		/* Keyboard navigation */
 
 		/** Ignoring handleKeyDown from Jest coverage as it is
 		 * tested with Playwright in tests/e2e/keyboardNavigation.test.ts */
 
 		/* istanbul ignore next */
-		const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, childIndex: number) => {
+		function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>, childIndex: number) {
 			const previousSibling = childIndex - 1;
 			const nextSibling = childIndex + 1;
 			const lastSibling = ratingValues.length - 1;
@@ -273,12 +274,20 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 			event.preventDefault();
 			event.stopPropagation();
-		};
+		}
 
-		/* Radio Group props */
+		/* Radio group props */
 
-		const getClassNames = (): string => {
-			const cursorClassName: MaybeEmptyCSSClassName = readOnly === false ? 'rr--pointer' : '';
+		function getClassNames() {
+			/* New in v1.1.0 */
+			const disabledClassName: MaybeEmptyCSSClassName =
+				readOnly === false && isDisabled === true ? 'rr--disabled' : '';
+			/* Edited in v1.1.0 */
+			const cursorClassName: MaybeEmptyCSSClassName = isDyanmic ? 'rr--pointer' : '';
+
+			const transitionClassName =
+				isDyanmic && transition !== 'none' ? getTransitionClassNames(transition) : '';
+
 			const orientationClassName: CSSClassName = `rr--dir-${
 				orientation === 'vertical' ? 'y' : 'x'
 			}`;
@@ -288,8 +297,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				absoluteBoxBorderWidth > 0 ? 'rr--has-border' : '';
 			const strokeClassName: MaybeEmptyCSSClassName =
 				absoluteStrokeWidth > 0 ? 'rr--has-stroke' : '';
-			const transitionClassName =
-				readOnly === false && transition !== 'none' ? getTransitionClassNames(transition) : '';
+
 			const gapClassName =
 				typeof spaceBetween === 'string' && spaceBetween !== 'none'
 					? getGapClassName(spaceBetween)
@@ -300,21 +308,25 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 					: '';
 
 			return `rr--group ${orientationClassName} ${strokeClassName} ${borderClassName}
-      ${transitionClassName} ${radiusClassName} ${cursorClassName} ${gapClassName}
+      ${transitionClassName} ${radiusClassName} ${cursorClassName} ${disabledClassName} ${gapClassName}
       ${paddingClassName} ${className || ''}`
 				.replace(/  +/g, ' ')
 				.trimEnd();
-		};
+		}
 
-		const getGroupAriaProps = (): React.HTMLProps<HTMLDivElement> => {
+		function getGroupAriaProps() {
 			if (readOnly === false) {
+				const isAriaRequired = isRequired === true && isDisabled === false;
 				const ariaProps: React.HTMLProps<HTMLDivElement> = {
 					role: 'radiogroup',
-					'aria-required': isRequired === true,
+					'aria-required': isAriaRequired,
 				};
-				if (isRequired === true) {
+
+				/* Edited in v1.1.0 */
+				if (isAriaRequired) {
 					ariaProps['aria-invalid'] = ratingValue <= 0;
 				}
+
 				if (typeof visibleLabelId === 'string' && visibleLabelId.length > 0) {
 					ariaProps['aria-labelledby'] = visibleLabelId;
 				} else {
@@ -326,54 +338,52 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				role: 'img',
 				'aria-label': invisibleLabel,
 			};
-		};
+		}
 
-		/* Radio Props */
+		/* Radio props */
 
-		const getKeyboardProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
-			if (disableKeyboard === false) {
-				return {
-					tabIndex: tabIndex[childIndex],
-					onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) =>
-						handleKeyDown(event, childIndex),
-				};
+		/* New in v1.1.0 */
+		function getInteractiveProps(childIndex: number): React.HTMLProps<HTMLDivElement> {
+			return {
+				onClick: (event) => handleClick(event, childIndex),
+				onMouseEnter: () => handleMouseEnter(childIndex),
+				onMouseLeave: handleMouseLeave,
+				tabIndex: tabIndex[childIndex],
+				onKeyDown: (event) => handleKeyDown(event, childIndex),
+			};
+		}
+
+		function getRadioProps(childIndex: number): React.HTMLProps<HTMLDivElement> {
+			const getRadioLabels = () =>
+				Array.isArray(invisibleItemLabels)
+					? invisibleItemLabels
+					: ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`);
+
+			const labelProps: React.HTMLProps<HTMLDivElement> = {};
+
+			if (Array.isArray(visibleItemLabelIds)) {
+				labelProps['aria-labelledby'] = visibleItemLabelIds[childIndex];
+			} else {
+				labelProps['aria-label'] = getRadioLabels()?.[childIndex];
 			}
-			return {};
-		};
 
-		const getRadioProps = (childIndex: number): React.HTMLProps<HTMLDivElement> => {
-			if (readOnly === false) {
-				const getRadioLabels = () =>
-					Array.isArray(invisibleItemLabels)
-						? invisibleItemLabels
-						: ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`);
-
-				const labelProps: React.HTMLProps<HTMLDivElement> = {};
-
-				if (Array.isArray(visibleItemLabelIds)) {
-					labelProps['aria-labelledby'] = visibleItemLabelIds[childIndex];
-				} else {
-					labelProps['aria-label'] = getRadioLabels()?.[childIndex];
-				}
-
-				return {
-					...labelProps,
-					'aria-checked': ratingValues[childIndex] === ratingValue,
-					role: 'radio',
-					ref: (radioChildNode: HTMLDivElement) =>
-						(roleRadioDivs.current[childIndex] = radioChildNode),
-					onClick: (event: React.MouseEvent<HTMLDivElement>) => handleClick(event, childIndex),
-					onMouseEnter: () => handleMouseEnter(childIndex),
-					onMouseLeave: handleMouseLeave,
-					...getKeyboardProps(childIndex),
-				};
+			if (readOnly === false && isDisabled === true) {
+				labelProps['aria-disabled'] = 'true';
 			}
-			return {};
-		};
+
+			return {
+				'aria-checked': ratingValues[childIndex] === ratingValue,
+				role: 'radio',
+				ref: (radioChildNode: HTMLDivElement) =>
+					(roleRadioDivs.current[childIndex] = radioChildNode),
+				...(isDisabled === false ? getInteractiveProps(childIndex) : {}),
+				...labelProps,
+			};
+		}
 
 		/* SVG */
 
-		const getSvgRatingItemProps = (childNodeIndex: number) => {
+		function getSvgRatingItemProps(childNodeIndex: number): RatingItemProps {
 			const sharedProps = {
 				...getSvgChildTestIds(childNodeIndex),
 				itemShapes: Array.isArray(itemShapes) ? itemShapes[childNodeIndex] : itemShapes,
@@ -385,7 +395,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				sharedProps.hasHalfFill = childNodeIndex === currentRatingIndex;
 			}
 			return sharedProps;
-		};
+		}
 
 		/* Render */
 
@@ -400,25 +410,28 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			>
 				{/* */}
 				{/* */}
+				{/* */}
+				{/* */}
 				{/* Box */}
 				{ratingValues.map((_, childIndex) => (
 					<div
 						key={`rr_box_${childIndex}`}
 						className={`rr--box ${styles.dynamicClassNames[childIndex]}`}
 						style={styles?.dynamicCssVars?.[childIndex]}
-						{...getRadioProps(childIndex)}
+						{...(readOnly === false ? getRadioProps(childIndex) : {})}
 						{...getChildTestIds(childIndex)}
 					>
+						{/* */}
+						{/* */}
 						{/* */}
 						{/* */}
 						{/* SVG */}
 						<RatingItem {...getSvgRatingItemProps(childIndex)} />
 					</div>
 				))}
-				{/* */}
-				{/* */}
-				{/* */}
 			</div>
 		);
 	}
 );
+
+Rating.displayName = 'Rating';

@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-
 import { beforeAny, pressShiftTab, pressTab } from './testUtils';
 
 test.beforeEach(async ({ page, browserName }) => {

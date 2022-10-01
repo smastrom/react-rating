@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { render, screen } from '@testing-library/react';
 import {
 	beforeEach,
@@ -12,9 +11,8 @@ import {
 	SVGCHILD_ID_2,
 	SVGCHILD_ID_3,
 } from './testUtils';
-
 import { Rating } from '../../src/Rating';
-import { Star } from '../../src/Star';
+import { Star } from '../../src/Shapes';
 
 beforeEach();
 afterEach();
@@ -149,6 +147,19 @@ describe('Component rendering', () => {
 		render(<Rating value={3.6} onChange={() => {}} />);
 		const item = screen.queryByTestId(ID);
 		expect(item).not.toBeInTheDocument();
+	});
+
+	/* New in v1.1.0 */
+	test('If isDisabled, should not render the component if onChange is undefined', () => {
+		render(<Rating isDisabled value={5} />);
+		const item = screen.queryByTestId(ID);
+		expect(item).not.toBeInTheDocument();
+	});
+
+	test('If readOnly and isDisabled, should render the component if onChange is undefined', () => {
+		render(<Rating readOnly isDisabled value={5} />);
+		const item = screen.queryByTestId(ID);
+		expect(item).toBeInTheDocument();
 	});
 });
 

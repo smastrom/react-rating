@@ -1,5 +1,4 @@
 import { getDynamicCssVars } from '../../src/getDynamicCssVars';
-
 import { CSSVariables, RequireAtLeastOne, ValidArrayColors } from '../../src/internalTypes';
 
 describe('getDynamicCssVars returns only CSS vars that user actually needs', () => {

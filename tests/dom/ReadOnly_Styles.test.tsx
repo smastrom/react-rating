@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
 	render,
 	screen,
@@ -12,7 +11,6 @@ import {
 	CHILD_ID_3,
 	CHILD_ID_4,
 } from './testUtils';
-
 import { Rating } from '../../src/Rating';
 
 beforeEach();
@@ -77,6 +75,14 @@ describe('Classnames and inline css vars - Image element', () => {
 		toHaveClassNames(CHILD_ID_1, activeClassNames);
 		toHaveClassNames(CHILD_ID_2, activeClassNames);
 		toHaveClassNames(CHILD_ID_3, inactiveClassNames);
+	});
+
+	/* New in v1.1.0 */
+	test('readOnly should always take precedence over isDisabled', async () => {
+		render(<Rating readOnly isDisabled value={2} />);
+
+		const item = screen.queryByTestId(ID);
+		expect(item).not.toHaveClass('rr--disabled');
 	});
 });
 

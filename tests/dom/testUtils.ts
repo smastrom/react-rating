@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-
-import { StrangeFace } from '../../vite/Shapes';
+import { ThinStar } from '../../src/Shapes';
 import { useState } from 'react';
 import { ItemStyles } from '../../src/exportedTypes';
 
-const before = () =>
-	beforeEach(() => {
-		jest.spyOn(console, 'error').mockImplementation(() => {});
+function before() {
+	return beforeEach(() => {
+		jest.spyOn(console, 'error').mockImplementation(() => null);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		window.SVGElement.prototype.getBBox = () => ({
 			x: 0,
@@ -16,12 +16,15 @@ const before = () =>
 			height: 0,
 		});
 	});
+}
 
-const after = () =>
-	afterEach(() => {
+function after() {
+	return afterEach(() => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		delete window.SVGElement.prototype.getBBox;
 	});
+}
 
 export { render, screen, before as beforeEach, after as afterEach };
 
@@ -38,8 +41,10 @@ export const SVGCHILD_ID_3 = 'rating-child-svg-3';
 export const SVGCHILD_ID_4 = 'rating-child-svg-4';
 export const SVGCHILD_ID_5 = 'rating-child-svg-5';
 
+export const childArr = [CHILD_ID_1, CHILD_ID_2, CHILD_ID_3, CHILD_ID_4, CHILD_ID_5];
+
 export const itemStyles: ItemStyles = {
-	itemShapes: StrangeFace,
+	itemShapes: ThinStar,
 };
 
 export const useSelectedRatingValue = (initialValue: number) => {

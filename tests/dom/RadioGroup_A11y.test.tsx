@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
 	render,
 	screen,
@@ -9,8 +8,8 @@ import {
 	CHILD_ID_1,
 	CHILD_ID_2,
 	CHILD_ID_3,
+	childArr,
 } from './testUtils';
-
 import { Rating } from '../../src/Rating';
 
 beforeEach();
@@ -86,14 +85,10 @@ describe('Accessibility DOM Output Test - Child', () => {
 			expect(child).toHaveAttribute('role', 'radio');
 		};
 
-		const child1 = screen.getByTestId(CHILD_ID_1);
-		expectAccessibleAttributes(child1);
-
-		const child2 = screen.getByTestId(CHILD_ID_2);
-		expectAccessibleAttributes(child2);
-
-		const child3 = screen.getByTestId(CHILD_ID_3);
-		expectAccessibleAttributes(child3);
+		[CHILD_ID_1, CHILD_ID_2, CHILD_ID_3].forEach((testId) => {
+			const child = screen.getByTestId(testId);
+			expectAccessibleAttributes(child);
+		});
 	});
 
 	test('If both invisible label and visible label ids are set, visible labels should take precedence', () => {
@@ -151,29 +146,44 @@ describe('Accessibility DOM Output Test - Child', () => {
 		expect(child3).toHaveAttribute('tabindex', '-1');
 	});
 
-	test('If keyboard is disabled should not be focusable via tabindex', () => {
-		render(<Rating value={2} items={3} onChange={() => {}} disableKeyboard />);
+	/* New in v1.1.0 */
+	test('If isDisabled, rating should never be required', async () => {
+		const { rerender } = render(
+			<Rating isRequired isDisabled value={3} onChange={() => {}} />
+		);
 
-		const child1 = screen.getByTestId(CHILD_ID_1);
-		expect(child1).not.toHaveAttribute('tabindex');
+		const item = screen.queryByTestId(ID);
+		expect(item).not.toBeRequired();
 
-		const child2 = screen.getByTestId(CHILD_ID_2);
-		expect(child2).not.toHaveAttribute('tabindex');
+		rerender(<Rating isDisabled value={3} onChange={() => {}} />);
 
-		const child3 = screen.getByTestId(CHILD_ID_3);
-		expect(child3).not.toHaveAttribute('tabindex');
+		expect(item).not.toBeRequired();
 	});
 
-	test('If keyboard is disabled should have aria-checked in any case', () => {
-		render(<Rating value={2} items={3} onChange={() => {}} disableKeyboard />);
+	test('If isDisabled, all radios should be disabled', async () => {
+		render(<Rating isDisabled value={3} onChange={() => {}} />);
 
-		const child1 = screen.getByTestId(CHILD_ID_1);
-		expect(child1).not.toBeChecked();
+		/* Can't be tested with toBeDisabled() https://github.com/testing-library/jest-dom/issues/144 */
 
-		const child2 = screen.getByTestId(CHILD_ID_2);
-		expect(child2).toBeChecked();
+		childArr.forEach((testID) => {
+			const item = screen.queryByTestId(testID);
+			expect(item).toHaveAttribute('aria-disabled', 'true');
+		});
+	});
 
-		const child3 = screen.getByTestId(CHILD_ID_3);
-		expect(child3).not.toBeChecked();
+	test('If isDisabled, all radios should not have focus', async () => {
+		render(<Rating isDisabled value={3} onChange={() => {}} />);
+
+		childArr.forEach((testID) => {
+			const item = screen.queryByTestId(testID);
+			expect(item).not.toHaveFocus();
+		});
+	});
+
+	test('If isDisabled, current rating should always be set', async () => {
+		render(<Rating isDisabled value={3} onChange={() => {}} />);
+
+		const item = screen.queryByTestId(CHILD_ID_3);
+		expect(item).toBeChecked();
 	});
 });

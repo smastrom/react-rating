@@ -1,8 +1,5 @@
-playwright.config.ts
-jest.config.ts
-vite.config.ts
-tests
 dist
-examples
-dev
 node_modules
+tests
+playwright.config.ts
+vite.config.ts

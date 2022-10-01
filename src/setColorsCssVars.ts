@@ -6,11 +6,7 @@ const ACTIVE_BORDER_COLOR_VAR = '--rr--border-on-color';
 const ACTIVE_STROKE_COLOR_VAR = '--rr--stroke-on-color';
 
 /* istanbul ignore next */
-export const setDyamicCssVars = (
-	targetObj: CSSVariables,
-	key: string,
-	value: string
-): void => {
+export function setDyamicCssVars(targetObj: CSSVariables, key: string, value: string) {
 	switch (key) {
 		case 'activeFillColor':
 			targetObj[ACTIVE_FILL_COLOR_VAR] = value;
@@ -25,10 +21,10 @@ export const setDyamicCssVars = (
 			targetObj[ACTIVE_STROKE_COLOR_VAR] = value;
 			break;
 	}
-};
+}
 
 /* istanbul ignore next */
-export const setColorCssVars = (targetObj: CSSVariables, key: string, value: string): void => {
+export function setColorCssVars(targetObj: CSSVariables, key: string, value: string) {
 	switch (key) {
 		case 'activeFillColor':
 			targetObj[ACTIVE_FILL_COLOR_VAR] = value;
@@ -55,4 +51,4 @@ export const setColorCssVars = (targetObj: CSSVariables, key: string, value: str
 			targetObj['--rr--stroke-off-color'] = value;
 			break;
 	}
-};
+}

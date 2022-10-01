@@ -5,11 +5,11 @@
 /* Colors */
 
 .rr--fx-colors {
-	--rr--easing: 150ms cubic-bezier(0.61, 1, 0.88, 1);
+	--rr--easing: 200ms cubic-bezier(0.61, 1, 0.88, 1);
 }
 
 .rr--fx-colors .rr--svg {
-	transition-duration: 150ms;
+	transition-duration: 200ms;
 	transition-timing-function: var(--rr--easing);
 	transition-property: background-color, border-color, fill, stroke;
 }
@@ -42,6 +42,12 @@
 	.rr--fx-zoom .rr--box:hover {
 		transform: scale(1.2);
 	}
+
+	@media (prefers-reduced-motion) {
+		.rr--fx-zoom .rr--box:hover {
+			transform: scale(1);
+		}
+	}
 }
 
 /* Position */
@@ -54,5 +60,11 @@
 
 	.rr--fx-position .rr--box:hover {
 		transform: translateY(-15%);
+	}
+
+	@media (prefers-reduced-motion) {
+		.rr--fx-position .rr--box:hover {
+			transform: translateY(0%);
+		}
 	}
 }

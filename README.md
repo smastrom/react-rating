@@ -246,7 +246,7 @@ function App() {
 | :green_circle:      | `orientation`  | Orientation of the rating items                                | `horizontal` \| `vertical`                              | `horizontal`  | :x:      |
 | :green_circle:      | `spaceInside`  | <u><strong>Responsive</strong></u> padding of each rating item | `none` \| `small` \| `medium` \| `large`                | `small`       | :x:      |
 | :green_circle:      | `spaceBetween` | <u><strong>Responsive</strong></u> gap between rating items    | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
-| :green_circle:      | `radius`       | Radius of the bounding box                                     | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
+| :green_circle:      | `radius`       | <u><strong>Responsive</strong></u> radius of the bounding box  | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
 | :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting                    | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `colors`      | :x:      |
 | :green_circle:      | `itemStyles`   | Custom shapes and colors                                       | ItemStyles                                              | defaultStyles | :x:      |
 

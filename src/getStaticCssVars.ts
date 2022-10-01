@@ -13,10 +13,11 @@ export function getStaticCssVars(
 	}
 	const colorsEntries = Object.entries(staticColors);
 
-	colorsEntries.length > 0 &&
-		colorsEntries.forEach(([key, value]) => {
+	if (colorsEntries.length > 0) {
+		for (const [key, value] of colorsEntries) {
 			setColorCssVars(cssVars, key, value as string);
-		});
+		}
+	}
 
 	return cssVars;
 }

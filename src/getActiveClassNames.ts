@@ -6,20 +6,16 @@ export function getActiveClassNames(
 	items: number,
 	selectedIndex: number
 ): CSSClassName[] {
-	const activeClassNames = Array(items)
-		.fill(undefined)
-		.map((_, index) => {
-			if (highlightOnlySelectedProp === false) {
-				if (index <= selectedIndex) {
-					return 'rr--on';
-				}
-				return 'rr--off';
-			}
-			if (index === selectedIndex) {
+	return new Array(items).fill(undefined).map((_, index) => {
+		if (highlightOnlySelectedProp === false) {
+			if (index <= selectedIndex) {
 				return 'rr--on';
 			}
 			return 'rr--off';
-		});
-
-	return activeClassNames;
+		}
+		if (index === selectedIndex) {
+			return 'rr--on';
+		}
+		return 'rr--off';
+	});
 }

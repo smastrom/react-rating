@@ -276,7 +276,7 @@ function App() {
 }
 ```
 
-Whenever a new rating is set, your UI is updated. React also keeps stable the setter function during re-renderings.
+Whenever a new rating is set, your UI is updated. React will also keep stable the setter function during re-renderings.
 
 ### Custom logic / state
 
@@ -364,6 +364,62 @@ function App() {
   );
 }
 ```
+
+<details><summary><strong>Customizable properties</strong></summary>
+
+<br/>
+
+You can pass an object with the following properties to `itemStyles` prop:
+
+```ts
+type ItemStyles = {
+  itemShapes: JSX.Element | JSX.Element[];
+
+  itemStrokeWidth?: number;
+  boxBorderWidth?: number;
+
+  activeFillColor?: string | string[];
+  activeStrokeColor?: string | string[];
+  activeBoxColor?: string | string[];
+  activeBoxBorderColor?: string | string[];
+
+  inactiveFillColor?: string;
+  inactiveStrokeColor?: string;
+  inactiveBoxColor?: string;
+  inactiveBoxBorderColor?: string;
+};
+```
+
+Besides `itemShapes`, **all the properties are optional**. If a property isn't defined, no classes nor CSS variables will be added to the SVG.
+
+Just set the ones you need and that's it:
+
+```jsx
+const CustomStar = (
+  <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
+);
+
+const customStyles = {
+  itemShapes: CustomStar,
+  activeFillColor: '#22C55E',
+  inactiveFillColor: '#BBF7D0',
+};
+
+function App() {
+  const [ratingValue, setRatingValue] = useState(4);
+
+  return (
+    <Rating
+      style={{ maxWidth: 300 }}
+      value={ratingValue}
+      onChange={setRatingValue}
+      itemStyles={customStyles}
+    />
+  );
+}
+```
+
+</details>
 
 <br />
 

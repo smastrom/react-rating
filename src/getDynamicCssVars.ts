@@ -12,9 +12,9 @@ export function getDynamicCssVars(
 
 	let cssVars: CSSVariables[];
 
-	Object.entries(copyArrayColors).forEach(([key, color]) =>
-		setDyamicCssVars(arrayStylesVars, key, color[currentSelectedIndex])
-	);
+	for (const [key, color] of Object.entries(copyArrayColors)) {
+		setDyamicCssVars(arrayStylesVars, key, color[currentSelectedIndex]);
+	}
 
 	if (highlightOnlySelected === true) {
 		cssVars = Array(currentSelectedIndex).fill({});

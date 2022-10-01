@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { getUniqueId, toSecondDecimal, useIsomorphicLayoutEffect } from './utils';
 import { RatingItemProps, KeyAndValueStrings } from './internalTypes';
 
+/* istanbul ignore next */
 function getDefsTestId() {
 	if (__DEV__) {
 		return {

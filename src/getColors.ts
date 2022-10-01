@@ -33,12 +33,12 @@ export function getColors(
 
 	const colorsEntries = Object.entries(allColors);
 
-	colorsEntries.length > 0 &&
-		colorsEntries.forEach(([key, value]) => {
+	if (colorsEntries.length > 0) {
+		for (const [key, value] of colorsEntries) {
 			if (!Array.isArray(value) && typeof value !== 'string') {
 				delete allColors[key as keyof typeof allColors];
 			} else if (Array.isArray(value)) {
-				validArrayColorKeys.forEach((validKey) => {
+				for (const validKey of validArrayColorKeys) {
 					if (validKey === key) {
 						const cleanedArrayColors = value.filter((color) => typeof color === 'string');
 						if (cleanedArrayColors.length > 0) {
@@ -50,9 +50,10 @@ export function getColors(
 					} else {
 						delete allColors[key as keyof typeof allColors];
 					}
-				});
+				}
 			}
-		});
+		}
+	}
 
 	return { arrayColors, staticColors: allColors as StaticColors };
 }

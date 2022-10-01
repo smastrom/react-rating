@@ -148,7 +148,7 @@ describe('Accessibility DOM Output Test - Child', () => {
 		expect(child3).toHaveAttribute('tabindex', '-1');
 	});
 
-	/** New v1.1.0 */
+	/* New in v1.1.0 */
 	test('If isDisabled, rating should never be required', async () => {
 		const { rerender } = render(
 			<Rating isRequired isDisabled value={3} onChange={() => {}} />

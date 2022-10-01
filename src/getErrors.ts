@@ -23,7 +23,8 @@ export function getErrors(
 	value: unknown,
 	readOnly: unknown,
 	onChange: unknown,
-	itemShapes: unknown
+	itemShapes: unknown,
+	isDisabled: unknown
 ) {
 	const errorsObj: ErrorsObj = { shouldRender: true, errorReason: '' };
 
@@ -33,8 +34,17 @@ export function getErrors(
 	if (typeof value !== 'number' || value < 0 || value > items) {
 		return setErrors(errorsObj, 'value is invalid');
 	}
-	if (readOnly === false && typeof onChange !== 'function') {
+
+	const isOnChangeRequired = readOnly === false && typeof onChange !== 'function';
+
+	if (isOnChangeRequired) {
 		return setErrors(errorsObj, 'onChange is required');
+	}
+	if (isOnChangeRequired && isDisabled === true) {
+		return setErrors(
+			errorsObj,
+			'onChange required when Rating is an input, whether is disabled or not. Use readOnly to render an image element instead.'
+		);
 	}
 	if (readOnly === false && !Number.isInteger(value)) {
 		return setErrors(errorsObj, 'Value is not an integer');
@@ -45,6 +55,7 @@ export function getErrors(
 	if (!Array.isArray(itemShapes) && !isValidElement(itemShapes as object | null | undefined)) {
 		return setErrors(errorsObj, invalidJSXMsg);
 	}
+
 	if (Array.isArray(itemShapes)) {
 		if (itemShapes.length !== items) {
 			return setErrors(errorsObj, 'itemShapes length mismatch');

@@ -50,7 +50,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			spaceBetween = 'none',
 			spaceInside = 'small',
 			radius = 'none',
-			transition = 'zoom',
+			transition = 'colors',
 			itemStyles = defaultItemStyles,
 			isRequired = true,
 			halfFillMode = 'svg',
@@ -220,7 +220,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			setStyles({ ...styles, ...getDynamicStyles(currentRatingIndex, needsDynamicCssVars) });
 		}
 
-		/* Keyboard handler */
+		/* Keyboard navigation */
 
 		/** Ignoring handleKeyDown from Jest coverage as it is
 		 * tested with Playwright in tests/e2e/keyboardNavigation.test.ts */

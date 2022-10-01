@@ -10,8 +10,8 @@ const getErrorReason = (reason: string) =>
 	`[${Package.name}] - Nothing's returned from rendering. Reason: ${reason}.`;
 
 function setErrors(targetObj: ErrorsObj, reason: string) {
-	targetObj['shouldRender'] = false;
-	targetObj['errorReason'] = getErrorReason(reason);
+	targetObj.shouldRender = false;
+	targetObj.errorReason = getErrorReason(reason);
 
 	return targetObj;
 }
@@ -29,7 +29,7 @@ export function getErrors(
 	const errorsObj: ErrorsObj = { shouldRender: true, errorReason: '' };
 
 	if (typeof items !== 'number' || items < 1 || items > 10) {
-		return setErrors(errorsObj, ' is invalid');
+		return setErrors(errorsObj, 'items is invalid');
 	}
 	if (typeof value !== 'number' || value < 0 || value > items) {
 		return setErrors(errorsObj, 'value is invalid');

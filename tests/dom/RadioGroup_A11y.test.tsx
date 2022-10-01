@@ -149,7 +149,6 @@ describe('Accessibility DOM Output Test - Child', () => {
 	});
 
 	/** New v1.1.0 */
-
 	test('If isDisabled, rating should never be required', async () => {
 		const { rerender } = render(
 			<Rating isRequired isDisabled value={3} onChange={() => {}} />

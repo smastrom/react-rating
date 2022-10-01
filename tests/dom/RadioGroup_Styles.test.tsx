@@ -107,6 +107,15 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 		const item = screen.queryByTestId(ID);
 		expect(item).toHaveClass(classNames, { exact: true });
 	});
+
+	/* New in v1.1.0 */
+	test('If isDisabled, should have proper cursor classNames', async () => {
+		render(<Rating isDisabled value={3} onChange={() => {}} />);
+
+		const item = screen.queryByTestId(ID);
+		expect(item).toHaveClass('rr--disabled');
+		expect(item).not.toHaveClass('rr-cursor');
+	});
 });
 
 describe('Classnames and inline css vars - Radio elements', () => {

@@ -150,6 +150,19 @@ describe('Component rendering', () => {
 		const item = screen.queryByTestId(ID);
 		expect(item).not.toBeInTheDocument();
 	});
+
+	/* New in v1.1.0 */
+	test('If isDisabled, should not render the component if onChange is undefined', () => {
+		render(<Rating isDisabled value={5} />);
+		const item = screen.queryByTestId(ID);
+		expect(item).not.toBeInTheDocument();
+	});
+
+	test('If readOnly and isDisabled, should render the component if onChange is undefined', () => {
+		render(<Rating readOnly isDisabled value={5} />);
+		const item = screen.queryByTestId(ID);
+		expect(item).toBeInTheDocument();
+	});
 });
 
 describe('Any child element rendering', () => {

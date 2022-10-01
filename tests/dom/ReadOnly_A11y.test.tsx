@@ -10,7 +10,6 @@ import {
 	CHILD_ID_2,
 	CHILD_ID_3,
 	CHILD_ID_4,
-	childArr,
 } from './testUtils';
 
 import { Rating } from '../../src/Rating';
@@ -19,13 +18,17 @@ beforeEach();
 afterEach();
 
 describe('readOnly parent component displays proper a11y attributes', () => {
-	test('Should have readOnly attributes', () => {
-		render(<Rating readOnly value={2} />);
-		const item = screen.getByTestId(ID);
+	function toHaveReadOnlyAttrs(item: HTMLElement | null) {
 		expect(item).toBeInTheDocument();
 		expect(item).toHaveAttribute('role', 'img');
 		expect(item).toHaveAccessibleName('Rated 2 on 5');
 		expect(item).toHaveClass('rr--group');
+	}
+
+	test('Should have readOnly attributes', () => {
+		render(<Rating readOnly value={2} />);
+		const item = screen.getByTestId(ID);
+		toHaveReadOnlyAttrs(item);
 	});
 
 	test('Should not be focusable and have radio-group specific attributes and classes', () => {
@@ -36,6 +39,14 @@ describe('readOnly parent component displays proper a11y attributes', () => {
 		expect(item).not.toHaveAttribute('aria-invalid');
 		expect(item).not.toHaveClass('rr--cursor');
 		expect(item).not.toHaveClass('rr--fx-colors');
+	});
+
+	/* New in v1.1.0 */
+	test('readOnly should always take precedence over isDisabled', async () => {
+		render(<Rating readOnly isDisabled value={2} onChange={() => {}} />);
+
+		const item = screen.queryByTestId(ID);
+		toHaveReadOnlyAttrs(item);
 	});
 
 	test('User should be able to customize aria-label', () => {

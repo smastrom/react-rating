@@ -344,7 +344,7 @@ This package ships with six of the most common rating shapes that you can import
 ```jsx
 import { Rating, ThinStar } from '@smastrom/react-rating';
 
-// Declare the object outside your component so it doesn't get re-created during re-renderings
+// Declare it outside your component so it doesn't get re-created during re-renderings
 const customStyles = {
   itemShapes: ThinStar,
   activeFillColor: '#ffb700',

@@ -18,14 +18,14 @@ Zero dependency, highly customizable rating component for React.
 - **Use any SVG**: No headaches, icon fonts or packages to install in order to use your favorite shapes.
 - Unlimited possibilities of customization
 - Zero-config smart half-fill
-- Fully accessible with keyboard navigation and custom/default labels
 - Most common rating shapes included
 - Dead simple per-active-item styling
+- Fully accessible with keyboard navigation and custom/default labels
 - Truly responsive and mobile-first
 - Simple and clean DOM structure
 - Zero-config RTL support
+- Lightweight with zero dependencies
 - Works with SSR
-- Lightweight
 
 <br/>
 
@@ -226,8 +226,8 @@ function App() {
 | :thinking:          | Prop                    | Description                                                                     | Type                                            | Default   | Required                        |
 | ------------------- | ----------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------- | --------- | ------------------------------- |
 | :green_circle:      | `value`                 | An integer from 0 to `items`. It can be a float if `readOnly` is **true**.      | number                                          | undefined | :white_check_mark:              |
-| :large_blue_circle: | `onChange`              | Setter or custom function to update the rating value                            | RatingChange                                    | undefined | Only if `readOnly` is **false** |
-| :large_blue_circle: | `onHoverChange`         | Callback to execute when hovering different rating items                        | (value?: number) => void                        | undefined | :x:                             |
+| :large_blue_circle: | `onChange`              | Setter or custom function to update the rating                                  | RatingChange                                    | undefined | Only if `readOnly` is **false** |
+| :large_blue_circle: | `onHoverChange`         | Callback to execute when entering/leaving the rating items                      | (ratingValue?: number) => void                  | undefined | :x:                             |
 | :green_circle:      | `items`                 | Rating items to display                                                         | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
 | :green_circle:      | `readOnly`              | Whether or not to render an accessible image element                            | boolean                                         | false     | :x:                             |
 | :large_blue_circle: | `isDisabled`            | Whether or not to disable the radio group                                       | boolean                                         | false     | :x:                             |
@@ -266,7 +266,7 @@ function App() {
 
 ## onChange
 
-If your app doesn't require any custom logic/state to handle the rating, the best you can do is to directly pass the setter to `onChange`:
+If your app doesn't require any custom logic/state to handle the rating, the best thing to do is to directly pass the setter to `onChange`:
 
 ```js
 function App() {
@@ -276,7 +276,7 @@ function App() {
 }
 ```
 
-Whenever a new rating is set, the state/UI is updated. It is less verbose and React also keeps stable the setter during re-renderings.
+Whenever a new rating is set, the state/UI is updated. It is less verbose and the setter is also kept stable by React during re-renderings.
 
 ### Custom logic / state
 
@@ -286,12 +286,12 @@ Whenever a new rating is set, the state/UI is updated. It is less verbose and Re
 ```ts
 type RatingChange =
   | React.Dispatch<React.SetStateAction<number>>
-  | ((value: number) => void | Promise<void>);
+  | ((ratingValue: number) => void | Promise<void>);
 ```
 
 </details>
 
-If you need to perform some actions while setting the rating (like calling an API) or you need to update just a portion of state, `onChange` accepts a function whose single parameter corresponds to the selected rating value:
+If you need to perform some actions while setting the rating (like calling an API) or you need to update just a portion of state, `onChange` accepts a callback whose unique parameter corresponds to the selected rating value:
 
 ```js
 function App() {
@@ -306,7 +306,7 @@ function App() {
 
     // 3. Do something with or without the value...
 
-    // 4. Set the state
+    // 4. Update the state
     setState((prevState) => ({
       ...prevState,
       rating: ratingValue,
@@ -315,14 +315,12 @@ function App() {
 
   return (
     <Rating
-      onChange={handleChange} // 1. Execute the callback
+      onChange={handleChange} // 1. Callback is executed on selection
       value={state.rating} // 5. Your UI is updated!
     />
   );
 }
 ```
-
-You can check many different examples on the [Demo website](https://react-rating.onrender.com/).
 
 <br />
 
@@ -710,7 +708,7 @@ You can switch between `svg` and `box`:
 
 ![react-rating](https://i.ibb.co/sKpybbV/Schermata-2022-06-01-alle-23-43-29.png)
 
-In this case instead, all the SVGs will have the same fill color (inactiveFillColor) and `activeFillColor` will have no effect.
+In this case instead, all the shapes will have the same fill color (inactiveFillColor) and `activeFillColor` will have no effect.
 
 If you don't want the half-fill feature, simply pass an integer to `value`.
 

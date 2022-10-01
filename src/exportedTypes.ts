@@ -75,7 +75,7 @@ export type InputProps = {
 	onChange?: RatingChange;
 	/** Callback to execute when hovering different rating items. */
 	onHoverChange?: (value: number) => void | (() => void);
-	/** Whether or not to disable the input field. */
+	/** Whether or not to disable the radio group. */
 	isDisabled?: boolean;
 	/** Whether or not to reset the rating value if clicking again on the current rating. */
 	resetOnSecondClick?: boolean;

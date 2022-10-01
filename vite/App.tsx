@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Profiler } from './Profiler';
 import { Rating } from '../src/Rating';
 import { ItemStyles } from '../src/exportedTypes';
@@ -17,7 +17,7 @@ const CUSTOM_LABELS = ['Bad', 'Poor', 'Average', 'Very Good', 'Excellent'];
 const CUSTOM_LABELS_IDS = ['label_1', 'label_2', 'label_3', 'label_4', 'label_5'];
 
 export function App() {
-	const [value, setValue] = useState<number>(3);
+	// const [value, setValue] = useState<number>(3);
 
 	const [state, setState] = useState({
 		name: '',
@@ -25,17 +25,14 @@ export function App() {
 		rating: 0, // Initial value
 	});
 
-	const handleChange = useCallback((ratingValue: number) => {
-		console.log(ratingValue); // Logs the selected rating (1, 2, 3...)
+	function handleChange(ratingValue: number) {
+		console.log(ratingValue);
 
-		// Do something with the value...
-
-		// When ready, update the rating UI
 		setState((prevState) => ({
 			...prevState,
 			rating: ratingValue,
 		}));
-	}, []);
+	}
 
 	return (
 		<div
@@ -60,13 +57,13 @@ export function App() {
 					}}
 					// readOnly
 					resetOnSecondClick
+					onHoverChange={() => console.log('Ciao')}
 					// isDisabled
 					items={5}
 					aria-label="Ciao"
 					onChange={handleChange}
 					value={state.rating}
 					itemStyles={customStyles}
-					// transition="zoom"
 					// highlightOnlySelected
 					orientation="horizontal"
 					spaceBetween="small"

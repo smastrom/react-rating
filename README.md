@@ -170,7 +170,7 @@ Since **Rating** will span across the entire container, define a _maximum width_
 
 ```jsx
 function App() {
-  const [ratingValue, setRatingValue] = useState(0); // This is your initial/default value
+  const [ratingValue, setRatingValue] = useState(0); // Initial value
 
   return <Rating style={{ maxWidth: 250 }} value={ratingValue} onChange={setRatingValue} />;
 }
@@ -230,9 +230,10 @@ function App() {
 | :large_blue_circle: | `onHoverChange`         | Callback to execute when hovering different rating items                        | (value?: number) => void                        | undefined | :x:                             |
 | :green_circle:      | `items`                 | Rating items to display                                                         | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
 | :green_circle:      | `readOnly`              | Whether or not to render an accessible image element                            | boolean                                         | false     | :x:                             |
-| :large_blue_circle: | `isDisabled`            | Whether or not to disable the input field                                       | boolean                                         | false     | :x:                             |
+| :large_blue_circle: | `isDisabled`            | Whether or not to disable the radio group                                       | boolean                                         | false     | :x:                             |
 | :large_blue_circle: | `resetOnSecondClick`    | Whether or not to reset the rating value if clicking again on the selected item | boolean                                         | false     | :x:                             |
 | :green_circle:      | `highlightOnlySelected` | Whether or not to highlight only the selected rating item                       | boolean                                         | false     | :x:                             |
+| :purple_circle:     | `halfFillMode`          | Whether or not to half-fill the shape or the bounding box                       | `svg` \| `box`                                  | `svg`     | :x:                             |
 
 `ref`, `id`, `className` and `style` are also available.
 
@@ -242,13 +243,12 @@ function App() {
 
 | :thinking:          | Prop           | Description                                                    | Type                                                    | Default       | Required |
 | ------------------- | -------------- | -------------------------------------------------------------- | ------------------------------------------------------- | ------------- | -------- |
-| :purple_circle:     | `halfFillMode` | Whether to half-fill the shape or the bounding box             | `svg` \| `box`                                          | `svg`         | :x:      |
-| :green_circle:      | `orientation`  | Orientation of the rating items                                | `horizontal` \| `vertical`                              | `horizontal`  | :x:      |
+| :green_circle:      | `itemStyles`   | Custom shapes and colors                                       | ItemStyles                                              | defaultStyles | :x:      |
 | :green_circle:      | `spaceInside`  | <u><strong>Responsive</strong></u> padding of each rating item | `none` \| `small` \| `medium` \| `large`                | `small`       | :x:      |
 | :green_circle:      | `spaceBetween` | <u><strong>Responsive</strong></u> gap between rating items    | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
 | :green_circle:      | `radius`       | <u><strong>Responsive</strong></u> radius of the bounding box  | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
+| :green_circle:      | `orientation`  | Orientation of the rating items                                | `horizontal` \| `vertical`                              | `horizontal`  | :x:      |
 | :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting                    | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `colors`      | :x:      |
-| :green_circle:      | `itemStyles`   | Custom shapes and colors                                       | ItemStyles                                              | defaultStyles | :x:      |
 
 <br />
 
@@ -266,7 +266,7 @@ function App() {
 
 ## onChange
 
-If your app doesn't require any custom logic to set the rating, just pass the setter to `onChange`:
+If your app doesn't require any custom logic/state to handle the rating, the best you can do is to directly pass the setter to `onChange`:
 
 ```js
 function App() {
@@ -276,7 +276,7 @@ function App() {
 }
 ```
 
-Whenever a new rating is set, your UI is updated. React will also keep stable the setter function during re-renderings.
+Whenever a new rating is set, the state/UI is updated. It is less verbose and React also keeps stable the setter during re-renderings.
 
 ### Custom logic / state
 
@@ -291,7 +291,7 @@ type RatingChange =
 
 </details>
 
-If you need to perform some actions while setting the rating (like calling an API) or your state shape differs from the above case, `onChange` accepts a function with a single parameter corresponding to the selected rating value:
+If you need to perform some actions while setting the rating (like calling an API) or you need to update just a portion of state, `onChange` accepts a function whose single parameter corresponds to the selected rating value:
 
 ```js
 function App() {
@@ -301,22 +301,22 @@ function App() {
     rating: 0, // Initial value
   });
 
-  const handleChange = useCallback((ratingValue) => {
-    console.log(ratingValue); // Logs the selected rating (1, 2, 3...)
+  function handleChange(ratingValue) {
+    console.log(ratingValue); // 2. Logs the selected rating (1, 2, 3...)
 
-    // Do something...
+    // 3. Do something with or without the value...
 
-    // When ready, update the state
+    // 4. Set the state
     setState((prevState) => ({
       ...prevState,
       rating: ratingValue,
     }));
-  }, []);
+  }
 
   return (
     <Rating
-      value={state.rating} // ...your UI is updated!
-      onChange={handleChange}
+      onChange={handleChange} // 1. Execute the callback
+      value={state.rating} // 5. Your UI is updated!
     />
   );
 }

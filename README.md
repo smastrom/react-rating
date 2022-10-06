@@ -7,7 +7,7 @@ Zero dependency, highly customizable rating component for React.
 
 <br />
 
-![react-rating](https://i.ibb.co/0X7djmF/examples.png)
+![react-rating](https://i.ibb.co/L6M0hfw/new.png)
 
 [Demo and examples](https://react-rating.onrender.com/)
 

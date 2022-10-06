@@ -14,48 +14,12 @@
 	padding: 8%;
 }
 
-.rr--space-sm .rr--box:focus-visible .rr--svg {
-	transition: all 100ms ease-out;
-	padding: 10%;
-}
-
-@media (prefers-reduced-motion) {
-	.rr--space-sm .rr--box:focus-visible .rr--svg {
-		transition: unset;
-		padding: 8%;
-	}
-}
-
 .rr--space-md .rr--svg {
 	padding: 12.5%;
 }
 
-.rr--space-md .rr--box:focus-visible .rr--svg {
-	transition: all 100ms ease-out;
-	padding: 15%;
-}
-
-@media (prefers-reduced-motion) {
-	.rr--space-md .rr--box:focus-visible .rr--svg {
-		transition: unset;
-		padding: 12.5%;
-	}
-}
-
 .rr--space-lg .rr--svg {
 	padding: 17.5%;
-}
-
-.rr--space-lg .rr--box:focus-visible .rr--svg {
-	transition: all 100ms ease-out;
-	padding: 20%;
-}
-
-@media (prefers-reduced-motion) {
-	.rr--space-lg .rr--box:focus-visible .rr--svg {
-		transition: unset;
-		padding: 17.5%;
-	}
 }
 
 /* spaceBetween */

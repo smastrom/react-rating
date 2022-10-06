@@ -31,5 +31,5 @@
 }
 
 .rr--box:focus-visible .rr--svg {
-	box-shadow: 0 0 0 2px #0079ff;
+	box-shadow: inset 0 0 0 2px white, 0 0 0 2px #0079ff;
 }

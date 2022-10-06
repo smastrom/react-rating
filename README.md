@@ -173,9 +173,9 @@ Since **Rating** will span across the entire container, define a _maximum width_
 
 ```jsx
 function App() {
-  const [ratingValue, setRatingValue] = useState(0); // Initial value
+  const [rating, setRating] = useState(0); // Initial value
 
-  return <Rating style={{ maxWidth: 250 }} value={ratingValue} onChange={setRatingValue} />;
+  return <Rating style={{ maxWidth: 250 }} value={rating} onChange={setRating} />;
 }
 ```
 
@@ -196,9 +196,9 @@ function App() {
 import './my-styles.css';
 
 function App() {
-  const [ratingValue, setRatingValue] = useState(0);
+  const [rating, setRating] = useState(0);
 
-  return <Rating className="my-rating-class" value={ratingValue} onChange={setRatingValue} />;
+  return <Rating className="my-rating-class" value={rating} onChange={setRating} />;
 }
 ```
 
@@ -230,7 +230,7 @@ function App() {
 | ------------------- | ----------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------- | --------- | ------------------------------- |
 | :green_circle:      | `value`                 | An integer from 0 to `items`. It can be a float if `readOnly` is **true**.      | number                                          | undefined | :white_check_mark:              |
 | :large_blue_circle: | `onChange`              | Setter or custom function to update the rating                                  | RatingChange                                    | undefined | Only if `readOnly` is **false** |
-| :large_blue_circle: | `onHoverChange`         | Callback to execute when entering/leaving the rating items                      | (ratingValue?: number) => void                  | undefined | :x:                             |
+| :large_blue_circle: | `onHoverChange`         | Callback to execute when entering/leaving the rating items                      | (hoveredValue: number) => void                  | undefined | :x:                             |
 | :green_circle:      | `items`                 | Rating items to display                                                         | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
 | :green_circle:      | `readOnly`              | Whether or not to render an accessible image element                            | boolean                                         | false     | :x:                             |
 | :large_blue_circle: | `isDisabled`            | Whether or not to disable the radio group                                       | boolean                                         | false     | :x:                             |
@@ -244,14 +244,14 @@ function App() {
 
 ### :nail_care: Appearance
 
-| :thinking:          | Prop           | Description                                                    | Type                                                    | Default       | Required |
-| ------------------- | -------------- | -------------------------------------------------------------- | ------------------------------------------------------- | ------------- | -------- |
-| :green_circle:      | `itemStyles`   | Custom shapes and colors                                       | ItemStyles                                              | defaultStyles | :x:      |
-| :green_circle:      | `spaceInside`  | <u><strong>Responsive</strong></u> padding of each rating item | `none` \| `small` \| `medium` \| `large`                | `small`       | :x:      |
-| :green_circle:      | `spaceBetween` | <u><strong>Responsive</strong></u> gap between rating items    | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
-| :green_circle:      | `radius`       | <u><strong>Responsive</strong></u> radius of the bounding box  | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
-| :green_circle:      | `orientation`  | Orientation of the rating items                                | `horizontal` \| `vertical`                              | `horizontal`  | :x:      |
-| :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting                    | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `colors`      | :x:      |
+| :thinking:          | Prop           | Description                                 | Type                                                    | Default       | Required |
+| ------------------- | -------------- | ------------------------------------------- | ------------------------------------------------------- | ------------- | -------- |
+| :green_circle:      | `itemStyles`   | Custom shapes and colors                    | ItemStyles                                              | defaultStyles | :x:      |
+| :green_circle:      | `spaceInside`  | Responsive padding of each rating item      | `none` \| `small` \| `medium` \| `large`                | `small`       | :x:      |
+| :green_circle:      | `spaceBetween` | Responsive gap between rating items         | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
+| :green_circle:      | `radius`       | Responsive radius of the bounding box       | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
+| :green_circle:      | `orientation`  | Orientation of the rating items             | `horizontal` \| `vertical`                              | `horizontal`  | :x:      |
+| :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `colors`      | :x:      |
 
 <br />
 
@@ -273,9 +273,9 @@ If your app doesn't require any custom logic/state to handle the rating, the bes
 
 ```js
 function App() {
-  const [ratingValue, setRatingValue] = useState(0);
+  const [rating, setRating] = useState(0);
 
-  return <Rating value={ratingValue} onChange={setRatingValue} />;
+  return <Rating value={rating} onChange={setRating} />;
 }
 ```
 
@@ -289,7 +289,7 @@ Whenever a new rating is set, the state/UI is updated. In addition to being less
 ```ts
 type RatingChange =
   | React.Dispatch<React.SetStateAction<number>>
-  | ((ratingValue: number) => void | Promise<void>);
+  | ((selectedValue: number) => void | Promise<void>);
 ```
 
 </details>
@@ -304,15 +304,15 @@ function App() {
     rating: 0, // Initial value
   });
 
-  function handleChange(ratingValue) {
-    console.log(ratingValue); // 2. Logs the selected rating (1, 2, 3...)
+  function handleChange(selectedValue) {
+    console.log(selectedValue); // 2. Logs the selected rating (1, 2, 3...)
 
     // 3. Do something with or without the value...
 
     // 4. Whenever you want, update the state
     setState((prevState) => ({
       ...prevState,
-      rating: ratingValue,
+      rating: selectedValue,
     }));
   }
 
@@ -346,21 +346,21 @@ This package ships with six of the most common (open source) rating shapes that 
 import { Rating, ThinStar } from '@smastrom/react-rating';
 
 // Declare it outside your component so it doesn't get re-created during re-renderings
-const customStyles = {
+const myStyles = {
   itemShapes: ThinStar,
   activeFillColor: '#ffb700',
   inactiveFillColor: '#fbf1a9',
 };
 
 function App() {
-  const [ratingValue, setRatingValue] = useState(0);
+  const [rating, setRating] = useState(0);
 
   return (
     <Rating
       style={{ maxWidth: 300 }}
-      value={ratingValue}
-      onChange={setRatingValue}
-      itemStyles={customStyles}
+      value={rating}
+      onChange={setRating}
+      itemStyles={myStyles}
     />
   );
 }
@@ -400,21 +400,21 @@ const CustomStar = (
   <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
 );
 
-const customStyles = {
+const myStyles = {
   itemShapes: CustomStar,
   activeFillColor: '#22C55E',
   inactiveFillColor: '#BBF7D0',
 };
 
 function App() {
-  const [ratingValue, setRatingValue] = useState(4);
+  const [rating, setRating] = useState(4);
 
   return (
     <Rating
       style={{ maxWidth: 300 }}
-      value={ratingValue}
-      onChange={setRatingValue}
-      itemStyles={customStyles}
+      value={rating}
+      onChange={setRating}
+      itemStyles={myStyles}
     />
   );
 }
@@ -449,7 +449,7 @@ const CustomStar = (
   <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
 );
 
-const customStyles = {
+const myStyles = {
   itemShapes: CustomStar,
   itemStrokeWidth: 2,
   activeFillColor: 'LightSeaGreen',
@@ -459,14 +459,14 @@ const customStyles = {
 };
 
 function App() {
-  const [ratingValue, setRatingValue] = useState(4);
+  const [rating, setRating] = useState(4);
 
   return (
     <Rating
       style={{ maxWidth: 300 }}
-      value={ratingValue}
-      onChange={setRatingValue}
-      itemStyles={customStyles}
+      value={rating}
+      onChange={setRating}
+      itemStyles={myStyles}
     />
   );
 }
@@ -510,21 +510,21 @@ const CustomStar = (
   <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
 );
 
-const customStyles = {
+const myStyles = {
   itemShapes: CustomStar,
   activeFillColor: '#22C55E',
   inactiveFillColor: '#BBF7D0',
 };
 
 function App() {
-  const [ratingValue, setRatingValue] = useState(4);
+  const [rating, setRating] = useState(4);
 
   return (
     <Rating
       style={{ maxWidth: 300 }}
-      value={ratingValue}
-      onChange={setRatingValue}
-      itemStyles={customStyles}
+      value={rating}
+      onChange={setRating}
+      itemStyles={myStyles}
     />
   );
 }
@@ -578,7 +578,7 @@ const Star = (
   <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
 );
 
-const customStyles: ItemStyles = {
+const myStyles: ItemStyles = {
   itemShapes: Star,
   activeFillColor: 'green',
   inactiveFillColor: 'gray',
@@ -618,22 +618,22 @@ const SmilingFace = (
   <path d="M12.0000002,1.99896738 C17.523704,1.99896738 22.0015507,6.47681407 22.0015507,12.0005179 C22.0015507,17.5242217 17.523704,22.0020684 12.0000002,22.0020684 C6.47629639,22.0020684 1.99844971,17.5242217 1.99844971,12.0005179 C1.99844971,6.47681407 6.47629639,1.99896738 12.0000002,1.99896738 Z M12.0000002,3.49896738 C7.30472352,3.49896738 3.49844971,7.30524119 3.49844971,12.0005179 C3.49844971,16.6957946 7.30472352,20.5020684 12.0000002,20.5020684 C16.6952769,20.5020684 20.5015507,16.6957946 20.5015507,12.0005179 C20.5015507,7.30524119 16.6952769,3.49896738 12.0000002,3.49896738 Z M8.46174078,14.7838355 C9.31087697,15.8615555 10.6018926,16.5020843 11.9999849,16.5020843 C13.396209,16.5020843 14.6856803,15.8632816 15.5349376,14.7880078 C15.7916692,14.4629512 16.2633016,14.4075628 16.5883582,14.6642944 C16.9134148,14.9210259 16.9688032,15.3926584 16.7120717,15.717715 C15.5813083,17.1494133 13.8601276,18.0020843 11.9999849,18.0020843 C10.1373487,18.0020843 8.41411759,17.1471146 7.28351576,15.7121597 C7.02716611,15.3868018 7.08310832,14.9152347 7.40846617,14.6588851 C7.73382403,14.4025354 8.20539113,14.4584777 8.46174078,14.7838355 Z M9.00044779,8.75115873 C9.69041108,8.75115873 10.2497368,9.3104845 10.2497368,10.0004478 C10.2497368,10.6904111 9.69041108,11.2497368 9.00044779,11.2497368 C8.3104845,11.2497368 7.75115873,10.6904111 7.75115873,10.0004478 C7.75115873,9.3104845 8.3104845,8.75115873 9.00044779,8.75115873 Z M15.0004478,8.75115873 C15.6904111,8.75115873 16.2497368,9.3104845 16.2497368,10.0004478 C16.2497368,10.6904111 15.6904111,11.2497368 15.0004478,11.2497368 C14.3104845,11.2497368 13.7511587,10.6904111 13.7511587,10.0004478 C13.7511587,9.3104845 14.3104845,8.75115873 15.0004478,8.75115873 Z" />
 );
 
-const customStyles = {
+const myStyles = {
   itemShapes: [SadFace, SmilingFace],
   activeFillColor: ['#da1600', '#61bb00'],
   inactiveFillColor: '#a8a8a8',
 };
 
 function App() {
-  const [ratingValue, setRatingValue] = useState(0);
+  const [rating, setRating] = useState(0);
 
   return (
     <Rating
       style={{ maxWidth: 200 }}
-      value={ratingValue}
-      onChange={setRatingValue}
+      value={rating}
+      onChange={setRating}
       items={2}
-      itemStyles={customStyles}
+      itemStyles={myStyles}
       highlightOnlySelected
     />
   );
@@ -647,7 +647,7 @@ const Star = (
   <path d="M62 25.154H39.082L32 3l-7.082 22.154H2l18.541 13.693L13.459 61L32 47.309L50.541 61l-7.082-22.152L62 25.154z" />
 );
 
-const customStyles = {
+const myStyles = {
   itemShapes: Star,
   boxBorderWidth: 3,
 
@@ -661,14 +661,14 @@ const customStyles = {
 };
 
 function App() {
-  const [ratingValue, setRatingValue] = useState(4);
+  const [rating, setRating] = useState(0);
 
   return (
     <Rating
       style={{ maxWidth: 500 }}
-      value={ratingValue}
-      onChange={setRatingValue}
-      itemStyles={customStyles}
+      value={rating}
+      onChange={setRating}
+      itemStyles={myStyles}
       radius="large"
       spaceInside="large"
     />
@@ -726,15 +726,15 @@ It is not necessary but if you want to, you can do it:
 1. Assign a custom class to `<Rating />`:
 
 ```jsx
-<Rating value={ratingValue} onChange={setRatingValue} className="my-own-class" />
+<Rating value={rating} onChange={setRating} className="my-own-class" />
 ```
 
 2. Disable any style you want to replace via props, so that no variables nor classes for that style will be generated/injected:
 
 ```jsx
 <Rating
-  value={ratingValue}
-  onChange={setRatingValue}
+  value={rating}
+  onChange={setRating}
   className="my-own-class"
   spaceInside="none"
   radius="none"

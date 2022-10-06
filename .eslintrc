@@ -1,30 +1,31 @@
 {
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended"
-  ],
-  "env": {
-    "browser": true,
-    "node": true
-  },
-  "settings": {
-    "react": {
-      "version": "17.0.2"
-    }
-  },
-  "rules": {
-    "comma-dangle": "off",
-    "@typescript-eslint/comma-dangle": "off",
-    "indent": "off",
-    "@typescript-eslint/indent": "off",
-    "space-before-blocks": "off",
-    "@typescript-eslint/space-before-blocks": "off",
-    "react/display-name": "off",
-    "react/prop-types": "off"
-  }
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:react-hooks/recommended"
+	],
+	"env": {
+		"browser": true,
+		"node": true
+	},
+	"settings": {
+		"react": {
+			"version": "17.0.2"
+		}
+	},
+	"rules": {
+		"comma-dangle": "off",
+		"@typescript-eslint/comma-dangle": "off",
+		"indent": "off",
+		"@typescript-eslint/indent": "off",
+		"space-before-blocks": "off",
+		"@typescript-eslint/space-before-blocks": "off",
+		"react/display-name": "off",
+		"react/prop-types": "off",
+		"no-mixed-spaces-and-tabs": "off"
+	}
 }

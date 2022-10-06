@@ -75,7 +75,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		const hasPrecision = readOnly && !Number.isInteger(value);
 		const isEligibleForHalfFill = hasPrecision && highlightOnlySelected === false;
 		const isNotEligibleForHalfFill = hasPrecision && highlightOnlySelected === true;
-
 		/* New in v1.1.0 */
 		const isDyanmic = readOnly === false && isDisabled === false;
 
@@ -86,7 +85,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			: ratingValues.indexOf(ratingValue);
 
 		const deservesHalfFill = isEligibleForHalfFill && !isGraphicalValueInteger(ratingValue);
-
 		const hasHoverChange = typeof onHoverChange === 'function';
 
 		/* Style helpers */
@@ -134,7 +132,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 								arrayColors as RequireAtLeastOne<ValidArrayColors>,
 								currentSelectedIndex,
 								highlightOnlySelected
-								// eslint-disable-next-line no-mixed-spaces-and-tabs
 						  )
 						: [],
 			}),

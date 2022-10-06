@@ -68,13 +68,13 @@ export type ReadOnlyProps = {
 
 type RatingChange =
 	| React.Dispatch<React.SetStateAction<number>>
-	| ((ratingValue: number) => void | Promise<void>);
+	| ((selectedValue: number) => void | Promise<void>);
 
 export type InputProps = {
 	/** Setter or custom callback to update the rating. */
 	onChange?: RatingChange;
 	/** Callback to execute when entering/leaving the rating items. */
-	onHoverChange?: (ratingValue: number) => void | (() => void);
+	onHoverChange?: (hoveredValue: number) => void | (() => void);
 	/** Whether or not to disable the radio group. */
 	isDisabled?: boolean;
 	/** Whether or not to reset the rating value if clicking again on the current rating. */

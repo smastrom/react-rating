@@ -1,38 +1,46 @@
 import { isValidElement } from 'react';
+import { ItemStyles, RatingProps } from './exportedTypes';
 import Package from '../package.json';
 
-type ErrorsObj = {
+type ErrorObj = {
 	shouldRender: boolean;
-	errorReason: string;
+	reason: string;
 };
 
 const getErrorReason = (reason: string) =>
 	`[${Package.name}] - Nothing's returned from rendering. Reason: ${reason}.`;
 
-function setErrors(targetObj: ErrorsObj, reason: string) {
+function setErrors(targetObj: ErrorObj, reason: string) {
 	targetObj.shouldRender = false;
-	targetObj.errorReason = getErrorReason(reason);
+	targetObj.reason = getErrorReason(reason);
 
 	return targetObj;
 }
 
 const invalidJSXMsg = 'itemShapes is not a valid JSX element';
 
-export function getErrors(
-	items: unknown,
-	value: unknown,
-	readOnly: unknown,
-	onChange: unknown,
-	itemShapes: unknown,
-	isDisabled: unknown
-) {
-	const errorsObj: ErrorsObj = { shouldRender: true, errorReason: '' };
+type Props = Pick<RatingProps, 'items' | 'value' | 'readOnly' | 'onChange' | 'isDisabled'> &
+	Pick<ItemStyles, 'itemShapes'>;
+
+type ParamObj = Required<{
+	[Prop in keyof Props]: unknown;
+}>;
+
+export function getErrors({
+	items,
+	value,
+	readOnly,
+	onChange,
+	itemShapes,
+	isDisabled,
+}: ParamObj) {
+	const errorsObj: ErrorObj = { shouldRender: true, reason: '' };
 
 	if (typeof items !== 'number' || items < 1 || items > 10) {
 		return setErrors(errorsObj, 'items is invalid');
 	}
 	if (typeof value !== 'number' || value < 0 || value > items) {
-		return setErrors(errorsObj, 'value is invalid');
+		return setErrors(errorsObj, 'value is invalid or greater than items');
 	}
 
 	const isOnChangeRequired = readOnly === false && typeof onChange !== 'function';

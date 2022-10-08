@@ -35,7 +35,11 @@ export type ItemStyles = Colors & {
 	boxBorderWidth?: number;
 };
 
-export type StyleOptions = 'none' | 'small' | 'medium' | 'large';
+export type Orientation = 'horizontal' | 'vertical';
+export type Sizes = 'none' | 'small' | 'medium' | 'large' | 'full';
+export type Spacings = Omit<Sizes, 'full'>;
+export type HF = 'svg' | 'box';
+export type Transitions = 'none' | 'zoom' | 'position' | 'opacity' | 'colors';
 
 export type SharedProps = {
 	/** An integer from 0 to items. It can be a float if readOnly is true. */
@@ -47,13 +51,13 @@ export type SharedProps = {
 	/** Whether or not to highlight only the selected rating item. */
 	highlightOnlySelected?: boolean;
 	/** Orientation of the rating items. */
-	orientation?: 'horizontal' | 'vertical';
+	orientation?: Orientation;
 	/** Responsive padding of each rating item. */
-	spaceInside?: StyleOptions;
+	spaceInside?: Spacings;
 	/** Responsive gap between rating items. */
-	spaceBetween?: StyleOptions;
+	spaceBetween?: Spacings;
 	/** Radius of each rating item */
-	radius?: StyleOptions | 'full';
+	radius?: Sizes;
 	/** Custom shapes and colors, visit https://github.com/smastrom/react-rating for more info. */
 	itemStyles?: ItemStyles;
 	id?: string;
@@ -63,7 +67,7 @@ export type SharedProps = {
 
 export type ReadOnlyProps = {
 	/** Whether to half-fill the SVG or the box. */
-	halfFillMode?: 'svg' | 'box';
+	halfFillMode?: HF;
 };
 
 type RatingChange =
@@ -80,7 +84,7 @@ export type InputProps = {
 	/** Whether or not to reset the rating value if clicking again on the current rating. */
 	resetOnSecondClick?: boolean;
 	/** Transition to apply when hovering/selecting. */
-	transition?: 'colors' | 'zoom' | 'position' | 'opacity' | 'none';
+	transition?: Transitions;
 	/** Whether or not to tell assistive technologies that rating is required. */
 	isRequired?: boolean;
 	/** Accessible label of the rating group / image. */
@@ -96,5 +100,5 @@ export type InputProps = {
 export type RatingProps = SharedProps & ReadOnlyProps & InputProps;
 
 export declare const Rating: React.ForwardRefExoticComponent<
-	SharedProps & ReadOnlyProps & InputProps & React.RefAttributes<HTMLDivElement>
+	RatingProps & React.RefAttributes<HTMLDivElement>
 >;

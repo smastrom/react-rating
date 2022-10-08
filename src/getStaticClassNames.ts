@@ -1,62 +1,72 @@
-import { CSSClassName, MaybeEmptyCSSClassName } from './internalTypes';
-
-const BASE_TRANSITION: CSSClassName = 'rr--fx-colors';
+import { CSSClassName, MaybeEmptyClassName } from './internalTypes';
+import {
+	Sizes,
+	TransitionProps,
+	TransitionClasses,
+	RadiusClasses,
+	GapClasses,
+	PaddingClasses,
+} from './constants';
 
 /* istanbul ignore next */
-export function getTransitionClassNames(transitionProp: string): MaybeEmptyCSSClassName {
+const colorsWith = (transition: CSSClassName): CSSClassName =>
+	`${transition} ${TransitionClasses.COLORS}`;
+
+/* istanbul ignore next */
+export function getTransitionClassNames(transitionProp: unknown): MaybeEmptyClassName {
 	switch (transitionProp) {
-		case 'zoom':
-			return `rr--fx-zoom ${BASE_TRANSITION}`;
-		case 'position':
-			return `rr--fx-position ${BASE_TRANSITION}`;
-		case 'opacity':
-			return `rr--fx-opacity ${BASE_TRANSITION}`;
-		case 'colors':
-			return BASE_TRANSITION;
+		case TransitionProps.ZOOM:
+			return colorsWith(TransitionClasses.ZOOM);
+		case TransitionProps.POSITION:
+			return colorsWith(TransitionClasses.POSITION);
+		case TransitionProps.OPACITY:
+			return colorsWith(TransitionClasses.OPACITY);
+		case TransitionProps.COLORS:
+			return TransitionClasses.COLORS;
 		default:
 			return '';
 	}
 }
 
 /* istanbul ignore next */
-export function getRadiusClassName(radiusProp: string): MaybeEmptyCSSClassName {
+export function getRadiusClassName(radiusProp: unknown): MaybeEmptyClassName {
 	switch (radiusProp) {
-		case 'small':
-			return 'rr--rx-sm';
-		case 'medium':
-			return 'rr--rx-md';
-		case 'large':
-			return 'rr--rx-lg';
-		case 'full':
-			return 'rr--rx-full';
+		case Sizes.SMALL:
+			return RadiusClasses.SMALL;
+		case Sizes.MEDIUM:
+			return RadiusClasses.MEDIUM;
+		case Sizes.LARGE:
+			return RadiusClasses.LARGE;
+		case Sizes.FULL:
+			return RadiusClasses.FULL;
 		default:
 			return '';
 	}
 }
 
 /* istanbul ignore next */
-export function getGapClassName(gapProp: string): MaybeEmptyCSSClassName {
+export function getGapClassName(gapProp: unknown): MaybeEmptyClassName {
 	switch (gapProp) {
-		case 'small':
-			return 'rr--gap-sm';
-		case 'medium':
-			return 'rr--gap-md';
-		case 'large':
-			return 'rr--gap-lg';
+		case Sizes.SMALL:
+			return GapClasses.SMALL;
+		case Sizes.MEDIUM:
+			return GapClasses.MEDIUM;
+		case Sizes.LARGE:
+			return GapClasses.LARGE;
 		default:
 			return '';
 	}
 }
 
 /* istanbul ignore next */
-export function getPaddingClassName(paddingProp: string): MaybeEmptyCSSClassName {
+export function getPaddingClassName(paddingProp: unknown): MaybeEmptyClassName {
 	switch (paddingProp) {
-		case 'small':
-			return 'rr--space-sm';
-		case 'medium':
-			return 'rr--space-md';
-		case 'large':
-			return 'rr--space-lg';
+		case Sizes.SMALL:
+			return PaddingClasses.SMALL;
+		case Sizes.MEDIUM:
+			return PaddingClasses.MEDIUM;
+		case Sizes.LARGE:
+			return PaddingClasses.LARGE;
 		default:
 			return '';
 	}

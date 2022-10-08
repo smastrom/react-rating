@@ -1,32 +1,26 @@
-import React, { forwardRef, useRef, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { forwardRef, useMemo, useCallback, useRef, useState, useEffect } from 'react';
 import { RatingItem } from './RatingItem';
 import { getDynamicCssVars } from './getDynamicCssVars';
+import { getGroupClassNames } from './getGroupClassNames';
 import { getActiveClassNames } from './getActiveClassNames';
-import { getHalfFillClassNames } from './getHFClassNames';
+import { getHFClassNames } from './getHFClassNames';
 import { getStaticCssVars } from './getStaticCssVars';
 import { getColors } from './getColors';
 import { getTabIndex } from './getTabIndex';
 import { getErrors } from './getErrors';
 import {
-	getGapClassName,
-	getPaddingClassName,
-	getRadiusClassName,
-	getTransitionClassNames,
-} from './getStaticClassNames';
-import {
 	getIntersectionIndex,
-	isValidPositiveNumber,
+	getNumber,
 	isGraphicalValueInteger,
-	getChildTestIds,
-	getSvgChildTestIds,
+	getRadioTestIds,
+	getSvgTestIds,
 	devTestId,
 } from './utils';
+import { Sizes, OrientationProps, TransitionProps, HFProps, RatingClasses } from './constants';
 import { defaultItemStyles } from './defaultItemStyles';
 import { RatingProps, Rating as RatingComponent } from './exportedTypes';
 import {
 	StylesState,
-	CSSClassName,
-	MaybeEmptyCSSClassName,
 	RequireAtLeastOne,
 	ValidArrayColors,
 	TabIndex,
@@ -46,14 +40,14 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			isDisabled = false,
 			highlightOnlySelected = false,
 			resetOnSecondClick = false,
-			orientation = 'horizontal',
-			spaceBetween = 'none',
-			spaceInside = 'small',
-			radius = 'none',
-			transition = 'colors',
+			orientation = OrientationProps.HORIZONTAL,
+			spaceBetween = Sizes.NONE,
+			spaceInside = Sizes.SMALL,
+			radius = Sizes.NONE,
+			transition = TransitionProps.COLORS,
 			itemStyles = defaultItemStyles,
 			isRequired = true,
-			halfFillMode = 'svg',
+			halfFillMode = HFProps.SVG,
 			visibleLabelId,
 			visibleItemLabelIds,
 			invisibleLabel = readOnly === false ? 'Rating' : `Rated ${value} on ${items}`,
@@ -64,68 +58,51 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		},
 		externalRef
 	) => {
-		/* Refs */
-
-		const roleRadioDivs = useRef<HTMLDivElement[] | []>([]);
-
-		/* Value helpers */
+		/* Helpers */
 
 		const ratingValues = Array.from(Array(items), (_, index) => index + 1);
-
 		const hasPrecision = readOnly && !Number.isInteger(value);
-		const isEligibleForHalfFill = hasPrecision && highlightOnlySelected === false;
-		const isNotEligibleForHalfFill = hasPrecision && highlightOnlySelected === true;
-		/* New in v1.1.0 */
+		const isEligibleForHF = hasPrecision && highlightOnlySelected === false;
+		const isNotEligibleForHF = hasPrecision && highlightOnlySelected === true;
+		const ratingValue = isNotEligibleForHF ? Math.round(value) : value;
 		const isDyanmic = readOnly === false && isDisabled === false;
-
-		const ratingValue = isNotEligibleForHalfFill ? Math.round(value) : value;
-
-		const currentRatingIndex = isEligibleForHalfFill
+		const hasHoverChange = typeof onHoverChange === 'function';
+		const needsDynamicCssVars = ratingValue >= 0.25;
+		const userClassNames = typeof className === 'string' ? className : '';
+		const absoluteHFMode = halfFillMode === HFProps.BOX ? HFProps.BOX : HFProps.SVG;
+		const deservesHF = isEligibleForHF && !isGraphicalValueInteger(ratingValue);
+		const currentRatingIndex = isEligibleForHF
 			? getIntersectionIndex(ratingValues, ratingValue)
 			: ratingValues.indexOf(ratingValue);
 
-		const deservesHalfFill = isEligibleForHalfFill && !isGraphicalValueInteger(ratingValue);
-		const hasHoverChange = typeof onHoverChange === 'function';
+		/* Deps/Callbacks */
 
-		/* Style helpers */
-
-		const { itemShapes, itemStrokeWidth, boxBorderWidth } = itemStyles;
-
-		const absoluteStrokeWidth = isValidPositiveNumber(itemStrokeWidth)
-			? (itemStrokeWidth as number)
-			: 0;
-		const absoluteBoxBorderWidth = isValidPositiveNumber(boxBorderWidth)
-			? (boxBorderWidth as number)
-			: 0;
-		const absoluteHalfFillMode = halfFillMode === 'box' ? 'box' : 'svg';
-
-		const needsDynamicCssVars = ratingValue >= 0.25;
-
-		/* Colors */
-
-		const { staticColors, arrayColors } = useMemo(() => {
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const {
+			staticColors,
+			arrayColors,
+			itemShapes,
+			absoluteStrokeWidth,
+			absoluteBoxBorderWidth,
+		} = useMemo(() => {
 			const { itemShapes, itemStrokeWidth, boxBorderWidth, ...colors } = itemStyles;
-			return getColors(colors, deservesHalfFill, absoluteStrokeWidth, absoluteHalfFillMode);
-		}, [itemStyles, deservesHalfFill, absoluteStrokeWidth, absoluteHalfFillMode]);
+			const absoluteStrokeWidth = getNumber(itemStrokeWidth);
+			const absoluteBoxBorderWidth = getNumber(boxBorderWidth);
+			const userColors = getColors(colors, deservesHF, absoluteStrokeWidth, absoluteHFMode);
+			return {
+				itemShapes,
+				absoluteStrokeWidth,
+				absoluteBoxBorderWidth,
+				...userColors,
+			};
+		}, [itemStyles, deservesHF, absoluteHFMode]);
 
 		const hasArrayColors = Object.keys(arrayColors).length > 0;
 
-		/* Callbacks */
-
-		const getDynamicClassNames = useCallback(
-			(currentSelectedIndex: number) => {
-				if (deservesHalfFill) {
-					return getHalfFillClassNames(ratingValue, items, absoluteHalfFillMode);
-				}
-				return getActiveClassNames(highlightOnlySelected, items, currentSelectedIndex);
-			},
-			[deservesHalfFill, highlightOnlySelected, ratingValue, items, absoluteHalfFillMode]
-		);
-
 		const getDynamicStyles = useCallback(
 			(currentSelectedIndex: number, shouldGetCssVars: boolean) => ({
-				dynamicClassNames: getDynamicClassNames(currentSelectedIndex),
+				dynamicClassNames: deservesHF
+					? getHFClassNames(ratingValue, items, absoluteHFMode)
+					: getActiveClassNames(highlightOnlySelected, items, currentSelectedIndex),
 				dynamicCssVars:
 					shouldGetCssVars && hasArrayColors
 						? getDynamicCssVars(
@@ -135,8 +112,22 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 						  )
 						: [],
 			}),
-			[getDynamicClassNames, arrayColors, hasArrayColors, highlightOnlySelected]
+			[
+				arrayColors,
+				hasArrayColors,
+				highlightOnlySelected,
+				absoluteHFMode,
+				deservesHF,
+				items,
+				ratingValue,
+			]
 		);
+
+		/* Refs */
+
+		const skipStylesMount = useRef(true);
+		const skipTabMount = useRef(true);
+		const radioRefs = useRef<HTMLDivElement[]>([]);
 
 		/* State */
 
@@ -155,10 +146,13 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		/* Effects */
 
 		useEffect(() => {
-			setStyles({
-				staticCssVars: getStaticCssVars(staticColors, absoluteBoxBorderWidth),
-				...getDynamicStyles(currentRatingIndex, needsDynamicCssVars),
-			});
+			if (!skipStylesMount.current) {
+				return setStyles({
+					staticCssVars: getStaticCssVars(staticColors, absoluteBoxBorderWidth),
+					...getDynamicStyles(currentRatingIndex, needsDynamicCssVars),
+				});
+			}
+			skipStylesMount.current = false;
 		}, [
 			staticColors,
 			getDynamicStyles,
@@ -168,28 +162,29 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		]);
 
 		useEffect(() => {
-			if (isDyanmic) {
-				setTabIndex(() => getTabIndex(items, currentRatingIndex));
+			if (!skipTabMount.current && isDyanmic) {
+				return setTabIndex(getTabIndex(items, currentRatingIndex));
 			}
+			skipTabMount.current = false;
 		}, [isDyanmic, currentRatingIndex, items]);
 
-		/* Prevent rendering */
+		/* Log critical errors, prevent rendering */
 
-		const { shouldRender, errorReason } = getErrors(
+		const { shouldRender, reason } = getErrors({
 			items,
 			value,
 			readOnly,
 			onChange,
 			itemShapes,
-			isDisabled
-		);
+			isDisabled,
+		});
 
 		if (!shouldRender) {
-			console.error(errorReason);
+			console.error(reason);
 			return null;
 		}
 
-		/* Mouse handlers */
+		/* Mouse */
 
 		function handleClick(event: React.MouseEvent<HTMLDivElement>, clickedIndex: number) {
 			event.stopPropagation();
@@ -210,16 +205,21 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			setStyles({ ...styles, ...getDynamicStyles(hoveredIndex, true) });
 		}
 
-		function handleMouseLeave() {
+		function handleMouseLeave(event: React.MouseEvent<HTMLDivElement>) {
 			if (hasHoverChange) {
-				onHoverChange(0);
+				const hasTargetedRadio = radioRefs.current.some(
+					(radioDiv) => radioDiv === event.relatedTarget
+				);
+				if (!hasTargetedRadio) {
+					onHoverChange(0);
+				}
 			}
 			setStyles({ ...styles, ...getDynamicStyles(currentRatingIndex, needsDynamicCssVars) });
 		}
 
-		/* Keyboard navigation */
+		/* Keyboard */
 
-		/** Ignoring handleKeyDown from Jest coverage as it is
+		/** Ignoring handleKeyDown from Jest coverage as it has been
 		 * tested with Playwright in tests/e2e/keyboardNavigation.test.ts */
 
 		/* istanbul ignore next */
@@ -227,9 +227,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			const previousSibling = childIndex - 1;
 			const nextSibling = childIndex + 1;
 			const lastSibling = ratingValues.length - 1;
-
-			const isEventFiringFromLastItem = lastSibling === childIndex;
-			const isEventFiringFromFistItem = childIndex === 0;
+			const isFiringFromLastItem = lastSibling === childIndex;
+			const isFiringFromFistItem = childIndex === 0;
 
 			switch (event.code) {
 				case 'Shift':
@@ -254,17 +253,17 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				case 'ArrowDown':
 				case 'ArrowRight':
 					{
-						const siblingToFocus = isEventFiringFromLastItem ? 0 : nextSibling;
+						const siblingToFocus = isFiringFromLastItem ? 0 : nextSibling;
 						setTabIndex(getTabIndex(items, siblingToFocus));
-						roleRadioDivs.current[siblingToFocus].focus();
+						radioRefs.current[siblingToFocus].focus();
 					}
 					break;
 				case 'ArrowUp':
 				case 'ArrowLeft':
 					{
-						const siblingToFocus = isEventFiringFromFistItem ? lastSibling : previousSibling;
+						const siblingToFocus = isFiringFromFistItem ? lastSibling : previousSibling;
 						setTabIndex(getTabIndex(items, siblingToFocus));
-						roleRadioDivs.current[siblingToFocus].focus();
+						radioRefs.current[siblingToFocus].focus();
 					}
 					break;
 			}
@@ -273,43 +272,21 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			event.stopPropagation();
 		}
 
-		/* Radio group props */
+		/* Group props */
 
-		function getClassNames() {
-			/* New in v1.1.0 */
-			const disabledClassName: MaybeEmptyCSSClassName =
-				readOnly === false && isDisabled === true ? 'rr--disabled' : '';
-			/* Edited in v1.1.0 */
-			const cursorClassName: MaybeEmptyCSSClassName = isDyanmic ? 'rr--pointer' : '';
-
-			const transitionClassName =
-				isDyanmic && transition !== 'none' ? getTransitionClassNames(transition) : '';
-
-			const orientationClassName: CSSClassName = `rr--dir-${
-				orientation === 'vertical' ? 'y' : 'x'
-			}`;
-			const radiusClassName =
-				typeof radius === 'string' && radius !== 'none' ? getRadiusClassName(radius) : '';
-			const borderClassName: MaybeEmptyCSSClassName =
-				absoluteBoxBorderWidth > 0 ? 'rr--has-border' : '';
-			const strokeClassName: MaybeEmptyCSSClassName =
-				absoluteStrokeWidth > 0 ? 'rr--has-stroke' : '';
-
-			const gapClassName =
-				typeof spaceBetween === 'string' && spaceBetween !== 'none'
-					? getGapClassName(spaceBetween)
-					: '';
-			const paddingClassName =
-				typeof spaceInside === 'string' && spaceInside !== 'none'
-					? getPaddingClassName(spaceInside)
-					: '';
-
-			return `rr--group ${orientationClassName} ${strokeClassName} ${borderClassName}
-      ${transitionClassName} ${radiusClassName} ${cursorClassName} ${disabledClassName} ${gapClassName}
-      ${paddingClassName} ${className || ''}`
-				.replace(/  +/g, ' ')
-				.trimEnd();
-		}
+		const groupClassNames = getGroupClassNames({
+			className: userClassNames,
+			radius,
+			readOnly,
+			isDisabled,
+			isDyanmic,
+			transition,
+			orientation,
+			absoluteBoxBorderWidth,
+			absoluteStrokeWidth,
+			spaceBetween,
+			spaceInside,
+		});
 
 		function getGroupAriaProps() {
 			if (readOnly === false) {
@@ -319,7 +296,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 					'aria-required': isAriaRequired,
 				};
 
-				/* Edited in v1.1.0 */
 				if (isAriaRequired) {
 					ariaProps['aria-invalid'] = ratingValue <= 0;
 				}
@@ -339,29 +315,27 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		/* Radio props */
 
-		/* New in v1.1.0 */
 		function getInteractiveProps(childIndex: number): React.HTMLProps<HTMLDivElement> {
 			return {
 				onClick: (event) => handleClick(event, childIndex),
 				onMouseEnter: () => handleMouseEnter(childIndex),
 				onMouseLeave: handleMouseLeave,
 				tabIndex: tabIndex[childIndex],
-				onKeyDown: (event) => handleKeyDown(event, childIndex),
+				/* Ignoring from Jest cov as it has been tested with Playwright */
+				onKeyDown: /* istanbul ignore next */ (event) => handleKeyDown(event, childIndex),
 			};
 		}
 
 		function getRadioProps(childIndex: number): React.HTMLProps<HTMLDivElement> {
-			const getRadioLabels = () =>
-				Array.isArray(invisibleItemLabels)
-					? invisibleItemLabels
-					: ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`);
-
 			const labelProps: React.HTMLProps<HTMLDivElement> = {};
+			const radioLabels = Array.isArray(invisibleItemLabels)
+				? invisibleItemLabels
+				: ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`);
 
 			if (Array.isArray(visibleItemLabelIds)) {
 				labelProps['aria-labelledby'] = visibleItemLabelIds[childIndex];
 			} else {
-				labelProps['aria-label'] = getRadioLabels()?.[childIndex];
+				labelProps['aria-label'] = radioLabels?.[childIndex];
 			}
 
 			if (readOnly === false && isDisabled === true) {
@@ -372,24 +346,24 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				'aria-checked': ratingValues[childIndex] === ratingValue,
 				role: 'radio',
 				ref: (radioChildNode: HTMLDivElement) =>
-					(roleRadioDivs.current[childIndex] = radioChildNode),
+					(radioRefs.current[childIndex] = radioChildNode),
 				...(isDisabled === false ? getInteractiveProps(childIndex) : {}),
 				...labelProps,
 			};
 		}
 
-		/* SVG */
+		/* SVG props */
 
-		function getSvgRatingItemProps(childNodeIndex: number): RatingItemProps {
+		function getRatingItemProps(childNodeIndex: number): RatingItemProps {
 			const sharedProps = {
-				...getSvgChildTestIds(childNodeIndex),
 				itemShapes: Array.isArray(itemShapes) ? itemShapes[childNodeIndex] : itemShapes,
 				itemStrokeWidth: absoluteStrokeWidth,
-				hasHalfFill: false,
-				orientationProp: orientation,
+				orientation,
+				hasHF: false,
+				testId: getSvgTestIds(childNodeIndex),
 			};
-			if (deservesHalfFill && absoluteHalfFillMode === 'svg') {
-				sharedProps.hasHalfFill = childNodeIndex === currentRatingIndex;
+			if (deservesHF && absoluteHFMode === HFProps.SVG) {
+				sharedProps.hasHF = childNodeIndex === currentRatingIndex;
 			}
 			return sharedProps;
 		}
@@ -398,32 +372,22 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		return (
 			<div
-				{...devTestId}
 				ref={externalRef}
 				id={id}
+				className={groupClassNames}
 				style={{ ...style, ...styles.staticCssVars }}
-				className={getClassNames()}
 				{...getGroupAriaProps()}
+				{...devTestId}
 			>
-				{/* */}
-				{/* */}
-				{/* */}
-				{/* */}
-				{/* Box */}
 				{ratingValues.map((_, childIndex) => (
 					<div
 						key={`rr_box_${childIndex}`}
-						className={`rr--box ${styles.dynamicClassNames[childIndex]}`}
+						className={`${RatingClasses.BOX} ${styles.dynamicClassNames[childIndex]}`}
 						style={styles?.dynamicCssVars?.[childIndex]}
 						{...(readOnly === false ? getRadioProps(childIndex) : {})}
-						{...getChildTestIds(childIndex)}
+						{...getRadioTestIds(childIndex)}
 					>
-						{/* */}
-						{/* */}
-						{/* */}
-						{/* */}
-						{/* SVG */}
-						<RatingItem {...getSvgRatingItemProps(childIndex)} />
+						<RatingItem {...getRatingItemProps(childIndex)} />
 					</div>
 				))}
 			</div>

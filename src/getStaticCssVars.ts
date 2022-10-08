@@ -1,6 +1,8 @@
-import { setColorCssVars } from './setColorsCssVars';
+import { setColorCssVars } from './setColorCssVars';
 import { ItemStyles } from './exportedTypes';
 import { CSSVariables, StaticColors } from './internalTypes';
+import { ItemVars } from './constants';
+import { isPositiveNum } from './utils';
 
 export function getStaticCssVars(
 	staticColors: StaticColors,
@@ -8,9 +10,10 @@ export function getStaticCssVars(
 ): CSSVariables {
 	const cssVars: CSSVariables = {};
 
-	if (typeof boxBorderWidth === 'number' && boxBorderWidth > 0) {
-		cssVars['--rr--border-width'] = `${boxBorderWidth}px`;
+	if (isPositiveNum(boxBorderWidth)) {
+		cssVars[ItemVars.BORDER_WIDTH] = `${boxBorderWidth}px`;
 	}
+
 	const colorsEntries = Object.entries(staticColors);
 
 	if (colorsEntries.length > 0) {

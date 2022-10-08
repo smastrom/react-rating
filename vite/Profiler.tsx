@@ -8,10 +8,8 @@ const onRender: ProfilerOnRenderCallback = (
 	commitTime
 ) => {
 	const performanceData = [
-		`id: ${id}`,
 		`phase: ${phase}`,
 		`actualDuration: ${actualDuration}`,
-		`startTime: ${startTime}`,
 		`commitTime: ${commitTime}`,
 	].join(', ');
 	console.log(performanceData);

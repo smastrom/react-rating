@@ -1,32 +1,32 @@
-import { RatingProps, ItemStyles, Colors } from './exportedTypes';
-import { StaticColors, ValidArrayColors } from './internalTypes';
+import { ItemStyles, Colors } from './exportedTypes';
+import { NonNullProp, StaticColors, ValidArrayColors } from './internalTypes';
+import { ActiveColorProps, HFProps } from './constants';
 
-const validArrayColorKeys: Array<keyof ValidArrayColors> = [
-	'activeFillColor',
-	'activeStrokeColor',
-	'activeBoxColor',
-	'activeBoxBorderColor',
+const validArrayColorKeys: (keyof ValidArrayColors)[] = [
+	ActiveColorProps.FILL,
+	ActiveColorProps.BOX,
+	ActiveColorProps.STROKE,
+	ActiveColorProps.BORDER,
 ];
 
 export function getColors(
 	colorsObj: Colors | object,
-	deservesHalfFill: boolean,
-	absoluteStrokeWidth: NonNullable<ItemStyles['itemStrokeWidth']>,
-	absoluteHalfFill: NonNullable<RatingProps['halfFillMode']>
+	deservesHF: boolean,
+	itemStrokeWidth: NonNullable<ItemStyles['itemStrokeWidth']>,
+	absoluteHF: NonNullProp<'halfFillMode'>
 ) {
 	const allColors = { ...colorsObj };
-
 	const arrayColors: ValidArrayColors = {};
 
-	if (deservesHalfFill) {
-		if (absoluteHalfFill === 'box') {
+	if (deservesHF) {
+		if (absoluteHF === HFProps.BOX) {
 			delete allColors.activeFillColor;
 		} else {
 			delete allColors.activeBoxColor;
 		}
 	}
 
-	if (absoluteStrokeWidth === 0) {
+	if (itemStrokeWidth === 0) {
 		delete allColors.activeStrokeColor;
 		delete allColors.inactiveStrokeColor;
 	}
@@ -43,8 +43,6 @@ export function getColors(
 						const cleanedArrayColors = value.filter((color) => typeof color === 'string');
 						if (cleanedArrayColors.length > 0) {
 							arrayColors[key] = cleanedArrayColors;
-							delete allColors[key];
-						} else {
 							delete allColors[key];
 						}
 					} else {

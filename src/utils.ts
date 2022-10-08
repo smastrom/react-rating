@@ -4,14 +4,21 @@ export const isSSR = typeof window === 'undefined';
 
 export const useIsomorphicLayoutEffect = isSSR ? useEffect : useLayoutEffect;
 
-export const isValidPositiveNumber = (value: unknown) =>
-	typeof value === 'number' && value > 0;
+export const isPositiveNum = (value: unknown) => typeof value === 'number' && value > 0;
+
+export const getNumber = (value: unknown) => (isPositiveNum(value) ? (value as number) : 0);
 
 export const toSecondDecimal = (number: number) => Math.round(number * 100) / 100;
 
 export const roundToHalf = (number: number) => Math.round(number * 2) / 2;
 
 export const getUniqueId = () => (Math.random() + 1).toString(36).substring(7);
+
+export const areNum = (...values: unknown[]) =>
+	values.every((value) => typeof value === 'number');
+
+export const getNewPosition = (originalPos: number) =>
+	originalPos === 0 ? 0 : toSecondDecimal(originalPos) * -1;
 
 export const isGraphicalValueInteger = (ratingValue: number) =>
 	Number.isInteger(roundToHalf(ratingValue));
@@ -29,7 +36,7 @@ export function getIntersectionIndex(ratingValues: number[], ratingValue: number
 export const devTestId = __DEV__ ? { 'data-testid': 'rating' } : {};
 
 /* istanbul ignore next */
-export function getChildTestIds(childIndex: number) {
+export function getRadioTestIds(childIndex: number) {
 	if (__DEV__) {
 		return { 'data-testid': `rating-child-${childIndex + 1}` };
 	}
@@ -37,10 +44,20 @@ export function getChildTestIds(childIndex: number) {
 }
 
 /* istanbul ignore next */
-export function getSvgChildTestIds(childIndex: number) {
+export function getSvgTestIds(childIndex: number) {
 	if (__DEV__) {
 		return {
-			testId: `rating-child-svg-${childIndex + 1}`,
+			'data-testid': `rating-child-svg-${childIndex + 1}`,
+		};
+	}
+	return {};
+}
+
+/* istanbul ignore next */
+export function getDefsTestId() {
+	if (__DEV__) {
+		return {
+			'data-testid': 'svg-defs-testid',
 		};
 	}
 	return {};

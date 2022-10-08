@@ -16,6 +16,7 @@
 	width: 100%;
 	flex-grow: 1;
 	overflow: clip;
+	pointer-events: none;
 }
 
 @supports not (overflow: clip) {

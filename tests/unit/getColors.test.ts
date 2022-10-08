@@ -16,8 +16,8 @@ describe('getColors returns proper arrayColors and staticColors objects', () => 
 	};
 
 	const absoluteStrokeWidth = 1;
-	const absoluteHalfFill = 'svg';
-	const deservesHalfFill = false;
+	const absoluteHF = 'svg';
+	const deservesHF = false;
 
 	const expectedObject = {
 		arrayColors: {
@@ -33,9 +33,9 @@ describe('getColors returns proper arrayColors and staticColors objects', () => 
 	};
 
 	test(Test1, () => {
-		expect(
-			getColors(sourceObject, deservesHalfFill, absoluteStrokeWidth, absoluteHalfFill)
-		).toStrictEqual(expectedObject);
+		expect(getColors(sourceObject, deservesHF, absoluteStrokeWidth, absoluteHF)).toStrictEqual(
+			expectedObject
+		);
 	});
 
 	const Test2 = 'Should never include non-array properties in arrayColors';
@@ -58,7 +58,7 @@ describe('getColors returns proper arrayColors and staticColors objects', () => 
 
 	test(Test2, () => {
 		expect(
-			getColors(sourceObject2, deservesHalfFill, absoluteStrokeWidth, absoluteHalfFill)
+			getColors(sourceObject2, deservesHF, absoluteStrokeWidth, absoluteHF)
 		).toStrictEqual(expectedObject2);
 	});
 
@@ -86,7 +86,7 @@ describe('getColors returns proper arrayColors and staticColors objects', () => 
 
 	test(Test3, () => {
 		expect(
-			getColors(sourceObject3, deservesHalfFill, absoluteStrokeWidth, absoluteHalfFill)
+			getColors(sourceObject3, deservesHF, absoluteStrokeWidth, absoluteHF)
 		).toStrictEqual(expectedObject3);
 	});
 
@@ -113,9 +113,7 @@ describe('getColors returns proper arrayColors and staticColors objects', () => 
 	};
 
 	test(Test4, () => {
-		expect(getColors(sourceObject4, deservesHalfFill, 0, absoluteHalfFill)).toStrictEqual(
-			expectedObject4
-		);
+		expect(getColors(sourceObject4, deservesHF, 0, absoluteHF)).toStrictEqual(expectedObject4);
 	});
 
 	const Test5 = `Should never include activeFillColor if halfFillMode is set to "box"

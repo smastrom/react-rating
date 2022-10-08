@@ -10,3 +10,4 @@ playwright/.cache
 *.tgz
 style.css
 .vscode
+yarn-error.log

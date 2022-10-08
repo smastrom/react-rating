@@ -1,27 +1,27 @@
 import { roundToHalf } from './utils';
-import { CSSClassName } from './internalTypes';
-import { ReadOnlyProps } from './exportedTypes';
+import { NonNullProp, CSSClassName } from './internalTypes';
+import { HFClasses } from './constants';
 
-export function getHalfFillClassNames(
-	ratingValue: number,
-	items: number,
-	absoluteHalfFillMode: NonNullable<ReadOnlyProps['halfFillMode']>
+export function getHFClassNames(
+	ratingValue: NonNullProp<'value'>,
+	items: NonNullProp<'items'>,
+	absoluteHFMode: NonNullProp<'halfFillMode'>
 ): CSSClassName[] {
 	const intersectionIndex = Math.floor(roundToHalf(ratingValue));
 
 	return new Array(items).fill(undefined).map((_, index) => {
-		if (absoluteHalfFillMode === 'box') {
+		if (absoluteHFMode === 'box') {
 			if (index > intersectionIndex) {
-				return 'rr--hf-box-off';
+				return HFClasses.BOX_OFF;
 			}
 			if (index === intersectionIndex) {
-				return 'rr--hf-box-int';
+				return HFClasses.BOX_INT;
 			}
-			return 'rr--hf-box-on';
+			return HFClasses.BOX_ON;
 		}
 		if (index > intersectionIndex) {
-			return 'rr--hf-svg-off';
+			return HFClasses.SVG_OFF;
 		}
-		return 'rr--hf-svg-on';
+		return HFClasses.SVG_ON;
 	});
 }

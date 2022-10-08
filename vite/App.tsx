@@ -17,13 +17,15 @@ const CUSTOM_LABELS = ['Bad', 'Poor', 'Average', 'Very Good', 'Excellent'];
 const CUSTOM_LABELS_IDS = ['label_1', 'label_2', 'label_3', 'label_4', 'label_5'];
 
 export function App() {
-	// const [value, setValue] = useState<number>(3);
-
 	const [state, setState] = useState({
 		name: '',
 		review: '',
-		rating: 3, // Initial value
+		rating: 3,
 	});
+
+	function handleHover(hoveredValue: number) {
+		console.log(hoveredValue);
+	}
 
 	function handleChange(ratingValue: number) {
 		console.log(ratingValue);
@@ -53,11 +55,11 @@ export function App() {
 			<Profiler>
 				<Rating
 					style={{
-						maxWidth: 150,
+						maxWidth: 200,
 					}}
 					// readOnly
 					resetOnSecondClick
-					onHoverChange={() => console.log('Ciao')}
+					onHoverChange={handleHover}
 					// isDisabled
 					items={5}
 					aria-label="Ciao"

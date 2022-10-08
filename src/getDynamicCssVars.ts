@@ -1,18 +1,20 @@
-import { setDyamicCssVars } from './setColorsCssVars';
-import { RatingProps } from './exportedTypes';
-import { CSSVariables, RequireAtLeastOne, ValidArrayColors } from './internalTypes';
+import { setDyamicCssVars } from './setColorCssVars';
+import {
+	NonNullProp,
+	CSSVariables,
+	RequireAtLeastOne,
+	ValidArrayColors,
+} from './internalTypes';
 
 export function getDynamicCssVars(
 	arrayColors: RequireAtLeastOne<ValidArrayColors>,
 	currentSelectedIndex: number,
-	highlightOnlySelected: NonNullable<RatingProps['highlightOnlySelected']>
+	highlightOnlySelected: NonNullProp<'highlightOnlySelected'>
 ): CSSVariables[] {
-	const copyArrayColors = { ...arrayColors };
 	const arrayStylesVars: CSSVariables = {};
-
 	let cssVars: CSSVariables[];
 
-	for (const [key, color] of Object.entries(copyArrayColors)) {
+	for (const [key, color] of Object.entries(arrayColors)) {
 		setDyamicCssVars(arrayStylesVars, key, color[currentSelectedIndex]);
 	}
 

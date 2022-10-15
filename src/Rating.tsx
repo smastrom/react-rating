@@ -23,6 +23,8 @@ import {
 	getRadioTestIds,
 	getSvgTestIds,
 	devTestId,
+	isRTL as isRight,
+	useIsomorphicLayoutEffect,
 } from './utils';
 import { Sizes, OrientationProps, TransitionProps, HFProps, RatingClasses } from './constants';
 import { defaultItemStyles } from './defaultItemStyles';
@@ -47,7 +49,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			onHoverChange,
 			isDisabled = false,
 			highlightOnlySelected = false,
-			/* 			resetOnSecondClick = false, */
 			orientation = OrientationProps.HORIZONTAL,
 			spaceBetween = Sizes.NONE,
 			spaceInside = Sizes.SMALL,
@@ -139,6 +140,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		const skipStylesMount = useRef(true);
 		const skipTabMount = useRef(true);
 		const radioRefs = useRef<HTMLDivElement[]>([]);
+		const isRTL = useRef(false);
 
 		/* State */
 
@@ -155,6 +157,12 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		});
 
 		/* Effects */
+
+		useIsomorphicLayoutEffect(() => {
+			if (isDynamic) {
+				isRTL.current = isRight(radioRefs?.current[0]);
+			}
+		}, [isDynamic]);
 
 		useEffect(() => {
 			if (!skipStylesMount.current) {
@@ -234,13 +242,18 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		/* istanbul ignore next */
 
 		function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>, childIndex: number) {
-			const previousSibling = childIndex - 1;
+			const prevSibling = childIndex - 1;
 			const nextSibling = childIndex + 1;
 
 			const lastSibling = isRequired ? ratingValues.length - 1 : ratingValues.length;
 
 			const isFiringFromLast = lastSibling === childIndex;
 			const isFiringFromFirst = childIndex === 0;
+
+			const prevToFocus = isFiringFromFirst ? lastSibling : prevSibling;
+			const nextToFocus = isFiringFromLast ? 0 : nextSibling;
+
+			let siblingToFocus = 0;
 
 			switch (event.code) {
 				case 'Shift':
@@ -269,7 +282,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				case 'ArrowDown':
 				case 'ArrowRight':
 					{
-						const siblingToFocus = isFiringFromLast ? 0 : nextSibling;
+						siblingToFocus = !isRTL.current ? nextToFocus : prevToFocus;
 						setTabIndex(getTabIndex(tabIndexItems, siblingToFocus));
 						radioRefs.current[siblingToFocus].focus();
 					}
@@ -277,7 +290,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				case 'ArrowUp':
 				case 'ArrowLeft':
 					{
-						const siblingToFocus = isFiringFromFirst ? lastSibling : previousSibling;
+						siblingToFocus = !isRTL.current ? prevToFocus : nextToFocus;
 						setTabIndex(getTabIndex(tabIndexItems, siblingToFocus));
 						radioRefs.current[siblingToFocus].focus();
 					}
@@ -418,7 +431,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 						<div
 							className={`${RatingClasses.BOX} ${styles.dynamicClassNames[starIndex]}`}
 							style={styles?.dynamicCssVars?.[starIndex]}
-							{...(readOnly ? getRadioProps(starIndex) : {})}
+							{...(!readOnly ? getRadioProps(starIndex) : {})}
 							{...(isDynamic ? getKeyboardProps(incrementIndex(starIndex)) : {})}
 							{...(isDynamic ? getRefsFn(incrementIndex(starIndex)) : {})}
 							{...getRadioTestIds(starIndex)}

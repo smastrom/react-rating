@@ -28,7 +28,7 @@ type ParamObj = Required<
 		| 'spaceInside'
 	>
 > & {
-	isDyanmic: boolean;
+	isDynamic: boolean;
 	absoluteBoxBorderWidth: number;
 	absoluteStrokeWidth: number;
 };
@@ -38,7 +38,7 @@ export function getGroupClassNames({
 	radius,
 	readOnly,
 	isDisabled,
-	isDyanmic,
+	isDynamic,
 	transition,
 	orientation,
 	absoluteBoxBorderWidth,
@@ -46,13 +46,13 @@ export function getGroupClassNames({
 	spaceBetween,
 	spaceInside,
 }: ParamObj) {
-	const cursorClassName: MaybeEmptyClassName = isDyanmic ? CursorClasses.POINTER : '';
+	const cursorClassName: MaybeEmptyClassName = isDynamic ? CursorClasses.POINTER : '';
 	const gapClassName = getGapClassName(spaceBetween);
 	const paddingClassName = getPaddingClassName(spaceInside);
 	const disabledClassName: MaybeEmptyClassName =
 		readOnly === false && isDisabled === true ? CursorClasses.DISABLED : '';
 	const transitionClassName =
-		isDyanmic && transition !== TransitionProps.NONE
+		isDynamic && transition !== TransitionProps.NONE
 			? getTransitionClassNames(transition)
 			: '';
 	const orientationClassName: CSSClassName =

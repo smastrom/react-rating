@@ -27,6 +27,8 @@ export function App() {
 		console.log(hoveredValue);
 	}
 
+	console.log('Rating: ' + state.rating);
+
 	function handleChange(ratingValue: number) {
 		console.log(ratingValue);
 
@@ -59,8 +61,9 @@ export function App() {
 					}}
 					// readOnly
 					resetOnSecondClick
-					onHoverChange={handleHover}
+					// onHoverChange={handleHover}
 					// isDisabled
+					isRequired={false}
 					items={5}
 					aria-label="Ciao"
 					onChange={handleChange}
@@ -69,7 +72,6 @@ export function App() {
 					// highlightOnlySelected
 					orientation="horizontal"
 					radius="small"
-					isRequired={false}
 					visibleLabelId={CUSTOM_GROUP_LABEL_ID}
 					invisibleLabel={CUSTOM_GROUP_LABEL}
 				/>

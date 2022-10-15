@@ -1,6 +1,6 @@
-import { ItemStyles, Colors } from './exportedTypes';
-import { NonNullProp, StaticColors, ValidArrayColors } from './internalTypes';
-import { ActiveColorProps, HFProps } from './constants';
+import { Colors } from './exportedTypes';
+import { StaticColors, ValidArrayColors } from './internalTypes';
+import { ActiveColorProps } from './constants';
 
 const validArrayColorKeys: (keyof ValidArrayColors)[] = [
 	ActiveColorProps.FILL,
@@ -9,27 +9,9 @@ const validArrayColorKeys: (keyof ValidArrayColors)[] = [
 	ActiveColorProps.BORDER,
 ];
 
-export function getColors(
-	colorsObj: Colors | object,
-	deservesHF: boolean,
-	itemStrokeWidth: NonNullable<ItemStyles['itemStrokeWidth']>,
-	absoluteHF: NonNullProp<'halfFillMode'>
-) {
+export function getColors(colorsObj: Colors | object) {
 	const allColors = { ...colorsObj };
 	const arrayColors: ValidArrayColors = {};
-
-	if (deservesHF) {
-		if (absoluteHF === HFProps.BOX) {
-			delete allColors.activeFillColor;
-		} else {
-			delete allColors.activeBoxColor;
-		}
-	}
-
-	if (itemStrokeWidth === 0) {
-		delete allColors.activeStrokeColor;
-		delete allColors.inactiveStrokeColor;
-	}
 
 	const colorsEntries = Object.entries(allColors);
 

@@ -46,6 +46,31 @@
 
 /* Focus to reset */
 
-.rr--group[data-reset='true'][data-selected-rating='0'] {
+.rr--group:has(.rr--reset:focus-visible) {
 	box-shadow: inset 0 0 0 2px white, 0 0 0 2px #0079ff, 0 0 0 4px white, 0 0 0 6px #0079ff;
+}
+
+/* Reset */
+
+.rr--reset {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Disabled */
+
+.rr--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.rr--disabled .rr--svg {
+	pointer-events: none;
 }

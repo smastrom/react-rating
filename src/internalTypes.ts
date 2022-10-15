@@ -2,6 +2,12 @@ import { ItemStyles, MaybeArrayColors, NonArrayColors, RatingProps } from './exp
 
 type CSSPrefix = 'rr';
 
+declare module 'react' {
+	interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
+		'data-rating-value'?: string;
+	}
+}
+
 export type CSSVariable = `--${CSSPrefix}--${string}`;
 
 export type CSSVariables = {

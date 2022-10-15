@@ -32,6 +32,14 @@ export function getIntersectionIndex(ratingValues: number[], ratingValue: number
 	return Math.floor(roundedHalf);
 }
 
+export function isRTL(rootElem: HTMLElement) {
+	if (rootElem) {
+		const userDir = getComputedStyle(rootElem).getPropertyValue('direction');
+		return userDir === 'rtl';
+	}
+	return false;
+}
+
 /* istanbul ignore next */
 export const devTestId = __DEV__ ? { 'data-testid': 'rating' } : {};
 

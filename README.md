@@ -279,7 +279,9 @@ type RatingChange =
 
 </details>
 
-If your app doesn't require any custom logic/state to handle the rating, you can directly pass the setter to `onChange`:
+### Basic
+
+If your app doesn't require any custom logic/state to handle the rating, just pass the setter to `onChange`:
 
 ```js
 function App() {
@@ -293,7 +295,7 @@ In addition to being less verbose, the setter will also be kept stable by React 
 
 ### Custom logic/state
 
-If you need to perform some actions while setting the rating (like calling an API) or you need to update just a portion of state, `onChange` accepts a callback whose parameter corresponds to the selected rating:
+If you need to perform some actions while setting the rating (like calling an API) or you need to update a portion of state, `onChange` accepts a callback whose parameter equals to the selected rating:
 
 ```js
 function App() {
@@ -326,20 +328,20 @@ function App() {
 
 <br />
 
-## Rating Behavior
+## Behavior
 
-React Rating covers two different selection scenarios that should match the two _most-common_ business logics:
+React Rating covers two selection scenarios in attempt to match different business logic without compromising accessibility:
 
 ### 1. Rating with reset - _Default_
 
 By default, the user is able to reset the rating (from 1-5 to 0 and vice versa):
 
-| Interaction | Reset Behavior                                                 | Preview |
-| ----------- | -------------------------------------------------------------- | ------- |
-| Mouse       | By clicking again on the selected item                         |         |
-| Keyboard    | By navigating to an invisible _ad-hoc_ radio and confirming it |         |
+| Interaction    | Reset                                                  | Preview |
+| -------------- | ------------------------------------------------------ | ------- |
+| Mouse          | By clicking again on the selected item                 |         |
+| Keyboard/Phone | By navigating/scrolling to an invisible _ad-hoc_ radio |         |
 
-> It is announced to screen readers that rating **is not** required.
+- It is announced to screen readers that rating **is not** required.
 
 ### 2. Rating without reset
 
@@ -351,12 +353,13 @@ In such cases, just set `isRequired` prop to **true**:
 <Rating value={rating} onChange={setRating} isRequired />
 ```
 
-| Interaction | Reset Behavior                                                 | Preview |
-| ----------- | -------------------------------------------------------------- | ------- |
-| Mouse       | By clicking again on the selected item                         |         |
-| Keyboard    | By navigating to an invisible _ad-hoc_ radio and activating it |         |
+- It is not possbile to reset by clicking again on the selected rating with mouse.
 
-> It is announced to screen readers that rating **is** required.
+- No invisible radio to reset with keyboard will be rendered.
+
+- It is announced to screen readers that rating **is required**.
+
+- If rating equals to 0 it is announced to screen readers that the value **is invalid** and vice versa.
 
 <br />
 
@@ -764,7 +767,7 @@ Take this example from MUI Rating (which uses native radio buttons):
 
 To rate **5 stars**, assuming users start navigating from the first item, `onChange` must be fired 4 times.
 
-Imagine a scenario where `onChange` calls an API to send the rating somewhere: any keyboard user won't be able to perform the action as intended.
+Imagine a scenario where `onChange` calls an API to send the rating somewhere: any visually impaired user won't be able to perform the action as intended.
 
 In **React Rating**:
 

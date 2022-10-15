@@ -190,11 +190,9 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			event.stopPropagation();
 
 			if (resetOnSecondClick === true && currentRatingIndex === clickedIndex) {
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				onChange!(0);
+				onChange?.(0);
 			} else {
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				onChange!(ratingValues[clickedIndex]);
+				onChange?.(ratingValues[clickedIndex]);
 			}
 		}
 
@@ -244,16 +242,16 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				case 'Space': {
 					event.preventDefault();
 					if (childIndex !== currentRatingIndex) {
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-						return onChange!(ratingValues[childIndex]);
+						return onChange?.(ratingValues[childIndex]);
 					}
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					return onChange!(0);
+
+					return onChange?.(0);
 				}
 				case 'ArrowDown':
 				case 'ArrowRight':
 					{
 						const siblingToFocus = isFiringFromLastItem ? 0 : nextSibling;
+						console.log('siblingToFocus', siblingToFocus);
 						setTabIndex(getTabIndex(items, siblingToFocus));
 						radioRefs.current[siblingToFocus].focus();
 					}
@@ -262,6 +260,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				case 'ArrowLeft':
 					{
 						const siblingToFocus = isFiringFromFistItem ? lastSibling : previousSibling;
+						console.log('siblingToFocus', siblingToFocus);
 						setTabIndex(getTabIndex(items, siblingToFocus));
 						radioRefs.current[siblingToFocus].focus();
 					}
@@ -293,6 +292,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				const isAriaRequired = isRequired === true && isDisabled === false;
 				const ariaProps: React.HTMLProps<HTMLDivElement> = {
 					role: 'radiogroup',
+					'data-rating-value': `${ratingValue}`,
 					'aria-required': isAriaRequired,
 				};
 
@@ -379,15 +379,15 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				{...getGroupAriaProps()}
 				{...devTestId}
 			>
-				{ratingValues.map((_, childIndex) => (
+				{ratingValues.map((_, renderIndex) => (
 					<div
-						key={`rr_box_${childIndex}`}
-						className={`${RatingClasses.BOX} ${styles.dynamicClassNames[childIndex]}`}
-						style={styles?.dynamicCssVars?.[childIndex]}
-						{...(readOnly === false ? getRadioProps(childIndex) : {})}
-						{...getRadioTestIds(childIndex)}
+						key={`rr_box_${renderIndex}`}
+						className={`${RatingClasses.BOX} ${styles.dynamicClassNames[renderIndex]}`}
+						style={styles?.dynamicCssVars?.[renderIndex]}
+						{...(readOnly === false ? getRadioProps(renderIndex) : {})}
+						{...getRadioTestIds(renderIndex)}
 					>
-						<RatingItem {...getRatingItemProps(childIndex)} />
+						<RatingItem {...getRatingItemProps(renderIndex)} />
 					</div>
 				))}
 			</div>

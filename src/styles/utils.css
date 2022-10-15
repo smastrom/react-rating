@@ -101,7 +101,7 @@
 	cursor: pointer;
 }
 
-.rr--hidden {
+.rr--reset {
 	position: absolute;
 	width: 1px;
 	height: 1px;

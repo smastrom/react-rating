@@ -15,6 +15,7 @@ import {
 	getRadioTestIds,
 	getSvgTestIds,
 	devTestId,
+	isRTL,
 } from './utils';
 import { Sizes, OrientationProps, TransitionProps, HFProps, RatingClasses } from './constants';
 import { defaultItemStyles } from './defaultItemStyles';
@@ -59,6 +60,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		externalRef
 	) => {
 		/* Helpers */
+
+		console.log(isRTL(document.body));
 
 		const ratingValues = Array.from(Array(items), (_, index) => index + 1);
 		const hasPrecision = readOnly && !Number.isInteger(value);

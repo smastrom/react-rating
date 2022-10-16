@@ -83,11 +83,9 @@ export type InputProps = {
 	onHoverChange?: HoverChange;
 	/** Whether or not to disable the radio group. */
 	isDisabled?: boolean;
-
 	/**
 	 * @deprecated Since version 1.2.0, please use isRequired prop instead.
 	 */
-	/** Whether or not to reset the rating value if clicking again on the current rating. */
 	resetOnSecondClick?: boolean;
 	/** Transition to apply when hovering/selecting. */
 	transition?: Transitions;
@@ -101,6 +99,8 @@ export type InputProps = {
 	visibleLabelId?: string;
 	/** Ids of the elements used as labels for each rating item. Takes precedence over invisibleItemLabels. */
 	visibleItemLabelIds?: string[];
+	/** Accessible label for the invisible reset radio. Effective if `isRequired` is set to **false**. */
+	resetLabel?: string;
 };
 
 export type RatingProps = SharedProps & ReadOnlyProps & InputProps;

@@ -18,6 +18,7 @@ export const RatingClasses: Classes = {
 	GROUP: 'rr--group',
 	BOX: 'rr--box',
 	SVG: 'rr--svg',
+	RESET: 'rr--reset',
 	DEF_50: 'rr--svg-stop-1',
 	DEF_100: 'rr--svg-stop-2',
 };

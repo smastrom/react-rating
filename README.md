@@ -353,13 +353,13 @@ In such cases, just set `isRequired` to **true** (defaults to false):
 <Rating value={rating} onChange={setRating} isRequired />
 ```
 
-- It is not possbile to reset by clicking again on the selected rating with mouse.
+1. It is not possbile to reset by clicking again on the selected rating with mouse.
 
-- No invisible radio to reset with keyboard will be rendered.
+2. No invisible radio to reset with keyboard will be rendered.
 
-- It is announced to screen readers that rating **is required**.
+3. It is announced to screen readers that rating **is required**.
 
-- If rating equals to 0 it is announced to screen readers that the value **is invalid** and vice versa.
+4. If rating equals to 0 it is announced to screen readers that the value **is invalid** and vice versa.
 
 <br />
 
@@ -381,7 +381,7 @@ In **React Rating**:
 
 <br />
 
-**When arrow-navigating native HTML radios with keyboard, the value is set without any chance to confirm it.**
+> When arrow-navigating native HTML radios with keyboard, the value is set without any chance to confirm it.
 
 Take this example from MUI Rating (which uses native radio buttons):
 

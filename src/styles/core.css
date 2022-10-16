@@ -30,24 +30,16 @@
 .rr--box:focus-visible,
 .rr-reset:focus-visible {
 	outline: rgba(0, 0, 0, 0);
-}
-
-.rr--box:focus-visible .rr--svg {
-	box-shadow: inset 0 0 0 2px white, 0 0 0 2px #0079ff, 0 0 0 4px white, 0 0 0 6px #0079ff;
-}
-
-.rr--box[tabindex='0'] {
 	z-index: 5;
 }
 
-.rr--box[tabindex='-1'] {
-	z-index: 0;
+.rr--box:focus-visible .rr--svg {
+	box-shadow: var(--rr--focus-shadow);
 }
 
-/* Focus to reset */
-
-.rr--reset:focus-visible {
-	box-shadow: inset 0 0 0 2px white, 0 0 0 2px #0079ff, 0 0 0 4px white, 0 0 0 6px #0079ff;
+.rr--focus-reset {
+	border-radius: 2.5px;
+	box-shadow: var(--rr--focus-shadow);
 }
 
 /* Reset */
@@ -73,4 +65,15 @@
 
 .rr--disabled .rr--svg {
 	pointer-events: none;
+}
+
+/* Interactive */
+
+.rr--pointer {
+	--rr--focus-shadow: inset 0 0 0 2px white, 0 0 0 2px #0079ff, 0 0 0 4px white,
+		0 0 0 6px #0079ff;
+}
+
+.rr--pointer .rr--box {
+	cursor: pointer;
 }

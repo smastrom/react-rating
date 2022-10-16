@@ -4,7 +4,7 @@ type CSSPrefix = 'rr';
 
 declare module 'react' {
 	interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
-		'data-rating-value'?: string;
+		'data-value'?: string;
 	}
 }
 

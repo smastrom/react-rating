@@ -112,7 +112,7 @@ export function RatingItem({
 				</defs>
 			)}
 
-			<g ref={svgRef} {...getTransform()} {...getHFAttr()}>
+			<g ref={svgRef} shapeRendering="geometricPrecision" {...getTransform()} {...getHFAttr()}>
 				{itemShapes}
 			</g>
 		</svg>

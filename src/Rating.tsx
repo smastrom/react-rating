@@ -44,6 +44,7 @@ import {
 	MouseEvent,
 	FocusEvent,
 	HTMLProps,
+	MutableRef,
 } from './internalTypes';
 
 /** Thank you for using **React Rating**.
@@ -157,6 +158,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		const skipStylesMount = useRef(true);
 		const skipTabMount = useRef(true);
+		const wrapperRef = useRef<HTMLDivElement>(null);
 		const radioRefs = useRef<HTMLDivElement[]>([]);
 		const isRTL = useRef(false);
 
@@ -292,7 +294,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				event,
 				() => {
 					if (hasHoverChange) {
-						onHoverChange(ratingValues[currentStarIndex]);
+						onHoverChange(ratingValues[currentRatingIndex] ?? 0);
 					}
 					onFocus();
 				},
@@ -396,6 +398,15 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			};
 		}
 
+		function pushGroupRefs(element: HTMLDivElement) {
+			if (isDynamic && !isRequired) {
+				(wrapperRef as MutableRef).current = element;
+			}
+			if (externalRef) {
+				(externalRef as MutableRef).current = element;
+			}
+		}
+
 		/* Radio props */
 
 		function getRefs(childIndex: number) {
@@ -472,8 +483,14 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 			if (isDynamic) {
 				resetProps = { ...resetProps, ...getKeyboardProps(0), ...getRefs(0) };
-				resetProps.onFocus = (event) => handleRealFocus(event, 0);
-				resetProps.onBlur = (event) => handleRealBlur(event);
+				resetProps.onFocus = (event) => {
+					handleRealFocus(event, 0);
+					wrapperRef?.current?.classList.add(RatingClasses.GROUP_RESET);
+				};
+				resetProps.onBlur = (event) => {
+					handleRealBlur(event);
+					wrapperRef?.current?.classList.remove(RatingClasses.GROUP_RESET);
+				};
 			}
 
 			if (isDisabled) {
@@ -506,21 +523,21 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				id={id}
 				className={groupClassNames}
 				style={{ ...style, ...styles.staticCssVars }}
-				ref={externalRef}
+				ref={pushGroupRefs}
 				{...getAriaGroupProps()}
 				{...devTestId}
 			>
-				{ratingValues.map((value, childIndex) => (
+				{ratingValues.map((value, index) => (
 					<Fragment key={value}>
-						{shouldRenderReset && childIndex === 0 && <div {...getResetProps()} />}
+						{shouldRenderReset && index === 0 && <div {...getResetProps()} />}
 						<div
-							className={`${RatingClasses.BOX} ${styles.dynamicClassNames[childIndex]}`}
-							style={styles?.dynamicCssVars?.[childIndex]}
-							{...getAriaRadioProps(childIndex)}
-							{...getInteractiveRadioProps(childIndex)}
-							{...getRadioTestIds(childIndex)}
+							className={`${RatingClasses.BOX} ${styles.dynamicClassNames[index]}`}
+							style={styles?.dynamicCssVars?.[index]}
+							{...getAriaRadioProps(index)}
+							{...getInteractiveRadioProps(index)}
+							{...getRadioTestIds(index)}
 						>
-							<RatingItem {...getRatingItemProps(childIndex)} />
+							<RatingItem {...getRatingItemProps(index)} />
 						</div>
 					</Fragment>
 				))}

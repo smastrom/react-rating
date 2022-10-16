@@ -94,9 +94,3 @@
 	border-width: var(--rr--border-width);
 	border-style: solid;
 }
-
-/* Misc */
-
-.rr--pointer .rr--box {
-	cursor: pointer;
-}

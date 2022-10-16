@@ -55,3 +55,7 @@ export type SvgData = {
 };
 
 export type NonNullProp<K extends keyof RatingProps> = NonNullable<RatingProps[`${K}`]>;
+
+export type HTMLProps = React.HTMLProps<HTMLDivElement>;
+export type MouseEvent = React.MouseEvent<HTMLDivElement>;
+export type FocusEvent = React.FocusEvent<HTMLDivElement>;

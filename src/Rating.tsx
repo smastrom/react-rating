@@ -23,8 +23,9 @@ import {
 	getRadioTestIds,
 	getSvgTestIds,
 	devTestId,
-	isRTL as isRTLDir,
+	isRTLDir,
 	useIsomorphicLayoutEffect,
+	noop,
 } from './utils';
 import { Sizes, OrientationProps, TransitionProps, HFProps, RatingClasses } from './constants';
 import { defaultItemStyles } from './defaultItemStyles';
@@ -40,6 +41,9 @@ import {
 	ValidArrayColors,
 	TabIndex,
 	RatingItemProps,
+	MouseEvent,
+	FocusEvent,
+	HTMLProps,
 } from './internalTypes';
 
 /** Thank you for using **React Rating**.
@@ -52,6 +56,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			readOnly = false,
 			onChange,
 			onHoverChange,
+			onFocus = noop,
+			onBlur = noop,
 			isDisabled = false,
 			highlightOnlySelected = false,
 			orientation = OrientationProps.HORIZONTAL,
@@ -87,7 +93,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		const absoluteHFMode = halfFillMode === HFProps.BOX ? HFProps.BOX : HFProps.SVG;
 		const deservesHF = isEligibleForHF && !isGraphicalValueInteger(ratingValue);
 		const shouldRenderReset = !isRequired && !readOnly;
-
 		const incrementIndex = (index: number) => (isRequired ? index : index + 1);
 		const tabIndexItems = incrementIndex(items);
 		const currentStarIndex = isEligibleForHF
@@ -219,7 +224,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		/* Event Handlers */
 
 		function handleWhenNeeded(
-			event: React.FocusEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement>,
+			event: FocusEvent | MouseEvent,
 			relatedCallback: () => void,
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
 			unrelatedCallback: () => void = () => {}
@@ -251,7 +256,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			}
 		}
 
-		function handleClick(event: React.MouseEvent<HTMLDivElement>, starIndex: number) {
+		function handleClick(event: MouseEvent, starIndex: number) {
 			event.stopPropagation();
 
 			if (!isRequired && currentStarIndex === starIndex) {
@@ -268,26 +273,28 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			setStyles({ ...styles, ...getDynamicStyles(starIndex, true) });
 		}
 
-		function handleMouseLeave(event: React.MouseEvent<HTMLDivElement>) {
+		function handleMouseLeave(event: MouseEvent) {
 			handleWhenNeeded(event, () => {
 				handleStarBlur();
 			});
 			setStyles({ ...styles, ...getDynamicStyles(currentStarIndex, needsDynamicCssVars) });
 		}
 
-		function handleRealBlur(event: React.FocusEvent<HTMLDivElement>) {
+		function handleRealBlur(event: FocusEvent) {
 			handleWhenNeeded(event, () => {
 				handleStarBlur();
+				onBlur();
 			});
 		}
 
-		function handleRealFocus(event: React.FocusEvent<HTMLDivElement>, childIndex: number) {
+		function handleRealFocus(event: FocusEvent, childIndex: number) {
 			handleWhenNeeded(
 				event,
 				() => {
 					if (hasHoverChange) {
 						onHoverChange(ratingValues[currentStarIndex]);
 					}
+					onFocus();
 				},
 				() => {
 					if (hasHoverChange) {
@@ -366,7 +373,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		function getAriaGroupProps() {
 			if (!readOnly) {
 				const isAriaRequired = isRequired && !isDisabled;
-				const ariaProps: React.HTMLProps<HTMLDivElement> = {
+				const ariaProps: HTMLProps = {
 					role: 'radiogroup',
 					'data-value': `${ratingValue}`,
 					'aria-required': isAriaRequired,
@@ -397,14 +404,14 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			};
 		}
 
-		function getKeyboardProps(childIndex: number): React.HTMLProps<HTMLDivElement> {
+		function getKeyboardProps(childIndex: number): HTMLProps {
 			return {
 				tabIndex: tabIndex[childIndex],
 				onKeyDown: /* istanbul ignore next */ (event) => handleKeyDown(event, childIndex),
 			};
 		}
 
-		function getMouseProps(starIndex: number): React.HTMLProps<HTMLDivElement> {
+		function getMouseProps(starIndex: number): HTMLProps {
 			return {
 				onClick: (event) => handleClick(event, starIndex),
 				onMouseEnter: () => handleMouseEnter(starIndex),
@@ -412,12 +419,12 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			};
 		}
 
-		function getAriaRadioProps(starIndex: number): React.HTMLProps<HTMLDivElement> {
+		function getAriaRadioProps(starIndex: number): HTMLProps {
 			if (readOnly) {
 				return {};
 			}
 
-			const labelProps: React.HTMLProps<HTMLDivElement> = {};
+			const labelProps: HTMLProps = {};
 			const radioLabels = Array.isArray(invisibleItemLabels)
 				? invisibleItemLabels
 				: ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`);
@@ -439,7 +446,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			};
 		}
 
-		function getInteractiveRadioProps(starIndex: number): React.HTMLProps<HTMLDivElement> {
+		function getInteractiveRadioProps(starIndex: number): HTMLProps {
 			if (!isDynamic) {
 				return {};
 			}
@@ -455,8 +462,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			};
 		}
 
-		function getResetProps(): React.HTMLProps<HTMLDivElement> {
-			let resetProps: React.HTMLProps<HTMLDivElement> = {
+		function getResetProps(): HTMLProps {
+			let resetProps: HTMLProps = {
 				className: RatingClasses.RESET,
 				role: 'radio',
 				'aria-label': resetLabel,

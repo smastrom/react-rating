@@ -9,7 +9,7 @@ export function getHFClassNames(
 ): CSSClassName[] {
 	const intersectionIndex = Math.floor(roundToHalf(ratingValue));
 
-	return new Array(items).fill(undefined).map((_, index) => {
+	return Array.from({ length: items }, (_, index) => {
 		if (absoluteHFMode === 'box') {
 			if (index > intersectionIndex) {
 				return HFClasses.BOX_OFF;

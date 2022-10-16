@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Profiler } from './Profiler';
 import { Rating } from '../src/Rating';
 /* import { ItemStyles } from '../src/exportedTypes';
@@ -23,15 +23,13 @@ export function App() {
 		rating: 3,
 	});
 
-	function handleHover(hoveredValue: number) {
+	const handleHover = useCallback((hoveredValue: number) => {
 		console.log(hoveredValue);
-	}
+	}, []);
 
 	console.log('Rating: ' + state.rating);
 
 	function handleChange(ratingValue: number) {
-		console.log(ratingValue);
-
 		setState((prevState) => ({
 			...prevState,
 			rating: ratingValue,
@@ -61,7 +59,7 @@ export function App() {
 					}}
 					// readOnly
 					resetOnSecondClick
-					// onHoverChange={handleHover}
+					onHoverChange={handleHover}
 					// isDisabled
 					isRequired={false}
 					items={5}

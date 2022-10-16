@@ -6,7 +6,7 @@ export function getActiveClassNames(
 	items: NonNullProp<'items'>,
 	selectedIndex: number
 ): CSSClassName[] {
-	return new Array(items).fill(undefined).map((_, index) => {
+	return Array.from({ length: items }, (_, index) => {
 		if (highlightOnlySelectedProp === false) {
 			if (index <= selectedIndex) {
 				return ActiveClassNames.ON;

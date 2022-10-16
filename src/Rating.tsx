@@ -64,8 +64,9 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			halfFillMode = HFProps.SVG,
 			visibleLabelId,
 			visibleItemLabelIds,
-			invisibleLabel = readOnly === false ? 'Rating' : `Rated ${value} on ${items}`,
+			invisibleLabel = !readOnly ? 'Rating' : `Rated ${value} on ${items}`,
 			invisibleItemLabels,
+			resetLabel = 'No rating',
 			id,
 			className,
 			style,
@@ -74,25 +75,25 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 	) => {
 		/* Helpers */
 
-		const adjustIndex = (index: number) => (isRequired ? index : index + 1);
-
 		const ratingValues = Array.from({ length: items }, (_, index) => index + 1);
 		const hasPrecision = readOnly && !Number.isInteger(value);
-		const isEligibleForHF = hasPrecision && highlightOnlySelected === false;
-		const isNotEligibleForHF = hasPrecision && highlightOnlySelected === true;
+		const isEligibleForHF = hasPrecision && !highlightOnlySelected;
+		const isNotEligibleForHF = hasPrecision && highlightOnlySelected;
 		const ratingValue = isNotEligibleForHF ? Math.round(value) : value;
-		const isDynamic = readOnly === false && isDisabled === false;
+		const isDynamic = !readOnly && !isDisabled;
 		const hasHoverChange = typeof onHoverChange === 'function';
 		const needsDynamicCssVars = ratingValue >= 0.25;
 		const userClassNames = typeof className === 'string' ? className : '';
 		const absoluteHFMode = halfFillMode === HFProps.BOX ? HFProps.BOX : HFProps.SVG;
 		const deservesHF = isEligibleForHF && !isGraphicalValueInteger(ratingValue);
+		const shouldRenderReset = !isRequired && !readOnly;
 
-		const tabIndexItems = adjustIndex(items);
+		const incrementIndex = (index: number) => (isRequired ? index : index + 1);
+		const tabIndexItems = incrementIndex(items);
 		const currentStarIndex = isEligibleForHF
 			? getIntersectionIndex(ratingValues, ratingValue)
 			: ratingValues.indexOf(ratingValue);
-		const currentRatingIndex = adjustIndex(currentStarIndex);
+		const currentRatingIndex = incrementIndex(currentStarIndex);
 
 		/* Deps/Callbacks */
 
@@ -231,6 +232,25 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			}
 		}
 
+		function handleStarBlur() {
+			if (hasHoverChange) {
+				onHoverChange(0);
+			}
+			setTimeout(() => saveTabIndex());
+		}
+
+		function selectRating(childIndex: number, changeCallback: RatingChange | HoverChange) {
+			if (!isRequired) {
+				if (childIndex === 0) {
+					changeCallback?.(0);
+				} else {
+					changeCallback?.(ratingValues[childIndex - 1]);
+				}
+			} else {
+				changeCallback?.(ratingValues[childIndex]);
+			}
+		}
+
 		function handleClick(event: React.MouseEvent<HTMLDivElement>, starIndex: number) {
 			event.stopPropagation();
 
@@ -239,13 +259,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			} else {
 				onChange?.(ratingValues[starIndex]);
 			}
-		}
-
-		function handleStarBlur() {
-			if (hasHoverChange) {
-				onHoverChange(0);
-			}
-			setTimeout(() => saveTabIndex());
 		}
 
 		function handleMouseEnter(starIndex: number) {
@@ -268,19 +281,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			});
 		}
 
-		function selectRating(childIndex: number, changeCallback: RatingChange | HoverChange) {
-			if (!isRequired) {
-				if (childIndex === 0) {
-					changeCallback?.(0);
-				} else {
-					changeCallback?.(ratingValues[childIndex - 1]);
-				}
-			} else {
-				changeCallback?.(ratingValues[childIndex]);
-			}
-		}
-
-		function handleRealFocus(event: React.FocusEvent<HTMLDivElement>, starIndex: number) {
+		function handleRealFocus(event: React.FocusEvent<HTMLDivElement>, childIndex: number) {
 			handleWhenNeeded(
 				event,
 				() => {
@@ -290,14 +291,11 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				},
 				() => {
 					if (hasHoverChange) {
-						selectRating(starIndex, onHoverChange);
+						selectRating(childIndex, onHoverChange);
 					}
 				}
 			);
 		}
-
-		console.log('currentRatingIndex: ' + currentRatingIndex);
-		console.log('currentStarIndex: ' + currentStarIndex);
 
 		/* Keyboard */
 
@@ -325,12 +323,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			const nextToFocus = isFiringFromLast ? 0 : nextSibling;
 
 			switch (event.code) {
-				case 'Enter':
-				case 'Space': {
-					event.preventDefault();
-					selectRating(childIndex, onChange as RatingChange);
-					break;
-				}
+				case 'Shift':
+				case 'Tab':
+					return true;
+
 				case 'ArrowDown':
 				case 'ArrowRight':
 					siblingToFocus = !isRTL.current ? nextToFocus : prevToFocus;
@@ -341,10 +337,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 					siblingToFocus = !isRTL.current ? prevToFocus : nextToFocus;
 					return handleArrowNav(siblingToFocus);
 
-				case 'Shift':
-					return true;
-				case 'Tab':
-					return true;
+				case 'Enter':
+				case 'Space':
+					event.preventDefault();
+					return selectRating(childIndex, onChange as RatingChange);
 			}
 
 			event.preventDefault();
@@ -367,12 +363,12 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			spaceInside,
 		});
 
-		function getGroupAriaProps() {
-			if (readOnly === false) {
-				const isAriaRequired = isRequired === true && isDisabled === false;
+		function getAriaGroupProps() {
+			if (!readOnly) {
+				const isAriaRequired = isRequired && !isDisabled;
 				const ariaProps: React.HTMLProps<HTMLDivElement> = {
 					role: 'radiogroup',
-					'data-rating-value': `${ratingValue}`,
+					'data-value': `${ratingValue}`,
 					'aria-required': isAriaRequired,
 				};
 
@@ -416,7 +412,11 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			};
 		}
 
-		function getRadioProps(starIndex: number): React.HTMLProps<HTMLDivElement> {
+		function getAriaRadioProps(starIndex: number): React.HTMLProps<HTMLDivElement> {
+			if (readOnly) {
+				return {};
+			}
+
 			const labelProps: React.HTMLProps<HTMLDivElement> = {};
 			const radioLabels = Array.isArray(invisibleItemLabels)
 				? invisibleItemLabels
@@ -425,19 +425,55 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			if (Array.isArray(visibleItemLabelIds)) {
 				labelProps['aria-labelledby'] = visibleItemLabelIds[starIndex];
 			} else {
-				labelProps['aria-label'] = radioLabels?.[starIndex];
+				labelProps['aria-label'] = radioLabels[starIndex];
 			}
 
-			if (isDisabled === true) {
+			if (isDisabled) {
 				labelProps['aria-disabled'] = 'true';
 			}
 
 			return {
 				role: 'radio',
 				'aria-checked': ratingValues[starIndex] === ratingValue,
-				...(isDisabled === false ? getMouseProps(starIndex) : {}),
 				...labelProps,
 			};
+		}
+
+		function getInteractiveRadioProps(starIndex: number): React.HTMLProps<HTMLDivElement> {
+			if (!isDynamic) {
+				return {};
+			}
+
+			const radioIndex = incrementIndex(starIndex);
+
+			return {
+				...getRefs(radioIndex),
+				...getKeyboardProps(radioIndex),
+				...getMouseProps(starIndex),
+				onFocus: (event) => handleRealFocus(event, radioIndex),
+				onBlur: (event) => handleRealBlur(event),
+			};
+		}
+
+		function getResetProps(): React.HTMLProps<HTMLDivElement> {
+			let resetProps: React.HTMLProps<HTMLDivElement> = {
+				className: RatingClasses.RESET,
+				role: 'radio',
+				'aria-label': resetLabel,
+				'aria-checked': ratingValue === 0,
+			};
+
+			if (isDynamic) {
+				resetProps = { ...resetProps, ...getKeyboardProps(0), ...getRefs(0) };
+				resetProps.onFocus = (event) => handleRealFocus(event, 0);
+				resetProps.onBlur = (event) => handleRealBlur(event);
+			}
+
+			if (isDisabled) {
+				resetProps['aria-disabled'] = 'true';
+			}
+
+			return resetProps;
 		}
 
 		/* SVG props */
@@ -460,38 +496,24 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		return (
 			<div
-				ref={externalRef}
 				id={id}
 				className={groupClassNames}
 				style={{ ...style, ...styles.staticCssVars }}
-				{...getGroupAriaProps()}
+				ref={externalRef}
+				{...getAriaGroupProps()}
 				{...devTestId}
 			>
-				{ratingValues.map((_, starIndex) => (
-					<Fragment key={`rr_key_${starIndex}`}>
-						{!isRequired && starIndex === 0 && (
-							<div
-								className="rr--reset"
-								aria-label="No rating"
-								role="radio"
-								{...(!readOnly ? { 'aria-checked': ratingValue === 0 } : {})}
-								{...(isDynamic ? getKeyboardProps(0) : {})}
-								{...(isDynamic ? getRefs(0) : {})}
-								onFocus={(event) => handleRealFocus(event, 0)}
-								onBlur={(event) => handleRealBlur(event)}
-							/>
-						)}
+				{ratingValues.map((value, childIndex) => (
+					<Fragment key={value}>
+						{shouldRenderReset && childIndex === 0 && <div {...getResetProps()} />}
 						<div
-							className={`${RatingClasses.BOX} ${styles.dynamicClassNames[starIndex]}`}
-							style={styles?.dynamicCssVars?.[starIndex]}
-							{...(!readOnly ? getRadioProps(starIndex) : {})}
-							{...(isDynamic ? getKeyboardProps(adjustIndex(starIndex)) : {})}
-							{...(isDynamic ? getRefs(adjustIndex(starIndex)) : {})}
-							{...getRadioTestIds(starIndex)}
-							onFocus={(event) => handleRealFocus(event, adjustIndex(starIndex))}
-							onBlur={(event) => handleRealBlur(event)}
+							className={`${RatingClasses.BOX} ${styles.dynamicClassNames[childIndex]}`}
+							style={styles?.dynamicCssVars?.[childIndex]}
+							{...getAriaRadioProps(childIndex)}
+							{...getInteractiveRadioProps(childIndex)}
+							{...getRadioTestIds(childIndex)}
 						>
-							<RatingItem {...getRatingItemProps(starIndex)} />
+							<RatingItem {...getRatingItemProps(childIndex)} />
 						</div>
 					</Fragment>
 				))}

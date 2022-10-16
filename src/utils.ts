@@ -17,6 +17,11 @@ export const getUniqueId = () => (Math.random() + 1).toString(36).substring(7);
 export const areNum = (...values: unknown[]) =>
 	values.every((value) => typeof value === 'number');
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const noop = (): void => {};
+
+export const isFn = (fn: unknown) => typeof fn === 'function';
+
 export const getNewPosition = (originalPos: number) =>
 	originalPos === 0 ? 0 : toSecondDecimal(originalPos) * -1;
 
@@ -32,7 +37,7 @@ export function getIntersectionIndex(ratingValues: number[], ratingValue: number
 	return Math.floor(roundedHalf);
 }
 
-export function isRTL(rootElem: HTMLElement) {
+export function isRTLDir(rootElem: HTMLElement) {
 	if (rootElem) {
 		const userDir = getComputedStyle(rootElem).getPropertyValue('direction');
 		return userDir === 'rtl';

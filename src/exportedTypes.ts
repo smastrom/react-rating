@@ -75,12 +75,15 @@ export type RatingChange =
 	| ((selectedValue: number) => void | Promise<void>);
 
 export type HoverChange = (hoveredValue: number) => void | (() => void);
+type FocusEvent = (event?: FocusEvent) => void;
 
 export type InputProps = {
 	/** Setter or custom callback to update the rating. */
 	onChange?: RatingChange;
 	/** Callback to execute when entering/leaving the rating items. */
 	onHoverChange?: HoverChange;
+	onBlur?: FocusEvent;
+	onFocus?: FocusEvent;
 	/** Whether or not to disable the radio group. */
 	isDisabled?: boolean;
 	/**

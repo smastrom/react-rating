@@ -226,31 +226,32 @@ function App() {
 
 ### :cyclone: Core
 
-| :thinking:          | Prop                    | Description                                                                | Type                                            | Default   | Required                        |
-| ------------------- | ----------------------- | -------------------------------------------------------------------------- | ----------------------------------------------- | --------- | ------------------------------- |
-| :green_circle:      | `value`                 | An integer from 0 to `items`. It can be a float if `readOnly` is **true**. | number                                          | undefined | :white_check_mark:              |
-| :large_blue_circle: | `onChange`              | Setter or custom function to update the rating                             | RatingChange                                    | undefined | Only if `readOnly` is **false** |
-| :large_blue_circle: | `onHoverChange`         | Callback to execute when navigating the rating items                       | (hoveredValue: number) => void                  | undefined | :x:                             |
-| :green_circle:      | `items`                 | Rating items to display                                                    | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
-| :green_circle:      | `readOnly`              | Whether or not to render an accessible image element                       | boolean                                         | false     | :x:                             |
-| :large_blue_circle: | `isDisabled`            | Whether or not to disable the radio group                                  | boolean                                         | false     | :x:                             |
-| :green_circle:      | `highlightOnlySelected` | Whether or not to highlight only the selected rating item                  | boolean                                         | false     | :x:                             |
+| :thinking:          | Prop            | Description                                                                | Type                                            | Default   | Required                        |
+| ------------------- | --------------- | -------------------------------------------------------------------------- | ----------------------------------------------- | --------- | ------------------------------- |
+| :green_circle:      | `value`         | An integer from 0 to `items`. It can be a float if `readOnly` is **true**. | number                                          | undefined | :white_check_mark:              |
+| :large_blue_circle: | `onChange`      | Setter or custom function to update the rating.                            | RatingChange                                    | undefined | Only if `readOnly` is **false** |
+| :large_blue_circle: | `onHoverChange` | Callback to execute when navigating the rating items.                      | (hoveredValue: number) => void                  | undefined | :x:                             |
+| :green_circle:      | `items`         | Rating items to display.                                                   | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
+| :green_circle:      | `readOnly`      | Whether to render an accessible image element or not.                      | boolean                                         | false     | :x:                             |
+| :large_blue_circle: | `isDisabled`    | Whether to disable the radio group or not.                                 | boolean                                         | false     | :x:                             |
+| :large_blue_circle: | `isRequired`    | Whether users should be able to set rating to 0 and vice versa.            | boolean                                         | false     | :x:                             |
 
-`ref`, `id`, `className` and `style` are also available.
+`ref`, `id`, `className`, `style`, `onBlur`, `onFocus` are also available.
 
 <br />
 
 ### :nail_care: Appearance
 
-| :thinking:          | Prop           | Description                                        | Type                                                    | Default       | Required |
-| ------------------- | -------------- | -------------------------------------------------- | ------------------------------------------------------- | ------------- | -------- |
-| :purple_circle:     | `halfFillMode` | Whether to half-fill the shape or the bounding box | `svg` \| `box`                                          | `svg`         | :x:      |
-| :green_circle:      | `itemStyles`   | Custom shapes and colors                           | ItemStyles                                              | defaultStyles | :x:      |
-| :green_circle:      | `spaceInside`  | Responsive padding of each rating item             | `none` \| `small` \| `medium` \| `large`                | `small`       | :x:      |
-| :green_circle:      | `spaceBetween` | Responsive gap between rating items                | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
-| :green_circle:      | `radius`       | Responsive radius of the bounding box              | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
-| :green_circle:      | `orientation`  | Orientation of the rating items                    | `horizontal` \| `vertical`                              | `horizontal`  | :x:      |
-| :large_blue_circle: | `transition`   | Transition to apply when hovering/selecting        | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `colors`      | :x:      |
+| :thinking:          | Prop                    | Description                                                | Type                                                    | Default       | Required |
+| ------------------- | ----------------------- | ---------------------------------------------------------- | ------------------------------------------------------- | ------------- | -------- |
+| :green_circle:      | `highlightOnlySelected` | Whether to highlight only the selected rating item or not. | boolean                                                 | false         | :x:      |
+| :purple_circle:     | `halfFillMode`          | Whether to half-fill the shape or the bounding box.        | `svg` \| `box`                                          | `svg`         | :x:      |
+| :green_circle:      | `itemStyles`            | Custom shapes and colors.                                  | ItemStyles                                              | defaultStyles | :x:      |
+| :green_circle:      | `spaceInside`           | Responsive padding of each rating item.                    | `none` \| `small` \| `medium` \| `large`                | `small`       | :x:      |
+| :green_circle:      | `spaceBetween`          | Responsive gap between rating items.                       | `none` \| `small` \| `medium` \| `large`                | `none`        | :x:      |
+| :green_circle:      | `radius`                | Responsive radius of the bounding box.                     | `none` \| `small` \| `medium` \| `large` \| `full`      | `none`        | :x:      |
+| :green_circle:      | `orientation`           | Orientation of the rating items.                           | `horizontal` \| `vertical`                              | `horizontal`  | :x:      |
+| :large_blue_circle: | `transition`            | Transition to apply when hovering/selecting.               | `none` \| `zoom` \| `colors` \| `opacity` \| `position` | `colors`      | :x:      |
 
 <br />
 
@@ -258,10 +259,9 @@ function App() {
 
 | :thinking:          | Prop                  | Description                                                                                                       | Type     | Default                                                          | Required |
 | ------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------- | -------- |
-| :large_blue_circle: | `isRequired`          | Whether or not to tell assistive technologies that rating is required                                             | boolean  | true                                                             | :x:      |
-| :green_circle:      | `resetLabel`          | Accessible label of the reset radio                                                                               | string   | `No Rating`                                                      | :x:      |
-| :green_circle:      | `invisibleLabel`      | Accessible label of the rating group / image                                                                      | string   | `Rating` or `Rated <value> on <items>` if `readOnly` is **true** | :x:      |
-| :large_blue_circle: | `invisibleItemLabels` | Accessible labels of each each rating item                                                                        | string[] | `Rate 1`, `Rate 2`...                                            | :x:      |
+| :large_blue_circle: | `resetLabel`          | Accessible label of the reset radio button.                                                                       | string   | `No Rating`                                                      | :x:      |
+| :green_circle:      | `invisibleLabel`      | Accessible label of the rating group / image.                                                                     | string   | `Rating` or `Rated <value> on <items>` if `readOnly` is **true** | :x:      |
+| :large_blue_circle: | `invisibleItemLabels` | Accessible labels of each each rating item.                                                                       | string[] | `Rate 1`, `Rate 2`...                                            | :x:      |
 | :large_blue_circle: | `visibleLabelId`      | DOM ID of the element used as rating group label. If set, takes precedence over `invisibleLabel`.                 | string   | undefined                                                        | :x:      |
 | :large_blue_circle: | `visibleItemLabelIds` | DOM IDs of the elements used as labels for each rating item. If set, takes precedence over `invisibleItemLabels`. | string[] | undefined                                                        | :x:      |
 
@@ -296,7 +296,7 @@ In addition to being less verbose, the setter will also be kept stable by React 
 
 ### Custom logic/state
 
-If you need to perform some actions while setting the rating (like calling an API) or you need to update a portion of state, `onChange` accepts a callback whose parameter equals to the selected rating:
+If you need to perform some actions while setting the rating (like calling an API) or you need to update only a portion of the state, `onChange` accepts a callback whose parameter equals to the selected rating:
 
 ```js
 function App() {
@@ -307,7 +307,8 @@ function App() {
   });
 
   function handleChange(selectedValue) {
-    console.log(selectedValue); // 2. Logs the selected rating (1, 2, 3...)
+    // 2. Logs the selected rating (1, 2, 3...)
+    console.log(selectedValue);
 
     // 3. Do something with or without the value...
 
@@ -320,7 +321,7 @@ function App() {
 
   return (
     <Rating
-      onChange={handleChange} // 1. Callback is executed on selection
+      onChange={handleChange} // 1. Callback is executed on confirmation
       value={state.rating} // 5. ...your UI is updated!
     />
   );
@@ -331,16 +332,14 @@ function App() {
 
 ## Behavior
 
-React Rating covers two selection scenarios in attempt to match different business logic without compromising accessibility:
-
 ### 1. Rating with reset - _Default_
 
 By default, the user is able to reset the rating (from 1-5 to 0 and vice versa):
 
-| Interaction    | Reset                                                  | Preview |
-| -------------- | ------------------------------------------------------ | ------- |
-| Mouse          | By clicking again on the selected item                 |         |
-| Keyboard/Phone | By navigating/scrolling to an invisible _ad-hoc_ radio |         |
+| Interaction | Reset                                        | Preview |
+| ----------- | -------------------------------------------- | ------- |
+| Mouse       | By clicking again on the selected item       |         |
+| Keyboard    | By navigating to an invisible _ad-hoc_ radio |         |
 
 - It is announced to screen readers that rating **is not** required.
 
@@ -348,7 +347,7 @@ By default, the user is able to reset the rating (from 1-5 to 0 and vice versa):
 
 There could be scenarios where you want to force the user to express a rating _(e.g. dedicated review page)_.
 
-In such cases, just set `isRequired` prop to **true**:
+In such cases, just set `isRequired` to **true** (defaults to false):
 
 ```jsx
 <Rating value={rating} onChange={setRating} isRequired />
@@ -361,6 +360,46 @@ In such cases, just set `isRequired` prop to **true**:
 - It is announced to screen readers that rating **is required**.
 
 - If rating equals to 0 it is announced to screen readers that the value **is invalid** and vice versa.
+
+<br />
+
+## Accessibility
+
+### Callbacks consistency
+
+React Rating leverages `aria radiogroup` role instead of native HTML radio buttons in order to extend capabilities to keyboard users (e.g. API calls).
+
+In **React Rating**:
+
+- `onChange` is called on `Enter/Space` keys and mouse _click_.
+
+- `onHoverChange` is called on `← → ↑ ↓` keys, mouse _hovering_, focus from / blur to a _non-react-rating_ element.
+
+- Rating must be confirmed and cannot be set with just arrow navigation.
+
+<details><summary><strong>Explanation</strong></summary>
+
+<br />
+
+**When arrow-navigating native HTML radios with keyboard, the value is set without any chance to confirm it.**
+
+Take this example from MUI Rating (which uses native radio buttons):
+
+![react-rating](https://i.ibb.co/s1ynkmP/ezgif-com-gif-maker.gif)
+
+To rate **5 stars**, assuming users start navigating from the first item, `onChange` must be fired 4 times.
+
+Imagine a scenario where `onChange` calls an API to send the rating somewhere: any visually impaired user won't be able to perform the action as intended.
+
+</details>
+
+### Disabled state
+
+The disabled state (`isDisabled` prop) is always announced to screen readers. This means that the radio group will still be focusable (but not interactive).
+
+### Labels
+
+Check the multiple examples on the [demo website](https://react-rating.onrender.com).
 
 <br />
 
@@ -751,38 +790,6 @@ In this case instead, all the shapes will have the same fill color (inactiveFill
 If you don't want the half-fill feature, simply pass an integer to `value`.
 
 > :warning: If `highlightOnlySelected` is set to **true**, no half-fill will take place.
-
-<br />
-
-## Accessibility
-
-### Callbacks consistency
-
-React Rating leverages aria's `radiogroup` role instead of native radio buttons.
-
-Why? **When arrow-navigating native radios with keyboard, the value is set without any chance to confirm it.**
-
-Take this example from MUI Rating (which uses native radio buttons):
-
-![react-rating](https://i.ibb.co/s1ynkmP/ezgif-com-gif-maker.gif)
-
-To rate **5 stars**, assuming users start navigating from the first item, `onChange` must be fired 4 times.
-
-Imagine a scenario where `onChange` calls an API to send the rating somewhere: any visually impaired user won't be able to perform the action as intended.
-
-In **React Rating**:
-
-- `onChange` is called on both `Enter/Space` keys and mouse _click_.
-
-- `onHoverChange` is called on both `← → ↑ ↓` keys and mouse _hovering_.
-
-### Disabled state
-
-The disabled state (`isDisabled` prop) is always announced to screen readers. This means that the radio group (not the children) will still be focusable but not interactive.
-
-### Keyboard controls
-
-### Labels
 
 <br />
 

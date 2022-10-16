@@ -37,7 +37,7 @@
 }
 
 .rr--box[tabindex='0'] {
-	z-index: 1;
+	z-index: 5;
 }
 
 .rr--box[tabindex='-1'] {
@@ -46,7 +46,7 @@
 
 /* Focus to reset */
 
-.rr--group:has(.rr--reset:focus-visible) {
+.rr--reset:focus-visible {
 	box-shadow: inset 0 0 0 2px white, 0 0 0 2px #0079ff, 0 0 0 4px white, 0 0 0 6px #0079ff;
 }
 

@@ -70,15 +70,17 @@ export type ReadOnlyProps = {
 	halfFillMode?: HF;
 };
 
-type RatingChange =
+export type RatingChange =
 	| React.Dispatch<React.SetStateAction<number>>
 	| ((selectedValue: number) => void | Promise<void>);
+
+export type HoverChange = (hoveredValue: number) => void | (() => void);
 
 export type InputProps = {
 	/** Setter or custom callback to update the rating. */
 	onChange?: RatingChange;
 	/** Callback to execute when entering/leaving the rating items. */
-	onHoverChange?: (hoveredValue: number) => void | (() => void);
+	onHoverChange?: HoverChange;
 	/** Whether or not to disable the radio group. */
 	isDisabled?: boolean;
 

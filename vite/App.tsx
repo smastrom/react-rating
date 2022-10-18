@@ -20,7 +20,7 @@ export function App() {
 	const [state, setState] = useState({
 		name: '',
 		review: '',
-		rating: 3,
+		rating: 1,
 	});
 
 	const handleHover = useCallback((hoveredValue: number) => {
@@ -36,8 +36,11 @@ export function App() {
 		}));
 	}
 
+	console.log(state.rating);
+
 	return (
 		<div
+			// dir="rtl"
 			style={{
 				width: '100%',
 				height: '90vh',
@@ -58,10 +61,9 @@ export function App() {
 						maxWidth: 160,
 					}}
 					// readOnly
-					resetOnSecondClick
 					onHoverChange={handleHover}
 					// isDisabled
-					isRequired={false}
+					// isRequired
 					items={5}
 					aria-label="Ciao"
 					onChange={handleChange}
@@ -74,7 +76,11 @@ export function App() {
 					invisibleLabel={CUSTOM_GROUP_LABEL}
 				/>
 			</Profiler>
-			<button id="second_button" type="button" onClick={() => null}>
+			<button
+				id="second_button"
+				type="button"
+				onClick={() => setState((prevState) => ({ ...prevState, rating: 0 }))}
+			>
 				Second Button
 			</button>
 		</div>

@@ -1,0 +1,3 @@
+interface SVGElement {
+	getBBox?: () => void;
+}

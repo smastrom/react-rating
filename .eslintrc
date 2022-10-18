@@ -1,7 +1,5 @@
 {
-	"parserOptions": {
-		"project": "./tsconfig.json"
-	},
+	"parser": "@typescript-eslint/parser",
 	"extends": [
 		"eslint:recommended",
 		"plugin:react/recommended",
@@ -18,14 +16,20 @@
 		}
 	},
 	"rules": {
-		"comma-dangle": "off",
-		"@typescript-eslint/comma-dangle": "off",
-		"indent": "off",
 		"@typescript-eslint/indent": "off",
-		"space-before-blocks": "off",
+		"@typescript-eslint/comma-dangle": "off",
 		"@typescript-eslint/space-before-blocks": "off",
+		"@typescript-eslint/ban-ts-comment": [
+			"error",
+			{
+				"ts-ignore": "allow-with-description"
+			}
+		],
 		"react/display-name": "off",
 		"react/prop-types": "off",
+		"comma-dangle": "off",
+		"indent": "off",
+		"space-before-blocks": "off",
 		"no-mixed-spaces-and-tabs": "off"
 	}
 }

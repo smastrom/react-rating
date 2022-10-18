@@ -24,7 +24,6 @@ Zero dependency, highly customizable rating component for React.
 - Truly responsive and mobile-first
 - Simple DOM structure
 - Zero-config RTL support
-- Lightweight with zero dependencies
 - Works with SSR
 
 <br/>
@@ -234,7 +233,7 @@ function App() {
 | :green_circle:      | `items`         | Rating items to display.                                                   | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
 | :green_circle:      | `readOnly`      | Whether to render an accessible image element or not.                      | boolean                                         | false     | :x:                             |
 | :large_blue_circle: | `isDisabled`    | Whether to disable the radio group or not.                                 | boolean                                         | false     | :x:                             |
-| :large_blue_circle: | `isRequired`    | Whether users should be able to set rating to 0 and vice versa.            | boolean                                         | false     | :x:                             |
+| :large_blue_circle: | `isRequired`    | Whether users should be able to set rating to 0 and vice versa or not.     | boolean                                         | false     | :x:                             |
 
 `ref`, `id`, `className`, `style`, `onBlur`, `onFocus` are also available.
 
@@ -259,11 +258,11 @@ function App() {
 
 | :thinking:          | Prop                  | Description                                                                                                       | Type     | Default                                                          | Required |
 | ------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------- | -------- |
-| :large_blue_circle: | `resetLabel`          | Accessible label of the reset radio button.                                                                       | string   | `No Rating`                                                      | :x:      |
 | :green_circle:      | `invisibleLabel`      | Accessible label of the rating group / image.                                                                     | string   | `Rating` or `Rated <value> on <items>` if `readOnly` is **true** | :x:      |
 | :large_blue_circle: | `invisibleItemLabels` | Accessible labels of each each rating item.                                                                       | string[] | `Rate 1`, `Rate 2`...                                            | :x:      |
 | :large_blue_circle: | `visibleLabelId`      | DOM ID of the element used as rating group label. If set, takes precedence over `invisibleLabel`.                 | string   | undefined                                                        | :x:      |
 | :large_blue_circle: | `visibleItemLabelIds` | DOM IDs of the elements used as labels for each rating item. If set, takes precedence over `invisibleItemLabels`. | string[] | undefined                                                        | :x:      |
+| :large_blue_circle: | `resetLabel`          | Accessible label of the reset radio button.                                                                       | string   | `No Rating`                                                      | :x:      |
 
 <br />
 
@@ -301,30 +300,24 @@ If you need to perform some actions while setting the rating (like calling an AP
 ```js
 function App() {
   const [state, setState] = useState({
-    name: '',
     review: '',
     rating: 0, // Initial value
   });
 
   function handleChange(selectedValue) {
-    // 2. Logs the selected rating (1, 2, 3...)
+    // 1. Logs the selected rating (1, 2, 3...)
     console.log(selectedValue);
 
-    // 3. Do something with or without the value...
+    // 2. Do something with or without the value...
 
-    // 4. Whenever you want, update the state
+    // 3. Whenever you want, update the UI
     setState((prevState) => ({
       ...prevState,
       rating: selectedValue,
     }));
   }
 
-  return (
-    <Rating
-      onChange={handleChange} // 1. Callback is executed on confirmation
-      value={state.rating} // 5. ...your UI is updated!
-    />
-  );
+  return <Rating onChange={handleChange} value={state.rating} />;
 }
 ```
 
@@ -336,16 +329,16 @@ function App() {
 
 By default, the user is able to reset the rating (from 1-5 to 0 and vice versa):
 
-| Interaction | Reset                                        | Preview |
-| ----------- | -------------------------------------------- | ------- |
-| Mouse       | By clicking again on the selected item       |         |
-| Keyboard    | By navigating to an invisible _ad-hoc_ radio |         |
+| Interaction | Reset                                     | Preview                                                             |
+| ----------- | ----------------------------------------- | ------------------------------------------------------------------- |
+| Mouse       | By clicking again on the selected item    | ![react-rating](https://i.ibb.co/h8242KP/ezgif-com-gif-maker.gif)   |
+| Keyboard    | By navigating to an invisible reset radio | ![react-rating](https://i.ibb.co/Ydc0BKc/ezgif-com-gif-maker-1.gif) |
 
 - It is announced to screen readers that rating **is not** required.
 
 ### 2. Rating without reset
 
-There could be scenarios where you want to force the user to express a rating _(e.g. dedicated review page)_.
+There could be scenarios where you want to force the user to express a rating _(e.g. review page, post-service rating)_.
 
 In such cases, just set `isRequired` to **true** (defaults to false):
 
@@ -353,13 +346,15 @@ In such cases, just set `isRequired` to **true** (defaults to false):
 <Rating value={rating} onChange={setRating} isRequired />
 ```
 
-1. It is not possbile to reset by clicking again on the selected rating with mouse.
+![react-rating](https://i.ibb.co/WyStRMz/ezgif-com-gif-maker-2.gif)
+
+1. It is not possbile to reset by clicking again on the selected rating.
 
 2. No invisible radio to reset with keyboard will be rendered.
 
 3. It is announced to screen readers that rating **is required**.
 
-4. If rating equals to 0 it is announced to screen readers that the value **is invalid** and vice versa.
+4. It is announced to screen readers that the value **is invalid** if rating equals to 0.
 
 <br />
 
@@ -367,35 +362,19 @@ In such cases, just set `isRequired` to **true** (defaults to false):
 
 ### Callbacks consistency
 
-React Rating leverages `aria radiogroup` role instead of native HTML radio buttons in order to extend capabilities to keyboard users (e.g. API calls).
+React Rating leverages `aria radiogroup` role instead of native HTML radio buttons in order to improve keyboard-users experience and extend capabilities (e.g. API calls).
 
 In **React Rating**:
 
-- `onChange` is called on `Enter/Space` keys and mouse _click_.
-
-- `onHoverChange` is called on `← → ↑ ↓` keys, mouse _hovering_, focus from / blur to a _non-react-rating_ element.
-
 - Rating must be confirmed and cannot be set with just arrow navigation.
 
-<details><summary><strong>Explanation</strong></summary>
+- `onChange` is called on `Enter/Space` keys and mouse _click_.
 
-<br />
-
-> When arrow-navigating native HTML radios with keyboard, the value is set without any chance to confirm it.
-
-Take this example from MUI Rating (which uses native radio buttons):
-
-![react-rating](https://i.ibb.co/s1ynkmP/ezgif-com-gif-maker.gif)
-
-To rate **5 stars**, assuming users start navigating from the first item, `onChange` must be fired 4 times.
-
-Imagine a scenario where `onChange` calls an API to send the rating somewhere: any visually impaired user won't be able to perform the action as intended.
-
-</details>
+- `onHoverChange` is called on `← → ↑ ↓` navigation, mouse _hovering_, focus-from / blur-to a _non-react-rating_ element.
 
 ### Disabled state
 
-The disabled state (`isDisabled` prop) is always announced to screen readers. This means that the radio group will still be focusable (but not interactive).
+The disabled state (`isDisabled` prop) is always announced. The root element will still be focusable (but not interactive) instead of being completely hidden to screen readers.
 
 ### Labels
 
@@ -769,7 +748,7 @@ The component will try to round it to the nearest half integer:
 3.75 = 4
 ```
 
-> :warning: The value will only be rounded "internally" for graphical purposes. The accessible label will always display the value you provided.
+> :warning: The value will only be rounded "internally" for graphical purposes. The accessible label will always display the value provided.
 
 If necessary, the SVG will be half-filled by default (`halfFillMode = 'svg'`):
 

@@ -49,6 +49,14 @@ export function isRTLDir(rootElem: HTMLElement) {
 export const devTestId = __DEV__ ? { 'data-testid': 'rating' } : {};
 
 /* istanbul ignore next */
+export function getResetTestId() {
+	if (__DEV__) {
+		return { 'data-testid': `rating-reset` };
+	}
+	return {};
+}
+
+/* istanbul ignore next */
 export function getRadioTestIds(childIndex: number) {
 	if (__DEV__) {
 		return { 'data-testid': `rating-child-${childIndex + 1}` };

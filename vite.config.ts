@@ -5,9 +5,19 @@ import { terser } from 'rollup-plugin-terser';
 
 import Package from './package.json';
 
+const vitestOptions = {
+	test: {
+		globals: true,
+		environment: 'jsdom',
+		setupFiles: './tests/dom/setupTests.ts',
+		exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**'],
+	},
+};
+
 export default defineConfig(({ command, mode }) => {
 	if (mode === 'ci') {
 		return {
+			...vitestOptions,
 			define: {
 				__DEV__: true,
 			},
@@ -15,6 +25,7 @@ export default defineConfig(({ command, mode }) => {
 		};
 	}
 	return {
+		...vitestOptions,
 		define: {
 			__DEV__: command !== 'build',
 		},

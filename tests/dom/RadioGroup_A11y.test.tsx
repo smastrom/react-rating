@@ -1,29 +1,15 @@
 import React from 'react';
-import {
-	render,
-	screen,
-	beforeEach,
-	afterEach,
-	ID,
-	CHILD_ID_1,
-	CHILD_ID_2,
-	CHILD_ID_3,
-	childArr,
-} from './testUtils';
+import { describe, test } from 'vitest';
+import { render, screen, ID, CHILD_ID_1, CHILD_ID_2, CHILD_ID_3, childArr } from './testUtils';
 import { Rating } from '../../src/Rating';
-
-beforeEach();
-afterEach();
 
 describe('Accessibility DOM Output Test - Parent', () => {
 	test('Should have all default aria-attributes and if switching to read-only should not have such attrs anymore', () => {
-		const { rerender } = render(<Rating value={2} onChange={() => {}} />);
+		const { rerender } = render(<Rating value={2} onChange={() => null} />);
 		const item = screen.queryByTestId(ID);
 		expect(item).toHaveAccessibleName('Rating');
 		expect(item).toHaveAttribute('role', 'radiogroup');
-		expect(item).toHaveAttribute('aria-required', 'true');
-		expect(item).toHaveAttribute('aria-invalid', 'false');
-		expect(item).not.toHaveAttribute('aria-labelledby');
+		expect(item).toHaveAttribute('aria-required', 'false');
 
 		rerender(<Rating readOnly value={2} />);
 
@@ -38,19 +24,19 @@ describe('Accessibility DOM Output Test - Parent', () => {
 	});
 
 	test('Should not have aria-invalid attribute if isRequired equals to false', () => {
-		render(<Rating value={3} onChange={() => {}} isRequired={false} />);
+		render(<Rating value={3} onChange={() => null} isRequired={false} />);
 		const item = screen.queryByTestId(ID);
 		expect(item).toHaveAttribute('aria-required', 'false');
 		expect(item).not.toHaveAttribute('aria-invalid');
 	});
 
-	test('Should be invalid if no value is set and isRequired equals to true (default)', () => {
-		const { rerender } = render(<Rating value={0} onChange={() => {}} />);
+	test('Should be invalid if no value is set and isRequired equals to true', () => {
+		const { rerender } = render(<Rating value={0} isRequired onChange={() => null} />);
 		const item = screen.queryByTestId(ID);
 		expect(item).toBeInvalid();
 		expect(item).toHaveAttribute('aria-invalid', 'true');
 
-		rerender(<Rating value={1} onChange={() => {}} />);
+		rerender(<Rating value={1} isRequired onChange={() => null} />);
 		expect(item).toBeValid();
 		expect(item).toHaveAttribute('aria-invalid', 'false');
 	});
@@ -62,7 +48,7 @@ describe('Accessibility DOM Output Test - Parent', () => {
 				<Rating
 					value={3}
 					items={3}
-					onChange={() => {}}
+					onChange={() => null}
 					invisibleLabel="Ciao"
 					visibleLabelId="id_1"
 				/>
@@ -77,7 +63,7 @@ describe('Accessibility DOM Output Test - Parent', () => {
 /* A11y - Child */
 describe('Accessibility DOM Output Test - Child', () => {
 	test('Each child should have default accessible attributes', () => {
-		render(<Rating value={2} items={3} onChange={() => {}} />);
+		render(<Rating value={2} items={3} onChange={() => null} />);
 
 		const expectAccessibleAttributes = (child: HTMLElement) => {
 			expect(child).toHaveAttribute('tabindex');
@@ -100,7 +86,7 @@ describe('Accessibility DOM Output Test - Child', () => {
 				<Rating
 					value={2}
 					items={3}
-					onChange={() => {}}
+					onChange={() => null}
 					invisibleItemLabels={['a', 'b', 'c']}
 					visibleItemLabelIds={['id_a', 'id_b', 'id_c']}
 				/>
@@ -121,7 +107,7 @@ describe('Accessibility DOM Output Test - Child', () => {
 	});
 
 	test('Only the selected child should be checked', () => {
-		render(<Rating value={2} items={3} onChange={() => {}} />);
+		render(<Rating value={2} items={3} onChange={() => null} />);
 
 		const child1 = screen.getByTestId(CHILD_ID_1);
 		expect(child1).not.toBeChecked();
@@ -134,7 +120,7 @@ describe('Accessibility DOM Output Test - Child', () => {
 	});
 
 	test('Only the selected child should be focusable on initial render', () => {
-		render(<Rating value={2} items={3} onChange={() => {}} />);
+		render(<Rating value={2} items={3} onChange={() => null} />);
 
 		const child1 = screen.getByTestId(CHILD_ID_1);
 		expect(child1).toHaveAttribute('tabindex', '-1');
@@ -149,19 +135,19 @@ describe('Accessibility DOM Output Test - Child', () => {
 	/* New in v1.1.0 */
 	test('If isDisabled, rating should never be required', async () => {
 		const { rerender } = render(
-			<Rating isRequired isDisabled value={3} onChange={() => {}} />
+			<Rating isRequired isDisabled value={3} onChange={() => null} />
 		);
 
 		const item = screen.queryByTestId(ID);
 		expect(item).not.toBeRequired();
 
-		rerender(<Rating isDisabled value={3} onChange={() => {}} />);
+		rerender(<Rating isDisabled value={3} onChange={() => null} />);
 
 		expect(item).not.toBeRequired();
 	});
 
 	test('If isDisabled, all radios should be disabled', async () => {
-		render(<Rating isDisabled value={3} onChange={() => {}} />);
+		render(<Rating isDisabled value={3} onChange={() => null} />);
 
 		/* Can't be tested with toBeDisabled() https://github.com/testing-library/jest-dom/issues/144 */
 
@@ -172,7 +158,7 @@ describe('Accessibility DOM Output Test - Child', () => {
 	});
 
 	test('If isDisabled, all radios should not have focus', async () => {
-		render(<Rating isDisabled value={3} onChange={() => {}} />);
+		render(<Rating isDisabled value={3} onChange={() => null} />);
 
 		childArr.forEach((testID) => {
 			const item = screen.queryByTestId(testID);
@@ -181,7 +167,7 @@ describe('Accessibility DOM Output Test - Child', () => {
 	});
 
 	test('If isDisabled, current rating should always be set', async () => {
-		render(<Rating isDisabled value={3} onChange={() => {}} />);
+		render(<Rating isDisabled value={3} onChange={() => null} />);
 
 		const item = screen.queryByTestId(CHILD_ID_3);
 		expect(item).toBeChecked();

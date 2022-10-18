@@ -1,5 +1,5 @@
 import React, { StrictMode } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { App } from './App';
 
 import './index.css';
@@ -10,9 +10,11 @@ import '../src/styles/colors.css';
 import '../src/styles/transitions.css';
 import '../src/styles/half-fill.css';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container as HTMLElement);
+
+root.render(
 	<StrictMode>
 		<App />
-	</StrictMode>,
-	document.getElementById('root')
+	</StrictMode>
 );

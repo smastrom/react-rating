@@ -1,9 +1,8 @@
 import React from 'react';
+import { describe, test } from 'vitest';
 import {
 	render,
 	screen,
-	beforeEach,
-	afterEach,
 	ID,
 	itemStyles,
 	CHILD_ID_1,
@@ -15,15 +14,12 @@ import {
 } from './testUtils';
 import { Rating } from '../../src/Rating';
 
-beforeEach();
-afterEach();
-
 describe('Classnames and inline css vars - RadioGroup element', () => {
 	test('Should have default classNames applied', () => {
 		const defaultClasses =
 			'rr--group rr--dir-x rr--fx-colors rr--pointer rr--has-stroke rr--space-sm';
 
-		render(<Rating value={2} items={3} onChange={() => {}} />);
+		render(<Rating value={2} items={3} onChange={() => null} />);
 
 		const item = screen.queryByTestId(ID);
 		expect(item).toHaveClass(defaultClasses, { exact: true });
@@ -36,7 +32,7 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 			<Rating
 				value={2}
 				items={3}
-				onChange={() => {}}
+				onChange={() => null}
 				transition="none"
 				spaceBetween="none"
 				spaceInside="none"
@@ -55,7 +51,7 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 				value={2}
 				items={3}
 				itemStyles={itemStyles}
-				onChange={() => {}}
+				onChange={() => null}
 				transition="none"
 				spaceBetween="none"
 				spaceInside="none"
@@ -75,7 +71,7 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 				value={2}
 				items={3}
 				itemStyles={{ ...itemStyles, boxBorderWidth: 20, itemStrokeWidth: 20 }}
-				onChange={() => {}}
+				onChange={() => null}
 				transition="none"
 				spaceBetween="none"
 				spaceInside="none"
@@ -90,7 +86,7 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 		const classNames = 'rr--group rr--dir-x rr--pointer rr--has-stroke';
 
 		render(
-			<Rating value={2} items={3} onChange={() => {}} transition="none" spaceInside="none" />
+			<Rating value={2} items={3} onChange={() => null} transition="none" spaceInside="none" />
 		);
 		const item = screen.queryByTestId(ID);
 		expect(item).toHaveClass(classNames, { exact: true });
@@ -100,7 +96,13 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 		const classNames = 'rr--group rr--dir-x rr--pointer rr--has-stroke rr--space-sm';
 
 		render(
-			<Rating value={2} items={3} onChange={() => {}} transition="none" spaceBetween="none" />
+			<Rating
+				value={2}
+				items={3}
+				onChange={() => null}
+				transition="none"
+				spaceBetween="none"
+			/>
 		);
 		const item = screen.queryByTestId(ID);
 		expect(item).toHaveClass(classNames, { exact: true });
@@ -108,7 +110,7 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 
 	/* New in v1.1.0 */
 	test('If isDisabled, should have proper cursor classNames', async () => {
-		render(<Rating isDisabled value={3} onChange={() => {}} />);
+		render(<Rating isDisabled value={3} onChange={() => null} />);
 
 		const item = screen.queryByTestId(ID);
 		expect(item).toHaveClass('rr--disabled');
@@ -128,7 +130,7 @@ describe('Classnames and inline css vars - Radio elements', () => {
 	};
 
 	test('If ratingValue equals to n, first n child should have correspondent active className', () => {
-		render(<Rating value={3} items={6} onChange={() => {}} />);
+		render(<Rating value={3} items={6} onChange={() => null} />);
 
 		toHaveActiveClassName(CHILD_ID_1);
 		toHaveActiveClassName(CHILD_ID_2);
@@ -139,7 +141,7 @@ describe('Classnames and inline css vars - Radio elements', () => {
 	});
 
 	test('If ratingValue equals to n, only n child should have correspondent active className if highlightOnlySelected is enabled', () => {
-		render(<Rating value={3} items={6} onChange={() => {}} highlightOnlySelected />);
+		render(<Rating value={3} items={6} onChange={() => null} highlightOnlySelected />);
 		toHaveInactiveClassName(CHILD_ID_1);
 		toHaveInactiveClassName(CHILD_ID_2);
 
@@ -150,13 +152,13 @@ describe('Classnames and inline css vars - Radio elements', () => {
 	});
 
 	test('If ratingValue equals to 0, no child should have active className, whether or not highlightOnlySelected is enabled', () => {
-		const { rerender } = render(<Rating value={0} items={6} onChange={() => {}} />);
+		const { rerender } = render(<Rating value={0} items={6} onChange={() => null} />);
 
 		childArr.forEach((testId) => {
 			toHaveInactiveClassName(testId);
 		});
 
-		rerender(<Rating value={0} items={6} onChange={() => {}} highlightOnlySelected />);
+		rerender(<Rating value={0} items={6} onChange={() => null} highlightOnlySelected />);
 
 		childArr.forEach((testId) => {
 			toHaveInactiveClassName(testId);

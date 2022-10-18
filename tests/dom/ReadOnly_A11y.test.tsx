@@ -1,9 +1,8 @@
 import React from 'react';
+import { describe, test } from 'vitest';
 import {
 	render,
 	screen,
-	beforeEach,
-	afterEach,
 	ID,
 	CHILD_ID_1,
 	CHILD_ID_2,
@@ -11,9 +10,6 @@ import {
 	CHILD_ID_4,
 } from './testUtils';
 import { Rating } from '../../src/Rating';
-
-beforeEach();
-afterEach();
 
 describe('readOnly parent component displays proper a11y attributes', () => {
 	function toHaveReadOnlyAttrs(item: HTMLElement | null) {
@@ -41,7 +37,7 @@ describe('readOnly parent component displays proper a11y attributes', () => {
 
 	/* New in v1.1.0 */
 	test('readOnly should always take precedence over isDisabled', async () => {
-		render(<Rating readOnly isDisabled value={2} onChange={() => {}} />);
+		render(<Rating readOnly isDisabled value={2} onChange={() => null} />);
 
 		const item = screen.queryByTestId(ID);
 		toHaveReadOnlyAttrs(item);

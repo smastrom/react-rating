@@ -1,9 +1,8 @@
 import React from 'react';
+import { Rating } from '../../src/Rating';
 import {
 	render,
 	screen,
-	beforeEach,
-	afterEach,
 	ID,
 	itemStyles,
 	CHILD_ID_1,
@@ -11,10 +10,6 @@ import {
 	CHILD_ID_3,
 	CHILD_ID_4,
 } from './testUtils';
-import { Rating } from '../../src/Rating';
-
-beforeEach();
-afterEach();
 
 const activeClassNames = 'rr--box rr--on';
 const inactiveClassNames = 'rr--box rr--off';

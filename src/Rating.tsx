@@ -26,6 +26,7 @@ import {
 	isRTLDir,
 	useIsomorphicLayoutEffect,
 	noop,
+	getResetTestId,
 } from './utils';
 import { Sizes, OrientationProps, TransitionProps, HFProps, RatingClasses } from './constants';
 import { defaultItemStyles } from './defaultItemStyles';
@@ -67,7 +68,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			radius = Sizes.NONE,
 			transition = TransitionProps.COLORS,
 			itemStyles = defaultItemStyles,
-			isRequired = true,
+			isRequired = false,
 			halfFillMode = HFProps.SVG,
 			visibleLabelId,
 			visibleItemLabelIds,
@@ -111,13 +112,11 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			absoluteBoxBorderWidth,
 		} = useMemo(() => {
 			const { itemShapes, itemStrokeWidth, boxBorderWidth, ...colors } = itemStyles;
-			const absoluteStrokeWidth = getNumber(itemStrokeWidth);
-			const absoluteBoxBorderWidth = getNumber(boxBorderWidth);
 			const userColors = getColors(colors);
 			return {
 				itemShapes,
-				absoluteStrokeWidth,
-				absoluteBoxBorderWidth,
+				absoluteStrokeWidth: getNumber(itemStrokeWidth),
+				absoluteBoxBorderWidth: getNumber(boxBorderWidth),
 				...userColors,
 			};
 		}, [itemStyles]);
@@ -179,7 +178,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		/* Effects */
 
 		useIsomorphicLayoutEffect(() => {
-			if (isDynamic && radioRefs?.current) {
+			if (isDynamic && radioRefs.current) {
 				isRTL.current = isRTLDir(radioRefs.current[0]);
 			}
 		}, [isDynamic]);
@@ -227,15 +226,15 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		function handleWhenNeeded(
 			event: FocusEvent | MouseEvent,
-			relatedCallback: () => void,
+			unrelatedCallback: () => void,
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			unrelatedCallback: () => void = () => {}
+			relatedCallback: () => void = () => {}
 		) {
 			const isStarRelated = radioRefs.current.some((radio) => radio === event.relatedTarget);
 			if (!isStarRelated) {
-				relatedCallback();
-			} else {
 				unrelatedCallback();
+			} else {
+				relatedCallback();
 			}
 		}
 
@@ -308,7 +307,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		/* Keyboard */
 
-		/** Ignoring keyboard handlers from Jest coverage as they have been
+		/** Ignoring keyboard handlers from Vitest coverage as they have been
 		 * tested with Playwright in tests/e2e/keyboardNavigation.test.ts */
 
 		/* istanbul ignore next */
@@ -479,6 +478,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				role: 'radio',
 				'aria-label': resetLabel,
 				'aria-checked': ratingValue === 0,
+				...getResetTestId(),
 			};
 
 			if (isDynamic) {

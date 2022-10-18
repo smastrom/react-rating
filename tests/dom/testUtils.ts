@@ -1,32 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import { ThinStar } from '../../src/Shapes';
 import { useState } from 'react';
 import { ItemStyles } from '../../src/exportedTypes';
-
-function before() {
-	return beforeEach(() => {
-		jest.spyOn(console, 'error').mockImplementation(() => null);
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		window.SVGElement.prototype.getBBox = () => ({
-			x: 0,
-			y: 0,
-			width: 0,
-			height: 0,
-		});
-	});
-}
-
-function after() {
-	return afterEach(() => {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		delete window.SVGElement.prototype.getBBox;
-	});
-}
-
-export { render, screen, before as beforeEach, after as afterEach };
+export { render, screen } from '@testing-library/react';
 
 export const ID = 'rating';
 export const CHILD_ID_1 = 'rating-child-1';
@@ -47,7 +22,7 @@ export const itemStyles: ItemStyles = {
 	itemShapes: ThinStar,
 };
 
-export const useSelectedRatingValue = (initialValue: number) => {
+export const useOnChange = (initialValue: number) => {
 	const [ratingValue, setRatingValue] = useState(initialValue);
 
 	return { ratingValue, setRatingValue };

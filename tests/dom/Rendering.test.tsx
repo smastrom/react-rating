@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
 import {
-	beforeEach,
-	afterEach,
+	render,
+	screen,
 	ID,
 	CHILD_ID_1,
 	CHILD_ID_2,
@@ -14,12 +13,9 @@ import {
 import { Rating } from '../../src/Rating';
 import { Star } from '../../src/Shapes';
 
-beforeEach();
-afterEach();
-
 describe('Component rendering', () => {
 	test('Should be in the document if value equals to zero', () => {
-		const { rerender } = render(<Rating value={0} onChange={() => {}} />);
+		const { rerender } = render(<Rating value={0} onChange={() => null} />);
 		const item = screen.getByTestId(ID);
 		expect(item).toBeInTheDocument();
 
@@ -28,17 +24,17 @@ describe('Component rendering', () => {
 	});
 
 	test('Should not render the component if value is not a number', () => {
-		// @ts-ignore
+		// @ts-ignore - TEST
 		const { rerender } = render(<Rating value="6" />);
 		const item = screen.queryByTestId(ID);
 		expect(item).not.toBeInTheDocument();
-		// @ts-ignore
+		// @ts-ignore - TEST
 		rerender(<Rating readOnly value="6" />);
 		expect(item).not.toBeInTheDocument();
 	});
 
 	test('Should not render the component if items greater than 10', () => {
-		// @ts-ignore
+		// @ts-ignore - TEST
 		render(<Rating value={6} items={11} />);
 		const item = screen.queryByTestId(ID);
 		expect(item).not.toBeInTheDocument();
@@ -60,10 +56,10 @@ describe('Component rendering', () => {
 			<Rating
 				readOnly
 				value={1.5}
-				// @ts-ignore
+				// @ts-ignore - TEST
 				itemStyles={{ itemShapes: StarComponent }}
 				items={3}
-				onChange={() => {}}
+				onChange={() => null}
 			/>
 		);
 
@@ -74,10 +70,10 @@ describe('Component rendering', () => {
 			<Rating
 				readOnly
 				value={1.5}
-				// @ts-ignore
+				// @ts-ignore - TEST
 				itemStyles={{ itemShapes: [StarComponent, StarComponent, StarComponent] }}
 				items={3}
-				onChange={() => {}}
+				onChange={() => null}
 			/>
 		);
 
@@ -85,15 +81,13 @@ describe('Component rendering', () => {
 	});
 
 	test('Should not render the component if itemShapes length not equal to items', () => {
-		const StarComponent = () => Star;
-
 		const { rerender } = render(
 			<Rating
 				readOnly
 				value={1.5}
 				itemStyles={{ itemShapes: [Star, Star] }}
 				items={3}
-				onChange={() => {}}
+				onChange={() => null}
 			/>
 		);
 
@@ -106,7 +100,7 @@ describe('Component rendering', () => {
 				value={1.5}
 				itemStyles={{ itemShapes: [Star, Star, Star, Star] }}
 				items={4}
-				onChange={() => {}}
+				onChange={() => null}
 			/>
 		);
 
@@ -114,16 +108,14 @@ describe('Component rendering', () => {
 	});
 
 	test('Should not render the component if no itemShapes provided JSX element', () => {
-		const StarComponent = () => Star;
-
 		render(
 			<Rating
 				readOnly
 				value={1.5}
-				// @ts-ignore
+				// @ts-ignore - TEST
 				itemStyles={{ activeFillColor: 'red' }}
 				items={3}
-				onChange={() => {}}
+				onChange={() => null}
 			/>
 		);
 
@@ -138,13 +130,13 @@ describe('Component rendering', () => {
 	});
 
 	test('If onChange provided and readOnly is false, it should render the component', () => {
-		render(<Rating value={3} onChange={() => {}} />);
+		render(<Rating value={3} onChange={() => null} />);
 		const item = screen.queryByTestId(ID);
 		expect(item).toBeInTheDocument();
 	});
 
 	test('If readOnly is false and value provided is not an integer, it should not render the component', () => {
-		render(<Rating value={3.6} onChange={() => {}} />);
+		render(<Rating value={3.6} onChange={() => null} />);
 		const item = screen.queryByTestId(ID);
 		expect(item).not.toBeInTheDocument();
 	});
@@ -165,7 +157,7 @@ describe('Component rendering', () => {
 
 describe('Any child element rendering', () => {
 	test('It should render 3 boxes and each box should have a non-empty SVG child', () => {
-		render(<Rating value={3} items={3} onChange={() => {}} />);
+		render(<Rating value={3} items={3} onChange={() => null} />);
 
 		const areChildNodesRendered = (boxId: string, svgId: string) => {
 			const box = screen.getByTestId(boxId);
@@ -180,7 +172,7 @@ describe('Any child element rendering', () => {
 	});
 
 	test('If halfFillMode equals to svg (default) and deserves half-fill, it should render defs', () => {
-		render(<Rating readOnly value={1.5} items={3} onChange={() => {}} />);
+		render(<Rating readOnly value={1.5} items={3} onChange={() => null} />);
 
 		const defs = screen.getByTestId('svg-defs-testid');
 		expect(defs).toBeInTheDocument();

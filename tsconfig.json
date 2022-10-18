@@ -8,7 +8,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
 		"noEmit": true,
-		"jsx": "react",
+		"jsx": "react-jsx",
 		"target": "ES6",
 		"module": "ES6"
 	},

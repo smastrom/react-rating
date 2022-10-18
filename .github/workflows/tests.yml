@@ -25,9 +25,9 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
-      - name: Install Playwright and its dependencies
+      - name: Install Playwright
         run: npx playwright install --with-deps
-      - name: Run Jest tests
+      - name: Vitest
         run: yarn test
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

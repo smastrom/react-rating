@@ -26,19 +26,16 @@
 }
 
 /* Focus */
-
+.rr--box:focus,
 .rr--box:focus-visible,
-.rr-reset:focus-visible {
+.rr-reset:focus-visible,
+.rr-reset:focus {
 	outline: rgba(0, 0, 0, 0);
 	z-index: 5;
 }
 
-.rr--box:focus-visible .rr--svg {
-	box-shadow: var(--rr--focus-shadow);
-}
-
+.rr--box:focus-visible .rr--svg,
 .rr--focus-reset {
-	border-radius: 2.5px;
 	box-shadow: var(--rr--focus-shadow);
 }
 

@@ -3,7 +3,7 @@ import { Rating } from '../../src/Rating';
 import {
 	render,
 	screen,
-	ID,
+	GROUP_ID,
 	itemStyles,
 	CHILD_ID_1,
 	CHILD_ID_2,
@@ -32,8 +32,8 @@ describe('Classnames and inline css vars - Image element', () => {
 				spaceInside="none"
 			/>
 		);
-		const item = screen.getByTestId(ID);
-		expect(item).toHaveClass(defaultClasses, { exact: true });
+		const group = screen.getByTestId(GROUP_ID);
+		expect(group).toHaveClass(defaultClasses, { exact: true });
 	});
 
 	test('If only one color is defined, should have exactly one CSS var defined in style', () => {
@@ -46,8 +46,8 @@ describe('Classnames and inline css vars - Image element', () => {
 				spaceInside="none"
 			/>
 		);
-		const item = screen.getByTestId(ID);
-		expect(item).toHaveAttribute('style', '--rr--fill-on-color: red;');
+		const group = screen.getByTestId(GROUP_ID);
+		expect(group).toHaveAttribute('style', '--rr--fill-on-color: red;');
 	});
 
 	test('If no colors are defined, the style attribute should not be defined', () => {
@@ -60,8 +60,8 @@ describe('Classnames and inline css vars - Image element', () => {
 				spaceInside="none"
 			/>
 		);
-		const item = screen.getByTestId(ID);
-		expect(item).not.toHaveAttribute('style');
+		const group = screen.getByTestId(GROUP_ID);
+		expect(group).not.toHaveAttribute('style');
 	});
 
 	test('Should have active classNames added properly', () => {
@@ -76,8 +76,8 @@ describe('Classnames and inline css vars - Image element', () => {
 	test('readOnly should always take precedence over isDisabled', async () => {
 		render(<Rating readOnly isDisabled value={2} />);
 
-		const item = screen.queryByTestId(ID);
-		expect(item).not.toHaveClass('rr--disabled');
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).not.toHaveClass('rr--disabled');
 	});
 });
 
@@ -94,12 +94,12 @@ describe('Half-fill classnames injection', () => {
 		const floatValue = 2.12;
 		const items = 3;
 		const { rerender } = render(<Rating readOnly value={floatValue} items={items} />);
-		const item = screen.getByTestId(ID);
-		expect(item).toHaveAccessibleName(`Rated ${floatValue} on ${items}`);
+		const group = screen.getByTestId(GROUP_ID);
+		expect(group).toHaveAccessibleName(`Rated ${floatValue} on ${items}`);
 
 		const floatValueHF = 2.44;
 		rerender(<Rating readOnly value={floatValueHF} items={items} />);
-		expect(item).toHaveAccessibleName(`Rated ${floatValueHF} on ${items}`);
+		expect(group).toHaveAccessibleName(`Rated ${floatValueHF} on ${items}`);
 	});
 
 	test('If user passes a float, deserves half-fill but highlightOnlySelected is enabled, should have default on/off classNames', () => {

@@ -1,9 +1,10 @@
 import React from 'react';
 import { describe, test } from 'vitest';
 import {
+	arrayColorStyles,
 	render,
 	screen,
-	ID,
+	GROUP_ID,
 	itemStyles,
 	CHILD_ID_1,
 	CHILD_ID_2,
@@ -13,6 +14,14 @@ import {
 	childArr,
 } from './testUtils';
 import { Rating } from '../../src/Rating';
+import {
+	ActiveVars,
+	GapClasses,
+	OrientationClasses,
+	PaddingClasses,
+	RadiusClasses,
+	TransitionClasses,
+} from '../../src/constants';
 
 describe('Classnames and inline css vars - RadioGroup element', () => {
 	test('Should have default classNames applied', () => {
@@ -21,8 +30,8 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 
 		render(<Rating value={2} items={3} onChange={() => null} />);
 
-		const item = screen.queryByTestId(ID);
-		expect(item).toHaveClass(defaultClasses, { exact: true });
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveClass(defaultClasses, { exact: true });
 	});
 
 	test('Should not have classNames if styling props are disabled', () => {
@@ -39,8 +48,8 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 			/>
 		);
 
-		const item = screen.queryByTestId(ID);
-		expect(item).toHaveClass(defaultClasses, { exact: true });
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveClass(defaultClasses, { exact: true });
 	});
 
 	test('Should have no stroke nor border classNames and no CSS inline vars if not included in itemStyles', () => {
@@ -58,9 +67,9 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 			/>
 		);
 
-		const item = screen.queryByTestId(ID);
-		expect(item).toHaveClass(defaultClasses, { exact: true });
-		expect(item).not.toHaveAttribute('style');
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveClass(defaultClasses, { exact: true });
+		expect(group).not.toHaveAttribute('style');
 	});
 
 	test('Should have stroke and border classNames if set in itemStyles', () => {
@@ -78,8 +87,8 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 			/>
 		);
 
-		const item = screen.queryByTestId(ID);
-		expect(item).toHaveClass(classNames, { exact: true });
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveClass(classNames, { exact: true });
 	});
 
 	test('Should have no gap nor padding classNames if spaceInside is set to none (default: small)', () => {
@@ -88,8 +97,8 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 		render(
 			<Rating value={2} items={3} onChange={() => null} transition="none" spaceInside="none" />
 		);
-		const item = screen.queryByTestId(ID);
-		expect(item).toHaveClass(classNames, { exact: true });
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveClass(classNames, { exact: true });
 	});
 
 	test('Should have default padding className if spaceInside set to none', () => {
@@ -104,17 +113,17 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 				spaceBetween="none"
 			/>
 		);
-		const item = screen.queryByTestId(ID);
-		expect(item).toHaveClass(classNames, { exact: true });
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveClass(classNames, { exact: true });
 	});
 
 	/* New in v1.1.0 */
 	test('If isDisabled, should have proper cursor classNames', async () => {
 		render(<Rating isDisabled value={3} onChange={() => null} />);
 
-		const item = screen.queryByTestId(ID);
-		expect(item).toHaveClass('rr--disabled');
-		expect(item).not.toHaveClass('rr-cursor');
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveClass('rr--disabled');
+		expect(group).not.toHaveClass('rr-cursor');
 	});
 });
 
@@ -163,5 +172,60 @@ describe('Classnames and inline css vars - Radio elements', () => {
 		childArr.forEach((testId) => {
 			toHaveInactiveClassName(testId);
 		});
+	});
+
+	test('If providing array colors, variables should be added correctly to current and prev items', () => {
+		const { rerender } = render(
+			<Rating value={1} items={5} onChange={() => null} itemStyles={arrayColorStyles} />
+		);
+
+		const prevChild: HTMLElement[] = [];
+
+		childArr.forEach((childTestId, index) => {
+			rerender(
+				<Rating
+					value={index + 1}
+					items={5}
+					onChange={() => null}
+					itemStyles={arrayColorStyles}
+				/>
+			);
+			const child = screen.queryByTestId(childTestId);
+			[...prevChild, child].forEach((prevTestId) => {
+				expect(prevTestId).toHaveStyle({
+					[ActiveVars.FILL]: (arrayColorStyles.activeFillColor as string[])[index],
+					[ActiveVars.BOX]: (arrayColorStyles.activeBoxColor as string[])[index],
+					[ActiveVars.STROKE]: (arrayColorStyles.activeStrokeColor as string[])[index],
+					[ActiveVars.BORDER]: (arrayColorStyles.activeBoxBorderColor as string[])[index],
+				});
+			});
+
+			prevChild.push(child as HTMLElement);
+		});
+	});
+
+	test('Any className from props is added correctly', () => {
+		render(
+			<Rating
+				value={1}
+				items={5}
+				onChange={() => null}
+				itemStyles={arrayColorStyles}
+				spaceBetween="medium"
+				spaceInside="large"
+				radius="full"
+				orientation="vertical"
+				transition="opacity"
+			/>
+		);
+
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveClass(
+			GapClasses.MEDIUM,
+			PaddingClasses.LARGE,
+			RadiusClasses.FULL,
+			OrientationClasses.VERTICAL,
+			TransitionClasses.OPACITY
+		);
 	});
 });

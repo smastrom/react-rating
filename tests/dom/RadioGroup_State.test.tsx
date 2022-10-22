@@ -2,15 +2,7 @@ import React from 'react';
 import { describe, test } from 'vitest';
 import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
-import {
-	render,
-	screen,
-	CHILD_ID_1,
-	CHILD_ID_3,
-	CHILD_ID_4,
-	CHILD_ID_5,
-	useOnChange,
-} from './testUtils';
+import { render, screen, CHILD_ID_3, CHILD_ID_4, CHILD_ID_5, useOnChange } from './testUtils';
 import { Rating } from '../../src/Rating';
 
 describe('User-managed state is updated correctly by click and hover events', () => {
@@ -69,9 +61,6 @@ describe('User-managed state is updated correctly by click and hover events', ()
 
 		await user.click(screen.getByTestId('reset-btn'));
 		expect(result.current.ratingValue).toBe(0);
-
-		await user.click(screen.getByTestId(CHILD_ID_1));
-		expect(result.current.ratingValue).toBe(1);
 	});
 
 	test('Hovered rating value is updated correctly and does not interfere with selected value', async () => {

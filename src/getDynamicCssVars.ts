@@ -8,21 +8,21 @@ import {
 
 export function getDynamicCssVars(
 	arrayColors: RequireAtLeastOne<ValidArrayColors>,
-	currentSelectedIndex: number,
+	starIndex: number,
 	highlightOnlySelected: NonNullProp<'highlightOnlySelected'>
 ): CSSVariables[] {
 	const arrayStylesVars: CSSVariables = {};
 	let cssVars: CSSVariables[];
 
 	for (const [key, color] of Object.entries(arrayColors)) {
-		setDyamicCssVars(arrayStylesVars, key, color[currentSelectedIndex]);
+		setDyamicCssVars(arrayStylesVars, key, color[starIndex]);
 	}
 
 	if (highlightOnlySelected === true) {
-		cssVars = Array(currentSelectedIndex).fill({});
+		cssVars = Array(starIndex).fill({});
 		cssVars.push(arrayStylesVars);
 	} else {
-		cssVars = Array(currentSelectedIndex + 1).fill(arrayStylesVars);
+		cssVars = Array(starIndex + 1).fill(arrayStylesVars);
 	}
 
 	return cssVars;

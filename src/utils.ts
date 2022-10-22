@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect } from 'react';
 
 export const isSSR = typeof window === 'undefined';
 
+/* c8 ignore next */
 export const useIsomorphicLayoutEffect = isSSR ? useEffect : useLayoutEffect;
 
 export const isPositiveNum = (value: unknown) => typeof value === 'number' && value > 0;
@@ -45,41 +46,41 @@ export function isRTLDir(rootElem: HTMLElement) {
 	return false;
 }
 
-/* istanbul ignore next */
+/* c8 ignore next */
 export const devTestId = __DEV__ ? { 'data-testid': 'rating' } : {};
 
-/* istanbul ignore next */
+/* c8 ignore next */
 export function getResetTestId() {
 	if (__DEV__) {
 		return { 'data-testid': `rating-reset` };
-	}
+	} /* c8 ignore next */
 	return {};
 }
 
-/* istanbul ignore next */
+/* c8 ignore next */
 export function getRadioTestIds(childIndex: number) {
 	if (__DEV__) {
 		return { 'data-testid': `rating-child-${childIndex + 1}` };
-	}
+	} /* c8 ignore next */
 	return {};
 }
 
-/* istanbul ignore next */
+/* c8 ignore next */
 export function getSvgTestIds(childIndex: number) {
 	if (__DEV__) {
 		return {
 			'data-testid': `rating-child-svg-${childIndex + 1}`,
 		};
-	}
+	} /* c8 ignore next */
 	return {};
 }
 
-/* istanbul ignore next */
+/* c8 ignore next */
 export function getDefsTestId() {
 	if (__DEV__) {
 		return {
 			'data-testid': 'svg-defs-testid',
 		};
-	}
+	} /* c8 ignore next */
 	return {};
 }

@@ -1,44 +1,51 @@
 import React from 'react';
-import { describe, test } from 'vitest';
-import { render, screen, ID, CHILD_ID_1, CHILD_ID_2, CHILD_ID_3, childArr } from './testUtils';
+import {
+	render,
+	screen,
+	GROUP_ID,
+	CHILD_ID_1,
+	CHILD_ID_2,
+	CHILD_ID_3,
+	childArr,
+} from './testUtils';
 import { Rating } from '../../src/Rating';
 
 describe('Accessibility DOM Output Test - Parent', () => {
 	test('Should have all default aria-attributes and if switching to read-only should not have such attrs anymore', () => {
 		const { rerender } = render(<Rating value={2} onChange={() => null} />);
-		const item = screen.queryByTestId(ID);
-		expect(item).toHaveAccessibleName('Rating');
-		expect(item).toHaveAttribute('role', 'radiogroup');
-		expect(item).toHaveAttribute('aria-required', 'false');
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveAccessibleName('Rating');
+		expect(group).toHaveAttribute('role', 'radiogroup');
+		expect(group).toHaveAttribute('aria-required', 'false');
 
 		rerender(<Rating readOnly value={2} />);
 
-		expect(item).toHaveAttribute('role', 'img');
-		expect(item).toHaveAccessibleName('Rated 2 on 5');
+		expect(group).toHaveAttribute('role', 'img');
+		expect(group).toHaveAccessibleName('Rated 2 on 5');
 
-		expect(item).not.toHaveAccessibleName('Rating');
-		expect(item).not.toHaveAttribute('role', 'radiogroup');
-		expect(item).not.toHaveAttribute('aria-required', 'true');
-		expect(item).not.toHaveAttribute('aria-invalid', 'false');
-		expect(item).not.toHaveAttribute('aria-labelledby');
+		expect(group).not.toHaveAccessibleName('Rating');
+		expect(group).not.toHaveAttribute('role', 'radiogroup');
+		expect(group).not.toHaveAttribute('aria-required', 'true');
+		expect(group).not.toHaveAttribute('aria-invalid', 'false');
+		expect(group).not.toHaveAttribute('aria-labelledby');
 	});
 
 	test('Should not have aria-invalid attribute if isRequired equals to false', () => {
-		render(<Rating value={3} onChange={() => null} isRequired={false} />);
-		const item = screen.queryByTestId(ID);
-		expect(item).toHaveAttribute('aria-required', 'false');
-		expect(item).not.toHaveAttribute('aria-invalid');
+		render(<Rating value={3} onChange={() => null} />);
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveAttribute('aria-required', 'false');
+		expect(group).not.toHaveAttribute('aria-invalid');
 	});
 
 	test('Should be invalid if no value is set and isRequired equals to true', () => {
 		const { rerender } = render(<Rating value={0} isRequired onChange={() => null} />);
-		const item = screen.queryByTestId(ID);
-		expect(item).toBeInvalid();
-		expect(item).toHaveAttribute('aria-invalid', 'true');
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toBeInvalid();
+		expect(group).toHaveAttribute('aria-invalid', 'true');
 
 		rerender(<Rating value={1} isRequired onChange={() => null} />);
-		expect(item).toBeValid();
-		expect(item).toHaveAttribute('aria-invalid', 'false');
+		expect(group).toBeValid();
+		expect(group).toHaveAttribute('aria-invalid', 'false');
 	});
 
 	test('If both invisible label and visible label ids are set, visible labels should take precedence', () => {
@@ -54,13 +61,12 @@ describe('Accessibility DOM Output Test - Parent', () => {
 				/>
 			</>
 		);
-		const item = screen.queryByTestId(ID);
-		expect(item).toHaveAccessibleName('Hello');
-		expect(item).not.toHaveAttribute('aria-label', 'Ciao');
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveAccessibleName('Hello');
+		expect(group).not.toHaveAttribute('aria-label', 'Ciao');
 	});
 });
 
-/* A11y - Child */
 describe('Accessibility DOM Output Test - Child', () => {
 	test('Each child should have default accessible attributes', () => {
 		render(<Rating value={2} items={3} onChange={() => null} />);
@@ -132,18 +138,17 @@ describe('Accessibility DOM Output Test - Child', () => {
 		expect(child3).toHaveAttribute('tabindex', '-1');
 	});
 
-	/* New in v1.1.0 */
 	test('If isDisabled, rating should never be required', async () => {
 		const { rerender } = render(
 			<Rating isRequired isDisabled value={3} onChange={() => null} />
 		);
 
-		const item = screen.queryByTestId(ID);
-		expect(item).not.toBeRequired();
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).not.toBeRequired();
 
 		rerender(<Rating isDisabled value={3} onChange={() => null} />);
 
-		expect(item).not.toBeRequired();
+		expect(group).not.toBeRequired();
 	});
 
 	test('If isDisabled, all radios should be disabled', async () => {
@@ -169,7 +174,7 @@ describe('Accessibility DOM Output Test - Child', () => {
 	test('If isDisabled, current rating should always be set', async () => {
 		render(<Rating isDisabled value={3} onChange={() => null} />);
 
-		const item = screen.queryByTestId(CHILD_ID_3);
-		expect(item).toBeChecked();
+		const group = screen.queryByTestId(CHILD_ID_3);
+		expect(group).toBeChecked();
 	});
 });

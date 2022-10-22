@@ -1,14 +1,18 @@
 import React, { useCallback, useState } from 'react';
 import { Profiler } from './Profiler';
 import { Rating } from '../src/Rating';
-/* import { ItemStyles } from '../src/exportedTypes';
-import { StickerStar } from '../src'; */
+import { ItemStyles } from '../src/exportedTypes';
+import { StickerStar } from '../src';
 
-/* const customStyles: ItemStyles = {
+const customStyles: ItemStyles = {
 	itemShapes: StickerStar,
-	activeFillColor: '#9333ea',
-	inactiveFillColor: '#f3e8ff',
-}; */
+	activeFillColor: ['#FEE2E2', '#FFEDD5', '#FEF9C3', '#ECFCCB', '#D1FAE5'],
+	activeBoxColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
+	activeBoxBorderColor: ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'],
+	inactiveFillColor: 'white',
+	inactiveBoxColor: '#dddddd',
+	inactiveBoxBorderColor: '#a8a8a8',
+};
 
 const CUSTOM_GROUP_LABEL = 'Rate - GitHub Plaza Hotel';
 const CUSTOM_GROUP_LABEL_ID = 'group_label';
@@ -63,15 +67,15 @@ export function App() {
 					// readOnly
 					onHoverChange={handleHover}
 					// isDisabled
-					// isRequired
+					isRequired
 					items={5}
 					aria-label="Ciao"
 					onChange={handleChange}
 					value={state.rating}
-					// itemStyles={customStyles}
+					itemStyles={customStyles}
 					// highlightOnlySelected
 					orientation="horizontal"
-					radius="small"
+					// radius="small"
 					visibleLabelId={CUSTOM_GROUP_LABEL_ID}
 					invisibleLabel={CUSTOM_GROUP_LABEL}
 				/>

@@ -229,11 +229,11 @@ function App() {
 | ------------------- | --------------- | -------------------------------------------------------------------------- | ----------------------------------------------- | --------- | ------------------------------- |
 | :green_circle:      | `value`         | An integer from 0 to `items`. It can be a float if `readOnly` is **true**. | number                                          | undefined | :white_check_mark:              |
 | :large_blue_circle: | `onChange`      | Setter or custom function to update the rating.                            | RatingChange                                    | undefined | Only if `readOnly` is **false** |
-| :large_blue_circle: | `onHoverChange` | Callback to execute when navigating the rating items.                      | (hoveredValue: number) => void                  | undefined | :x:                             |
+| :large_blue_circle: | `onHoverChange` | Callback to execute while navigating the rating items.                     | (hoveredValue: number) => void                  | undefined | :x:                             |
 | :green_circle:      | `items`         | Rating items to display.                                                   | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
 | :green_circle:      | `readOnly`      | Whether to render an accessible image element or not.                      | boolean                                         | false     | :x:                             |
 | :large_blue_circle: | `isDisabled`    | Whether to disable the radio group or not.                                 | boolean                                         | false     | :x:                             |
-| :large_blue_circle: | `isRequired`    | Whether users should be able to set rating to 0 and vice versa or not.     | boolean                                         | false     | :x:                             |
+| :large_blue_circle: | `isRequired`    | Whether users should be able to set rating to 0 or not.                    | boolean                                         | false     | :x:                             |
 
 `ref`, `id`, `className`, `style`, `onBlur`, `onFocus` are also available.
 
@@ -343,18 +343,18 @@ There could be scenarios where you want to force the user to express a rating _(
 In such cases, just set `isRequired` to **true** (defaults to false):
 
 ```jsx
-<Rating value={rating} onChange={setRating} isRequired />
+<Rating isRequired value={rating} onChange={setRating} />
 ```
 
 ![react-rating](https://i.ibb.co/WyStRMz/ezgif-com-gif-maker-2.gif)
 
 1. It is not possbile to reset by clicking again on the selected rating.
 
-2. No invisible radio to reset with keyboard will be rendered.
+2. No invisible radio to reset with keyboard is rendered.
 
 3. It is announced to screen readers that rating **is required**.
 
-4. It is announced to screen readers that the value **is invalid** if rating equals to 0.
+4. If value equals to 0, it is announced to screen readers that the rating **is invalid** .
 
 <br />
 

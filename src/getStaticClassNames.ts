@@ -8,11 +8,10 @@ import {
 	PaddingClasses,
 } from './constants';
 
-/* istanbul ignore next */
 const colorsWith = (transition: CSSClassName): CSSClassName =>
 	`${transition} ${TransitionClasses.COLORS}`;
 
-/* istanbul ignore next */
+/* c8 ignore start */
 export function getTransitionClassNames(transitionProp: unknown): MaybeEmptyClassName {
 	switch (transitionProp) {
 		case TransitionProps.ZOOM:
@@ -27,8 +26,9 @@ export function getTransitionClassNames(transitionProp: unknown): MaybeEmptyClas
 			return '';
 	}
 }
+/* c8 ignore stop */
 
-/* istanbul ignore next */
+/* c8 ignore start */
 export function getRadiusClassName(radiusProp: unknown): MaybeEmptyClassName {
 	switch (radiusProp) {
 		case Sizes.SMALL:
@@ -43,8 +43,9 @@ export function getRadiusClassName(radiusProp: unknown): MaybeEmptyClassName {
 			return '';
 	}
 }
+/* c8 ignore stop */
 
-/* istanbul ignore next */
+/* c8 ignore start */
 export function getGapClassName(gapProp: unknown): MaybeEmptyClassName {
 	switch (gapProp) {
 		case Sizes.SMALL:
@@ -57,8 +58,9 @@ export function getGapClassName(gapProp: unknown): MaybeEmptyClassName {
 			return '';
 	}
 }
+/* c8 ignore stop */
 
-/* istanbul ignore next */
+/* c8 ignore start */
 export function getPaddingClassName(paddingProp: unknown): MaybeEmptyClassName {
 	switch (paddingProp) {
 		case Sizes.SMALL:
@@ -71,3 +73,4 @@ export function getPaddingClassName(paddingProp: unknown): MaybeEmptyClassName {
 			return '';
 	}
 }
+/* c8 ignore stop */

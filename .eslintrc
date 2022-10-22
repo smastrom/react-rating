@@ -2,8 +2,9 @@
 	"parser": "@typescript-eslint/parser",
 	"extends": [
 		"eslint:recommended",
-		"plugin:react/recommended",
 		"plugin:@typescript-eslint/recommended",
+		"plugin:react/recommended",
+		"plugin:react/jsx-runtime",
 		"plugin:react-hooks/recommended"
 	],
 	"env": {
@@ -12,7 +13,7 @@
 	},
 	"settings": {
 		"react": {
-			"version": "17.0.2"
+			"version": "detect"
 		}
 	},
 	"rules": {

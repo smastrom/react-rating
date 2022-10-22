@@ -56,15 +56,16 @@
 		"style.css"
 	],
 	"scripts": {
-		"prebuild": "rimraf dist style.css",
-		"build": "tsc && vite build && cpy dist/style.css ./ --flat && rimraf dist/style.css",
-		"postbuild": "cpy dist/exportedTypes.d.ts dist --rename index.d.ts --flat && rimraf dist/exportedTypes.d.ts",
+		"prebuild": "rimraf dist style.css src/exportedTypes.d.ts",
+		"declare": "tsc src/exportedTypes --declaration --emitDeclarationOnly",
+		"build": "tsc && yarn declare && vite build && cpy dist/style.css ./ --flat && rimraf dist/style.css",
+		"postbuild": "cpy src/exportedTypes.d.ts dist --rename index.d.ts --flat && rimraf src/exportedTypes.d.ts",
 		"build:ci": "rimraf dist && tsc && vite build --mode ci",
+		"coverage": "vitest run --coverage",
 		"dev": "vite",
 		"lint": "yarn eslint . --ext .ts,.tsx && prettier --write \"**/*.{ts,tsx,css,md}\"",
 		"prepare": "husky install",
 		"test": "vitest",
-		"coverage": "vitest run --coverage",
 		"test:e2e": "yarn playwright test && yarn playwright show-report"
 	},
 	"lint-staged": {
@@ -84,7 +85,7 @@
 		"@vitejs/plugin-react": "^2.1.0",
 		"@vitest/coverage-c8": "^0.24.3",
 		"cpy-cli": "^4.2.0",
-		"eslint": "^8.25.0",
+		"eslint": "^8.26.0",
 		"eslint-plugin-react": "^7.31.10",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"husky": "^8.0.0",
@@ -96,7 +97,6 @@
 		"rollup-plugin-terser": "^7.0.2",
 		"typescript": "^4.8.4",
 		"vite": "^3.1.8",
-		"vite-plugin-dts": "1.4.1",
 		"vitest": "^0.24.3"
 	},
 	"peerDependencies": {

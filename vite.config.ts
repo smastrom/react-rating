@@ -60,11 +60,6 @@ export default defineConfig(({ command, mode }) => {
 				],
 			},
 		},
-		plugins: [
-			react({ jsxRuntime: 'classic' }),
-			dts({
-				include: ['src/exportedTypes.ts'],
-			}),
-		],
+		plugins: [react({ jsxRuntime: 'classic' })],
 	};
 });

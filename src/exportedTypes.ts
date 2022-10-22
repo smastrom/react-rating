@@ -1,4 +1,10 @@
-import React from 'react';
+import {
+	CSSProperties,
+	ForwardRefExoticComponent,
+	RefAttributes,
+	Dispatch,
+	SetStateAction,
+} from 'react';
 
 export type MaybeArrayColors = {
 	/** Active fill color of the SVG, it can be an array of colors in ascending order. */
@@ -62,7 +68,7 @@ export type SharedProps = {
 	itemStyles?: ItemStyles;
 	id?: string;
 	className?: string;
-	style?: React.CSSProperties;
+	style?: CSSProperties;
 };
 
 export type ReadOnlyProps = {
@@ -71,7 +77,7 @@ export type ReadOnlyProps = {
 };
 
 export type RatingChange =
-	| React.Dispatch<React.SetStateAction<number>>
+	| Dispatch<SetStateAction<number>>
 	| ((selectedValue: number) => void | Promise<void>);
 
 export type HoverChange = (hoveredValue: number) => void | (() => void);
@@ -108,6 +114,6 @@ export type InputProps = {
 
 export type RatingProps = SharedProps & ReadOnlyProps & InputProps;
 
-export declare const Rating: React.ForwardRefExoticComponent<
-	RatingProps & React.RefAttributes<HTMLDivElement>
+export declare const Rating: ForwardRefExoticComponent<
+	RatingProps & RefAttributes<HTMLDivElement>
 >;

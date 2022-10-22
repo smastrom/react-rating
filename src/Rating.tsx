@@ -1,4 +1,4 @@
-import React, {
+import {
 	forwardRef,
 	useMemo,
 	useCallback,
@@ -6,6 +6,7 @@ import React, {
 	useState,
 	useEffect,
 	Fragment,
+	KeyboardEvent,
 } from 'react';
 import { RatingItem } from './RatingItem';
 import { getDynamicCssVars } from './getDynamicCssVars';
@@ -294,7 +295,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		/* c8 ignore stop */
 
 		/* c8 ignore start */
-		function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>, childIndex: number) {
+		function handleKeyDown(event: KeyboardEvent<HTMLDivElement>, childIndex: number) {
 			let siblingToFocus = 0;
 
 			const lastSibling = isRequired ? ratingValues.length - 1 : ratingValues.length;

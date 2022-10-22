@@ -1,4 +1,8 @@
 import { useEffect, useLayoutEffect } from 'react';
+import { HTMLProps } from './internalTypes';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+export const noop = (number?: number) => {};
 
 export const isSSR = typeof window === 'undefined';
 
@@ -18,9 +22,6 @@ export const getUniqueId = () => (Math.random() + 1).toString(36).substring(7);
 export const areNum = (...values: unknown[]) =>
 	values.every((value) => typeof value === 'number');
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export const noop = (): void => {};
-
 export const isFn = (fn: unknown) => typeof fn === 'function';
 
 export const getNewPosition = (originalPos: number) =>
@@ -28,6 +29,10 @@ export const getNewPosition = (originalPos: number) =>
 
 export const isGraphicalValueInteger = (ratingValue: number) =>
 	Number.isInteger(roundToHalf(ratingValue));
+
+export function setAriaDisabled(props: HTMLProps) {
+	props['aria-disabled'] = 'true';
+}
 
 export function getIntersectionIndex(ratingValues: number[], ratingValue: number) {
 	const roundedHalf = roundToHalf(ratingValue);

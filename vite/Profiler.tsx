@@ -1,4 +1,4 @@
-import React, { Profiler as ReactProfiler, ProfilerOnRenderCallback } from 'react';
+import { Profiler as ReactProfiler, ProfilerOnRenderCallback } from 'react';
 
 const onRender: ProfilerOnRenderCallback = (
 	id,

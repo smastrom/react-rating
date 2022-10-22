@@ -1,7 +1,7 @@
 import { CSSVariables } from './internalTypes';
 import { ActiveColorProps, InactiveColorProps, ActiveVars, InactiveVars } from './constants';
 
-/* istanbul ignore next */
+/* c8 ignore next */
 export function setDyamicCssVars(targetObj: CSSVariables, key: string, value: string) {
 	switch (key) {
 		case ActiveColorProps.FILL:
@@ -20,7 +20,7 @@ export function setDyamicCssVars(targetObj: CSSVariables, key: string, value: st
 	return false;
 }
 
-/* istanbul ignore next */
+/* c8 ignore next */
 export function setColorCssVars(targetObj: CSSVariables, key: string, value: string) {
 	const isActive = setDyamicCssVars(targetObj, key, value);
 	if (!isActive) {

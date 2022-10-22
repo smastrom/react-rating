@@ -63,7 +63,7 @@ export function RatingItem({
 		return {};
 	}
 
-	/* istanbul ignore next */
+	/* c8 ignore next */
 	function getGradientTransformAttr() {
 		if (orientation === OrientationProps.VERTICAL) {
 			return {

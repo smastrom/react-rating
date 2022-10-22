@@ -30,12 +30,7 @@ import {
 } from './utils';
 import { Sizes, OrientationProps, TransitionProps, HFProps, RatingClasses } from './constants';
 import { defaultItemStyles } from './defaultItemStyles';
-import {
-	RatingProps,
-	Rating as RatingComponent,
-	RatingChange,
-	HoverChange,
-} from './exportedTypes';
+import { RatingProps, Rating as RatingComponent } from './exportedTypes';
 import {
 	StylesState,
 	RequireAtLeastOne,
@@ -49,7 +44,7 @@ import {
 } from './internalTypes';
 
 /** Thank you for using **React Rating**.
- * Visit https://github.com/smastrom/react-rating to read the full documentation.*/
+ * Visit https://github.com/smastrom/react-rating to read the full documentation. */
 export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingProps>(
 	(
 		{
@@ -83,24 +78,25 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 	) => {
 		/* Helpers */
 
+		const incrementIfReset = (index: number) => (isRequired ? index : index + 1);
+		const incrementIfRequired = (index: number) => (isRequired ? index + 1 : index);
+
 		const ratingValues = Array.from({ length: items }, (_, index) => index + 1);
 		const hasPrecision = readOnly && !Number.isInteger(value);
 		const isEligibleForHF = hasPrecision && !highlightOnlySelected;
 		const isNotEligibleForHF = hasPrecision && highlightOnlySelected;
 		const ratingValue = isNotEligibleForHF ? Math.round(value) : value;
 		const isDynamic = !readOnly && !isDisabled;
-		const hasHoverChange = typeof onHoverChange === 'function';
 		const needsDynamicCssVars = ratingValue >= 0.25;
 		const userClassNames = typeof className === 'string' ? className : '';
 		const absoluteHFMode = halfFillMode === HFProps.BOX ? HFProps.BOX : HFProps.SVG;
 		const deservesHF = isEligibleForHF && !isGraphicalValueInteger(ratingValue);
 		const shouldRenderReset = !isRequired && !readOnly;
-		const incrementIndex = (index: number) => (isRequired ? index : index + 1);
-		const tabIndexItems = incrementIndex(items);
-		const currentStarIndex = isEligibleForHF
+		const tabIndexItems = incrementIfReset(items);
+		const activeStarIndex = isEligibleForHF
 			? getIntersectionIndex(ratingValues, ratingValue)
 			: ratingValues.indexOf(ratingValue);
-		const currentRatingIndex = incrementIndex(currentStarIndex);
+		const activeTabIndex = incrementIfReset(activeStarIndex);
 
 		/* Deps/Callbacks */
 
@@ -124,15 +120,15 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		const hasArrayColors = Object.keys(arrayColors).length > 0;
 
 		const getDynamicStyles = useCallback(
-			(currentSelectedIndex: number, shouldGetCssVars: boolean) => ({
+			(starIndex: number, shouldGetCssVars: boolean) => ({
 				dynamicClassNames: deservesHF
 					? getHFClassNames(ratingValue, items, absoluteHFMode)
-					: getActiveClassNames(highlightOnlySelected, items, currentSelectedIndex),
+					: getActiveClassNames(highlightOnlySelected, items, starIndex),
 				dynamicCssVars:
 					shouldGetCssVars && hasArrayColors
 						? getDynamicCssVars(
 								arrayColors as RequireAtLeastOne<ValidArrayColors>,
-								currentSelectedIndex,
+								starIndex,
 								highlightOnlySelected
 						  )
 						: [],
@@ -149,8 +145,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		);
 
 		const saveTabIndex = useCallback(
-			() => setTabIndex(getTabIndex(tabIndexItems, currentRatingIndex)),
-			[currentRatingIndex, tabIndexItems]
+			() => setTabIndex(getTabIndex(tabIndexItems, activeTabIndex)),
+			[activeTabIndex, tabIndexItems]
 		);
 
 		/* Refs */
@@ -165,12 +161,12 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		const [styles, setStyles] = useState<StylesState>({
 			staticCssVars: getStaticCssVars(staticColors, absoluteBoxBorderWidth),
-			...getDynamicStyles(currentStarIndex, needsDynamicCssVars),
+			...getDynamicStyles(activeStarIndex, needsDynamicCssVars),
 		});
 
 		const [tabIndex, setTabIndex] = useState<TabIndex[]>(() => {
 			if (isDynamic) {
-				return getTabIndex(tabIndexItems, currentRatingIndex);
+				return getTabIndex(tabIndexItems, activeTabIndex);
 			}
 			return [];
 		});
@@ -187,7 +183,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			if (!skipStylesMount.current) {
 				return setStyles({
 					staticCssVars: getStaticCssVars(staticColors, absoluteBoxBorderWidth),
-					...getDynamicStyles(currentStarIndex, needsDynamicCssVars),
+					...getDynamicStyles(activeStarIndex, needsDynamicCssVars),
 				});
 			}
 			skipStylesMount.current = false;
@@ -195,7 +191,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			staticColors,
 			getDynamicStyles,
 			absoluteBoxBorderWidth,
-			currentStarIndex,
+			activeStarIndex,
 			needsDynamicCssVars,
 		]);
 
@@ -204,7 +200,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				return saveTabIndex();
 			}
 			skipTabMount.current = false;
-		}, [isDynamic, currentRatingIndex, tabIndexItems, saveTabIndex]);
+		}, [isDynamic, saveTabIndex]);
 
 		/* Log critical errors, prevent rendering */
 
@@ -226,81 +222,61 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		function handleWhenNeeded(
 			event: FocusEvent | MouseEvent,
-			unrelatedCallback: () => void,
+			fromOutsideCallback: () => void,
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			relatedCallback: () => void = () => {}
+			fromInsideCallback: () => void = () => {}
 		) {
-			const isStarRelated = radioRefs.current.some((radio) => radio === event.relatedTarget);
-			if (!isStarRelated) {
-				unrelatedCallback();
+			const fromInside = radioRefs.current.some((radio) => radio === event.relatedTarget);
+			if (!fromInside) {
+				fromOutsideCallback();
 			} else {
-				relatedCallback();
+				fromInsideCallback();
 			}
 		}
 
-		function handleStarBlur() {
-			if (hasHoverChange) {
-				onHoverChange(0);
-			}
+		function handleStarLeave() {
+			onHoverChange?.(0);
 			setTimeout(() => saveTabIndex());
 		}
 
-		function selectRating(childIndex: number, changeCallback: RatingChange | HoverChange) {
-			if (!isRequired) {
-				if (childIndex === 0) {
-					changeCallback?.(0);
-				} else {
-					changeCallback?.(ratingValues[childIndex - 1]);
-				}
-			} else {
-				changeCallback?.(ratingValues[childIndex]);
-			}
-		}
-
-		function handleClick(event: MouseEvent, starIndex: number) {
+		function handleClick(event: MouseEvent, clickedIndex: number) {
 			event.stopPropagation();
 
-			if (!isRequired && currentStarIndex === starIndex) {
+			if (!isRequired && activeStarIndex === clickedIndex) {
 				onChange?.(0);
 			} else {
-				onChange?.(ratingValues[starIndex]);
+				onChange?.(clickedIndex + 1);
 			}
 		}
 
-		function handleMouseEnter(starIndex: number) {
-			if (hasHoverChange) {
-				onHoverChange(ratingValues[starIndex]);
-			}
-			setStyles({ ...styles, ...getDynamicStyles(starIndex, true) });
+		function handleMouseEnter(hoveredIndex: number) {
+			onHoverChange?.(hoveredIndex + 1);
+			setStyles({ ...styles, ...getDynamicStyles(hoveredIndex, true) });
 		}
 
 		function handleMouseLeave(event: MouseEvent) {
 			handleWhenNeeded(event, () => {
-				handleStarBlur();
+				handleStarLeave();
 			});
-			setStyles({ ...styles, ...getDynamicStyles(currentStarIndex, needsDynamicCssVars) });
+			setStyles({ ...styles, ...getDynamicStyles(activeStarIndex, needsDynamicCssVars) });
 		}
 
-		function handleRealBlur(event: FocusEvent) {
+		function handleBlur(event: FocusEvent) {
 			handleWhenNeeded(event, () => {
-				handleStarBlur();
+				handleStarLeave();
 				onBlur();
 			});
 		}
 
-		function handleRealFocus(event: FocusEvent, childIndex: number) {
+		function handleFocus(event: FocusEvent, childIndex: number) {
 			handleWhenNeeded(
 				event,
 				() => {
-					if (hasHoverChange) {
-						onHoverChange(ratingValues[currentRatingIndex] ?? 0);
-					}
 					onFocus();
+					onHoverChange?.(incrementIfRequired(childIndex));
 				},
 				() => {
-					if (hasHoverChange) {
-						selectRating(childIndex, onHoverChange);
-					}
+					onHoverChange?.(incrementIfRequired(childIndex));
 				}
 			);
 		}
@@ -310,13 +286,14 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		/** Ignoring keyboard handlers from Vitest coverage as they have been
 		 * tested with Playwright in tests/e2e/keyboardNavigation.test.ts */
 
-		/* istanbul ignore next */
+		/* c8 ignore start */
 		function handleArrowNav(siblingToFocus: number) {
 			setTabIndex(getTabIndex(tabIndexItems, siblingToFocus));
 			radioRefs.current[siblingToFocus].focus();
 		}
+		/* c8 ignore stop */
 
-		/* istanbul ignore next */
+		/* c8 ignore start */
 		function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>, childIndex: number) {
 			let siblingToFocus = 0;
 
@@ -348,12 +325,13 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				case 'Enter':
 				case 'Space':
 					event.preventDefault();
-					return selectRating(childIndex, onChange as RatingChange);
+					return onChange?.(incrementIfRequired(childIndex));
 			}
 
 			event.preventDefault();
 			event.stopPropagation();
 		}
+		/* c8 ignore stop */
 
 		/* Group props */
 
@@ -389,6 +367,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				} else {
 					ariaProps['aria-label'] = invisibleLabel;
 				}
+
 				return ariaProps;
 			}
 			return {
@@ -417,7 +396,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		function getKeyboardProps(childIndex: number): HTMLProps {
 			return {
 				tabIndex: tabIndex[childIndex],
-				onKeyDown: /* istanbul ignore next */ (event) => handleKeyDown(event, childIndex),
+				/* c8 ignore next */
+				onKeyDown: (event) => handleKeyDown(event, childIndex),
 			};
 		}
 
@@ -437,7 +417,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			const labelProps: HTMLProps = {};
 			const radioLabels = Array.isArray(invisibleItemLabels)
 				? invisibleItemLabels
-				: ratingValues.map((_, index: number) => `Rate ${ratingValues[index]}`);
+				: ratingValues.map((_, index: number) => `Rate ${index + 1}`);
 
 			if (Array.isArray(visibleItemLabelIds)) {
 				labelProps['aria-labelledby'] = visibleItemLabelIds[starIndex];
@@ -451,7 +431,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 			return {
 				role: 'radio',
-				'aria-checked': ratingValues[starIndex] === ratingValue,
+				'aria-checked': starIndex + 1 === ratingValue,
 				...labelProps,
 			};
 		}
@@ -461,14 +441,14 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				return {};
 			}
 
-			const radioIndex = incrementIndex(starIndex);
+			const radioIndex = incrementIfReset(starIndex);
 
 			return {
 				...getRefs(radioIndex),
 				...getKeyboardProps(radioIndex),
 				...getMouseProps(starIndex),
-				onFocus: (event) => handleRealFocus(event, radioIndex),
-				onBlur: (event) => handleRealBlur(event),
+				onFocus: (event) => handleFocus(event, radioIndex),
+				onBlur: (event) => handleBlur(event),
 			};
 		}
 
@@ -482,14 +462,18 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			};
 
 			if (isDynamic) {
-				resetProps = { ...resetProps, ...getKeyboardProps(0), ...getRefs(0) };
-				resetProps.onFocus = (event) => {
-					handleRealFocus(event, 0);
-					wrapperRef?.current?.classList.add(RatingClasses.GROUP_RESET);
-				};
-				resetProps.onBlur = (event) => {
-					handleRealBlur(event);
-					wrapperRef?.current?.classList.remove(RatingClasses.GROUP_RESET);
+				resetProps = {
+					...resetProps,
+					...getKeyboardProps(0),
+					...getRefs(0),
+					onFocus: (event) => {
+						handleFocus(event, 0);
+						wrapperRef?.current?.classList.add(RatingClasses.GROUP_RESET);
+					},
+					onBlur: (event) => {
+						handleBlur(event);
+						wrapperRef?.current?.classList.remove(RatingClasses.GROUP_RESET);
+					},
 				};
 			}
 
@@ -511,7 +495,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				testId: getSvgTestIds(starIndex),
 			};
 			if (deservesHF && absoluteHFMode === HFProps.SVG) {
-				sharedProps.hasHF = starIndex === currentStarIndex;
+				sharedProps.hasHF = starIndex === activeStarIndex;
 			}
 			return sharedProps;
 		}

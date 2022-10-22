@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Profiler } from './Profiler';
 import { Rating } from '../src/Rating';
 import { ItemStyles } from '../src/exportedTypes';
@@ -21,6 +21,7 @@ const CUSTOM_GROUP_LABEL_ID = 'group_label';
 const CUSTOM_LABELS_IDS = ['label_1', 'label_2', 'label_3', 'label_4', 'label_5']; */
 
 export function App() {
+	const [rating, setRating] = useState(3);
 	const [state, setState] = useState({
 		name: '',
 		review: '',
@@ -31,16 +32,12 @@ export function App() {
 		console.log(hoveredValue);
 	}, []);
 
-	console.log('Rating: ' + state.rating);
-
 	function handleChange(ratingValue: number) {
 		setState((prevState) => ({
 			...prevState,
 			rating: ratingValue,
 		}));
 	}
-
-	console.log(state.rating);
 
 	return (
 		<div
@@ -59,25 +56,22 @@ export function App() {
 				First Button
 			</button>
 			<h2 id={CUSTOM_GROUP_LABEL_ID}>Rating Label</h2>
+
 			<Profiler>
 				<Rating
 					style={{
 						maxWidth: 160,
 					}}
 					// readOnly
-					onHoverChange={handleHover}
+					// onHoverChange={handleHover}
 					// isDisabled
-					isRequired
-					items={5}
-					aria-label="Ciao"
-					onChange={handleChange}
-					value={state.rating}
-					itemStyles={customStyles}
+					// isRequired
+					onChange={setRating}
+					value={rating}
+					// itemStyles={customStyles}
 					// highlightOnlySelected
-					orientation="horizontal"
+					// orientation="horizontal"
 					// radius="small"
-					visibleLabelId={CUSTOM_GROUP_LABEL_ID}
-					invisibleLabel={CUSTOM_GROUP_LABEL}
 				/>
 			</Profiler>
 			<button

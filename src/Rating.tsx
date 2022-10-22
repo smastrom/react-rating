@@ -20,14 +20,15 @@ import { getErrors } from './getErrors';
 import {
 	getIntersectionIndex,
 	getNumber,
-	isGraphicalValueInteger,
 	getRadioTestIds,
 	getSvgTestIds,
 	devTestId,
+	getResetTestId,
+	isGraphicalValueInteger,
 	isRTLDir,
 	useIsomorphicLayoutEffect,
 	noop,
-	getResetTestId,
+	setAriaDisabled,
 } from './utils';
 import { Sizes, OrientationProps, TransitionProps, HFProps, RatingClasses } from './constants';
 import { defaultItemStyles } from './defaultItemStyles';
@@ -53,7 +54,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			items = 5,
 			readOnly = false,
 			onChange,
-			onHoverChange,
+			onHoverChange = noop,
 			onFocus = noop,
 			onBlur = noop,
 			isDisabled = false,
@@ -236,7 +237,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		}
 
 		function handleStarLeave() {
-			onHoverChange?.(0);
+			onHoverChange(0);
 			setTimeout(() => saveTabIndex());
 		}
 
@@ -250,9 +251,9 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			}
 		}
 
-		function handleMouseEnter(hoveredIndex: number) {
-			onHoverChange?.(hoveredIndex + 1);
-			setStyles({ ...styles, ...getDynamicStyles(hoveredIndex, true) });
+		function handleMouseEnter(starIndex: number) {
+			onHoverChange(starIndex + 1);
+			setStyles({ ...styles, ...getDynamicStyles(starIndex, true) });
 		}
 
 		function handleMouseLeave(event: MouseEvent) {
@@ -274,10 +275,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				event,
 				() => {
 					onFocus();
-					onHoverChange?.(incrementIfRequired(childIndex));
+					onHoverChange(incrementIfRequired(childIndex));
 				},
 				() => {
-					onHoverChange?.(incrementIfRequired(childIndex));
+					onHoverChange(incrementIfRequired(childIndex));
 				}
 			);
 		}
@@ -427,7 +428,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			}
 
 			if (isDisabled) {
-				labelProps['aria-disabled'] = 'true';
+				setAriaDisabled(labelProps);
 			}
 
 			return {
@@ -469,17 +470,17 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 					...getRefs(0),
 					onFocus: (event) => {
 						handleFocus(event, 0);
-						wrapperRef?.current?.classList.add(RatingClasses.GROUP_RESET);
+						wrapperRef.current?.classList.add(RatingClasses.GROUP_RESET);
 					},
 					onBlur: (event) => {
 						handleBlur(event);
-						wrapperRef?.current?.classList.remove(RatingClasses.GROUP_RESET);
+						wrapperRef.current?.classList.remove(RatingClasses.GROUP_RESET);
 					},
 				};
 			}
 
 			if (isDisabled) {
-				resetProps['aria-disabled'] = 'true';
+				setAriaDisabled(resetProps);
 			}
 
 			return resetProps;
@@ -517,7 +518,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 						{shouldRenderReset && index === 0 && <div {...getResetProps()} />}
 						<div
 							className={`${RatingClasses.BOX} ${styles.dynamicClassNames[index]}`}
-							style={styles?.dynamicCssVars?.[index]}
+							style={styles.dynamicCssVars[index]}
 							{...getAriaRadioProps(index)}
 							{...getInteractiveRadioProps(index)}
 							{...getRadioTestIds(index)}

@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import dts from 'vite-plugin-dts';
 import { terser } from 'rollup-plugin-terser';
 
 import Package from './package.json';
@@ -27,7 +26,7 @@ export default defineConfig(({ command, mode }) => {
 	return {
 		...vitestOptions,
 		define: {
-			__DEV__: command !== 'build',
+			__DEV__: false, // command !== 'build',
 		},
 		build: {
 			minify: 'terser',

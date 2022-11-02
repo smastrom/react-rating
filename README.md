@@ -229,7 +229,7 @@ function App() {
 | ------------------- | --------------- | -------------------------------------------------------------------------- | ----------------------------------------------- | --------- | ------------------------------- |
 | :green_circle:      | `value`         | An integer from 0 to `items`. It can be a float if `readOnly` is **true**. | number                                          | undefined | :white_check_mark:              |
 | :large_blue_circle: | `onChange`      | Setter or custom function to update the rating.                            | RatingChange                                    | undefined | Only if `readOnly` is **false** |
-| :large_blue_circle: | `onHoverChange` | Callback to execute while navigating the rating items.                     | (hoveredValue: number) => void                  | undefined | :x:                             |
+| :large_blue_circle: | `onHoverChange` | Callback to execute while navigating the rating items.                     | (hoveredValue: number) => void                  | noop      | :x:                             |
 | :green_circle:      | `items`         | Rating items to display.                                                   | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
 | :green_circle:      | `readOnly`      | Whether to render an accessible image element or not.                      | boolean                                         | false     | :x:                             |
 | :large_blue_circle: | `isDisabled`    | Whether to disable the radio group or not.                                 | boolean                                         | false     | :x:                             |
@@ -295,7 +295,7 @@ In addition to being less verbose, the setter will also be kept stable by React 
 
 ### Custom logic/state
 
-If you need to perform some actions while setting the rating (like calling an API) or you need to update only a portion of the state, `onChange` accepts a callback whose parameter equals to the selected rating:
+If you need to perform some actions while setting the rating (like calling an API) or you need to update just a portion of the state, `onChange` accepts a callback whose parameter equals to the selected rating:
 
 ```js
 function App() {
@@ -310,7 +310,7 @@ function App() {
 
     // 2. Do something with or without the value...
 
-    // 3. Whenever you want, update the UI
+    // 3. Update Rating UI
     setState((prevState) => ({
       ...prevState,
       rating: selectedValue,

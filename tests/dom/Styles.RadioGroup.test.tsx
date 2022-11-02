@@ -45,6 +45,7 @@ describe('Classnames and inline css vars - RadioGroup element', () => {
 				transition="none"
 				spaceBetween="none"
 				spaceInside="none"
+				radius="none"
 			/>
 		);
 
@@ -138,6 +139,31 @@ describe('Classnames and inline css vars - Radio elements', () => {
 		expect(child).toHaveClass('rr--box rr--off', { exact: true });
 	};
 
+	test('Any className from props is added correctly', () => {
+		render(
+			<Rating
+				value={1}
+				items={5}
+				onChange={() => null}
+				itemStyles={arrayColorStyles}
+				spaceBetween="medium"
+				spaceInside="large"
+				radius="full"
+				orientation="vertical"
+				transition="opacity"
+			/>
+		);
+
+		const group = screen.queryByTestId(GROUP_ID);
+		expect(group).toHaveClass(
+			GapClasses.MEDIUM,
+			PaddingClasses.LARGE,
+			RadiusClasses.FULL,
+			OrientationClasses.VERTICAL,
+			TransitionClasses.OPACITY
+		);
+	});
+
 	test('If ratingValue equals to n, first n child should have correspondent active className', () => {
 		render(<Rating value={3} items={6} onChange={() => null} />);
 
@@ -160,7 +186,7 @@ describe('Classnames and inline css vars - Radio elements', () => {
 		toHaveInactiveClassName(CHILD_ID_5);
 	});
 
-	test('If ratingValue equals to 0, no child should have active className, whether or not highlightOnlySelected is enabled', () => {
+	test('If ratingValue equals to 0, no child should have active className, whether highlightOnlySelected is enabled or not', () => {
 		const { rerender } = render(<Rating value={0} items={6} onChange={() => null} />);
 
 		childArr.forEach((testId) => {
@@ -202,30 +228,5 @@ describe('Classnames and inline css vars - Radio elements', () => {
 
 			prevChild.push(child as HTMLElement);
 		});
-	});
-
-	test('Any className from props is added correctly', () => {
-		render(
-			<Rating
-				value={1}
-				items={5}
-				onChange={() => null}
-				itemStyles={arrayColorStyles}
-				spaceBetween="medium"
-				spaceInside="large"
-				radius="full"
-				orientation="vertical"
-				transition="opacity"
-			/>
-		);
-
-		const group = screen.queryByTestId(GROUP_ID);
-		expect(group).toHaveClass(
-			GapClasses.MEDIUM,
-			PaddingClasses.LARGE,
-			RadiusClasses.FULL,
-			OrientationClasses.VERTICAL,
-			TransitionClasses.OPACITY
-		);
 	});
 });

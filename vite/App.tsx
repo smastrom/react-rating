@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Profiler } from './Profiler';
 import { Rating } from '../src/Rating';
-import { ItemStyles } from '../src/exportedTypes';
+import { ItemStyles, RatingProps } from '../src/exportedTypes';
 import { StickerStar } from '../src';
 
 const customStyles: ItemStyles = {
@@ -20,24 +20,10 @@ const CUSTOM_GROUP_LABEL_ID = 'group_label';
 /* const CUSTOM_LABELS = ['Bad', 'Poor', 'Average', 'Very Good', 'Excellent'];
 const CUSTOM_LABELS_IDS = ['label_1', 'label_2', 'label_3', 'label_4', 'label_5']; */
 
-export function App() {
-	const [rating, setRating] = useState(3);
-	const [state, setState] = useState({
-		name: '',
-		review: '',
-		rating: 1,
-	});
+type Props = { isRequired?: boolean; initialRating?: number };
 
-	const handleHover = useCallback((hoveredValue: number) => {
-		console.log(hoveredValue);
-	}, []);
-
-	function handleChange(ratingValue: number) {
-		setState((prevState) => ({
-			...prevState,
-			rating: ratingValue,
-		}));
-	}
+export function App({ isRequired = false, initialRating = 0 }: Props) {
+	const [rating, setRating] = useState(initialRating);
 
 	return (
 		<div
@@ -65,20 +51,17 @@ export function App() {
 					// readOnly
 					// onHoverChange={handleHover}
 					// isDisabled
-					// isRequired
+					isRequired={isRequired}
 					onChange={setRating}
 					value={rating}
+					radius="small"
 					// itemStyles={customStyles}
 					// highlightOnlySelected
 					// orientation="horizontal"
 					// radius="small"
 				/>
 			</Profiler>
-			<button
-				id="second_button"
-				type="button"
-				onClick={() => setState((prevState) => ({ ...prevState, rating: 0 }))}
-			>
+			<button id="second_button" type="button" onClick={() => null}>
 				Second Button
 			</button>
 		</div>

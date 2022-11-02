@@ -1,21 +1,18 @@
-import { devices, PlaywrightTestConfig } from '@playwright/test';
-
-const timeout = 40000;
+import { devices, PlaywrightTestConfig } from '@playwright/experimental-ct-react';
+import { playwrightConfig } from './vite.config';
 
 const config: PlaywrightTestConfig = {
-	testDir: './tests/e2e',
-	timeout,
-	expect: {
-		timeout,
-	},
-	fullyParallel: true,
+	testDir: './tests/e2e-ct',
+	snapshotDir: './__snapshots__',
+	timeout: 30 * 1000,
+	fullyParallel: false,
 	reporter: 'html',
 	use: {
-		actionTimeout: 0,
-		baseURL: process.env.DEPLOY_URL || 'http://localhost:5173',
 		trace: 'on-first-retry',
+		ctViteConfig: {
+			...playwrightConfig,
+		},
 	},
-
 	projects: [
 		{
 			name: 'chromium',

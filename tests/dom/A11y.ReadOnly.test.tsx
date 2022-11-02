@@ -60,7 +60,7 @@ describe('readOnly parent component displays proper a11y attributes', () => {
 	});
 });
 
-describe('readOnly child components display proper a11y attributes', () => {
+describe('readOnly elements display proper a11y attributes', () => {
 	test('Should contain only n child as per items', () => {
 		render(<Rating readOnly value={2} items={3} />);
 		const group = screen.getByTestId(GROUP_ID);

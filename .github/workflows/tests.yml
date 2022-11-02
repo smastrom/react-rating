@@ -2,7 +2,7 @@ name: Tests
 
 on:
   push:
-    branches: [main]
+    branches: [next]
 
 jobs:
   tests:
@@ -14,17 +14,6 @@ jobs:
           node-version: '14.x'
       - name: Install dependencies
         run: yarn
-      - name: Build dist folder
-        run: yarn build:ci
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v20
-        id: deploy-to-vercel
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
       - name: Install Playwright
         run: npx playwright install --with-deps
       - name: Vitest
@@ -32,9 +21,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
       - name: Run e2e tests with Playwright
-        env:
-          DEPLOY_URL: ${{ steps.deploy-to-vercel.outputs.preview-url }}
-        run: yarn playwright test
+        run: yarn e2e
       - name: Upload Playwright artifacts
         uses: actions/upload-artifact@v3
         with:

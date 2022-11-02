@@ -58,21 +58,22 @@
 	"scripts": {
 		"prebuild": "rimraf dist style.css src/exportedTypes.d.ts",
 		"declare": "tsc src/exportedTypes --declaration --emitDeclarationOnly",
-		"build": "tsc && yarn declare && vite build && cpy dist/style.css ./ --flat && rimraf dist/style.css",
-		"postbuild": "cpy src/exportedTypes.d.ts dist --rename index.d.ts --flat && rimraf src/exportedTypes.d.ts",
+		"build": "tsc && vite build && yarn declare",
+		"postbuild": "cpy dist/style.css ./ --flat && cpy src/exportedTypes.d.ts dist --rename index.d.ts --flat && rimraf src/exportedTypes.d.ts dist/style.css",
 		"build:ci": "rimraf dist && tsc && vite build --mode ci",
 		"coverage": "vitest run --coverage",
 		"dev": "vite",
 		"lint": "yarn eslint . --ext .ts,.tsx && prettier --write \"**/*.{ts,tsx,css,md}\"",
 		"prepare": "husky install",
 		"test": "vitest",
-		"test:e2e": "yarn playwright test && yarn playwright show-report"
+		"e2e": "playwright test -c playwright-ct.config.ts"
 	},
 	"lint-staged": {
 		"*.{ts,tsx}": "eslint --cache --fix",
 		"*.{ts,tsx,css,md}": "prettier --write"
 	},
 	"devDependencies": {
+		"@playwright/experimental-ct-react": "^1.27.1",
 		"@playwright/test": "^1.27.1",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^13.4.0",

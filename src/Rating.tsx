@@ -292,8 +292,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		function handleArrowNav(siblingToFocus: number) {
 			setTabIndex(getTabIndex(tabIndexItems, siblingToFocus));
 			radioRefs.current[siblingToFocus].focus();
-		}
-		/* c8 ignore stop */
+		} /* c8 ignore stop */
 
 		/* c8 ignore start */
 		function handleKeyDown(event: KeyboardEvent<HTMLDivElement>, childIndex: number) {
@@ -496,9 +495,11 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				hasHF: false,
 				testId: getSvgTestIds(starIndex),
 			};
+
 			if (deservesHF && absoluteHFMode === HFProps.SVG) {
 				sharedProps.hasHF = starIndex === activeStarIndex;
 			}
+
 			return sharedProps;
 		}
 

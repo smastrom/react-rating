@@ -9,24 +9,28 @@ const vitestOptions = {
 		globals: true,
 		environment: 'jsdom',
 		setupFiles: './tests/dom/setupTests.ts',
-		exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**'],
+		exclude: ['**/vite/**', '**/node_modules/**', '**/dist/**', '**/e2e-ct/**'],
 	},
+};
+
+export const playwrightConfig = {
+	define: {
+		__DEV__: true,
+	},
+	plugins: [react()],
 };
 
 export default defineConfig(({ command, mode }) => {
 	if (mode === 'ci') {
 		return {
 			...vitestOptions,
-			define: {
-				__DEV__: true,
-			},
-			plugins: [react()],
+			...playwrightConfig,
 		};
 	}
 	return {
 		...vitestOptions,
 		define: {
-			__DEV__: false, // command !== 'build',
+			__DEV__: command !== 'build',
 		},
 		build: {
 			minify: 'terser',

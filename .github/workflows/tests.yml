@@ -20,10 +20,17 @@ jobs:
         run: yarn test
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
-      - name: Run e2e tests with Playwright
+      - name: Run e2e tests
         run: yarn e2e
-      - name: Upload Playwright artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: playwright-report
           path: playwright-report
+      - name: Run e2e:rtl tests
+        run: yarn e2e:rtl
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-rtl-report
+          path: playwright-rrl-report

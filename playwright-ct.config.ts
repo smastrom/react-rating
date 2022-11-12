@@ -1,16 +1,21 @@
 import { devices, PlaywrightTestConfig } from '@playwright/experimental-ct-react';
-import { playwrightConfig } from './vite.config';
+import react from '@vitejs/plugin-react';
+
+const reporterOutputDir = process.env.IS_RTL ? 'playwright-rtl-report' : 'playwright-report';
 
 const config: PlaywrightTestConfig = {
 	testDir: './tests/e2e-ct',
-	snapshotDir: './__snapshots__',
 	timeout: 30 * 1000,
 	fullyParallel: false,
-	reporter: 'html',
+	reporter: [['html', { outputFolder: reporterOutputDir }]],
 	use: {
 		trace: 'on-first-retry',
 		ctViteConfig: {
-			...playwrightConfig,
+			define: {
+				__DEV__: true,
+			},
+			// @ts-ignore - ""
+			plugins: [react()],
 		},
 	},
 	projects: [

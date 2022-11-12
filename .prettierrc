@@ -7,13 +7,9 @@
 		{
 			"files": "README.md",
 			"options": {
-				"useTabs": false
-			}
-		},
-		{
-			"files": "tests/*.ts",
-			"options": {
-				"printWidth": 100
+				"trailingComma": "none",
+				"useTabs": false,
+				"semi": false
 			}
 		}
 	]

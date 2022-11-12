@@ -12,6 +12,8 @@ export const firstButtonId = 'id=first_button';
 export const secondButtonId = 'id=second_button';
 export const resetTestId = 'data-testid=rating-reset';
 
+export const nextArrow = process.env.IS_RTL ? 'ArrowLeft' : 'ArrowRight';
+
 export const childTestIds = [
 	'data-testid=rating-child-1',
 	'data-testid=rating-child-2',
@@ -24,6 +26,14 @@ export function getRandomInt(min: number, max: number) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min) + min);
+}
+
+export async function setRTL(page: Page) {
+	if (process.env.IS_RTL) {
+		await page.addScriptTag({
+			content: "document.body.setAttribute('dir', 'rtl')",
+		});
+	}
 }
 
 export async function pressTab(page: Page, browserName: string) {

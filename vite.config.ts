@@ -13,56 +13,41 @@ const vitestOptions = {
 	},
 };
 
-export const playwrightConfig = {
+export default defineConfig(({ command }) => ({
+	...vitestOptions,
 	define: {
-		__DEV__: true,
+		__DEV__: command !== 'build',
 	},
-	plugins: [react()],
-};
-
-export default defineConfig(({ command, mode }) => {
-	if (mode === 'ci') {
-		return {
-			...vitestOptions,
-			...playwrightConfig,
-		};
-	}
-	return {
-		...vitestOptions,
-		define: {
-			__DEV__: command !== 'build',
+	build: {
+		minify: 'terser',
+		lib: {
+			name: Package.name,
+			entry: 'src/index.ts',
+			formats: ['es', 'umd'],
+			fileName: (format) => {
+				if (format === 'es') {
+					return 'index.js';
+				}
+				return `index.${format}.min.js`;
+			},
 		},
-		build: {
-			minify: 'terser',
-			lib: {
-				name: Package.name,
-				entry: 'src/index.ts',
-				formats: ['es', 'umd'],
-				fileName: (format) => {
-					if (format === 'es') {
-						return 'index.js';
-					}
-					return `index.${format}.min.js`;
+		rollupOptions: {
+			external: ['react'],
+			input: 'src/index.ts',
+			output: {
+				globals: {
+					react: 'React',
 				},
 			},
-			rollupOptions: {
-				external: ['react'],
-				input: 'src/index.ts',
-				output: {
-					globals: {
-						react: 'React',
+			plugins: [
+				terser({
+					compress: {
+						defaults: true,
+						drop_console: false,
 					},
-				},
-				plugins: [
-					terser({
-						compress: {
-							defaults: true,
-							drop_console: false,
-						},
-					}),
-				],
-			},
+				}),
+			],
 		},
-		plugins: [react({ jsxRuntime: 'classic' })],
-	};
-});
+	},
+	plugins: [react({ jsxRuntime: 'classic' })],
+}));

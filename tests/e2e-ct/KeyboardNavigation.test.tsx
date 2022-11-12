@@ -7,13 +7,19 @@ import {
 	expectToBeTheOnlyFocusable,
 	getRandomInt,
 	MountResult,
+	nextArrow,
 	resetTestId,
+	setRTL,
 	tabNavigateToRating,
 } from './testUtils';
 import { App } from '../../vite/App';
 
 const ratingItems = 5;
 const childWithReset = [resetTestId, ...childTestIds];
+
+test.beforeEach(async ({ page }) => {
+	setRTL(page);
+});
 
 test.describe('Checked value should not change and should always be the only one checked', () => {
 	const randomIterations = getRandomInt(200, 400);
@@ -28,7 +34,7 @@ test.describe('Checked value should not change and should always be the only one
 			{ length: randomIterations },
 			(_, index) => index
 		)) {
-			await page.keyboard.press('ArrowRight');
+			await page.keyboard.press(nextArrow);
 		}
 
 		await expectToBeTheOnlyChecked(component, childWithReset[randomRating]);
@@ -45,7 +51,7 @@ test.describe('Checked value should not change and should always be the only one
 			{ length: randomIterations },
 			(_, index) => index
 		)) {
-			await page.keyboard.press('ArrowRight');
+			await page.keyboard.press(nextArrow);
 		}
 
 		await expectToBeTheOnlyChecked(component, childTestIds[randomRating - 1]);
@@ -65,7 +71,7 @@ test('Only the currently focused item should be focusable', async ({
 			(_, index) => index
 		)) {
 			await expectToBeTheOnlyFocusable(component, childArr[radioIndex]);
-			await page.keyboard.press('ArrowRight');
+			await page.keyboard.press(nextArrow);
 		}
 	}
 
@@ -108,7 +114,7 @@ test('Should be able to loop through rating items', async ({ mount, page, browse
 				isFirstIteration = false;
 			}
 		}
-		await page.keyboard.press('ArrowRight');
+		await page.keyboard.press(nextArrow);
 	}
 
 	await expectToBeTheOnlyFocusable(component, childWithReset[iterationCount]);

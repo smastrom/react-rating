@@ -10,8 +10,14 @@ import {
 	secondButtonId,
 	MountResult,
 	resetTestId,
+	nextArrow,
 	getRandomInt,
+	setRTL,
 } from './testUtils';
+
+test.beforeEach(async ({ page }) => {
+	setRTL(page);
+});
 
 test.describe('Tab navigation should respect focusable elements order and active rating', () => {
 	const ratingItems = 5;
@@ -46,7 +52,7 @@ test.describe('Tab navigation should respect focusable elements order and active
 
 				/* If not last iteration, set next rating */
 				if (ratingValue < ratingItems) {
-					await page.keyboard.press('ArrowRight');
+					await page.keyboard.press(nextArrow);
 					await page.keyboard.press('Space');
 				}
 
@@ -90,7 +96,7 @@ test.describe('Tab navigation should respect focusable elements order and active
 
 		/* Reset rating */
 		for await (const repeat of Array.from({ length: repeatN }, (_, index) => index + 1)) {
-			await page.keyboard.press('ArrowRight');
+			await page.keyboard.press(nextArrow);
 
 			if (repeat === repeatN) {
 				await page.keyboard.press('Space');

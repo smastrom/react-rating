@@ -63,7 +63,6 @@ export function RatingItem({
 		return {};
 	}
 
-	/* c8 ignore next */
 	function getGradientTransformAttr() {
 		if (orientation === OrientationProps.VERTICAL) {
 			return {
@@ -112,7 +111,12 @@ export function RatingItem({
 				</defs>
 			)}
 
-			<g ref={svgRef} shapeRendering="geometricPrecision" {...getTransform()} {...getHFAttr()}>
+			<g
+				ref={svgRef}
+				shapeRendering="geometricPrecision"
+				{...getTransform()}
+				{...getHFAttr()}
+			>
 				{itemShapes}
 			</g>
 		</svg>

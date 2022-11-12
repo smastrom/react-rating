@@ -328,13 +328,11 @@ By default, the user is able to reset the rating (from 1-5 to 0 and vice versa):
 | Mouse       | By clicking again on the selected item    | ![react-rating](https://i.ibb.co/h8242KP/ezgif-com-gif-maker.gif)   |
 | Keyboard    | By navigating to an invisible reset radio | ![react-rating](https://i.ibb.co/Ydc0BKc/ezgif-com-gif-maker-1.gif) |
 
--   It is announced to screen readers that rating **is not** required.
-
 ### 2. Rating without reset
 
 There could be scenarios where you want to force the user to express a rating _(e.g. review page, post-service rating)_.
 
-In such cases, just set `isRequired` to **true** (defaults to false):
+In such cases, set `isRequired` to **true**:
 
 ```jsx
 <Rating isRequired value={rating} onChange={setRating} />
@@ -342,13 +340,11 @@ In such cases, just set `isRequired` to **true** (defaults to false):
 
 ![react-rating](https://i.ibb.co/WyStRMz/ezgif-com-gif-maker-2.gif)
 
-1. It is not possbile to reset by clicking again on the selected rating.
+-   It is not possbile to reset by clicking again on the selected rating or by using the invisible radio.
 
-2. No invisible radio to reset with keyboard is rendered.
+-   It is announced to screen readers that rating **is required**.
 
-3. It is announced to screen readers that rating **is required**.
-
-4. If value equals to 0, it is announced to screen readers that the rating **is invalid** .
+-   If value equals to 0, it is announced to screen readers that the rating **is invalid** .
 
 ## Styling
 
@@ -750,15 +746,15 @@ In **React Rating**:
 
 -   Rating must be confirmed and cannot be set with just arrow navigation like native HTML radios.
 
--   `onChange` is called on both `Enter/Space` keys and mouse _click_.
+-   `onChange` is called on both `Enter/Space` keys and click.
 
--   `onHoverChange` is called on `← → ↑ ↓` navigation, mouse _hovering_, focus-from / blur-to a _non-react-rating_ element.
+-   `onHoverChange` is called on `← → ↑ ↓` navigation, mouse hovering, focus-from / blur-to a _non-react-rating_ element.
 
 ### Disabled state
 
 The disabled state (`isDisabled` prop) is always announced. The root element will still be focusable (but not interactive) instead of being completely hidden to screen readers.
 
-### Labels
+### Custom labels
 
 Check the multiple examples on the [demo website](https://react-rating.onrender.com).
 
@@ -784,6 +780,26 @@ const Star = <path d="M100,10L40 198 190 78 10 78 160 198z" />
 
 ```jsx
 const Star = () => <path d="M100,10L40 198 190 78 10 78 160 198z" />
+```
+
+### I don't like the default focus ring style. How can I style it?
+
+It is possible to style them via CSS by targeting the following selectors:
+
+**Rating items**
+
+```css
+.rr--box:focus-visible .rr--svg {
+    /* Your own styles */
+}
+```
+
+**Reset**
+
+```css
+.rr--focus-reset {
+    /* Your own styles */
+}
 ```
 
 ### I passed an array of shapes but the stroke width looks different for each item.

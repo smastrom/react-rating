@@ -54,7 +54,6 @@ export function App({ isRequired = false, initialRating = 0 }: Props) {
 					isRequired={isRequired}
 					onChange={setRating}
 					value={rating}
-					radius="small"
 					// itemStyles={customStyles}
 					// highlightOnlySelected
 					// orientation="horizontal"

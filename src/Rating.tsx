@@ -79,9 +79,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 	) => {
 		/* Helpers */
 
-		const incrementIfReset = (index: number) => (isRequired ? index : index + 1);
-		const incrementIfRequired = (index: number) => (isRequired ? index + 1 : index);
-
 		const ratingValues = Array.from({ length: items }, (_, index) => index + 1);
 		const hasPrecision = readOnly && !Number.isInteger(value);
 		const isEligibleForHF = hasPrecision && !highlightOnlySelected;
@@ -93,11 +90,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		const absoluteHFMode = halfFillMode === HFProps.BOX ? HFProps.BOX : HFProps.SVG;
 		const deservesHF = isEligibleForHF && !isGraphicalValueInteger(ratingValue);
 		const shouldRenderReset = !isRequired && !readOnly;
-		const tabIndexItems = incrementIfReset(items);
+		const tabIndexItems = isRequired ? items : items + 1;
 		const activeStarIndex = isEligibleForHF
 			? getIntersectionIndex(ratingValues, ratingValue)
 			: ratingValues.indexOf(ratingValue);
-		const activeTabIndex = incrementIfReset(activeStarIndex);
 
 		/* Deps/Callbacks */
 
@@ -146,8 +142,8 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		);
 
 		const saveTabIndex = useCallback(
-			() => setTabIndex(getTabIndex(tabIndexItems, activeTabIndex)),
-			[activeTabIndex, tabIndexItems]
+			() => setTabIndex(getTabIndex(tabIndexItems, activeStarIndex, !isRequired)),
+			[activeStarIndex, tabIndexItems, isRequired]
 		);
 
 		/* Refs */
@@ -167,7 +163,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		const [tabIndex, setTabIndex] = useState<TabIndex[]>(() => {
 			if (isDynamic) {
-				return getTabIndex(tabIndexItems, activeTabIndex);
+				return getTabIndex(tabIndexItems, activeStarIndex, !isRequired);
 			}
 			return [];
 		});
@@ -239,10 +235,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		function handleStarLeave() {
 			onHoverChange(0);
-			setTimeout(() => saveTabIndex());
+			saveTabIndex();
 		}
 
-		function handleClick(event: MouseEvent, clickedIndex: number) {
+		function handleStarClick(event: MouseEvent, clickedIndex: number) {
 			event.stopPropagation();
 
 			if (!isRequired && activeStarIndex === clickedIndex) {
@@ -275,14 +271,17 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		}
 
 		function handleFocus(event: FocusEvent, childIndex: number) {
+			const isResetBtn = !isRequired && childIndex === ratingValues.length;
+			const hoveredValue = isResetBtn ? 0 : childIndex + 1;
+
 			handleWhenNeeded(
 				event,
 				() => {
 					onFocus();
-					onHoverChange(incrementIfRequired(childIndex));
+					onHoverChange(hoveredValue);
 				},
 				() => {
-					onHoverChange(incrementIfRequired(childIndex));
+					onHoverChange(hoveredValue);
 				}
 			);
 		}
@@ -290,9 +289,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		/* Keyboard */
 
 		function handleArrowNav(siblingToFocus: number) {
-			setTabIndex(getTabIndex(tabIndexItems, siblingToFocus));
+			setTabIndex(getTabIndex(tabIndexItems, siblingToFocus, !isRequired));
 			radioRefs.current[siblingToFocus].focus();
 		}
+
 		function handleKeyDown(event: KeyboardEvent<HTMLDivElement>, childIndex: number) {
 			let siblingToFocus = 0;
 
@@ -300,6 +300,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			const prevSibling = childIndex - 1;
 			const nextSibling = childIndex + 1;
 
+			const isResetBtn = !isRequired && childIndex === ratingValues.length;
 			const isFiringFromLast = lastSibling === childIndex;
 			const isFiringFromFirst = childIndex === 0;
 
@@ -324,7 +325,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				case 'Enter':
 				case 'Space':
 					event.preventDefault();
-					return onChange?.(incrementIfRequired(childIndex));
+					return onChange?.(isResetBtn ? 0 : childIndex + 1);
 			}
 
 			event.preventDefault();
@@ -400,7 +401,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		function getMouseProps(starIndex: number): HTMLProps {
 			return {
-				onClick: (event) => handleClick(event, starIndex),
+				onClick: (event) => handleStarClick(event, starIndex),
 				onMouseEnter: () => handleMouseEnter(starIndex),
 				onMouseLeave: handleMouseLeave,
 			};
@@ -438,18 +439,16 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				return {};
 			}
 
-			const radioIndex = incrementIfReset(starIndex);
-
 			return {
-				...getRefs(radioIndex),
-				...getKeyboardProps(radioIndex),
+				...getRefs(starIndex),
+				...getKeyboardProps(starIndex),
 				...getMouseProps(starIndex),
-				onFocus: (event) => handleFocus(event, radioIndex),
+				onFocus: (event) => handleFocus(event, starIndex),
 				onBlur: (event) => handleBlur(event),
 			};
 		}
 
-		function getResetProps(): HTMLProps {
+		function getResetProps(childIndex: number): HTMLProps {
 			return {
 				className: RatingClasses.RESET,
 				role: 'radio',
@@ -457,7 +456,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				'aria-checked': ratingValue === 0,
 				onClick: () => onChange?.(0),
 				onFocus: (event) => {
-					handleFocus(event, 0);
+					handleFocus(event, childIndex);
 					wrapperRef.current?.classList.add(RatingClasses.GROUP_RESET);
 				},
 				onBlur: (event) => {
@@ -465,13 +464,11 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 					wrapperRef.current?.classList.remove(RatingClasses.GROUP_RESET);
 				},
 				...getResetTestId(),
-				...getKeyboardProps(0),
-				...getRefs(0),
+				...getKeyboardProps(childIndex),
+				...getRefs(childIndex),
 				...(isDisabled ? { 'aria-disabled': 'true' } : {}),
 			};
 		}
-
-		console.log(radioRefs.current);
 
 		/* SVG props */
 
@@ -514,7 +511,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 							<RatingItem {...getRatingItemProps(index)} />
 						</div>
 						{shouldRenderReset && index === ratingValues.length - 1 && (
-							<div {...getResetProps()} />
+							<div {...getResetProps(index + 1)} />
 						)}
 					</Fragment>
 				))}

@@ -71,8 +71,10 @@ test.describe('Tab navigation should respect focusable elements order and active
 		const randomRating = getRandomInt(1, ratingItems);
 		const component = await mount(<App initialRating={randomRating} />);
 
-		const expectFirstButtonFocused = () => expect(page.locator(firstButtonId)).toBeFocused();
-		const expectSecondButtonFocused = () => expect(page.locator(secondButtonId)).toBeFocused();
+		const expectFirstButtonFocused = () =>
+			expect(page.locator(firstButtonId)).toBeFocused();
+		const expectSecondButtonFocused = () =>
+			expect(page.locator(secondButtonId)).toBeFocused();
 		const expectResetFocused = () => expect(component.locator(resetTestId)).toBeFocused();
 
 		/* Focus the first element (button) */

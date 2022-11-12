@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 import {
 	render,
@@ -13,7 +14,7 @@ import {
 import { Rating } from '../../src/Rating';
 import { Star } from '../../src/Shapes';
 
-describe('Component rendering', () => {
+describe('Group rendering', () => {
 	test('Should be in the document if value equals to zero', () => {
 		const { rerender } = render(<Rating value={0} onChange={() => null} />);
 		const group = screen.getByTestId(GROUP_ID);
@@ -155,7 +156,7 @@ describe('Component rendering', () => {
 	});
 });
 
-describe('Any child element rendering', () => {
+describe('Children rendering', () => {
 	test('It should render 3 boxes and each box should have a non-empty SVG child', () => {
 		render(<Rating value={3} items={3} onChange={() => null} />);
 

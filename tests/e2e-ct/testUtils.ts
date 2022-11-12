@@ -1,7 +1,7 @@
 import { expect } from '@playwright/experimental-ct-react';
 import { Locator, Page } from '@playwright/test';
 
-/** Copy-pasting it as it is not exported from @playwright */
+/** Copy-pasting it as it is not exported by playwright */
 export interface MountResult extends Locator {
 	unmount(): Promise<void>;
 	rerender(component: JSX.Element): Promise<void>;

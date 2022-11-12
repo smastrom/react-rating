@@ -113,5 +113,4 @@ test('Should be able to loop through rating items', async ({ mount, page, browse
 
 	await expectToBeTheOnlyFocusable(component, childWithReset[iterationCount]);
 	await expectToBeTheOnlyChecked(component, childWithReset[randomRating]);
-	await component.unmount();
 });

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 import { Rating } from '../../src/Rating';
 import {
@@ -19,7 +20,7 @@ const toHaveClassNames = (childId: string, classNames: string) => {
 	expect(child).toHaveClass(classNames, { exact: true });
 };
 
-describe('Classnames and inline css vars - Image element', () => {
+describe('Read Only - Classes and variables', () => {
 	test('If styles are deactivated/unset, no classNames should be added', () => {
 		const defaultClasses = 'rr--group rr--dir-x';
 

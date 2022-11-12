@@ -51,7 +51,7 @@ export function getErrors({
 	if (isOnChangeRequired && isDisabled === true) {
 		return setErrors(
 			errorsObj,
-			'onChange required when Rating is an input, whether is disabled or not. Use readOnly to render an image element instead.'
+			'onChange is required if Rating is an input, whether is disabled or not. Use readOnly to render an image element instead.'
 		);
 	}
 	if (readOnly === false && !Number.isInteger(value)) {
@@ -60,7 +60,10 @@ export function getErrors({
 	if (!itemShapes) {
 		return setErrors(errorsObj, 'itemStyles needs at least the property itemShapes set');
 	}
-	if (!Array.isArray(itemShapes) && !isValidElement(itemShapes as object | null | undefined)) {
+	if (
+		!Array.isArray(itemShapes) &&
+		!isValidElement(itemShapes as object | null | undefined)
+	) {
 		return setErrors(errorsObj, invalidJSXMsg);
 	}
 

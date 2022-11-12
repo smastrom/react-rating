@@ -11,7 +11,7 @@ import {
 	getRandomInt,
 } from './testUtils';
 
-test('Wheter rating is required or not, the clicked target should always be the only checked and focusable element', async ({
+test('Whether rating is required or not, the clicked target should always be the only checked and focusable element', async ({
 	mount,
 }) => {
 	const component = await mount(<App />);
@@ -21,6 +21,7 @@ test('Wheter rating is required or not, the clicked target should always be the 
 		await expectToBeTheOnlyChecked(component, testId);
 		await expectToBeTheOnlyFocusable(component, testId);
 	}
+	await component.unmount();
 
 	const requiredComponent = await mount(<App isRequired />);
 
@@ -31,19 +32,7 @@ test('Wheter rating is required or not, the clicked target should always be the 
 	}
 });
 
-test('If rating required, should never uncheck the target if clicking multiple times on it', async ({
-	mount,
-}) => {
-	const component = await mount(<App isRequired />);
-
-	for await (const testId of childTestIds) {
-		await component.locator(testId).click({ clickCount: getRandomInt(20, 100) });
-		await expectToBeTheOnlyChecked(component, testId);
-		await expectToBeTheOnlyFocusable(component, testId);
-	}
-});
-
-test('If rating not required, should check/uncheck the target if clicking multiple times on it', async ({
+test('If rating is not required, should check/uncheck the target if clicking multiple times on it', async ({
 	mount,
 }) => {
 	const component = await mount(<App />);
@@ -56,5 +45,17 @@ test('If rating not required, should check/uncheck the target if clicking multip
 		await component.locator(testId).click();
 		await expectNoneToBeChecked(component);
 		await expectToBeTheOnlyFocusable(component, resetTestId);
+	}
+});
+
+test('If rating is required, should never uncheck the target if clicking multiple times on it', async ({
+	mount,
+}) => {
+	const component = await mount(<App isRequired />);
+
+	for await (const testId of childTestIds) {
+		await component.locator(testId).click({ clickCount: getRandomInt(20, 100) });
+		await expectToBeTheOnlyChecked(component, testId);
+		await expectToBeTheOnlyFocusable(component, testId);
 	}
 });

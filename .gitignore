@@ -13,4 +13,5 @@ style.css
 yarn-error.log
 /test-results/
 /playwright-report/
+/playwright-rtl-report/
 /playwright/.cache/

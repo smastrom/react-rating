@@ -28,7 +28,6 @@ import {
 	isRTLDir,
 	useIsomorphicLayoutEffect,
 	noop,
-	setAriaDisabled,
 } from './utils';
 import { Sizes, OrientationProps, TransitionProps, HFProps, RatingClasses } from './constants';
 import { defaultItemStyles } from './defaultItemStyles';
@@ -353,7 +352,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				const isAriaRequired = isRequired && !isDisabled;
 				const ariaProps: HTMLProps = {
 					role: 'radiogroup',
-					'data-value': `${ratingValue}`,
 					'aria-required': isAriaRequired,
 				};
 
@@ -414,18 +412,18 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			}
 
 			const labelProps: HTMLProps = {};
-			const radioLabels = Array.isArray(invisibleItemLabels)
-				? invisibleItemLabels
-				: ratingValues.map((_, index: number) => `Rate ${index + 1}`);
 
 			if (Array.isArray(visibleItemLabelIds)) {
 				labelProps['aria-labelledby'] = visibleItemLabelIds[starIndex];
 			} else {
+				const radioLabels = Array.isArray(invisibleItemLabels)
+					? invisibleItemLabels
+					: ratingValues.map((_, index: number) => `Rate ${index + 1}`);
 				labelProps['aria-label'] = radioLabels[starIndex];
 			}
 
 			if (isDisabled) {
-				setAriaDisabled(labelProps);
+				labelProps['aria-disabled'] = 'true';
 			}
 
 			return {
@@ -452,37 +450,28 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 		}
 
 		function getResetProps(): HTMLProps {
-			let resetProps: HTMLProps = {
+			return {
 				className: RatingClasses.RESET,
 				role: 'radio',
 				'aria-label': resetLabel,
 				'aria-checked': ratingValue === 0,
+				onClick: () => onChange?.(0),
+				onFocus: (event) => {
+					handleFocus(event, 0);
+					wrapperRef.current?.classList.add(RatingClasses.GROUP_RESET);
+				},
+				onBlur: (event) => {
+					handleBlur(event);
+					wrapperRef.current?.classList.remove(RatingClasses.GROUP_RESET);
+				},
 				...getResetTestId(),
+				...getKeyboardProps(0),
+				...getRefs(0),
+				...(isDisabled ? { 'aria-disabled': 'true' } : {}),
 			};
-
-			if (isDynamic) {
-				resetProps = {
-					...resetProps,
-					...getKeyboardProps(0),
-					...getRefs(0),
-					onClick: () => onChange?.(0),
-					onFocus: (event) => {
-						handleFocus(event, 0);
-						wrapperRef.current?.classList.add(RatingClasses.GROUP_RESET);
-					},
-					onBlur: (event) => {
-						handleBlur(event);
-						wrapperRef.current?.classList.remove(RatingClasses.GROUP_RESET);
-					},
-				};
-			}
-
-			if (isDisabled) {
-				setAriaDisabled(resetProps);
-			}
-
-			return resetProps;
 		}
+
+		console.log(radioRefs.current);
 
 		/* SVG props */
 

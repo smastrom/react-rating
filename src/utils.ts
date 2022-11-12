@@ -30,10 +30,6 @@ export const getNewPosition = (originalPos: number) =>
 export const isGraphicalValueInteger = (ratingValue: number) =>
 	Number.isInteger(roundToHalf(ratingValue));
 
-export function setAriaDisabled(props: HTMLProps) {
-	props['aria-disabled'] = 'true';
-}
-
 export function getIntersectionIndex(ratingValues: number[], ratingValue: number) {
 	const roundedHalf = roundToHalf(ratingValue);
 

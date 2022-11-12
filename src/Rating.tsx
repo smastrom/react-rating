@@ -228,7 +228,9 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
 			fromInsideCallback: () => void = () => {}
 		) {
-			const fromInside = radioRefs.current.some((radio) => radio === event.relatedTarget);
+			const fromInside = radioRefs.current.some(
+				(radio) => radio === event.relatedTarget
+			);
 			if (!fromInside) {
 				fromOutsideCallback();
 			} else {
@@ -260,7 +262,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			handleWhenNeeded(event, () => {
 				handleStarLeave();
 			});
-			setStyles({ ...styles, ...getDynamicStyles(activeStarIndex, needsDynamicCssVars) });
+			setStyles({
+				...styles,
+				...getDynamicStyles(activeStarIndex, needsDynamicCssVars),
+			});
 		}
 
 		function handleBlur(event: FocusEvent) {
@@ -285,16 +290,10 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		/* Keyboard */
 
-		/** Ignoring keyboard handlers from Vitest coverage as they have been
-		 * tested with Playwright in tests/e2e/keyboardNavigation.test.ts */
-
-		/* c8 ignore start */
 		function handleArrowNav(siblingToFocus: number) {
 			setTabIndex(getTabIndex(tabIndexItems, siblingToFocus));
 			radioRefs.current[siblingToFocus].focus();
-		} /* c8 ignore stop */
-
-		/* c8 ignore start */
+		}
 		function handleKeyDown(event: KeyboardEvent<HTMLDivElement>, childIndex: number) {
 			let siblingToFocus = 0;
 
@@ -332,7 +331,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			event.preventDefault();
 			event.stopPropagation();
 		}
-		/* c8 ignore stop */
 
 		/* Group props */
 
@@ -390,14 +388,14 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
 		function getRefs(childIndex: number) {
 			return {
-				ref: (childNode: HTMLDivElement) => (radioRefs.current[childIndex] = childNode),
+				ref: (childNode: HTMLDivElement) =>
+					(radioRefs.current[childIndex] = childNode),
 			};
 		}
 
 		function getKeyboardProps(childIndex: number): HTMLProps {
 			return {
 				tabIndex: tabIndex[childIndex],
-				/* c8 ignore next */
 				onKeyDown: (event) => handleKeyDown(event, childIndex),
 			};
 		}
@@ -467,6 +465,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 					...resetProps,
 					...getKeyboardProps(0),
 					...getRefs(0),
+					onClick: () => onChange?.(0),
 					onFocus: (event) => {
 						handleFocus(event, 0);
 						wrapperRef.current?.classList.add(RatingClasses.GROUP_RESET);
@@ -516,7 +515,6 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			>
 				{ratingValues.map((value, index) => (
 					<Fragment key={value}>
-						{shouldRenderReset && index === 0 && <div {...getResetProps()} />}
 						<div
 							className={`${RatingClasses.BOX} ${styles.dynamicClassNames[index]}`}
 							style={styles.dynamicCssVars[index]}
@@ -526,6 +524,9 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 						>
 							<RatingItem {...getRatingItemProps(index)} />
 						</div>
+						{shouldRenderReset && index === ratingValues.length - 1 && (
+							<div {...getResetProps()} />
+						)}
 					</Fragment>
 				))}
 			</div>

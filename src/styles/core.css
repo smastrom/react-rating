@@ -1,6 +1,7 @@
 .rr--group {
 	display: flex;
 	width: 100%;
+	position: relative;
 }
 
 .rr--box {
@@ -51,6 +52,13 @@
 	clip: rect(0, 0, 0, 0);
 	white-space: nowrap;
 	border: 0;
+	right: 0;
+	bottom: 0;
+}
+
+[dir='rtl'] .rr--reset {
+	left: 0;
+	right: auto;
 }
 
 /* Disabled */

@@ -22,6 +22,7 @@ Zero dependency, highly customizable rating component for React.
 -   Dead simple per-active-item styling
 -   Built with accessibility in mind
 -   Truly responsive and mobile-first
+-   Controllable with React Hook Form
 -   Simple DOM structure
 -   Zero-config RTL support
 -   Works with SSR
@@ -38,13 +39,15 @@ yarn add @smastrom/react-rating
 
 ## Usage
 
-### 1. Import the CSS and the component
+### 1. Import CSS and Rating component
 
 ```jsx
 import { Rating } from '@smastrom/react-rating'
 
 import '@smastrom/react-rating/style.css'
 ```
+
+> Importing the CSS **only once** in your App is enough to use Rating in any component.
 
 <details><summary><strong>Remix</strong></summary>
 <br />
@@ -289,7 +292,7 @@ function App() {
 
 ### Custom logic/state
 
-If you need to perform some actions while setting the rating (like calling an API) or you need to update only a portion of the state, `onChange` accepts a callback whose parameter equals to the selected rating:
+If you need to perform actions while setting the rating (like calling an API) or you need to update only a portion of the state, `onChange` accepts a callback whose only parameter equals to the selected rating:
 
 ```js
 function App() {
@@ -344,7 +347,7 @@ In such cases, set `isRequired` to **true**:
 
 -   It is announced to screen readers that rating **is required**.
 
--   If value equals to 0, it is announced to screen readers that the rating **is invalid** .
+-   It is announced to screen readers that rating **is invalid** if value equals to 0.
 
 ## Styling
 
@@ -782,7 +785,13 @@ const Star = <path d="M100,10L40 198 190 78 10 78 160 198z" />
 const Star = () => <path d="M100,10L40 198 190 78 10 78 160 198z" />
 ```
 
-### I don't like the default focus ring style. How can I style it?
+### I passed an array of shapes but the stroke width looks different for each item.
+
+When passing different shapes for each rating item, this package forces you to use icons from the same collection to keep design consistency. Be sure you are doing that.
+
+You can find clean, SVG collections at [Icônes](https://icones.js.org/collection/all).
+
+### I don't like the default focus ring styles. How can I style them?
 
 It is possible to style them via CSS by targeting the following selectors:
 
@@ -790,7 +799,9 @@ It is possible to style them via CSS by targeting the following selectors:
 
 ```css
 .rr--box:focus-visible .rr--svg {
-    /* Your own styles */
+    /* Override or disable default */
+    box-shadow: none !important;
+    /* Add your own styles... */
 }
 ```
 
@@ -798,15 +809,11 @@ It is possible to style them via CSS by targeting the following selectors:
 
 ```css
 .rr--focus-reset {
-    /* Your own styles */
+    /* Override or disable default */
+    box-shadow: none !important;
+    /* Add your own styles... */
 }
 ```
-
-### I passed an array of shapes but the stroke width looks different for each item.
-
-When passing different shapes for each rating item, this package forces you to use icons from the same collection to keep design consistency. Be sure you are doing that.
-
-You can find clean, SVG collections at [Icônes](https://icones.js.org/collection/all).
 
 <br />
 

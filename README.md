@@ -47,7 +47,7 @@ import { Rating } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css'
 ```
 
-> Importing the CSS **only once** in your App is enough to use Rating in any component.
+> Importing the CSS **only once** (usullay _main.js_ or _App.jsx_) is enough to use Rating in any component of your App.
 
 <details><summary><strong>Remix</strong></summary>
 <br />
@@ -201,12 +201,6 @@ function App() {
 ```
 
 </details>
-
-<br />
-
-### 3. Rate!
-
-![react-rating](https://i.ibb.co/RT3pDV3/ezgif-com-gif-maker.gif)
 
 <br />
 
@@ -755,7 +749,7 @@ In **React Rating**:
 
 ### Disabled state
 
-The disabled state (`isDisabled` prop) is always announced. The root element will still be focusable (but not interactive) instead of being completely hidden to screen readers.
+The disabled state (`isDisabled` prop) is always announced by screen readers instead of being completely hidden.
 
 ### Custom labels
 
@@ -799,9 +793,7 @@ It is possible to style them via CSS by targeting the following selectors:
 
 ```css
 .rr--box:focus-visible .rr--svg {
-    /* Override or disable default */
-    box-shadow: none !important;
-    /* Add your own styles... */
+    /* Your styles */
 }
 ```
 
@@ -809,9 +801,7 @@ It is possible to style them via CSS by targeting the following selectors:
 
 ```css
 .rr--focus-reset {
-    /* Override or disable default */
-    box-shadow: none !important;
-    /* Add your own styles... */
+    /* Your styles */
 }
 ```
 

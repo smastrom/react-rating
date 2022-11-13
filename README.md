@@ -286,7 +286,7 @@ function App() {
 
 ### Custom logic/state
 
-If you need to perform actions while setting the rating (like calling an API) or you need to update only a portion of the state, `onChange` accepts a callback whose only parameter equals to the selected rating:
+If you need to perform actions while setting the rating (like calling an API) or you need to update a more complex state, `onChange` accepts a callback whose only parameter equals to the selected rating:
 
 ```js
 function App() {
@@ -322,8 +322,8 @@ By default, the user is able to reset the rating (from 1-5 to 0 and vice versa):
 
 | Interaction | Reset                                     | Preview                                                             |
 | ----------- | ----------------------------------------- | ------------------------------------------------------------------- |
-| Mouse       | By clicking again on the selected item    | ![react-rating](https://i.ibb.co/h8242KP/ezgif-com-gif-maker.gif)   |
-| Keyboard    | By navigating to an invisible reset radio | ![react-rating](https://i.ibb.co/Ydc0BKc/ezgif-com-gif-maker-1.gif) |
+| Mouse       | By clicking again on the selected item    | ![react-rating](https://i.ibb.co/pLPP1wM/ezgif-com-gif-maker-2.gif) |
+| Keyboard    | By navigating to an invisible reset radio | ![react-rating](https://i.ibb.co/3YWM7Fx/ezgif-com-gif-maker-1.gif) |
 
 ### 2. Rating without reset
 
@@ -335,13 +335,15 @@ In such cases, set `isRequired` to **true**:
 <Rating isRequired value={rating} onChange={setRating} />
 ```
 
-![react-rating](https://i.ibb.co/WyStRMz/ezgif-com-gif-maker-2.gif)
+![react-rating](https://i.ibb.co/BrtwWPX/ezgif-com-gif-maker-4.gif)
 
 -   It is not possbile to reset by clicking again on the selected rating or by using the invisible radio.
 
--   It is announced to screen readers that rating **is required**.
+-   It is announced by screen readers that rating **is required**.
 
--   It is announced to screen readers that rating **is invalid** if value equals to 0.
+-   If value equals to 0, it is announced by screen readers that rating **is invalid** .
+
+<br/>
 
 ## Styling
 
@@ -444,7 +446,7 @@ function App() {
 
 All you have to do is to open the SVG with a text editor, grab the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes">inner shapes</a> and delete any attribute except for <a href="https://www.w3.org/TR/SVG/geometry.html">geometric</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform">transform</a> ones.
 
-If the SVG comes from quality sources (or you made it) such as any collection you can find on [Icônes](https://icones.js.org/collection/all), all you have to do is to delete a couple of fill and stroke attributes (if any):
+If the SVG comes from quality sources such as any collection you can find on [Icônes](https://icones.js.org/collection/all), all you have to do is to delete a couple of fill and stroke attributes (if any):
 
 ```html
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -735,11 +737,11 @@ If you don't want the half-fill feature, simply pass an integer to `value`.
 
 ## Accessibility
 
-### Mouse/keyboard callbacks consistency
+### Mouse/keyboard callbacks
 
 React Rating leverages `aria radiogroup` role instead of native HTML radio buttons in order to improve keyboard-users experience and extend capabilities (e.g. API calls).
 
-In **React Rating**:
+In React Rating:
 
 -   Rating must be confirmed and cannot be set with just arrow navigation like native HTML radios.
 

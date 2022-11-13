@@ -1,5 +1,4 @@
 import { useEffect, useLayoutEffect } from 'react';
-import { HTMLProps } from './internalTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
 export const noop = (number?: number) => {};
@@ -21,8 +20,6 @@ export const getUniqueId = () => (Math.random() + 1).toString(36).substring(7);
 
 export const areNum = (...values: unknown[]) =>
 	values.every((value) => typeof value === 'number');
-
-export const isFn = (fn: unknown) => typeof fn === 'function';
 
 export const getNewPosition = (originalPos: number) =>
 	originalPos === 0 ? 0 : toSecondDecimal(originalPos) * -1;

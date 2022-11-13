@@ -238,9 +238,9 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			event.stopPropagation();
 
 			if (!isRequired && activeStarIndex === clickedIndex) {
-				onChange?.(0);
+				onChange(0);
 			} else {
-				onChange?.(clickedIndex + 1);
+				onChange(clickedIndex + 1);
 			}
 		}
 
@@ -321,7 +321,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				case 'Enter':
 				case 'Space':
 					event.preventDefault();
-					return onChange?.(isResetBtn ? 0 : childIndex + 1);
+					return onChange(isResetBtn ? 0 : childIndex + 1);
 			}
 
 			event.preventDefault();
@@ -450,7 +450,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 				role: 'radio',
 				'aria-label': resetLabel,
 				'aria-checked': ratingValue === 0,
-				onClick: () => onChange?.(0),
+				onClick: () => onChange(0),
 				onFocus: (event) => {
 					handleFocus(event, childIndex);
 					wrapperRef.current?.classList.add(RatingClasses.GROUP_RESET);

@@ -61,6 +61,11 @@
 	right: auto;
 }
 
+.rr--dir-y .rr--reset {
+	bottom: 0;
+	right: 50%;
+}
+
 /* Disabled */
 
 .rr--disabled {

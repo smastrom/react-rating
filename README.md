@@ -47,7 +47,7 @@ import { Rating } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css'
 ```
 
-> Importing the CSS **only once** (usullay _main.js_ or _App.jsx_) is enough to use Rating in any component of your App.
+> Importing the CSS **only once** (usually _main.js_ or _App.jsx_) is enough to use Rating in any component of your App.
 
 <details><summary><strong>Remix</strong></summary>
 <br />
@@ -274,7 +274,7 @@ type RatingChange =
 
 ### Basic
 
-If your app doesn't require any custom logic/state to handle the rating, you can simply pass the setter to `onChange`:
+If your app doesn't require any custom logic/state to set the rating, you can simply pass the setter to `onChange`:
 
 ```js
 function App() {
@@ -286,7 +286,7 @@ function App() {
 
 ### Custom logic/state
 
-If you need to perform actions while setting the rating (like calling an API) or you need to update a more complex state, `onChange` accepts a callback whose only parameter equals to the selected rating:
+If you need to perform actions while setting the rating (like calling an API) or you need to update a complex state, `onChange` accepts a callback whose only parameter equals to the selected rating:
 
 ```js
 function App() {
@@ -320,10 +320,10 @@ function App() {
 
 By default, the user is able to reset the rating (from 1-5 to 0 and vice versa):
 
-| Interaction | Reset                                     | Preview                                                             |
-| ----------- | ----------------------------------------- | ------------------------------------------------------------------- |
-| Mouse       | By clicking again on the selected item    | ![react-rating](https://i.ibb.co/pLPP1wM/ezgif-com-gif-maker-2.gif) |
-| Keyboard    | By navigating to an invisible reset radio | ![react-rating](https://i.ibb.co/3YWM7Fx/ezgif-com-gif-maker-1.gif) |
+| Interaction | Reset action                                  | Preview                                                             |
+| ----------- | --------------------------------------------- | ------------------------------------------------------------------- |
+| Mouse       | By clicking again on the selected rating item | ![react-rating](https://i.ibb.co/pLPP1wM/ezgif-com-gif-maker-2.gif) |
+| Keyboard    | By navigating to an invisible reset radio     | ![react-rating](https://i.ibb.co/3YWM7Fx/ezgif-com-gif-maker-1.gif) |
 
 ### 2. Rating without reset
 
@@ -337,7 +337,7 @@ In such cases, set `isRequired` to **true**:
 
 ![react-rating](https://i.ibb.co/BrtwWPX/ezgif-com-gif-maker-4.gif)
 
--   It is not possbile to reset by clicking again on the selected rating or by using the invisible radio.
+-   It is not possible to reset by clicking again on the selected rating or by using the invisible radio.
 
 -   It is announced by screen readers that rating **is required**.
 
@@ -715,7 +715,7 @@ The component will try to round it to the nearest half integer:
 
 If necessary, the SVG will be half-filled by default (`halfFillMode = 'svg'`):
 
-![react-rating](https://i.ibb.co/H29m0mQ/Schermata-2022-06-01-alle-23-41-53.png)
+![react-rating](https://i.ibb.co/V2kJ317/Screenshot-2022-11-13-alle-12-07-51.png)
 
 All the boxes will have the same background color (inactiveBoxColor) and `activeBoxColor` will have no effect.
 
@@ -739,11 +739,11 @@ If you don't want the half-fill feature, simply pass an integer to `value`.
 
 ### Mouse/keyboard callbacks
 
-React Rating leverages `aria radiogroup` role instead of native HTML radio buttons in order to improve keyboard-users experience and extend capabilities (e.g. API calls).
+React Rating leverages `aria radiogroup` role instead of native HTML radio buttons in order to improve keyboard-users experience and extend capabilities (e.g. API calls) by keeping callbacks consistent between keyboard and mouse.
 
-In React Rating:
+In **React Rating**:
 
--   Rating must be confirmed and cannot be set with just arrow navigation like native HTML radios.
+-   Rating must be confirmed with `Enter/Space` keys and cannot be set directly with arrows like native radios.
 
 -   `onChange` is called on both `Enter/Space` keys and click.
 
@@ -751,11 +751,11 @@ In React Rating:
 
 ### Disabled state
 
-The disabled state (`isDisabled` prop) is always announced by screen readers instead of being completely hidden.
+It is always announced by screen readers instead of being completely hidden.
 
-### Custom labels
+### Labels
 
-Check the multiple examples on the [demo website](https://react-rating.onrender.com).
+React Rating ships with default accessible labels computed from your `items` value. In order to customize them or to switch to visible ones check the multiple examples on the [demo website](https://react-rating.onrender.com).
 
 <br />
 
@@ -806,6 +806,17 @@ It is possible to style them via CSS by targeting the following selectors:
     /* Your styles */
 }
 ```
+
+<details><summary><strong>Defaults</strong></summary>
+
+```css
+.rr--box:focus-visible .rr--svg,
+.rr--focus-reset {
+    box-shadow: var(--rr--focus-shadow);
+}
+```
+
+</details>
 
 <br />
 

@@ -7,7 +7,7 @@ export function getActiveClassNames(
 	selectedIndex: number
 ): CSSClassName[] {
 	return Array.from({ length: items }, (_, index) => {
-		if (highlightOnlySelectedProp === false) {
+		if (!highlightOnlySelectedProp) {
 			if (index <= selectedIndex) {
 				return ActiveClassNames.ON;
 			}

@@ -52,7 +52,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			value,
 			items = 5,
 			readOnly = false,
-			onChange,
+			onChange = noop,
 			onHoverChange = noop,
 			onFocus = noop,
 			onBlur = noop,
@@ -199,15 +199,11 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 			skipTabMount.current = false;
 		}, [isDynamic, saveTabIndex]);
 
-		/* Log critical errors, prevent rendering */
+		/* Log critical errors, return null */
 
 		const { shouldRender, reason } = getErrors({
 			items,
-			value,
-			readOnly,
-			onChange,
 			itemShapes,
-			isDisabled,
 		});
 
 		if (!shouldRender) {

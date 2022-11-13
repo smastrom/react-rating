@@ -18,7 +18,7 @@ export function getDynamicCssVars(
 		setDyamicCssVars(arrayStylesVars, key, color[starIndex]);
 	}
 
-	if (highlightOnlySelected === true) {
+	if (highlightOnlySelected) {
 		cssVars = Array(starIndex).fill({});
 		cssVars.push(arrayStylesVars);
 	} else {

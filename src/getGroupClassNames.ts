@@ -50,7 +50,7 @@ export function getGroupClassNames({
 	const gapClassName = getGapClassName(spaceBetween);
 	const paddingClassName = getPaddingClassName(spaceInside);
 	const disabledClassName: MaybeEmptyClassName =
-		readOnly === false && isDisabled === true ? CursorClasses.DISABLED : '';
+		!readOnly && isDisabled ? CursorClasses.DISABLED : '';
 	const transitionClassName =
 		isDynamic && transition !== TransitionProps.NONE
 			? getTransitionClassNames(transition)

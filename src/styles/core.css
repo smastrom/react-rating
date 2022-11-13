@@ -31,13 +31,17 @@
 .rr--box:focus-visible,
 .rr-reset:focus-visible,
 .rr-reset:focus {
-	outline: rgba(0, 0, 0, 0);
-	z-index: 5;
+	outline: none;
+	box-shadow: none;
 }
 
-.rr--box:focus-visible .rr--svg,
 .rr--focus-reset {
-	box-shadow: var(--rr--focus-shadow);
+	outline: 6px double #0079ff;
+}
+
+.rr--box:focus-visible .rr--svg {
+	outline: 6px double #0079ff;
+	isolation: isolate;
 }
 
 /* Reset */
@@ -78,12 +82,6 @@
 }
 
 /* Interactive */
-
-.rr--pointer {
-	--rr--focus-shadow: inset 0 0 0 2px white, 0 0 0 2px #0079ff, 0 0 0 4px white,
-		0 0 0 6px #0079ff;
-}
-
 .rr--pointer .rr--box {
 	cursor: pointer;
 }

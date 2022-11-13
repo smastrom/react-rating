@@ -24,29 +24,10 @@ describe('Group rendering', () => {
 		expect(group).toBeInTheDocument();
 	});
 
-	test('Should not render the component if value is not a number', () => {
-		// @ts-ignore - TEST
-		const { rerender } = render(<Rating value="6" />);
-		const group = screen.queryByTestId(GROUP_ID);
-		expect(group).not.toBeInTheDocument();
-		// @ts-ignore - TEST
-		rerender(<Rating readOnly value="6" />);
-		expect(group).not.toBeInTheDocument();
-	});
-
 	test('Should not render the component if items greater than 10', () => {
 		// @ts-ignore - TEST
 		render(<Rating value={6} items={11} />);
 		const group = screen.queryByTestId(GROUP_ID);
-		expect(group).not.toBeInTheDocument();
-	});
-
-	test('Should not render the component if value greater than items (default: 5)', () => {
-		const { rerender } = render(<Rating value={6} />);
-		const group = screen.queryByTestId(GROUP_ID);
-		expect(group).not.toBeInTheDocument();
-
-		rerender(<Rating value={6} readOnly />);
 		expect(group).not.toBeInTheDocument();
 	});
 
@@ -108,7 +89,7 @@ describe('Group rendering', () => {
 		expect(group).not.toBeInTheDocument();
 	});
 
-	test('Should not render the component if no itemShapes provided JSX element', () => {
+	test('Should not render the component if no itemShapes provided', () => {
 		render(
 			<Rating
 				readOnly
@@ -122,37 +103,6 @@ describe('Group rendering', () => {
 
 		const group = screen.queryByTestId(GROUP_ID);
 		expect(group).not.toBeInTheDocument();
-	});
-
-	test('If no onChange provided and readOnly is false (default), it should not render the component', () => {
-		render(<Rating value={3} />);
-		const group = screen.queryByTestId(GROUP_ID);
-		expect(group).not.toBeInTheDocument();
-	});
-
-	test('If onChange provided and readOnly is false, it should render the component', () => {
-		render(<Rating value={3} onChange={() => null} />);
-		const group = screen.queryByTestId(GROUP_ID);
-		expect(group).toBeInTheDocument();
-	});
-
-	test('If readOnly is false and value provided is not an integer, it should not render the component', () => {
-		render(<Rating value={3.6} onChange={() => null} />);
-		const group = screen.queryByTestId(GROUP_ID);
-		expect(group).not.toBeInTheDocument();
-	});
-
-	/* New in v1.1.0 */
-	test('If isDisabled, should not render the component if onChange is undefined', () => {
-		render(<Rating isDisabled value={5} />);
-		const group = screen.queryByTestId(GROUP_ID);
-		expect(group).not.toBeInTheDocument();
-	});
-
-	test('If readOnly and isDisabled, should render the component if onChange is undefined', () => {
-		render(<Rating readOnly isDisabled value={5} />);
-		const group = screen.queryByTestId(GROUP_ID);
-		expect(group).toBeInTheDocument();
 	});
 });
 

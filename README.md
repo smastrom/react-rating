@@ -1,5 +1,5 @@
-![react-rating-version](https://img.shields.io/npm/v/@smastrom/react-rating?color=22C55E) ![react-rating-dependencies](https://img.shields.io/badge/dependency%20count-0-22C55E) ![react-rating-build-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Build/main?color=22C55E)
-![react-rating-tests-workflow](https://img.shields.io/github/workflow/status/smastrom/react-rating/Tests/main?color=22C55E&label=tests) ![react-rating-coverage](https://img.shields.io/codecov/c/github/smastrom/react-rating?color=22C55E) ![react-rating-code-quality](https://img.shields.io/lgtm/grade/javascript/github/smastrom/react-rating?color=22C55E)
+![react-rating-version](https://img.shields.io/npm/v/@smastrom/react-rating?color=22C55E) ![react-rating-build-workflow](https://img.shields.io/github/actions/workflow/status/smastrom/react-rating/build.yml?branch=main&color=22C55E)
+![react-rating-tests-workflow](https://img.shields.io/github/actions/workflow/status/smastrom/react-rating/tests.yml?branch=main&color=22C55E&label=tests) ![react-rating-coverage](https://img.shields.io/codecov/c/github/smastrom/react-rating?color=22C55E) ![react-rating-dependencies](https://img.shields.io/badge/dependency%20count-0-22C55E)
 
 # React Rating
 

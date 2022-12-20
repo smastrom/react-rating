@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 const reporterOutputDir = process.env.IS_RTL ? 'playwright-rtl-report' : 'playwright-report';
 
 const config: PlaywrightTestConfig = {
-	testDir: './tests/e2e-ct',
+	testDir: './tests/ct',
 	timeout: 30 * 1000,
 	fullyParallel: false,
 	reporter: [['html', { outputFolder: reporterOutputDir }]],

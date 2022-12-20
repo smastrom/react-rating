@@ -117,3 +117,10 @@ export type RatingProps = SharedProps & ReadOnlyProps & InputProps;
 export declare const Rating: ForwardRefExoticComponent<
 	RatingProps & RefAttributes<HTMLDivElement>
 >;
+
+export declare const Star: JSX.Element;
+export declare const ThinStar: JSX.Element;
+export declare const RoundedStar: JSX.Element;
+export declare const ThinRoundedStar: JSX.Element;
+export declare const StickerStar: JSX.Element;
+export declare const Heart: JSX.Element;

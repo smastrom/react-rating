@@ -9,7 +9,7 @@ const vitestOptions = {
 		globals: true,
 		environment: 'jsdom',
 		setupFiles: './tests/dom/setupTests.ts',
-		exclude: ['**/vite/**', '**/node_modules/**', '**/dist/**', '**/e2e-ct/**'],
+		exclude: ['**/vite/**', '**/node_modules/**', '**/dist/**', '**/ct/**'],
 	},
 };
 

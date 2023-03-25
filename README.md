@@ -15,24 +15,32 @@ Zero dependency, highly customizable rating component for React.
 
 ## Features
 
--   **Use any SVG**: No headaches, icon fonts or packages to install in order to use your favorite shapes.
--   Endless possibilities of customization
--   Most common rating shapes included
--   Zero-config smart half-fill
--   Dead simple per-active-item styling
--   Built with accessibility in mind
--   Truly responsive and mobile-first
--   Controllable with React Hook Form
--   Simple DOM structure
--   Zero-config RTL support
--   Works with SSR
+-  **Use any SVG**: No headaches, icon fonts or packages to install in order to use your favorite shapes.
+-  Endless possibilities of customization
+-  Most common rating shapes included
+-  Zero-config smart half-fill
+-  Dead simple per-active-item styling
+-  Built with accessibility in mind
+-  Truly responsive and mobile-first
+-  Controllable with React Hook Form
+-  Simple DOM structure
+-  Zero-config RTL support
+-  Works with SSR
 
 <br/>
 
 ## Installation
 
-```console
+```zsh
+pnpm add @smastrom/react-rating
+```
+
+```zsh
 yarn add @smastrom/react-rating
+```
+
+```zsh
+npm i @smastrom/react-rating
 ```
 
 <br />
@@ -47,7 +55,7 @@ import { Rating } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css'
 ```
 
-> Importing the CSS **only once** (usually _main.js_ or _App.jsx_) is enough to use Rating in any component of your App.
+> Importing the CSS **only once** (most likely _main.js_ or _App.jsx_) is enough to use Rating in any other component of your App.
 
 <details><summary><strong>Remix</strong></summary>
 <br />
@@ -171,9 +179,9 @@ Since **Rating** will span across the entire container, define a _maximum width_
 
 ```jsx
 function App() {
-    const [rating, setRating] = useState(0) // Initial value
+   const [rating, setRating] = useState(0) // Initial value
 
-    return <Rating style={{ maxWidth: 250 }} value={rating} onChange={setRating} />
+   return <Rating style={{ maxWidth: 250 }} value={rating} onChange={setRating} />
 }
 ```
 
@@ -184,7 +192,7 @@ function App() {
 
 ```css
 .my-rating-class {
-    max-width: 600px;
+   max-width: 600px;
 }
 ```
 
@@ -194,9 +202,9 @@ function App() {
 import './my-styles.css'
 
 function App() {
-    const [rating, setRating] = useState(0)
+   const [rating, setRating] = useState(0)
 
-    return <Rating className="my-rating-class" value={rating} onChange={setRating} />
+   return <Rating className="my-rating-class" value={rating} onChange={setRating} />
 }
 ```
 
@@ -221,8 +229,8 @@ function App() {
 | :thinking:          | Prop            | Description                                                                | Type                                            | Default   | Required                        |
 | ------------------- | --------------- | -------------------------------------------------------------------------- | ----------------------------------------------- | --------- | ------------------------------- |
 | :green_circle:      | `value`         | An integer from 0 to `items`. It can be a float if `readOnly` is **true**. | number                                          | undefined | :white_check_mark:              |
-| :large_blue_circle: | `onChange`      | Setter or custom function to update the rating.                            | RatingChange                                    | undefined | Only if `readOnly` is **false** |
-| :large_blue_circle: | `onHoverChange` | Callback to execute while navigating the rating items.                     | (hoveredValue: number) => void                  | noop      | :x:                             |
+| :large_blue_circle: | `onChange`      | Setter or custom function to update the rating.                            | RatingChange                                    | () => {}  | Only if `readOnly` is **false** |
+| :large_blue_circle: | `onHoverChange` | Callback to execute while navigating the rating items.                     | (hoveredValue: number) => void                  | () => {}  | :x:                             |
 | :green_circle:      | `items`         | Rating items to display.                                                   | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
 | :green_circle:      | `readOnly`      | Whether to render an accessible image element or not.                      | boolean                                         | false     | :x:                             |
 | :large_blue_circle: | `isDisabled`    | Whether to disable the radio group or not.                                 | boolean                                         | false     | :x:                             |
@@ -249,13 +257,13 @@ function App() {
 
 ### :open_umbrella: Accessibility
 
-| :thinking:          | Prop                  | Description                                                                                                       | Type     | Default                                                          | Required |
-| ------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------- | -------- |
-| :green_circle:      | `invisibleLabel`      | Accessible label of the rating group / image.                                                                     | string   | `Rating` or `Rated <value> on <items>` if `readOnly` is **true** | :x:      |
-| :large_blue_circle: | `invisibleItemLabels` | Accessible labels of each each rating item.                                                                       | string[] | `Rate 1`, `Rate 2`...                                            | :x:      |
-| :large_blue_circle: | `visibleLabelId`      | DOM ID of the element used as rating group label. If set, takes precedence over `invisibleLabel`.                 | string   | undefined                                                        | :x:      |
-| :large_blue_circle: | `visibleItemLabelIds` | DOM IDs of the elements used as labels for each rating item. If set, takes precedence over `invisibleItemLabels`. | string[] | undefined                                                        | :x:      |
-| :large_blue_circle: | `resetLabel`          | Accessible label of the reset radio button.                                                                       | string   | `No Rating`                                                      | :x:      |
+| :thinking:          | Prop                  | Description                                                                                                       | Type     | Default                                                                          | Required |
+| ------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------- | -------- |
+| :green_circle:      | `invisibleLabel`      | Accessible label of the rating group / image.                                                                     | string   | • `Rating Selection` (radioGroup) <br /> • `Rated {value} on {items}` (readOnly) | :x:      |
+| :large_blue_circle: | `invisibleItemLabels` | Accessible labels of each rating item.                                                                            | string[] | `Rate 1`, `Rate 2`...                                                            | :x:      |
+| :large_blue_circle: | `visibleLabelId`      | DOM ID of the element used as rating group label. If set, takes precedence over `invisibleLabel`.                 | string   | undefined                                                                        | :x:      |
+| :large_blue_circle: | `visibleItemLabelIds` | DOM IDs of the elements used as labels for each rating item. If set, takes precedence over `invisibleItemLabels`. | string[] | undefined                                                                        | :x:      |
+| :large_blue_circle: | `resetLabel`          | Accessible label of the reset radio button.                                                                       | string   | `Reset Rating`                                                                   | :x:      |
 
 <br />
 
@@ -266,8 +274,8 @@ function App() {
 
 ```ts
 type RatingChange =
-    | React.Dispatch<React.SetStateAction<number>>
-    | ((selectedValue: number) => void | Promise<void>)
+   | React.Dispatch<React.SetStateAction<number>>
+   | ((selectedValue: number) => void | Promise<void>)
 ```
 
 </details>
@@ -278,9 +286,9 @@ If your app doesn't require any custom logic/state to set the rating, you can si
 
 ```js
 function App() {
-    const [rating, setRating] = useState(0)
+   const [rating, setRating] = useState(0)
 
-    return <Rating value={rating} onChange={setRating} />
+   return <Rating value={rating} onChange={setRating} />
 }
 ```
 
@@ -290,25 +298,25 @@ If you need to perform actions while setting the rating (like calling an API) or
 
 ```js
 function App() {
-    const [state, setState] = useState({
-        review: '',
-        rating: 0 // Initial value
-    })
+   const [state, setState] = useState({
+      review: '',
+      rating: 0 // Initial value
+   })
 
-    function handleChange(selectedValue) {
-        // 1. Logs the selected rating (1, 2, 3...)
-        console.log(selectedValue)
+   function handleChange(selectedValue) {
+      // 1. Logs the selected rating (1, 2, 3...)
+      console.log(selectedValue)
 
-        // 2. Do something with or without the value...
+      // 2. Do something with or without the value...
 
-        // 3. Update Rating UI
-        setState((prevState) => ({
-            ...prevState,
-            rating: selectedValue
-        }))
-    }
+      // 3. Update Rating UI
+      setState((prevState) => ({
+         ...prevState,
+         rating: selectedValue
+      }))
+   }
 
-    return <Rating onChange={handleChange} value={state.rating} />
+   return <Rating onChange={handleChange} value={state.rating} />
 }
 ```
 
@@ -325,6 +333,8 @@ By default, the user is able to reset the rating (from 1-5 to 0 and vice versa):
 | Mouse       | By clicking again on the selected rating item | ![react-rating](https://i.ibb.co/pLPP1wM/ezgif-com-gif-maker-2.gif) |
 | Keyboard    | By navigating to an invisible reset radio     | ![react-rating](https://i.ibb.co/3YWM7Fx/ezgif-com-gif-maker-1.gif) |
 
+> :bulb: Don't like the default focus style? Check [here](#troubleshooting) how to customize it.
+
 ### 2. Rating without reset
 
 There could be scenarios where you want to force the user to express a rating _(e.g. review page, post-service rating)_.
@@ -337,11 +347,13 @@ In such cases, set `isRequired` to **true**:
 
 ![react-rating](https://i.ibb.co/BrtwWPX/ezgif-com-gif-maker-4.gif)
 
--   It is not possible to reset by clicking again on the selected rating or by using the invisible radio.
+-  It is not possible to reset by clicking again on the selected rating or by using the invisible radio.
 
--   It is announced by screen readers that rating **is required**.
+-  It is announced by screen readers that rating **is required**.
 
--   If value equals to 0, it is announced by screen readers that rating **is invalid** .
+-  If value equals to 0, it is announced by screen readers that rating **is invalid** .
+
+> :bulb: Don't like the default focus style? Check [here](#troubleshooting) how to customize it.
 
 <br/>
 
@@ -365,22 +377,17 @@ import { Rating, ThinStar } from '@smastrom/react-rating'
 
 // Declare it outside your component so it doesn't get re-created
 const myStyles = {
-    itemShapes: ThinStar,
-    activeFillColor: '#ffb700',
-    inactiveFillColor: '#fbf1a9'
+   itemShapes: ThinStar,
+   activeFillColor: '#ffb700',
+   inactiveFillColor: '#fbf1a9'
 }
 
 function App() {
-    const [rating, setRating] = useState(0)
+   const [rating, setRating] = useState(0)
 
-    return (
-        <Rating
-            style={{ maxWidth: 300 }}
-            value={rating}
-            onChange={setRating}
-            itemStyles={myStyles}
-        />
-    )
+   return (
+      <Rating style={{ maxWidth: 300 }} value={rating} onChange={setRating} itemStyles={myStyles} />
+   )
 }
 ```
 
@@ -392,20 +399,20 @@ You can pass an object with the following properties to `itemStyles` prop:
 
 ```ts
 type ItemStyles = {
-    itemShapes: JSX.Element | JSX.Element[]
+   itemShapes: JSX.Element | JSX.Element[]
 
-    itemStrokeWidth?: number
-    boxBorderWidth?: number
+   itemStrokeWidth?: number
+   boxBorderWidth?: number
 
-    activeFillColor?: string | string[]
-    activeStrokeColor?: string | string[]
-    activeBoxColor?: string | string[]
-    activeBoxBorderColor?: string | string[]
+   activeFillColor?: string | string[]
+   activeStrokeColor?: string | string[]
+   activeBoxColor?: string | string[]
+   activeBoxBorderColor?: string | string[]
 
-    inactiveFillColor?: string
-    inactiveStrokeColor?: string
-    inactiveBoxColor?: string
-    inactiveBoxBorderColor?: string
+   inactiveFillColor?: string
+   inactiveStrokeColor?: string
+   inactiveBoxColor?: string
+   inactiveBoxBorderColor?: string
 }
 ```
 
@@ -415,26 +422,21 @@ Just set the ones you need and that's it:
 
 ```jsx
 const CustomStar = (
-    <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
+   <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
 )
 
 const myStyles = {
-    itemShapes: CustomStar,
-    activeFillColor: '#22C55E',
-    inactiveFillColor: '#BBF7D0'
+   itemShapes: CustomStar,
+   activeFillColor: '#22C55E',
+   inactiveFillColor: '#BBF7D0'
 }
 
 function App() {
-    const [rating, setRating] = useState(4)
+   const [rating, setRating] = useState(4)
 
-    return (
-        <Rating
-            style={{ maxWidth: 300 }}
-            value={rating}
-            onChange={setRating}
-            itemStyles={myStyles}
-        />
-    )
+   return (
+      <Rating style={{ maxWidth: 300 }} value={rating} onChange={setRating} itemStyles={myStyles} />
+   )
 }
 ```
 
@@ -450,13 +452,13 @@ If the SVG comes from quality sources such as any collection you can find on [Ic
 
 ```html
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-    <path
-        fill="currentColor"
-        stroke="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-    />
+   <path
+      fill="currentColor"
+      stroke="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+   />
 </svg>
 ```
 
@@ -464,29 +466,24 @@ Then define a JSX element to render the shapes. Rating will take care of renderi
 
 ```jsx
 const CustomStar = (
-    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+   <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
 )
 
 const myStyles = {
-    itemShapes: CustomStar,
-    itemStrokeWidth: 2,
-    activeFillColor: 'LightSeaGreen',
-    activeStrokeColor: '#99F6E4',
-    inactiveFillColor: '#99F6E4',
-    inactiveStrokeColor: 'LightSeaGreen'
+   itemShapes: CustomStar,
+   itemStrokeWidth: 2,
+   activeFillColor: 'LightSeaGreen',
+   activeStrokeColor: '#99F6E4',
+   inactiveFillColor: '#99F6E4',
+   inactiveStrokeColor: 'LightSeaGreen'
 }
 
 function App() {
-    const [rating, setRating] = useState(4)
+   const [rating, setRating] = useState(4)
 
-    return (
-        <Rating
-            style={{ maxWidth: 300 }}
-            value={rating}
-            onChange={setRating}
-            itemStyles={myStyles}
-        />
-    )
+   return (
+      <Rating style={{ maxWidth: 300 }} value={rating} onChange={setRating} itemStyles={myStyles} />
+   )
 }
 ```
 
@@ -500,20 +497,20 @@ You can pass an object with the following properties to `itemStyles` prop:
 
 ```ts
 type ItemStyles = {
-    itemShapes: JSX.Element | JSX.Element[]
+   itemShapes: JSX.Element | JSX.Element[]
 
-    itemStrokeWidth?: number
-    boxBorderWidth?: number
+   itemStrokeWidth?: number
+   boxBorderWidth?: number
 
-    activeFillColor?: string | string[]
-    activeStrokeColor?: string | string[]
-    activeBoxColor?: string | string[]
-    activeBoxBorderColor?: string | string[]
+   activeFillColor?: string | string[]
+   activeStrokeColor?: string | string[]
+   activeBoxColor?: string | string[]
+   activeBoxBorderColor?: string | string[]
 
-    inactiveFillColor?: string
-    inactiveStrokeColor?: string
-    inactiveBoxColor?: string
-    inactiveBoxBorderColor?: string
+   inactiveFillColor?: string
+   inactiveStrokeColor?: string
+   inactiveBoxColor?: string
+   inactiveBoxBorderColor?: string
 }
 ```
 
@@ -523,26 +520,21 @@ Just set the ones you need and that's it:
 
 ```jsx
 const CustomStar = (
-    <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
+   <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
 )
 
 const myStyles = {
-    itemShapes: CustomStar,
-    activeFillColor: '#22C55E',
-    inactiveFillColor: '#BBF7D0'
+   itemShapes: CustomStar,
+   activeFillColor: '#22C55E',
+   inactiveFillColor: '#BBF7D0'
 }
 
 function App() {
-    const [rating, setRating] = useState(4)
+   const [rating, setRating] = useState(4)
 
-    return (
-        <Rating
-            style={{ maxWidth: 300 }}
-            value={rating}
-            onChange={setRating}
-            itemStyles={myStyles}
-        />
-    )
+   return (
+      <Rating style={{ maxWidth: 300 }} value={rating} onChange={setRating} itemStyles={myStyles} />
+   )
 }
 ```
 
@@ -555,12 +547,12 @@ function App() {
 import { Star } from '@smastrom/react-rating'
 
 const defaultItemStyles = {
-    itemShapes: Star,
-    itemStrokeWidth: 2,
-    activeFillColor: '#ffb23f',
-    activeStrokeColor: '#e17b21',
-    inactiveFillColor: '#fff7ed',
-    inactiveStrokeColor: '#e17b21'
+   itemShapes: Star,
+   itemStrokeWidth: 2,
+   activeFillColor: '#ffb23f',
+   activeStrokeColor: '#e17b21',
+   inactiveFillColor: '#fff7ed',
+   inactiveStrokeColor: '#e17b21'
 }
 ```
 
@@ -591,13 +583,13 @@ You can pass any valid CSS color string such as `aliceblue`, `#FFF332`, `rgba(0,
 import type { ItemStyles } from '@smastrom/react-rating'
 
 const Star = (
-    <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
+   <polygon points="478.53 189 318.53 152.69 239.26 0 160 152.69 0 189 111.02 303.45 84 478.53 239.26 396.63 394.53 478.53 367.51 303.45 478.53 189" />
 )
 
 const myStyles: ItemStyles = {
-    itemShapes: Star,
-    activeFillColor: 'green',
-    inactiveFillColor: 'gray'
+   itemShapes: Star,
+   activeFillColor: 'green',
+   inactiveFillColor: 'gray'
 }
 ```
 
@@ -627,32 +619,32 @@ If you wish to style each rating item, you can optionally pass an array of JSX e
 
 ```jsx
 const SadFace = (
-    <path d="M12.0000002,1.99896738 C17.523704,1.99896738 22.0015507,6.47681407 22.0015507,12.0005179 C22.0015507,17.5242217 17.523704,22.0020684 12.0000002,22.0020684 C6.47629639,22.0020684 1.99844971,17.5242217 1.99844971,12.0005179 C1.99844971,6.47681407 6.47629639,1.99896738 12.0000002,1.99896738 Z M12.0000002,3.49896738 C7.30472352,3.49896738 3.49844971,7.30524119 3.49844971,12.0005179 C3.49844971,16.6957946 7.30472352,20.5020684 12.0000002,20.5020684 C16.6952769,20.5020684 20.5015507,16.6957946 20.5015507,12.0005179 C20.5015507,7.30524119 16.6952769,3.49896738 12.0000002,3.49896738 Z M12.0000001,13.4979816 C13.6312483,13.4979816 15.1603686,14.1528953 16.2810488,15.2934358 C16.5713583,15.5888901 16.5671876,16.0637455 16.2717333,16.354055 C15.976279,16.6443646 15.5014236,16.6401939 15.211114,16.3447396 C14.3696444,15.4883577 13.2246935,14.9979816 12.0000001,14.9979816 C10.7726114,14.9979816 9.62535029,15.4905359 8.78347552,16.3502555 C8.49366985,16.6462041 8.01882223,16.6511839 7.72287367,16.3613782 C7.4269251,16.0715726 7.4219453,15.5967249 7.71175097,15.3007764 C8.83296242,14.155799 10.3651558,13.4979816 12.0000001,13.4979816 Z M9.00044779,8.75115873 C9.69041108,8.75115873 10.2497368,9.3104845 10.2497368,10.0004478 C10.2497368,10.6904111 9.69041108,11.2497368 9.00044779,11.2497368 C8.3104845,11.2497368 7.75115873,10.6904111 7.75115873,10.0004478 C7.75115873,9.3104845 8.3104845,8.75115873 9.00044779,8.75115873 Z M15.0004478,8.75115873 C15.6904111,8.75115873 16.2497368,9.3104845 16.2497368,10.0004478 C16.2497368,10.6904111 15.6904111,11.2497368 15.0004478,11.2497368 C14.3104845,11.2497368 13.7511587,10.6904111 13.7511587,10.0004478 C13.7511587,9.3104845 14.3104845,8.75115873 15.0004478,8.75115873 Z" />
+   <path d="M12.0000002,1.99896738 C17.523704,1.99896738 22.0015507,6.47681407 22.0015507,12.0005179 C22.0015507,17.5242217 17.523704,22.0020684 12.0000002,22.0020684 C6.47629639,22.0020684 1.99844971,17.5242217 1.99844971,12.0005179 C1.99844971,6.47681407 6.47629639,1.99896738 12.0000002,1.99896738 Z M12.0000002,3.49896738 C7.30472352,3.49896738 3.49844971,7.30524119 3.49844971,12.0005179 C3.49844971,16.6957946 7.30472352,20.5020684 12.0000002,20.5020684 C16.6952769,20.5020684 20.5015507,16.6957946 20.5015507,12.0005179 C20.5015507,7.30524119 16.6952769,3.49896738 12.0000002,3.49896738 Z M12.0000001,13.4979816 C13.6312483,13.4979816 15.1603686,14.1528953 16.2810488,15.2934358 C16.5713583,15.5888901 16.5671876,16.0637455 16.2717333,16.354055 C15.976279,16.6443646 15.5014236,16.6401939 15.211114,16.3447396 C14.3696444,15.4883577 13.2246935,14.9979816 12.0000001,14.9979816 C10.7726114,14.9979816 9.62535029,15.4905359 8.78347552,16.3502555 C8.49366985,16.6462041 8.01882223,16.6511839 7.72287367,16.3613782 C7.4269251,16.0715726 7.4219453,15.5967249 7.71175097,15.3007764 C8.83296242,14.155799 10.3651558,13.4979816 12.0000001,13.4979816 Z M9.00044779,8.75115873 C9.69041108,8.75115873 10.2497368,9.3104845 10.2497368,10.0004478 C10.2497368,10.6904111 9.69041108,11.2497368 9.00044779,11.2497368 C8.3104845,11.2497368 7.75115873,10.6904111 7.75115873,10.0004478 C7.75115873,9.3104845 8.3104845,8.75115873 9.00044779,8.75115873 Z M15.0004478,8.75115873 C15.6904111,8.75115873 16.2497368,9.3104845 16.2497368,10.0004478 C16.2497368,10.6904111 15.6904111,11.2497368 15.0004478,11.2497368 C14.3104845,11.2497368 13.7511587,10.6904111 13.7511587,10.0004478 C13.7511587,9.3104845 14.3104845,8.75115873 15.0004478,8.75115873 Z" />
 )
 
 const SmilingFace = (
-    <path d="M12.0000002,1.99896738 C17.523704,1.99896738 22.0015507,6.47681407 22.0015507,12.0005179 C22.0015507,17.5242217 17.523704,22.0020684 12.0000002,22.0020684 C6.47629639,22.0020684 1.99844971,17.5242217 1.99844971,12.0005179 C1.99844971,6.47681407 6.47629639,1.99896738 12.0000002,1.99896738 Z M12.0000002,3.49896738 C7.30472352,3.49896738 3.49844971,7.30524119 3.49844971,12.0005179 C3.49844971,16.6957946 7.30472352,20.5020684 12.0000002,20.5020684 C16.6952769,20.5020684 20.5015507,16.6957946 20.5015507,12.0005179 C20.5015507,7.30524119 16.6952769,3.49896738 12.0000002,3.49896738 Z M8.46174078,14.7838355 C9.31087697,15.8615555 10.6018926,16.5020843 11.9999849,16.5020843 C13.396209,16.5020843 14.6856803,15.8632816 15.5349376,14.7880078 C15.7916692,14.4629512 16.2633016,14.4075628 16.5883582,14.6642944 C16.9134148,14.9210259 16.9688032,15.3926584 16.7120717,15.717715 C15.5813083,17.1494133 13.8601276,18.0020843 11.9999849,18.0020843 C10.1373487,18.0020843 8.41411759,17.1471146 7.28351576,15.7121597 C7.02716611,15.3868018 7.08310832,14.9152347 7.40846617,14.6588851 C7.73382403,14.4025354 8.20539113,14.4584777 8.46174078,14.7838355 Z M9.00044779,8.75115873 C9.69041108,8.75115873 10.2497368,9.3104845 10.2497368,10.0004478 C10.2497368,10.6904111 9.69041108,11.2497368 9.00044779,11.2497368 C8.3104845,11.2497368 7.75115873,10.6904111 7.75115873,10.0004478 C7.75115873,9.3104845 8.3104845,8.75115873 9.00044779,8.75115873 Z M15.0004478,8.75115873 C15.6904111,8.75115873 16.2497368,9.3104845 16.2497368,10.0004478 C16.2497368,10.6904111 15.6904111,11.2497368 15.0004478,11.2497368 C14.3104845,11.2497368 13.7511587,10.6904111 13.7511587,10.0004478 C13.7511587,9.3104845 14.3104845,8.75115873 15.0004478,8.75115873 Z" />
+   <path d="M12.0000002,1.99896738 C17.523704,1.99896738 22.0015507,6.47681407 22.0015507,12.0005179 C22.0015507,17.5242217 17.523704,22.0020684 12.0000002,22.0020684 C6.47629639,22.0020684 1.99844971,17.5242217 1.99844971,12.0005179 C1.99844971,6.47681407 6.47629639,1.99896738 12.0000002,1.99896738 Z M12.0000002,3.49896738 C7.30472352,3.49896738 3.49844971,7.30524119 3.49844971,12.0005179 C3.49844971,16.6957946 7.30472352,20.5020684 12.0000002,20.5020684 C16.6952769,20.5020684 20.5015507,16.6957946 20.5015507,12.0005179 C20.5015507,7.30524119 16.6952769,3.49896738 12.0000002,3.49896738 Z M8.46174078,14.7838355 C9.31087697,15.8615555 10.6018926,16.5020843 11.9999849,16.5020843 C13.396209,16.5020843 14.6856803,15.8632816 15.5349376,14.7880078 C15.7916692,14.4629512 16.2633016,14.4075628 16.5883582,14.6642944 C16.9134148,14.9210259 16.9688032,15.3926584 16.7120717,15.717715 C15.5813083,17.1494133 13.8601276,18.0020843 11.9999849,18.0020843 C10.1373487,18.0020843 8.41411759,17.1471146 7.28351576,15.7121597 C7.02716611,15.3868018 7.08310832,14.9152347 7.40846617,14.6588851 C7.73382403,14.4025354 8.20539113,14.4584777 8.46174078,14.7838355 Z M9.00044779,8.75115873 C9.69041108,8.75115873 10.2497368,9.3104845 10.2497368,10.0004478 C10.2497368,10.6904111 9.69041108,11.2497368 9.00044779,11.2497368 C8.3104845,11.2497368 7.75115873,10.6904111 7.75115873,10.0004478 C7.75115873,9.3104845 8.3104845,8.75115873 9.00044779,8.75115873 Z M15.0004478,8.75115873 C15.6904111,8.75115873 16.2497368,9.3104845 16.2497368,10.0004478 C16.2497368,10.6904111 15.6904111,11.2497368 15.0004478,11.2497368 C14.3104845,11.2497368 13.7511587,10.6904111 13.7511587,10.0004478 C13.7511587,9.3104845 14.3104845,8.75115873 15.0004478,8.75115873 Z" />
 )
 
 const myStyles = {
-    itemShapes: [SadFace, SmilingFace],
-    activeFillColor: ['#da1600', '#61bb00'],
-    inactiveFillColor: '#a8a8a8'
+   itemShapes: [SadFace, SmilingFace],
+   activeFillColor: ['#da1600', '#61bb00'],
+   inactiveFillColor: '#a8a8a8'
 }
 
 function App() {
-    const [rating, setRating] = useState(0)
+   const [rating, setRating] = useState(0)
 
-    return (
-        <Rating
-            style={{ maxWidth: 200 }}
-            value={rating}
-            onChange={setRating}
-            items={2}
-            itemStyles={myStyles}
-            highlightOnlySelected
-        />
-    )
+   return (
+      <Rating
+         style={{ maxWidth: 200 }}
+         value={rating}
+         onChange={setRating}
+         items={2}
+         itemStyles={myStyles}
+         highlightOnlySelected
+      />
+   )
 }
 ```
 
@@ -660,35 +652,35 @@ function App() {
 
 ```jsx
 const Star = (
-    <path d="M62 25.154H39.082L32 3l-7.082 22.154H2l18.541 13.693L13.459 61L32 47.309L50.541 61l-7.082-22.152L62 25.154z" />
+   <path d="M62 25.154H39.082L32 3l-7.082 22.154H2l18.541 13.693L13.459 61L32 47.309L50.541 61l-7.082-22.152L62 25.154z" />
 )
 
 const myStyles = {
-    itemShapes: Star,
-    boxBorderWidth: 3,
+   itemShapes: Star,
+   boxBorderWidth: 3,
 
-    activeFillColor: ['#FEE2E2', '#FFEDD5', '#FEF9C3', '#ECFCCB', '#D1FAE5'],
-    activeBoxColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
-    activeBoxBorderColor: ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'],
+   activeFillColor: ['#FEE2E2', '#FFEDD5', '#FEF9C3', '#ECFCCB', '#D1FAE5'],
+   activeBoxColor: ['#da1600', '#db711a', '#dcb000', '#61bb00', '#009664'],
+   activeBoxBorderColor: ['#c41400', '#d05e00', '#cca300', '#498d00', '#00724c'],
 
-    inactiveFillColor: 'white',
-    inactiveBoxColor: '#dddddd',
-    inactiveBoxBorderColor: '#a8a8a8'
+   inactiveFillColor: 'white',
+   inactiveBoxColor: '#dddddd',
+   inactiveBoxBorderColor: '#a8a8a8'
 }
 
 function App() {
-    const [rating, setRating] = useState(0)
+   const [rating, setRating] = useState(0)
 
-    return (
-        <Rating
-            style={{ maxWidth: 500 }}
-            value={rating}
-            onChange={setRating}
-            itemStyles={myStyles}
-            radius="large"
-            spaceInside="large"
-        />
-    )
+   return (
+      <Rating
+         style={{ maxWidth: 500 }}
+         value={rating}
+         onChange={setRating}
+         itemStyles={myStyles}
+         radius="large"
+         spaceInside="large"
+      />
+   )
 }
 ```
 
@@ -743,11 +735,11 @@ React Rating leverages `aria radiogroup` role instead of native HTML radio butto
 
 In **React Rating**:
 
--   Rating must be confirmed with `Enter/Space` keys and cannot be set directly with arrows like native radios.
+-  Rating must be confirmed with `Enter/Space` keys and cannot be set directly with arrows like native radios.
 
--   `onChange` is called on both `Enter/Space` keys and click.
+-  `onChange` is called on both `Enter/Space` keys and click.
 
--   `onHoverChange` is called on `← → ↑ ↓` navigation, mouse hovering, focus-from / blur-to a _non-react-rating_ element.
+-  `onHoverChange` is called on `← → ↑ ↓` navigation, mouse hovering, focus-from / blur-to a _non-react-rating_ element.
 
 ### Disabled state
 
@@ -795,7 +787,7 @@ It is possible to style them via CSS by targeting the following selectors:
 
 ```css
 .rr--box:focus-visible .rr--svg {
-    /* Your styles */
+   /* Your styles */
 }
 ```
 
@@ -803,7 +795,7 @@ It is possible to style them via CSS by targeting the following selectors:
 
 ```css
 .rr--focus-reset {
-    /* Your styles */
+   /* Your styles */
 }
 ```
 
@@ -811,11 +803,11 @@ It is possible to style them via CSS by targeting the following selectors:
 
 ```css
 .rr--focus-reset {
-    outline: 6px double #0079ff;
+   outline: 6px double #0079ff;
 }
 
 .rr--box:focus-visible .rr--svg {
-    outline: 6px double #0079ff;
+   outline: 6px double #0079ff;
 }
 ```
 
@@ -825,4 +817,4 @@ It is possible to style them via CSS by targeting the following selectors:
 
 ## License
 
-MIT Licensed. Copyright (c) Simone Mastromattei 2022.
+MIT — Copyright (c) 2022 - Present, Simone Mastromattei

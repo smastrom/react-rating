@@ -1,104 +1,106 @@
 {
-	"name": "@smastrom/react-rating",
-	"version": "1.2.2",
-	"private": false,
-	"keywords": [
-		"react",
-		"rating",
-		"react rating",
-		"react-rating",
-		"rating star",
-		"rating-star",
-		"rating-component",
-		"rating component",
-		"stars",
-		"star",
-		"star-component",
-		"star component",
-		"reviews",
-		"review",
-		"reviews-component",
-		"reviews component",
-		"react reviews",
-		"react-reviews"
-	],
-	"homepage": "https://react-rating.onrender.com/",
-	"bugs": {
-		"url": "https://github.com/smastrom/react-rating/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/smastrom/react-rating"
-	},
-	"license": "MIT",
-	"author": "Simone Mastromattei <smastrom@proton.me>",
-	"exports": {
-		".": {
-			"import": "./dist/index.js",
-			"require": "./dist/index.umd.min.js"
-		},
-		"./style.css": {
-			"import": "./style.css",
-			"require": "./style.css"
-		},
-		"./style": {
-			"import": "./style.css",
-			"require": "./style.css"
-		}
-	},
-	"main": "dist/index.umd.min.js",
-	"module": "dist/index.js",
-	"browser": "dist/index.umd.min.js",
-	"types": "dist/index.d.ts",
-	"style": "style.css",
-	"files": [
-		"dist",
-		"style.css"
-	],
-	"scripts": {
-		"prebuild": "rimraf dist style.css src/exportedTypes.d.ts",
-		"build": "tsc && vite build && yarn declare",
-		"postbuild": "cpy dist/style.css ./ --flat && cpy src/exportedTypes.d.ts dist --rename index.d.ts --flat && rimraf src/exportedTypes.d.ts dist/style.css",
-		"coverage": "vitest run --coverage",
-		"declare": "tsc src/exportedTypes --declaration --emitDeclarationOnly",
-		"dev": "vite",
-		"e2e": "playwright test -c playwright-ct.config.ts",
-		"e2e:rtl": "IS_RTL=true yarn e2e",
-		"lint": "yarn eslint . --ext .ts,.tsx && prettier --write \"**/*.{ts,tsx,css,md}\"",
-		"prepare": "husky install",
-		"test": "vitest"
-	},
-	"lint-staged": {
-		"*.{ts,tsx}": "eslint --cache --fix",
-		"*.{ts,tsx,css,md}": "prettier --write"
-	},
-	"devDependencies": {
-		"@playwright/experimental-ct-react": "^1.29.0",
-		"@playwright/test": "^1.29.0",
-		"@testing-library/jest-dom": "^5.16.5",
-		"@testing-library/react": "^13.4.0",
-		"@testing-library/user-event": "^14.4.3",
-		"@typescript-eslint/eslint-plugin": "^5.47.0",
-		"@typescript-eslint/parser": "^5.47.0",
-		"@vitejs/plugin-react": "^3.0.0",
-		"@vitest/coverage-c8": "^0.26.0",
-		"cpy-cli": "^4.2.0",
-		"eslint": "^8.30.0",
-		"eslint-plugin-react": "^7.31.11",
-		"eslint-plugin-react-hooks": "^4.6.0",
-		"husky": "^8.0.2",
-		"jsdom": "^20.0.3",
-		"lint-staged": "^13.1.0",
-		"prettier": "^2.8.1",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"rollup-plugin-terser": "^7.0.2",
-		"typescript": "^4.9.4",
-		"vite": "^4.0.2",
-		"vitest": "^0.26.1"
-	},
-	"peerDependencies": {
-		"react": ">=16.8.0",
-		"react-dom": ">=16.8.0"
-	}
+   "name": "@smastrom/react-rating",
+   "version": "1.3.0",
+   "private": false,
+   "keywords": [
+      "react",
+      "rating",
+      "react rating",
+      "react-rating",
+      "rating star",
+      "rating-star",
+      "rating-component",
+      "rating component",
+      "stars",
+      "star",
+      "star-component",
+      "star component",
+      "reviews",
+      "review",
+      "reviews-component",
+      "reviews component",
+      "react reviews",
+      "react-reviews"
+   ],
+   "homepage": "https://react-rating.onrender.com/",
+   "bugs": {
+      "url": "https://github.com/smastrom/react-rating/issues"
+   },
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/smastrom/react-rating"
+   },
+   "license": "MIT",
+   "author": "Simone Mastromattei <smastrom@proton.me>",
+   "exports": {
+      ".": {
+         "import": "./dist/index.mjs",
+         "require": "./dist/index.js"
+      },
+      "./style.css": "./style.css",
+      "./style": "./style.css",
+      "./styles.css": "./style.css",
+      "./styles": "./style.css"
+   },
+   "main": "dist/index.js",
+   "module": "dist/index.mjs",
+   "browser": "dist/index.js",
+   "types": "dist/index.d.ts",
+   "style": "style.css",
+   "files": [
+      "dist",
+      "style.css"
+   ],
+   "scripts": {
+      "prebuild": "rimraf dist style.css src/exportedTypes.d.ts",
+      "build": "tsc && vite build && pnpm declare",
+      "postbuild": "cpy dist/style.css ./ --flat && cpy src/exportedTypes.d.ts dist --rename index.d.ts --flat && rimraf src/exportedTypes.d.ts dist/style.css",
+      "coverage": "vitest run --coverage",
+      "declare": "tsc src/exportedTypes --declaration --emitDeclarationOnly",
+      "dev": "vite",
+      "test": "vitest",
+      "test:ct": "playwright test -c playwright-ct.config.ts",
+      "test:ct:rtl": "IS_RTL=true pnpm test:ct",
+      "lint": "eslint . --ext .ts,.tsx && prettier --write \"**/*.{ts,tsx,css,md}\"",
+      "prepare": "husky install"
+   },
+   "lint-staged": {
+      "*.{ts,tsx}": "eslint --cache --fix",
+      "*.{ts,tsx,css,md}": "prettier --write"
+   },
+   "devDependencies": {
+      "@playwright/experimental-ct-react": "1.29.0",
+      "@playwright/test": "1.29.0",
+      "@rollup/plugin-terser": "^0.4.0",
+      "@testing-library/dom": "^9.2.0",
+      "@testing-library/jest-dom": "^5.16.5",
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/user-event": "^14.4.3",
+      "@types/node": "^18.15.9",
+      "@types/react": "^18.0.29",
+      "@types/react-dom": "^18.0.11",
+      "@types/testing-library__jest-dom": "^5.14.5",
+      "@typescript-eslint/eslint-plugin": "^5.56.0",
+      "@typescript-eslint/parser": "^5.56.0",
+      "@vitejs/plugin-react": "^3.1.0",
+      "@vitest/coverage-c8": "^0.29.7",
+      "cpy-cli": "^4.2.0",
+      "eslint": "^8.36.0",
+      "eslint-plugin-react": "^7.32.2",
+      "eslint-plugin-react-hooks": "^4.6.0",
+      "husky": "^8.0.3",
+      "jsdom": "^21.1.1",
+      "lint-staged": "^13.2.0",
+      "prettier": "^2.8.7",
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0",
+      "rimraf": "^4.4.1",
+      "typescript": "^5.0.2",
+      "vite": "^4.2.1",
+      "vitest": "^0.29.7"
+   },
+   "peerDependencies": {
+      "react": ">=17",
+      "react-dom": ">=17"
+   }
 }

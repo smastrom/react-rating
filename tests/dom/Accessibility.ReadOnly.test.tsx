@@ -1,5 +1,4 @@
 import { describe, test, expect } from 'vitest'
-
 import {
    render,
    screen,
@@ -24,6 +23,12 @@ describe('Read Only - Accessibility attributes', () => {
          render(<Rating readOnly value={2} />)
          const group = screen.getByTestId(GROUP_ID)
          toHaveReadOnlyAttrs(group)
+      })
+
+      test('Should display no rating label if value is 0', () => {
+         render(<Rating readOnly value={0} />)
+         const group = screen.getByTestId(GROUP_ID)
+         expect(group).toHaveAccessibleName('Not rated')
       })
 
       test('Should not be focusable and have radio-group specific attributes and classes', () => {

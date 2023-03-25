@@ -104,8 +104,6 @@ export type InputProps = {
    invisibleLabel?: string
    /** Accessible labels of each each rating item. */
    invisibleItemLabels?: string[]
-   /** Accessible label for no rating selected. */
-   emptyLabel?: string
    /** Id of the element used as rating group label. Takes precedence over invisibleLabel. */
    visibleLabelId?: string
    /** Ids of the elements used as labels for each rating item. Takes precedence over invisibleItemLabels. */

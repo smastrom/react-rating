@@ -31,8 +31,16 @@ Zero dependency, highly customizable rating component for React.
 
 ## Installation
 
-```console
+```zsh
+pnpm add @smastrom/react-rating
+```
+
+```zsh
 yarn add @smastrom/react-rating
+```
+
+```zsh
+npm i @smastrom/react-rating
 ```
 
 <br />
@@ -47,7 +55,7 @@ import { Rating } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css'
 ```
 
-> Importing the CSS **only once** (usually _main.js_ or _App.jsx_) is enough to use Rating in any component of your App.
+> Importing the CSS **only once** (most likely _main.js_ or _App.jsx_) is enough to use Rating in any other component of your App.
 
 <details><summary><strong>Remix</strong></summary>
 <br />
@@ -221,8 +229,8 @@ function App() {
 | :thinking:          | Prop            | Description                                                                | Type                                            | Default   | Required                        |
 | ------------------- | --------------- | -------------------------------------------------------------------------- | ----------------------------------------------- | --------- | ------------------------------- |
 | :green_circle:      | `value`         | An integer from 0 to `items`. It can be a float if `readOnly` is **true**. | number                                          | undefined | :white_check_mark:              |
-| :large_blue_circle: | `onChange`      | Setter or custom function to update the rating.                            | RatingChange                                    | undefined | Only if `readOnly` is **false** |
-| :large_blue_circle: | `onHoverChange` | Callback to execute while navigating the rating items.                     | (hoveredValue: number) => void                  | noop      | :x:                             |
+| :large_blue_circle: | `onChange`      | Setter or custom function to update the rating.                            | RatingChange                                    | () => {}  | Only if `readOnly` is **false** |
+| :large_blue_circle: | `onHoverChange` | Callback to execute while navigating the rating items.                     | (hoveredValue: number) => void                  | () => {}  | :x:                             |
 | :green_circle:      | `items`         | Rating items to display.                                                   | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
 | :green_circle:      | `readOnly`      | Whether to render an accessible image element or not.                      | boolean                                         | false     | :x:                             |
 | :large_blue_circle: | `isDisabled`    | Whether to disable the radio group or not.                                 | boolean                                         | false     | :x:                             |
@@ -325,6 +333,8 @@ By default, the user is able to reset the rating (from 1-5 to 0 and vice versa):
 | Mouse       | By clicking again on the selected rating item | ![react-rating](https://i.ibb.co/pLPP1wM/ezgif-com-gif-maker-2.gif) |
 | Keyboard    | By navigating to an invisible reset radio     | ![react-rating](https://i.ibb.co/3YWM7Fx/ezgif-com-gif-maker-1.gif) |
 
+> :bulb: Don't like the default focus style? Check [here](#troubleshooting) how to customize it.
+
 ### 2. Rating without reset
 
 There could be scenarios where you want to force the user to express a rating _(e.g. review page, post-service rating)_.
@@ -342,6 +352,8 @@ In such cases, set `isRequired` to **true**:
 -  It is announced by screen readers that rating **is required**.
 
 -  If value equals to 0, it is announced by screen readers that rating **is invalid** .
+
+> :bulb: Don't like the default focus style? Check [here](#troubleshooting) how to customize it.
 
 <br/>
 
@@ -805,4 +817,4 @@ It is possible to style them via CSS by targeting the following selectors:
 
 ## License
 
-MIT Licensed. Copyright (c) Simone Mastromattei 2022 - Present.
+MIT — Copyright (c) 2022 - Present, Simone Mastromattei

@@ -35,30 +35,26 @@
    "exports": {
       ".": {
          "import": "./dist/index.mjs",
-         "require": "./dist/index.cjs"
+         "require": "./dist/index.js"
       },
-      "./style.css": {
-         "import": "./dist/style.css",
-         "require": "./dist/style.css"
-      },
-      "./style": {
-         "import": "./dist/style.css",
-         "require": "./dist/style.css"
-      }
+      "./style.css": "./style.css",
+      "./style": "./style.css",
+      "./styles.css": "./style.css",
+      "./styles": "./style.css"
    },
-   "main": "dist/index.cjs",
+   "main": "dist/index.js",
    "module": "dist/index.mjs",
-   "browser": "dist/index.cjs",
+   "browser": "dist/index.js",
    "types": "dist/index.d.ts",
    "style": "style.css",
    "files": [
-      "dist/*",
+      "dist",
       "style.css"
    ],
    "scripts": {
       "prebuild": "rimraf dist style.css src/exportedTypes.d.ts",
       "build": "tsc && vite build && pnpm declare",
-      "postbuild": "cpy src/exportedTypes.d.ts dist --rename index.d.ts --flat && rimraf src/exportedTypes.d.ts",
+      "postbuild": "cpy dist/style.css ./ --flat && cpy src/exportedTypes.d.ts dist --rename index.d.ts --flat && rimraf src/exportedTypes.d.ts dist/style.css",
       "coverage": "vitest run --coverage",
       "declare": "tsc src/exportedTypes --declaration --emitDeclarationOnly",
       "dev": "vite",

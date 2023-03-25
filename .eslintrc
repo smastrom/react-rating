@@ -1,36 +1,38 @@
 {
-	"parser": "@typescript-eslint/parser",
-	"extends": [
-		"eslint:recommended",
-		"plugin:@typescript-eslint/recommended",
-		"plugin:react/recommended",
-		"plugin:react/jsx-runtime",
-		"plugin:react-hooks/recommended"
-	],
-	"env": {
-		"browser": true,
-		"node": true
-	},
-	"settings": {
-		"react": {
-			"version": "detect"
-		}
-	},
-	"rules": {
-		"@typescript-eslint/indent": "off",
-		"@typescript-eslint/comma-dangle": "off",
-		"@typescript-eslint/space-before-blocks": "off",
-		"@typescript-eslint/ban-ts-comment": [
-			"error",
-			{
-				"ts-ignore": "allow-with-description"
-			}
-		],
-		"react/display-name": "off",
-		"react/prop-types": "off",
-		"comma-dangle": "off",
-		"indent": "off",
-		"space-before-blocks": "off",
-		"no-mixed-spaces-and-tabs": "off"
-	}
+   "parser": "@typescript-eslint/parser",
+   "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "plugin:react/jsx-runtime",
+      "plugin:react-hooks/recommended"
+   ],
+   "env": {
+      "browser": true,
+      "node": true
+   },
+   "settings": {
+      "react": {
+         "version": "detect"
+      }
+   },
+   "rules": {
+      "@typescript-eslint/indent": "off",
+      "@typescript-eslint/comma-dangle": "off",
+      "@typescript-eslint/space-before-blocks": "off",
+      "no-extra-semi": "off",
+      "@typescript-eslint/no-extra-semi": "off",
+      "@typescript-eslint/ban-ts-comment": [
+         "error",
+         {
+            "ts-ignore": "allow-with-description"
+         }
+      ],
+      "react/display-name": "off",
+      "react/prop-types": "off",
+      "comma-dangle": "off",
+      "indent": "off",
+      "space-before-blocks": "off",
+      "no-mixed-spaces-and-tabs": "off"
+   }
 }

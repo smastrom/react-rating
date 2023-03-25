@@ -1,22 +1,22 @@
 name: Build
 
 on:
-  push:
-    branches: [main]
+   push:
+      branches: [main]
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+   build:
+      strategy:
+         matrix:
+            os: [windows-latest, macos-latest, ubuntu-latest]
 
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14.x'
-      - name: Install dependencies
-        run: yarn
-      - name: Build package
-        run: yarn build
+      runs-on: ${{ matrix.os }}
+      steps:
+         - uses: actions/checkout@v3
+         - uses: actions/setup-node@v3
+           with:
+              node-version: '16.x'
+         - name: Install dependencies
+           run: yarn
+         - name: Build package
+           run: yarn build

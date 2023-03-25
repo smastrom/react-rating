@@ -1,29 +1,29 @@
 .rr--group {
-	display: flex;
-	width: 100%;
-	position: relative;
+   display: flex;
+   width: 100%;
+   position: relative;
 }
 
 .rr--box {
-	display: flex;
-	width: 100%;
-	flex-grow: 1;
-	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+   display: flex;
+   width: 100%;
+   flex-grow: 1;
+   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .rr--svg {
-	display: flex;
-	aspect-ratio: 1;
-	width: 100%;
-	flex-grow: 1;
-	overflow: clip;
-	pointer-events: none;
+   display: flex;
+   aspect-ratio: 1;
+   width: 100%;
+   flex-grow: 1;
+   overflow: clip;
+   pointer-events: none;
 }
 
 @supports not (overflow: clip) {
-	.rr--svg {
-		overflow: auto;
-	}
+   .rr--svg {
+      overflow: auto;
+   }
 }
 
 /* Focus */
@@ -31,57 +31,57 @@
 .rr--box:focus-visible,
 .rr-reset:focus-visible,
 .rr-reset:focus {
-	outline: none;
-	box-shadow: none;
+   outline: none;
+   box-shadow: none;
 }
 
 .rr--focus-reset {
-	outline: 6px double #0079ff;
+   outline: 6px double #0079ff;
 }
 
 .rr--box:focus-visible .rr--svg {
-	outline: 6px double #0079ff;
-	isolation: isolate;
+   outline: 6px double #0079ff;
+   isolation: isolate;
 }
 
 /* Reset */
 
 .rr--reset {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	white-space: nowrap;
-	border: 0;
-	right: 0;
-	bottom: 50%;
+   position: absolute;
+   width: 1px;
+   height: 1px;
+   padding: 0;
+   margin: -1px;
+   overflow: hidden;
+   clip: rect(0, 0, 0, 0);
+   white-space: nowrap;
+   border: 0;
+   right: 0;
+   bottom: 50%;
 }
 
 [dir='rtl'] .rr--reset {
-	left: 0;
-	right: auto;
+   left: 0;
+   right: auto;
 }
 
 .rr--dir-y .rr--reset {
-	bottom: 0;
-	right: 50%;
+   bottom: 0;
+   right: 50%;
 }
 
 /* Disabled */
 
 .rr--disabled {
-	opacity: 0.5;
-	cursor: not-allowed;
+   opacity: 0.5;
+   cursor: not-allowed;
 }
 
 .rr--disabled .rr--svg {
-	pointer-events: none;
+   pointer-events: none;
 }
 
 /* Interactive */
 .rr--pointer .rr--box {
-	cursor: pointer;
+   cursor: pointer;
 }

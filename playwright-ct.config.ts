@@ -1,9 +1,9 @@
-import { devices, defineConfig } from '@playwright/experimental-ct-react'
+import { devices, PlaywrightTestConfig } from '@playwright/experimental-ct-react'
 import react from '@vitejs/plugin-react'
 
 const reporterOutputDir = process.env.IS_RTL ? 'playwright-rtl-report' : 'playwright-report'
 
-export default defineConfig({
+const config: PlaywrightTestConfig = {
    testDir: './tests/ct',
    timeout: 30 * 1000,
    fullyParallel: false,
@@ -14,6 +14,7 @@ export default defineConfig({
          define: {
             __DEV__: true,
          },
+         // @ts-ignore - ""
          plugins: [react()],
       },
    },
@@ -51,4 +52,6 @@ export default defineConfig({
          },
       },
    ],
-})
+}
+
+export default config

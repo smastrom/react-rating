@@ -69,8 +69,8 @@
       "*.{ts,tsx,css,md}": "prettier --write"
    },
    "devDependencies": {
-      "@playwright/experimental-ct-react": "^1.32.1",
-      "@playwright/test": "^1.32.1",
+      "@playwright/experimental-ct-react": "1.29.0",
+      "@playwright/test": "1.29.0",
       "@rollup/plugin-terser": "^0.4.0",
       "@testing-library/dom": "^9.2.0",
       "@testing-library/jest-dom": "^5.16.5",

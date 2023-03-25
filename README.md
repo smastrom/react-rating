@@ -1,15 +1,15 @@
 ![react-rating-version](https://img.shields.io/npm/v/@smastrom/react-rating?color=22C55E) ![react-rating-build-workflow](https://img.shields.io/github/actions/workflow/status/smastrom/react-rating/build.yml?branch=main&color=22C55E)
 ![react-rating-tests-workflow](https://img.shields.io/github/actions/workflow/status/smastrom/react-rating/tests.yml?branch=main&color=22C55E&label=tests) ![react-rating-coverage](https://img.shields.io/codecov/c/github/smastrom/react-rating?color=22C55E) ![react-rating-dependencies](https://img.shields.io/badge/dependency%20count-0-22C55E)
 
+<br />
+
 # React Rating
 
 Zero dependency, highly customizable rating component for React.
 
-<br />
-
 ![react-rating](https://i.ibb.co/L6M0hfw/new.png)
 
-[Demo and examples](https://react-rating.onrender.com/)
+[Demo and Examples](https://react-rating.onrender.com/) — [NextJS SSR](https://stackblitz.com/edit/nextjs-5qw9id?file=pages/index.tsx) — [Vite](https://stackblitz.com/edit/vitejs-vite-gwqytd?file=src/App.tsx)
 
 <br />
 

@@ -1,8 +1,6 @@
 name: Build
 
-on:
-   push:
-      branches: [main]
+on: [push, pull_request]
 
 jobs:
    build:
@@ -16,7 +14,10 @@ jobs:
          - uses: actions/setup-node@v3
            with:
               node-version: '16.x'
+         - uses: pnpm/action-setup@v2
+           with:
+              version: 7
          - name: Install dependencies
-           run: yarn
+           run: pnpm install
          - name: Build package
-           run: yarn build
+           run: pnpm build

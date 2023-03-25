@@ -1,8 +1,6 @@
 name: Tests
 
-on:
-   push:
-      branches: [main]
+on: [push, pull_request]
 
 jobs:
    tests:
@@ -12,23 +10,26 @@ jobs:
          - uses: actions/setup-node@v3
            with:
               node-version: '16.x'
+         - uses: pnpm/action-setup@v2
+           with:
+              version: 7
          - name: Install dependencies
-           run: yarn
+           run: pnpm install
          - name: Install Playwright
            run: npx playwright install --with-deps
          - name: Vitest
-           run: yarn test
+           run: pnpm test
          - name: Upload coverage to Codecov
            uses: codecov/codecov-action@v3
          - name: Run playwright ct tests
-           run: yarn test:ct
+           run: pnpm test:ct
          - name: Upload artifacts
            uses: actions/upload-artifact@v3
            with:
               name: playwright-report
               path: playwright-report
          - name: Run playwright rtl tests
-           run: yarn test:ct:rtl
+           run: pnpm test:ct:rtl
          - name: Upload artifacts
            uses: actions/upload-artifact@v3
            with:

@@ -7,7 +7,7 @@ Zero dependency, highly customizable rating component for React.
 
 ![react-rating](https://i.ibb.co/L6M0hfw/new.png)
 
-[Demo and Examples](https://react-rating.onrender.com/) — [NextJS SSR](https://stackblitz.com/edit/nextjs-5qw9id?file=pages/index.tsx) — [Vite](https://stackblitz.com/edit/vitejs-vite-gwqytd?file=src/App.tsx)
+[Demo and Examples](https://react-rating.onrender.com/) — [NextJS Page Router](https://stackblitz.com/edit/nextjs-5qw9id?file=pages/index.tsx) — [Vite](https://stackblitz.com/edit/vitejs-vite-gwqytd?file=src/App.tsx)
 
 <br />
 
@@ -71,7 +71,7 @@ export default function App() {
   // ...
 ```
 
-**in any page/component:**
+**in any page.tsx**
 
 ```tsx
 import { Rating } from '@smastrom/react-rating';
@@ -82,7 +82,74 @@ export default function Index() {
 
 </details>
 
-<details><summary><strong>Next</strong></summary>
+<details><summary><strong>NextJS 13 - App Router</strong></summary>
+
+### Interactive rating
+
+**app/layout.tsx**
+
+```tsx
+import '@smastrom/react-rating/style.css'
+```
+
+**components/Rating.tsx**
+
+```tsx
+'use client'
+
+import { useState } from 'react'
+import { Rating as ReactRating } from '@smastrom/react-rating'
+
+export function Rating() {
+  const [rating, setRating] = useState(0)
+
+  return <ReactRating style={{ maxWidth: 100 }} value={rating} onChange={setRating} />
+}
+```
+
+**in any page/component:**
+
+```tsx
+import { Rating } from './components/Rating'
+
+export default function Home() {
+  return (
+    <div>
+      {/* Other nodes... */}
+      <Rating />
+      {/* Other nodes... */}
+    </div>
+  )
+}
+```
+
+### Non-interactive rating
+
+**app/layout.tsx**
+
+```tsx
+import '@smastrom/react-rating/style.css'
+```
+
+**in any page/component:**
+
+```tsx
+import { Rating } from '@smastrom/react-rating'
+
+export default function Home() {
+  return (
+    <div>
+      {/* Other nodes... */}
+      <Rating style={{ maxWidth: 100 }} value={3} readOnly />
+      {/* Other nodes... */}
+    </div>
+  )
+}
+```
+
+</details>
+
+<details><summary><strong>NextJS - Pages Router</strong></summary>
 
 <br />
 
@@ -132,27 +199,6 @@ const IndexPage = () => {
 <br />
 
 **main.jsx**
-
-```jsx
-import '@smastrom/react-rating/style.css'
-```
-
-**in any component:**
-
-```jsx
-import { Rating } from '@smastrom/react-rating';
-
-function App() {
-  // ...
-```
-
-</details>
-
-<details><summary><strong>Create React App</strong></summary>
-
-<br />
-
-**index.js**
 
 ```jsx
 import '@smastrom/react-rating/style.css'

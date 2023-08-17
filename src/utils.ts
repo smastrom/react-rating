@@ -16,8 +16,6 @@ export const toSecondDecimal = (number: number) => Math.round(number * 100) / 10
 
 export const roundToHalf = (number: number) => Math.round(number * 2) / 2
 
-export const getUniqueId = () => (Math.random() + 1).toString(36).substring(7)
-
 export const areNum = (...values: unknown[]) => values.every((value) => typeof value === 'number')
 
 export const getNewPosition = (originalPos: number) =>

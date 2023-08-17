@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import terser from '@rollup/plugin-terser'
+import dts from 'vite-plugin-dts'
 
 import Package from './package.json'
 
@@ -40,6 +41,9 @@ export default defineConfig(({ command }) => ({
                   defaults: true,
                   drop_console: false,
                },
+            }),
+            dts({
+               rollupTypes: true,
             }),
          ],
       },

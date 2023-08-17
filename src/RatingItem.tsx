@@ -1,9 +1,8 @@
-import { useRef, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import {
    areNum,
    getNewPosition,
    getDefsTestId,
-   getUniqueId,
    toSecondDecimal,
    useIsomorphicLayoutEffect,
 } from './utils'
@@ -21,15 +20,11 @@ export function RatingItem({
    const translateOffset = itemStrokeWidth > 0 ? `${strokeOffset} ${strokeOffset}` : '0 0'
 
    const svgRef = useRef<SVGPathElement | null>(null)
-   const uniqId = useRef<string | null>(null)
+   const uniqId = useId()
 
    const [svgData, setSvgData] = useState<SvgData | null>(null)
 
    useIsomorphicLayoutEffect(() => {
-      if (hasHF && !uniqId.current) {
-         uniqId.current = `rr_hf_${getUniqueId()}`
-      }
-
       if (svgRef.current) {
          const {
             width: svgWidth,
@@ -57,7 +52,7 @@ export function RatingItem({
    function getHFAttr() {
       if (hasHF) {
          return {
-            fill: `url('#${uniqId.current}')`,
+            fill: `url('#${uniqId}')`,
          }
       }
       return {}
@@ -102,9 +97,9 @@ export function RatingItem({
          {...getStrokeAttribute()}
          {...testId}
       >
-         {hasHF && uniqId.current && (
+         {hasHF && (
             <defs {...getDefsTestId()}>
-               <linearGradient id={uniqId.current} {...getGradientTransformAttr()}>
+               <linearGradient id={uniqId} {...getGradientTransformAttr()}>
                   <stop className={RatingClasses.DEF_50} offset="50%" />
                   <stop className={RatingClasses.DEF_100} offset="50%" />
                </linearGradient>

@@ -232,6 +232,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       }
 
       function handleStarClick(event: MouseEvent, clickedIndex: number) {
+         event.preventDefault()
          event.stopPropagation()
 
          if (!isRequired && activeStarIndex === clickedIndex) {

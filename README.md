@@ -7,7 +7,7 @@ Zero dependency, highly customizable rating component for React.
 
 ![react-rating](https://i.ibb.co/L6M0hfw/new.png)
 
-[Demo and Examples](https://react-rating-buo7.onrender.com/) — [NextJS Page Router](https://stackblitz.com/edit/nextjs-5qw9id?file=pages/index.tsx) — [Vite](https://stackblitz.com/edit/vitejs-vite-gwqytd?file=src/App.tsx)
+[Demo and Examples](https://reactrating.netlify.app) — [NextJS Page Router](https://stackblitz.com/edit/nextjs-5qw9id?file=pages/index.tsx) — [Vite](https://stackblitz.com/edit/vitejs-vite-gwqytd?file=src/App.tsx)
 
 <br />
 
@@ -791,7 +791,7 @@ It is always announced by screen readers instead of being completely hidden.
 
 ### Labels
 
-React Rating ships with default accessible labels computed from your `items` value. In order to customize them or to switch to visible ones check the multiple examples on the [demo website](https://react-rating.onrender.com).
+React Rating ships with default accessible labels computed from your `items` value. In order to customize them or to switch to visible ones check the multiple examples on the [demo website](https://reactrating.netlify.app).
 
 <br />
 

@@ -22,7 +22,7 @@
       "react reviews",
       "react-reviews"
    ],
-   "homepage": "https://react-rating.onrender.com/",
+   "homepage": "https://reactrating.netlify.app/",
    "bugs": {
       "url": "https://github.com/smastrom/react-rating/issues"
    },

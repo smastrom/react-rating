@@ -1,10 +1,11 @@
-import { useId, useRef, useState } from 'react'
+import { useCallback, useId, useRef, useState } from 'react'
 import {
    areNum,
-   getNewPosition,
+   getNewPosition as getNewPos,
    getDefsTestId,
-   toSecondDecimal,
+   toSecondDecimal as toSecondDec,
    useIsomorphicLayoutEffect,
+   getHiddenParent,
 } from './utils'
 import { RatingClasses, OrientationProps } from './constants'
 import { RatingItemProps, SvgData } from './internalTypes'
@@ -19,33 +20,77 @@ export function RatingItem({
    const strokeOffset = itemStrokeWidth > 0 ? -(itemStrokeWidth / 2) : 0
    const translateOffset = itemStrokeWidth > 0 ? `${strokeOffset} ${strokeOffset}` : '0 0'
 
-   const svgRef = useRef<SVGPathElement | null>(null)
    const uniqId = useId()
 
-   const [svgData, setSvgData] = useState<SvgData | null>(null)
+   const groupRef = useRef<SVGPathElement | null>(null)
+   const [svgData, _setSvgData] = useState<SvgData | null>(null)
 
-   useIsomorphicLayoutEffect(() => {
-      if (svgRef.current) {
-         const {
-            width: svgWidth,
-            height: svgHeight,
-            x: svgXPos,
-            y: svgYPos,
-         } = svgRef.current.getBBox()
+   const [isHiddenParentDetected, setIsHiddenParentDetected] = useState(false)
+   const mutationObserver = useRef<MutationObserver | null>(null)
+   const hiddenParent = useRef<HTMLElement | SVGElement | null>(null)
 
-         if (areNum(svgWidth, svgHeight, svgXPos, svgYPos)) {
-            const viewBox = `${translateOffset} ${toSecondDecimal(
-               svgWidth + itemStrokeWidth
-            )} ${toSecondDecimal(svgHeight + itemStrokeWidth)}`
-            const translateData = `${getNewPosition(svgXPos)} ${getNewPosition(svgYPos)}`
+   const setSvgData = useCallback(
+      (el: SVGPathElement) => {
+         const { width: w, height: h, x, y } = el.getBBox()
 
-            setSvgData({
+         if (areNum(w, h, x, y)) {
+            const viewBox = `${translateOffset} ${toSecondDec(w + itemStrokeWidth)} ${toSecondDec(
+               h + itemStrokeWidth
+            )}`
+            const translateData = `${getNewPos(x)} ${getNewPos(y)}`
+
+            _setSvgData({
                viewBox,
                translateData,
             })
          }
+      },
+      [itemStrokeWidth, translateOffset]
+   )
+
+   useIsomorphicLayoutEffect(() => {
+      if (groupRef.current) {
+         const { width: w, height: h, x, y } = groupRef.current.getBBox()
+
+         const isHidden = w === 0 && h === 0 && x === 0 && y === 0
+
+         if (isHidden) {
+            const _hiddenParent = getHiddenParent(groupRef.current)
+            if (_hiddenParent) {
+               hiddenParent.current = _hiddenParent
+               setIsHiddenParentDetected(true)
+            }
+         } else {
+            setIsHiddenParentDetected(false)
+         }
+
+         setSvgData(groupRef.current)
       }
    }, [itemShapes, itemStrokeWidth, hasHF])
+
+   useIsomorphicLayoutEffect(() => {
+      if (isHiddenParentDetected && hiddenParent.current) {
+         mutationObserver.current = new MutationObserver((mutations, observer) => {
+            mutations.forEach(() => {
+               const isDisplayNone =
+                  window.getComputedStyle(hiddenParent.current as Element).display === 'none'
+
+               if (!isDisplayNone) {
+                  setSvgData(groupRef.current as SVGPathElement)
+                  observer.disconnect()
+               }
+            })
+         })
+
+         mutationObserver.current.observe(hiddenParent.current, {
+            attributes: true,
+         })
+
+         return () => {
+            mutationObserver.current?.disconnect()
+         }
+      }
+   }, [isHiddenParentDetected, setSvgData])
 
    /* Props */
 
@@ -106,7 +151,7 @@ export function RatingItem({
             </defs>
          )}
 
-         <g ref={svgRef} shapeRendering="geometricPrecision" {...getTransform()} {...getHFAttr()}>
+         <g ref={groupRef} shapeRendering="geometricPrecision" {...getTransform()} {...getHFAttr()}>
             {itemShapes}
          </g>
       </svg>

@@ -79,3 +79,23 @@ export function getDefsTestId() {
    } /* c8 ignore next */
    return {}
 }
+
+export function getHiddenParent(
+   el: HTMLElement | SVGElement | null
+): SVGElement | HTMLElement | null {
+   if (!el || !el.parentElement) return null
+
+   let nextParent = el?.parentElement as HTMLElement | SVGElement | null
+
+   // eslint-disable-next-line no-constant-condition
+   while (true) {
+      if (!nextParent) break
+
+      const isParentDisplayNone = window.getComputedStyle(nextParent).display === 'none'
+      if (isParentDisplayNone) break
+
+      nextParent = nextParent.parentElement
+   }
+
+   return nextParent
+}

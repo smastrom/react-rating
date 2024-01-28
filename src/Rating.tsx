@@ -56,6 +56,7 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
          onHoverChange = noop,
          onFocus = noop,
          onBlur = noop,
+         preventDefault = 'all',
          isDisabled = false,
          highlightOnlySelected = false,
          orientation = OrientationProps.HORIZONTAL,
@@ -232,7 +233,9 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
       }
 
       function handleStarClick(event: MouseEvent, clickedIndex: number) {
-         event.preventDefault()
+         if (preventDefault === 'all' || preventDefault === 'keydown') {
+            event.preventDefault()
+         }
          event.stopPropagation()
 
          if (!isRequired && activeStarIndex === clickedIndex) {
@@ -318,11 +321,12 @@ export const Rating: typeof RatingComponent = forwardRef<HTMLDivElement, RatingP
 
             case 'Enter':
             case 'Space':
-               event.preventDefault()
+               if (preventDefault === 'all' || preventDefault === 'click') {
+                  event.preventDefault()
+               }
                return onChange(isResetBtn ? 0 : childIndex + 1)
          }
 
-         event.preventDefault()
          event.stopPropagation()
       }
 

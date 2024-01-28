@@ -110,6 +110,8 @@ export type InputProps = {
    visibleItemLabelIds?: string[]
    /** Accessible label for the invisible reset radio. Effective if `isRequired` is set to **false**. */
    resetLabel?: string
+   /** Whether or not to call event.preventDefault on click and Enter/Space select. */
+   preventDefault?: 'click' | 'keydown' | 'all' | 'none'
 }
 
 export type RatingProps = SharedProps & ReadOnlyProps & InputProps

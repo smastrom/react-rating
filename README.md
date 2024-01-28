@@ -270,15 +270,16 @@ function App() {
 
 ### :cyclone: Core
 
-| :thinking:          | Prop            | Description                                                                | Type                                            | Default   | Required                        |
-| ------------------- | --------------- | -------------------------------------------------------------------------- | ----------------------------------------------- | --------- | ------------------------------- |
-| :green_circle:      | `value`         | An integer from 0 to `items`. It can be a float if `readOnly` is **true**. | number                                          | undefined | :white_check_mark:              |
-| :large_blue_circle: | `onChange`      | Setter or custom function to update the rating.                            | RatingChange                                    | () => {}  | Only if `readOnly` is **false** |
-| :large_blue_circle: | `onHoverChange` | Callback to execute while navigating the rating items.                     | (hoveredValue: number) => void                  | () => {}  | :x:                             |
-| :green_circle:      | `items`         | Rating items to display.                                                   | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
-| :green_circle:      | `readOnly`      | Whether to render an accessible image element or not.                      | boolean                                         | false     | :x:                             |
-| :large_blue_circle: | `isDisabled`    | Whether to disable the radio group or not.                                 | boolean                                         | false     | :x:                             |
-| :large_blue_circle: | `isRequired`    | Whether users should be able to set rating to 0 or not.                    | boolean                                         | false     | :x:                             |
+| :thinking:          | Prop             | Description                                                                    | Type                                            | Default   | Required                        |
+| ------------------- | ---------------- | ------------------------------------------------------------------------------ | ----------------------------------------------- | --------- | ------------------------------- |
+| :green_circle:      | `value`          | An integer from 0 to `items`. It can be a float if `readOnly` is **true**.     | number                                          | undefined | :white_check_mark:              |
+| :large_blue_circle: | `onChange`       | Setter or custom function to update the rating.                                | RatingChange                                    | () => {}  | Only if `readOnly` is **false** |
+| :large_blue_circle: | `onHoverChange`  | Callback to execute while navigating the rating items.                         | (hoveredValue: number) => void                  | () => {}  | :x:                             |
+| :green_circle:      | `items`          | Rating items to display.                                                       | 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 | 5         | :x:                             |
+| :green_circle:      | `readOnly`       | Whether to render an accessible image element or not.                          | boolean                                         | false     | :x:                             |
+| :large_blue_circle: | `isDisabled`     | Whether to disable the radio group or not.                                     | boolean                                         | false     | :x:                             |
+| :large_blue_circle: | `isRequired`     | Whether users should be able to set rating to 0 or not.                        | boolean                                         | false     | :x:                             |
+| :green_circle:      | `preventDefault` | Whether or not to call `event.preventDefault` on click and Enter/Space select. | `click` \| `keydown` \| `all` \| `none`         | `all`     | :x:                             |
 
 `ref`, `id`, `className`, `style`, `onBlur`, `onFocus` are also available.
 
